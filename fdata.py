@@ -18,9 +18,9 @@ def _max_width_():
     )
 
 
-st.set_page_config(page_icon="👊", page_title="UFC Data",layout="wide")
+st.set_page_config(page_icon="👊", page_title="UFC Data", layout="wide")
 
-st.header('UFC Fight Stats data explorer v0.1')
+st.header('UFC Fight Stats data explorer')
 st.write('This pulls data from Greco1899''s scraper of UFC Fight Stats - https://github.com/Greco1899/scrape_ufc_stats')
 st.image('https://media.tenor.com/3igI9osXP0UAAAAM/just-bleed.gif',width=100)
 
@@ -50,12 +50,24 @@ fighter_filter = st.selectbox('Pick a fighter',options=fighter_list)
 
 fights = fight_results[fight_results['BOUT'].str.contains(fighter_filter,case=False)]
 
+
+bouts = fight_stats[fight_stats['BOUT'].str.contains(fighter_filter, case=False)]
+opp_stats = fight_stats[(fight_stats['BOUT'].isin(bouts['BOUT'])) & (fight_stats['FIGHTER']!=fighter_filter)]
+fighter_stats = fight_stats[(fight_stats['BOUT'].isin(bouts['BOUT'])) & (fight_stats['FIGHTER']==fighter_filter)]
+
+
 if fighter_filter:
-    st.subheader('Total UFC Fights - '+str(fights.shape[0]))
+    col1,col2,col3 = st.columns(3)
+    with col1:
+        st.subheader('Total UFC Fights - '+str(fights.shape[0]))
+    with col2:
+        st.subheader(str(opp_stats['SIG_STR'].sum())+' Total Career Significant Strikes Absored')
+    with col3:
+        st.subheader(str(fighter_stats['SIG_STR'].sum())+' Total Career Significant Strikes Landed')
+    
     st.write('Fight Results')
     st.write(fights)
 
-bouts = fight_stats[fight_stats['BOUT'].str.contains(fighter_filter, case=False)]
 bout_filter = st.selectbox('Pick a bout',options=bouts['BOUT'].drop_duplicates())
 
 if bout_filter:
