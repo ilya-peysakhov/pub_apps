@@ -20,7 +20,7 @@ def _max_width_():
 
 st.set_page_config(page_icon="👊", page_title="UFC Data",layout="wide")
 
-st.header('UFC Fight Stats data explorer')
+st.header('UFC Fight Stats data explorer v0.1')
 st.write('This pulls data from Greco1899''s scraper of UFC Fight Stats - https://github.com/Greco1899/scrape_ufc_stats')
 st.image('https://media.tenor.com/3igI9osXP0UAAAAM/just-bleed.gif',width=100)
 
