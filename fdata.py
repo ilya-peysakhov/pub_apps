@@ -59,6 +59,8 @@ fight_stats = fight_stats.drop('HEAD', axis=1)
 
 fight_results[['OUTCOME_1', 'OUTCOME_2']] = fight_results['OUTCOME'].str.split('/', expand=True)
 fight_results[['FIGHTER_1', 'FIGHTER_2']] = fight_results['BOUT'].str.split('  vs. ', expand=True)
+fight_results['FIGHTER_2'] = fight_results['FIGHTER_2'].str.strip()
+
 fight_results = fight_results.drop('OUTCOME',axis=1)
 
 #
