@@ -82,6 +82,7 @@ if fighter_filter:
     with col2:
         st.subheader(str(opp_stats['SIG_STR'].sum())+' Total Career Significant Strikes Absored')
         st.subheader(str(opp_stats['HEAD_STR'].sum())+' Total Career Head Strikes Absored')
+        st.subheader(count = len(fight_results[(fight_results['OUTCOME_1'] == 'W') & (fight_results['FIGHTER_1'] == fighter_filter) | (fight_results['OUTCOME_2'] == 'W') & (fight_results['FIGHTER_2'] == fighter_filter)]))
     with col3:
         st.subheader(str(fighter_stats['SIG_STR'].sum())+' Total Career Significant Strikes Landed')
     
