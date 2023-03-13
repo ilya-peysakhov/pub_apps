@@ -47,9 +47,17 @@ fight_results = alldata[2]
 fight_stats = alldata[3]
 fighter_details = alldata[4]
 fighter_tot = alldata[5]
+
 fight_stats[['SIG_STR', 'SIG_STR_ATTEMPTED']] = fight_stats['SIG.STR.'].str.split(' of ', expand=True)
 fight_stats[['SIG_STR', 'SIG_STR_ATTEMPTED']] = fight_stats['SIG.STR.'].str.split(' of ', expand=True)
 fight_stats['SIG_STR'] = fight_stats['SIG_STR'].fillna('0').str.replace('\D+', '').astype(int)
+fight_stats = fight_stats.drop('SIG.STR.', axis=1)
+
+split_head = fight_stats['HEAD'].str.split(' of ', expand=True)
+split_head.columns = ['HEAD_LAND', 'HEAD_ATTEMPT']
+fight_stats = pd.concat([fight_stats, split_head], axis=1)
+fight_stats = fight_stats.drop('HEAD', axis=1)
+
 
 fighter_list = fighter_tot['FIGHTER'].tolist()
 fighter_filter = st.selectbox('Pick a fighter',options=fighter_list)
@@ -68,6 +76,7 @@ if fighter_filter:
         st.subheader('Total UFC Fights - '+str(fights.shape[0]))
     with col2:
         st.subheader(str(opp_stats['SIG_STR'].sum())+' Total Career Significant Strikes Absored')
+        st.subheader(str(opp_stats['HEAD_LAND'].sum())+' Total Career Significant Strikes Absored')
     with col3:
         st.subheader(str(fighter_stats['SIG_STR'].sum())+' Total Career Significant Strikes Landed')
     
