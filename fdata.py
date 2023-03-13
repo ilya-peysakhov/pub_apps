@@ -19,12 +19,13 @@ def _max_width_():
 
 
 st.set_page_config(page_icon="👊", page_title="UFC Data Explorer 0.v2", layout="wide")
-st.sidebar.[element_name]
+
 
 audio_file = open('song.mp3', 'rb')
 audio_bytes = audio_file.read()
 
 st.audio(audio_bytes, format='audio/ogg')
+st.sidebar.[audio_bytes]
 
 st.header('UFC Fight Stats data explorer')
 st.write('This pulls data from Greco1899''s scraper of UFC Fight Stats - https://github.com/Greco1899/scrape_ufc_stats')
