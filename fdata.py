@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+from pandasql import sqldf
 import time
 import numpy as np
 
@@ -58,6 +59,15 @@ fight_stats = fight_stats.drop('SIG.STR.', axis=1)
 fight_stats[['HEAD_STR', 'HEAD_STR_ATTEMPTED']] = fight_stats['HEAD'].str.split(' of ', expand=True)
 fight_stats['HEAD_STR'] = fight_stats['HEAD_STR'].fillna('0').str.replace('\D+', '').astype(int)
 fight_stats = fight_stats.drop('HEAD', axis=1)
+
+query = '''
+SELECT *, 
+       SUBSTR(FIGHT, 1, INSTR(FIGHT, ' vs. ') - 1) as fighter_1
+FROM fight_results
+'''
+
+# use the sqldf() function to run the query and return a new DataFrame with the added column
+fight_results = sqldf(query)
 
 fighter_list = fighter_merged['FIGHTER'].tolist()
 fighter_filter = st.selectbox('Pick a fighter',options=fighter_list)
