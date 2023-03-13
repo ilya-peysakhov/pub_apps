@@ -58,7 +58,7 @@ fight_stats[['HEAD_STR', 'HEAD_STR_ATTEMPTED']] = fight_stats['HEAD'].str.split(
 fight_stats['HEAD_STR'] = fight_stats['HEAD_STR'].fillna('0').str.replace('\D+', '').astype(int)
 fight_stats = fight_stats.drop('HEAD', axis=1)
 
-query = '''SELECT *, SUBSTR(FIGHT, 1, INSTR(FIGHT, ' vs. ') - 1) as fighter_1 FROM fight_results'''
+query = "SELECT *, SUBSTR(FIGHT, 1, INSTR(FIGHT, ' vs. ') - 1) as fighter_1 FROM fight_results"
 fight_results = sqldf(query)
 
 fighter_list = fighter_merged['FIGHTER'].tolist()
