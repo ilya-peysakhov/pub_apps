@@ -19,6 +19,7 @@ def _max_width_():
 
 
 st.set_page_config(page_icon="👊", page_title="UFC Data Explorer 0.v2", layout="wide")
+st.sidebar.[element_name]
 
 audio_file = open('song.mp3', 'rb')
 audio_bytes = audio_file.read()
