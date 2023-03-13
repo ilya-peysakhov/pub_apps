@@ -64,6 +64,11 @@ fighter_filter = st.selectbox('Pick a fighter',options=fighter_list)
 
 fights = fight_results[fight_results['BOUT'].str.contains(fighter_filter,case=False)]
 
+fight_results = fight_results.merge(fighter_merged, left_on='FIGHTER', right_on='NAME')
+wins_losses = fight_results.groupby(['NAME_x'])['RESULT'].value_counts().unstack().fillna(0).astype(int)
+wins_losses.columns = ['wins', 'losses']
+fighter_merged = fighter_merged.merge(wins_losses, left_on='NAME', right_index=True)
+
 
 bouts = fight_stats[fight_stats['BOUT'].str.contains(fighter_filter, case=False)]
 opp_stats = fight_stats[(fight_stats['BOUT'].isin(bouts['BOUT'])) & (fight_stats['FIGHTER']!=fighter_filter)]
