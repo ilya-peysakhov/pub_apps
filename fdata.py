@@ -18,7 +18,7 @@ def _max_width_():
     )
 
 
-st.set_page_config(page_icon="👊", page_title="UFC Data Explorer 0.v2", layout="wide")
+st.set_page_config(page_icon="👊", page_title="UFC Data Explorer v0.2", layout="wide")
 
 
 audio_file = open('song.mp3', 'rb')
