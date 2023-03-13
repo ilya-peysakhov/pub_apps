@@ -49,24 +49,16 @@ fight_stats = alldata[3]
 fighter_details = alldata[4]
 fighter_tot = alldata[5]
 
+#transforms
 fighter_merged = fighter_details.merge(fighter_tot, on='URL')
-
-
 fight_stats[['SIG_STR', 'SIG_STR_ATTEMPTED']] = fight_stats['SIG.STR.'].str.split(' of ', expand=True)
 fight_stats['SIG_STR'] = fight_stats['SIG_STR'].fillna('0').str.replace('\D+', '').astype(int)
 fight_stats = fight_stats.drop('SIG.STR.', axis=1)
-
 fight_stats[['HEAD_STR', 'HEAD_STR_ATTEMPTED']] = fight_stats['HEAD'].str.split(' of ', expand=True)
 fight_stats['HEAD_STR'] = fight_stats['HEAD_STR'].fillna('0').str.replace('\D+', '').astype(int)
 fight_stats = fight_stats.drop('HEAD', axis=1)
 
-query = '''
-SELECT *, 
-       SUBSTR(FIGHT, 1, INSTR(FIGHT, ' vs. ') - 1) as fighter_1
-FROM fight_results
-'''
-
-# use the sqldf() function to run the query and return a new DataFrame with the added column
+query = '''SELECT *, SUBSTR(FIGHT, 1, INSTR(FIGHT, ' vs. ') - 1) as fighter_1 FROM fight_results'''
 fight_results = sqldf(query)
 
 fighter_list = fighter_merged['FIGHTER'].tolist()
