@@ -57,7 +57,7 @@ fight_stats[['HEAD_STR', 'HEAD_STR_ATTEMPTED']] = fight_stats['HEAD'].str.split(
 fight_stats['HEAD_STR'] = fight_stats['HEAD_STR'].fillna('0').str.replace('\D+', '').astype(int)
 fight_stats = fight_stats.drop('HEAD', axis=1)
 
-fight_results[['OUTCOME_1', 'OUTCOME2']] = fight_results['OUTCOME'].str.split('/', expand=True)
+fight_results[['OUTCOME_1', 'OUTCOME_2']] = fight_results['OUTCOME'].str.split('/', expand=True)
 fight_results[['FIGHTER_1', 'FIGHTER_2']] = fight_results['BOUT'].str.split('  vs. ', expand=True)
 fight_results = fight_results.drop('OUTCOME',axis=1)
 
