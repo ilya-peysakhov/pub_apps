@@ -71,7 +71,7 @@ if fighter_filter:
         st.subheader(str(fighter_stats['SIG_STR'].sum())+' Total Career Significant Strikes Landed')
     
     st.write('Fight Results')
-    st.write(fights)
+    st.write(fights.style.hide_index())
 
 bout_filter = st.selectbox('Pick a bout',options=bouts['BOUT'].drop_duplicates())
 
