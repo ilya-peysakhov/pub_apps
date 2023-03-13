@@ -48,7 +48,7 @@ fight_stats = alldata[3]
 fighter_details = alldata[4]
 fighter_tot = alldata[5]
 
-fighter_merged = fighter_details.merge(fighter_tots, on='URL')
+fighter_merged = fighter_details.merge(fighter_tot, on='URL')
 
 
 fight_stats[['SIG_STR', 'SIG_STR_ATTEMPTED']] = fight_stats['SIG.STR.'].str.split(' of ', expand=True)
