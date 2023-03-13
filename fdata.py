@@ -82,10 +82,12 @@ if fighter_filter:
     col1,col2,col3 = st.columns(3)
     with col1:
         st.subheader('Total UFC Fights - '+str(fights.shape[0]))
+        st.subheader(str(wins)+' Wins')
+        st.subheader(str(losses)+' Losses')
     with col2:
         st.subheader(str(opp_stats['SIG_STR'].sum())+' Total Career Significant Strikes Absored')
         st.subheader(str(opp_stats['HEAD_STR'].sum())+' Total Career Head Strikes Absored')
-        st.subheader(str(wins)+' Wins ,'+str(losses)+' Losses')
+        
     with col3:
         st.subheader(str(fighter_stats['SIG_STR'].sum())+' Total Career Significant Strikes Landed')
     
