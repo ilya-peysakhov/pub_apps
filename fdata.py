@@ -48,6 +48,9 @@ fight_stats = alldata[3]
 fighter_details = alldata[4]
 fighter_tot = alldata[5]
 
+fighter_merged = fighter_details.merge(fighter_tots, on='URL')
+
+
 fight_stats[['SIG_STR', 'SIG_STR_ATTEMPTED']] = fight_stats['SIG.STR.'].str.split(' of ', expand=True)
 fight_stats['SIG_STR'] = fight_stats['SIG_STR'].fillna('0').str.replace('\D+', '').astype(int)
 fight_stats = fight_stats.drop('SIG.STR.', axis=1)
@@ -56,7 +59,7 @@ fight_stats[['HEAD_STR', 'HEAD_STR_ATTEMPTED']] = fight_stats['HEAD'].str.split(
 fight_stats['HEAD_STR'] = fight_stats['HEAD_STR'].fillna('0').str.replace('\D+', '').astype(int)
 fight_stats = fight_stats.drop('HEAD', axis=1)
 
-fighter_list = fighter_tot['FIGHTER'].tolist()
+fighter_list = fighter_merged['FIGHTER'].tolist()
 fighter_filter = st.selectbox('Pick a fighter',options=fighter_list)
 
 fights = fight_results[fight_results['BOUT'].str.contains(fighter_filter,case=False)]
@@ -96,9 +99,8 @@ if st.button("Show available datasets"):
     st.write('Fight Stats')
     st.write(fight_stats.head(5))
     st.write('Fighter Details')
-    st.write(fighter_details.head(5))
-    st.write('Fighter Tots')
-    st.write(fighter_tot.head(5))
+    st.write(fighter_merged.head(5))
+
 
 
 
