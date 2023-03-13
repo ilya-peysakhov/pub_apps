@@ -85,7 +85,7 @@ if fighter_filter:
     with col2:
         st.subheader(str(opp_stats['SIG_STR'].sum())+' Total Career Significant Strikes Absored')
         st.subheader(str(opp_stats['HEAD_STR'].sum())+' Total Career Head Strikes Absored')
-        st.subheader(wins+' Wins ,'+losses+' Losses')
+        st.subheader(str(wins)+' Wins ,'+str(losses)+' Losses')
     with col3:
         st.subheader(str(fighter_stats['SIG_STR'].sum())+' Total Career Significant Strikes Landed')
     
