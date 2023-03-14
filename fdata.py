@@ -70,10 +70,10 @@ fight_results = fight_results.drop('OUTCOME',axis=1)
 if view =='Single Fighter Stats':
     fighter_list = fighter_merged['FIGHTER'].tolist()
     fighter_filter = st.selectbox('Pick a fighter',options=fighter_list)
-
     fights = fight_results[fight_results['BOUT'].str.contains(fighter_filter,case=False)]
     bouts = fight_stats[fight_stats['BOUT'].str.contains(fighter_filter, case=False)]
-    opp_stats = fight_stats[(fight_stats['BOUT'].isin(bouts['BOUT'])) & (fight_stats['FIGHTER']!=fighter_filter)]fighter_stats = fight_stats[(fight_stats['BOUT'].isin(bouts['BOUT'])) & (fight_stats['FIGHTER']==fighter_filter)]
+    opp_stats = fight_stats[(fight_stats['BOUT'].isin(bouts['BOUT'])) & (fight_stats['FIGHTER']!=fighter_filter)]
+    fighter_stats = fight_stats[(fight_stats['BOUT'].isin(bouts['BOUT'])) & (fight_stats['FIGHTER']==fighter_filter)]
     wins = len(fight_results[(fight_results['OUTCOME_1'] == 'W') & (fight_results['FIGHTER_1'] == fighter_filter) | (fight_results['OUTCOME_2'] == 'W') & (fight_results['FIGHTER_2'] == fighter_filter)])
     losses = len(fight_results[(fight_results['OUTCOME_1'] == 'L') & (fight_results['FIGHTER_1'] == fighter_filter) | (fight_results['OUTCOME_2'] == 'L') & (fight_results['FIGHTER_2'] == fighter_filter)])
 
