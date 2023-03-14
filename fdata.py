@@ -106,7 +106,7 @@ elif view =='Show all data':
     st.write('Fighter Details')
     st.write(fighter_merged.head(5))
 else:
-    st.write("Building"
+    st.write("Building")
 
 
 
