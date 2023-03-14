@@ -30,7 +30,8 @@ st.header('UFC Fight Stats data explorer')
 st.write('This pulls data from Greco1899''s scraper of UFC Fight Stats - https://github.com/Greco1899/scrape_ufc_stats')
 st.image('https://media.tenor.com/3igI9osXP0UAAAAM/just-bleed.gif',width=200)
 
-st.sidebar.radio('Select a view',('Single Fighter Stats','All Time Stats'))
+view = st.sidebar.radio('Select a view',('Single Fighter Stats','All Time Stats','Show all data'))
+
 
 @st.cache_data
 def refreshData():
@@ -66,53 +67,46 @@ fight_results['FIGHTER_2'] = fight_results['FIGHTER_2'].str.strip()
 fight_results = fight_results.drop('OUTCOME',axis=1)
 
 #
+if view =='Single Fighter Stats':
+    fighter_list = fighter_merged['FIGHTER'].tolist()
+    fighter_filter = st.selectbox('Pick a fighter',options=fighter_list)
 
-fighter_list = fighter_merged['FIGHTER'].tolist()
-fighter_filter = st.selectbox('Pick a fighter',options=fighter_list)
+    fights = fight_results[fight_results['BOUT'].str.contains(fighter_filter,case=False)]
+    bouts = fight_stats[fight_stats['BOUT'].str.contains(fighter_filter, case=False)]
+    opp_stats = fight_stats[(fight_stats['BOUT'].isin(bouts['BOUT'])) & (fight_stats['FIGHTER']!=fighter_filter)]fighter_stats = fight_stats[(fight_stats['BOUT'].isin(bouts['BOUT'])) & (fight_stats['FIGHTER']==fighter_filter)]
+    wins = len(fight_results[(fight_results['OUTCOME_1'] == 'W') & (fight_results['FIGHTER_1'] == fighter_filter) | (fight_results['OUTCOME_2'] == 'W') & (fight_results['FIGHTER_2'] == fighter_filter)])
+    losses = len(fight_results[(fight_results['OUTCOME_1'] == 'L') & (fight_results['FIGHTER_1'] == fighter_filter) | (fight_results['OUTCOME_2'] == 'L') & (fight_results['FIGHTER_2'] == fighter_filter)])
 
-fights = fight_results[fight_results['BOUT'].str.contains(fighter_filter,case=False)]
+    if fighter_filter:
+        col1,col2,col3 = st.columns(3)
+        with col1:
+            st.subheader('Total UFC Fights - '+str(fights.shape[0]))
+            st.subheader(str(wins)+' Wins')
+            st.subheader(str(losses)+' Losses')
+        with col2:
+            st.subheader(str(opp_stats['SIG_STR'].sum())+' Total Career Significant Strikes Absored')
+            st.subheader(str(opp_stats['HEAD_STR'].sum())+' Total Career Head Strikes Absored')
+        with col3:
+            st.subheader(str(fighter_stats['SIG_STR'].sum())+' Total Career Significant Strikes Landed')
+        st.write('Fight Results')
+        st.dataframe(fights, use_container_width=False)
 
+    bout_filter = st.selectbox('Pick a bout',options=bouts['BOUT'].drop_duplicates())
 
+    if bout_filter:
+        st.write(fight_stats[(fight_stats['BOUT']==bout_filter) & (fight_stats['FIGHTER']==fighter_filter)])
 
-bouts = fight_stats[fight_stats['BOUT'].str.contains(fighter_filter, case=False)]
-opp_stats = fight_stats[(fight_stats['BOUT'].isin(bouts['BOUT'])) & (fight_stats['FIGHTER']!=fighter_filter)]
-fighter_stats = fight_stats[(fight_stats['BOUT'].isin(bouts['BOUT'])) & (fight_stats['FIGHTER']==fighter_filter)]
-wins = len(fight_results[(fight_results['OUTCOME_1'] == 'W') & (fight_results['FIGHTER_1'] == fighter_filter) | (fight_results['OUTCOME_2'] == 'W') & (fight_results['FIGHTER_2'] == fighter_filter)])
-losses = len(fight_results[(fight_results['OUTCOME_1'] == 'L') & (fight_results['FIGHTER_1'] == fighter_filter) | (fight_results['OUTCOME_2'] == 'L') & (fight_results['FIGHTER_2'] == fighter_filter)])
-
-if fighter_filter:
-    col1,col2,col3 = st.columns(3)
-    with col1:
-        st.subheader('Total UFC Fights - '+str(fights.shape[0]))
-        st.subheader(str(wins)+' Wins')
-        st.subheader(str(losses)+' Losses')
-    with col2:
-        st.subheader(str(opp_stats['SIG_STR'].sum())+' Total Career Significant Strikes Absored')
-        st.subheader(str(opp_stats['HEAD_STR'].sum())+' Total Career Head Strikes Absored')
-        
-    with col3:
-        st.subheader(str(fighter_stats['SIG_STR'].sum())+' Total Career Significant Strikes Landed')
-    
-    st.write('Fight Results')
-    st.dataframe(fights, use_container_width=False)
-
-bout_filter = st.selectbox('Pick a bout',options=bouts['BOUT'].drop_duplicates())
-
-if bout_filter:
-    st.write(fight_stats[(fight_stats['BOUT']==bout_filter) & (fight_stats['FIGHTER']==fighter_filter)])
-
-
-if st.button("Show available datasets"):
+elif view =='Show all data':
     st.write('Events')
     st.write(events.head(5))
     st.write('Fight Details')
-    # st.write(filtered_fight_details.head(5))
-    # st.write('Fight Results')
     st.write(fight_results.head(5))
     st.write('Fight Stats')
     st.write(fight_stats.head(5))
     st.write('Fighter Details')
     st.write(fighter_merged.head(5))
+else:
+    st.write("Building"
 
 
 
