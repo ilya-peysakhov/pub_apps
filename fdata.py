@@ -30,7 +30,7 @@ st.header('UFC Fight Stats data explorer')
 st.write('This pulls data from Greco1899''s scraper of UFC Fight Stats - https://github.com/Greco1899/scrape_ufc_stats')
 st.image('https://media.tenor.com/3igI9osXP0UAAAAM/just-bleed.gif',width=200)
 
-st.sidebar.radio(['Fighter Stats','All Time Stats'])
+st.sidebar.radio('Select a view',('Single Fighter Stats','All Time Stats'))
 
 @st.cache_data
 def refreshData():
