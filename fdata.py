@@ -27,7 +27,7 @@ spark = SparkSession.builder.getOrCreate()
 url="https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_event_details.csv"
 spark.sparkContext.addFile(url)
 df = spark.read.csv(SparkFiles.get('ufc_event_details.csv'), header=True)
-st.write(df.printSchema())
+st.write(df.count)
 
 
 audio_file = open('song.mp3', 'rb')
