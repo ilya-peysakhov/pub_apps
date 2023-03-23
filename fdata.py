@@ -24,10 +24,40 @@ def _max_width_():
 
 st.set_page_config(page_icon="👊", page_title="UFC Data Explorer v0.2", layout="wide")
 spark = SparkSession.builder.getOrCreate()
+
 ed_url="https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_event_details.csv"
 spark.sparkContext.addFile(ed_url)
 ed_df = spark.read.csv(SparkFiles.get('ufc_event_details.csv'), header=True)
 ed_df.createOrReplaceTempView("ed")
+
+fd_url="https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_details.csv"
+spark.sparkContext.addFile(fd_url)
+fd_df = spark.read.csv(SparkFiles.get('ufc_fight_details.csv'), header=True)
+fd_df.createOrReplaceTempView("fd")
+
+fr_url="https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_results.csv"
+spark.sparkContext.addFile(fr_url)
+fr_df = spark.read.csv(SparkFiles.get('ufc_fight_results.csv'), header=True)
+fr_df.createOrReplaceTempView("fr")
+
+fs_url="https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_stats.csv"
+spark.sparkContext.addFile(fs_url)
+fs_df = spark.read.csv(SparkFiles.get('ufc_fight_stats.csv'), header=True)
+fs_df.createOrReplaceTempView("fs")
+
+fd_url="https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fighter_details.csv"
+spark.sparkContext.addFile(fd_url)
+fd_df = spark.read.csv(SparkFiles.get('ufc_fighter_details.csv'), header=True)
+fd_df.createOrReplaceTempView("fd")
+
+ft_url="https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fighter_tott.csv"
+spark.sparkContext.addFile(ft_url)
+ft_df = spark.read.csv(SparkFiles.get('ufc_fighter_tott.csv'), header=True)
+ft_df.createOrReplaceTempView("ft")
+
+fed_df = spark.sql("select fd.*, date, location from fe inner join fd on fe.event=fd.event")
+st.write(fed_df.show(5))
+
 st.header('REWRITING WITH PYSPARK!!!')
 
 audio_file = open('song.mp3', 'rb')
