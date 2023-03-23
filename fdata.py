@@ -28,7 +28,7 @@ url="https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_event_details.cs
 spark.sparkContext.addFile(url)
 df = spark.read.csv(SparkFiles.get('ufc_event_details.csv'), header=True)
 ed.createOrReplaceTempView("ed")
-st.write(spark.sql("select * from ed")
+st.write(spark.sql("select * from ed"))
 
 
 audio_file = open('song.mp3', 'rb')
