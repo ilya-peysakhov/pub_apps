@@ -4,6 +4,8 @@ import time
 import numpy as np
 import pyspark
 from pyspark.sql import SparkSession
+from pyspark import SparkFiles
+
 
 ###################################
 def _max_width_():
@@ -21,9 +23,9 @@ def _max_width_():
 
 
 st.set_page_config(page_icon="👊", page_title="UFC Data Explorer v0.2", layout="wide")
-
 spark = SparkSession.builder.getOrCreate()
-df = spark.read.csv('https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_event_details.csv')
+spark.sparkContext.addFile(url)
+df = spark.read.csv(SparkFiles.get("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_event_details.csv"), header=True))
 st.write(df.printSchema())
 
 
