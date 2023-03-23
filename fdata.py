@@ -24,12 +24,11 @@ def _max_width_():
 
 st.set_page_config(page_icon="👊", page_title="UFC Data Explorer v0.2", layout="wide")
 spark = SparkSession.builder.getOrCreate()
-url="https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_event_details.csv"
-spark.sparkContext.addFile(url)
-df = spark.read.csv(SparkFiles.get('ufc_event_details.csv'), header=True)
-df.createOrReplaceTempView("ed")
-st.write(spark.sql("select * from ed"))
-
+ed_url="https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_event_details.csv"
+spark.sparkContext.addFile(ed_url)
+ed_df = spark.read.csv(SparkFiles.get('ufc_event_details.csv'), header=True)
+ed_df.createOrReplaceTempView("ed")
+st.header('REWRITING WITH PYSPARK!!!')
 
 audio_file = open('song.mp3', 'rb')
 audio_bytes = audio_file.read()
