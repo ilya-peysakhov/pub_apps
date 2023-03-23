@@ -22,7 +22,7 @@ def _max_width_():
 
 st.set_page_config(page_icon="👊", page_title="UFC Data Explorer v0.2", layout="wide")
 
-spark = SparkSession.builder().master("local[1]").appName("SparkByExamples.com").getOrCreate()
+spark = SparkSession.builder.master("local[1]").appName("SparkByExamples.com").getOrCreate()
 df = spark.read.csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_event_details.csv")
 st.write(df.printSchema())
 
