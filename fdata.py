@@ -25,7 +25,7 @@ def _max_width_():
 st.set_page_config(page_icon="👊", page_title="UFC Data Explorer v0.2", layout="wide")
 spark = SparkSession.builder.getOrCreate()
 spark.sparkContext.addFile(url)
-df = spark.read.csv(SparkFiles.get("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_event_details.csv"), header=True))
+df = spark.read.csv(SparkFiles.get("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_event_details.csv"), header=True)
 st.write(df.printSchema())
 
 
