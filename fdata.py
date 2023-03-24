@@ -185,7 +185,7 @@ else:
     st.area_chart(spark.sql("select date_trunc('month',date) date,count(*) fights from fed group by 1 order by 1 asc").toPandas().set_index("date"))
     st.write("Events by month")
     st.area_chart(spark.sql("select date_trunc('month', date) date, count(distinct EVENT) events from fed group by 1 order by 1 asc").toPandas().set_index("date"))
-    st.write('Fighters fought in the last 365 days')
+    st.write('Fighters fought in the last 730 days (2 years)')
     st.write(spark.sql("""
                    select count(distinct fighter) from 
                     (select FIGHTER1 fighter from fr_clean where date between current_date() -730 and current_date() group by 1 
