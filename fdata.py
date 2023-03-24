@@ -49,7 +49,17 @@ spark.sparkContext.addFile(fs_url)
 fs_df = spark.read.csv(SparkFiles.get('ufc_fight_stats.csv'), header=True)
 fs_df.createOrReplaceTempView("fs")
 
-cleaned_fs_df = spark.sql("select EVENT,BOUT,ROUND,FIGHTER,KD,split(`SIG.STR.`,' of ')[0] sig_str_l,split(`SIG.STR.`,' of ')[1] sig_str_a,split(`TOTAL.STR.`,' of ')[0] total_str_l,split(`TOTAL.STR.`,' of ')[1] total_str_a,split(TD,' of ')[0] td_l,split(TD,' of ')[1] td_a,`SUB.ATT`,`REV.` CTRL,split(HEAD,' of ')[0] head_str_l,split(HEAD,' of ')[1] head_str_a  from fs limit 5")
+cleaned_fs_df = spark.sql("select EVENT,BOUT,ROUND,FIGHTER,KD,
+                          split(`SIG.STR.`,' of ')[0] sig_str_l,
+                          split(`SIG.STR.`,' of ')[1] sig_str_a,
+                          split(`TOTAL.STR.`,' of ')[0] total_str_l,
+                          split(`TOTAL.STR.`,' of ')[1] total_str_a,
+                          split(TD,' of ')[0] td_l,
+                          split(TD,' of ')[1] td_a,
+                          `SUB.ATT`,`REV.`,CTRL,
+                          split(HEAD,' of ')[0] head_str_l,
+                          split(HEAD,' of ')[1] head_str_a  
+                          from fs limit 5")
 st.write(cleaned_fs_df)
 
 frd_url="https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fighter_details.csv"
