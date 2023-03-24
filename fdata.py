@@ -31,7 +31,7 @@ ed_df = spark.read.csv(SparkFiles.get('ufc_event_details.csv'), header=True)
 ed_df.createOrReplaceTempView("ed")
 
 if st.button("ed"):
-    st.write(ed_df)
+    st.write(ed_df.printSchema)
 
 fd_url="https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_details.csv"
 spark.sparkContext.addFile(fd_url)
