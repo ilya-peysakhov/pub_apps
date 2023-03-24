@@ -176,7 +176,10 @@ elif view =='Show all data':
     st.write('Fight Stats')
     st.write(spark.sql("select * from fs limit 5"))    
 else:
-    st.area_chart(spark.sql("select date_trunc('month',to_date(DATE, 'MMMM d, yyyy')) date,count(*) fights, count(distinct EVENT) events from fed group by 1 order by 1 asc").toPandas().set_index("date"))
+    st.write("Fights over time")
+    st.area_chart(spark.sql("select date_trunc('month',to_date(DATE, 'MMMM d, yyyy')) date,count(*) fights from fed group by 1 order by 1 asc").toPandas().set_index("date"))
+    st.write("Events over time")
+    st.area_chart(spark.sql("select date_trunc('month',to_date(DATE, 'MMMM d, yyyy')) date, count(distinct EVENT) events from fed group by 1 order by 1 asc").toPandas().set_index("date"))
 
 
 
