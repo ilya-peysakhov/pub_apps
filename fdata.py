@@ -48,7 +48,7 @@ spark.sparkContext.addFile(fs_url)
 fs_df = spark.read.csv(SparkFiles.get('ufc_fight_stats.csv'), header=True)
 fs_df.createOrReplaceTempView("fs")
 
-cleaned_fs_df = spark.sql("select EVENT,BOUT,ROUND,FIGHTER,KD,
+cleaned_fs_df = spark.sql("""select EVENT,BOUT,ROUND,FIGHTER,KD,
                           split(`SIG.STR.`,' of ')[0] sig_str_l,
                           split(`SIG.STR.`,' of ')[1] sig_str_a,
                           split(`TOTAL STR.`,' of ')[0] total_str_l,
@@ -58,7 +58,7 @@ cleaned_fs_df = spark.sql("select EVENT,BOUT,ROUND,FIGHTER,KD,
                           `SUB.ATT`,`REV.`,CTRL,
                           split(HEAD,' of ')[0] head_str_l,
                           split(HEAD,' of ')[1] head_str_a  
-                          from fs limit 5")
+                          from fs limit 5""")
 
 st.write(cleaned_fs_df)
 
