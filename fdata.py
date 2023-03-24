@@ -129,8 +129,7 @@ fight_results = fight_results.drop('OUTCOME',axis=1)
 
 #
 if view =='Single Fighter Stats':
-    st.write(spark.sql("select fighter from fighters group by 1").toPandas())
-    fighter_list = list(spark.sql("select fighter from fighters group by 1").toPandas())
+    fighter_list = list(spark.sql("select fighter from fighters group by 1").collect())
     fighter_filter = st.selectbox('Pick a fighter',options=fighter_list)
     fights = fight_results[fight_results['BOUT'].str.contains(fighter_filter,case=False)]
     bouts = fight_stats[fight_stats['BOUT'].str.contains(fighter_filter, case=False)]
