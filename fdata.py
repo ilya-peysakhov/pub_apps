@@ -26,71 +26,79 @@ def _max_width_():
 st.set_page_config(page_icon="👊", page_title="UFC Data Explorer v0.2", layout="wide")
 spark = SparkSession.builder.getOrCreate()
 
+def getData():
 #event details
-ed_url="https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_event_details.csv"
-spark.sparkContext.addFile(ed_url)
-ed_df = spark.read.csv(SparkFiles.get('ufc_event_details.csv'), header=True)
-ed_df.createOrReplaceTempView("ed")
-ed_clean_df = spark.sql("select trim(EVENT) EVENT,URL,to_date(DATE,'MMMM d, yyyy') DATE,LOCATION from ed")
+    ed_url="https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_event_details.csv"
+    spark.sparkContext.addFile(ed_url)
+    ed_df = spark.read.csv(SparkFiles.get('ufc_event_details.csv'), header=True)
+    ed_df.createOrReplaceTempView("ed")
+    ed_clean_df = spark.sql("select trim(EVENT) EVENT,URL,to_date(DATE,'MMMM d, yyyy') DATE,LOCATION from ed")
+    
+
+    #fight details
+    fd_url="https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_details.csv"
+    spark.sparkContext.addFile(fd_url)
+    fd_df = spark.read.csv(SparkFiles.get('ufc_fight_details.csv'), header=True)
+    fd_df.createOrReplaceTempView("fd")
+    #event + fight details
+    fed_df = spark.sql("select fd.*, date,LOCATION from ed_clean inner join fd on ed_clean.EVENT=fd.EVENT")
+    
+
+    #fight results
+    fr_url="https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_results.csv"
+    spark.sparkContext.addFile(fr_url)
+    fr_df = spark.read.csv(SparkFiles.get('ufc_fight_results.csv'), header=True)
+    fr_df.createOrReplaceTempView("fr")
+    fr_df = spark.sql("""select trim(fr.EVENT) EVENT, fr.BOUT, 
+                        split(fr.BOUT,' vs. ')[0] FIGHTER1,
+                        split(fr.BOUT,' vs. ')[1] FIGHTER2,
+                        split(OUTCOME,'/')[0] FIGHTER1_OUTCOME,
+                        split(OUTCOME,'/')[1] FIGHTER2_OUTCOME,
+                        WEIGHTCLASS,METHOD,ROUND,TIME,left(`TIME FORMAT`,1) TIME_FORMAT,REFEREE,DETAILS,fr.URL,date 
+                        from fr
+                        left join fed on fed.EVENT = trim(fr.EVENT) """)
+    
+
+    #fight stats
+    fs_url="https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_stats.csv"
+    spark.sparkContext.addFile(fs_url)
+    fs_df = spark.read.csv(SparkFiles.get('ufc_fight_stats.csv'), header=True)
+    
+
+    #cleanup fight stats
+    cleaned_fs_df = spark.sql("""select EVENT,BOUT,ROUND,FIGHTER,KD,
+                              split(`SIG.STR.`,' of ')[0] sig_str_l,
+                              split(`SIG.STR.`,' of ')[1] sig_str_a,
+                              split(`TOTAL STR.`,' of ')[0] total_str_l,
+                              split(`TOTAL STR.`,' of ')[1] total_str_a,
+                              split(TD,' of ')[0] td_l,
+                              split(TD,' of ')[1] td_a,
+                              `SUB.ATT`,`REV.`,CTRL,
+                              split(HEAD,' of ')[0] head_str_l,
+                              split(HEAD,' of ')[1] head_str_a  
+                              from fs limit 5""")
+
+
+
+    frd_url="https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fighter_details.csv"
+    spark.sparkContext.addFile(frd_url)
+    frd_df = spark.read.csv(SparkFiles.get('ufc_fighter_details.csv'), header=True)
+
+    ft_url="https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fighter_tott.csv"
+    spark.sparkContext.addFile(ft_url)
+    ft_df = spark.read.csv(SparkFiles.get('ufc_fighter_tott.csv'), header=True)
+    
+
+    fighters_df = spark.sql("select FIGHTER,HEIGHT,WEIGHT,REACH,STANCE,DOB,FIRST,LAST,NICKNAME,frd.URL from ft inner join frd on frd.URL = ft.URL")
+    fighters_df.createOrReplaceTempView("fighters")
+    return ed_clean_df,fed_df,fr_df,fs_df,frd_df,ft_df
+
 ed_clean_df.createOrReplaceTempView("ed_clean")
-
-#fight details
-fd_url="https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_details.csv"
-spark.sparkContext.addFile(fd_url)
-fd_df = spark.read.csv(SparkFiles.get('ufc_fight_details.csv'), header=True)
-fd_df.createOrReplaceTempView("fd")
-#event + fight details
-fed_df = spark.sql("select fd.*, date,LOCATION from ed_clean inner join fd on ed_clean.EVENT=fd.EVENT")
 fed_df.createOrReplaceTempView("fed")
-
-#fight results
-fr_url="https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_results.csv"
-spark.sparkContext.addFile(fr_url)
-fr_df = spark.read.csv(SparkFiles.get('ufc_fight_results.csv'), header=True)
-fr_df.createOrReplaceTempView("fr")
-fr_df = spark.sql("""select trim(fr.EVENT) EVENT, fr.BOUT, 
-                    split(fr.BOUT,' vs. ')[0] FIGHTER1,
-                    split(fr.BOUT,' vs. ')[1] FIGHTER2,
-                    split(OUTCOME,'/')[0] FIGHTER1_OUTCOME,
-                    split(OUTCOME,'/')[1] FIGHTER2_OUTCOME,
-                    WEIGHTCLASS,METHOD,ROUND,TIME,left(`TIME FORMAT`,1) TIME_FORMAT,REFEREE,DETAILS,fr.URL,date 
-                    from fr
-                    left join fed on fed.EVENT = trim(fr.EVENT) """)
 fr_df.createOrReplaceTempView("fr_clean")
-
-#fight stats
-fs_url="https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_stats.csv"
-spark.sparkContext.addFile(fs_url)
-fs_df = spark.read.csv(SparkFiles.get('ufc_fight_stats.csv'), header=True)
 fs_df.createOrReplaceTempView("fs")
-
-#cleanup fight stats
-cleaned_fs_df = spark.sql("""select EVENT,BOUT,ROUND,FIGHTER,KD,
-                          split(`SIG.STR.`,' of ')[0] sig_str_l,
-                          split(`SIG.STR.`,' of ')[1] sig_str_a,
-                          split(`TOTAL STR.`,' of ')[0] total_str_l,
-                          split(`TOTAL STR.`,' of ')[1] total_str_a,
-                          split(TD,' of ')[0] td_l,
-                          split(TD,' of ')[1] td_a,
-                          `SUB.ATT`,`REV.`,CTRL,
-                          split(HEAD,' of ')[0] head_str_l,
-                          split(HEAD,' of ')[1] head_str_a  
-                          from fs limit 5""")
-
-
-
-frd_url="https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fighter_details.csv"
-spark.sparkContext.addFile(frd_url)
-frd_df = spark.read.csv(SparkFiles.get('ufc_fighter_details.csv'), header=True)
 frd_df.createOrReplaceTempView("frd")
-
-ft_url="https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fighter_tott.csv"
-spark.sparkContext.addFile(ft_url)
-ft_df = spark.read.csv(SparkFiles.get('ufc_fighter_tott.csv'), header=True)
 ft_df.createOrReplaceTempView("ft")
-
-fighters_df = spark.sql("select FIGHTER,HEIGHT,WEIGHT,REACH,STANCE,DOB,FIRST,LAST,NICKNAME,frd.URL from ft inner join frd on frd.URL = ft.URL")
-fighters_df.createOrReplaceTempView("fighters")
 
 st.header('REWRITING WITH PYSPARK!!!')
 
