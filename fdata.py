@@ -188,9 +188,9 @@ else:
     st.write('Fighters fought in the last 365 days')
     st.write(spark.sql("""
                    select count(distinct fighter) from 
-                    (select FIGHTER1 fighter from fr_clean where date between current_date() -365 and current_date() group by 1 
+                    (select FIGHTER1 fighter from fr_clean where date between current_date() -730 and current_date() group by 1 
                     UNION 
-                    select FIGHTER2 fighter from fr_clean where date between current_date() -365 and current_date() group by 1)
+                    select FIGHTER2 fighter from fr_clean where date between current_date() -730 and current_date() group by 1)
                     """))
 
 
