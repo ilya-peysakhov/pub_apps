@@ -178,7 +178,7 @@ if view =='Single Fighter Stats':
             st.subheader(str(fighter_stats['SIG_STR'].sum())+' Total Career Significant Strikes Landed')
         
         st.write('Fight Results')
-        st.write(spark.sql("select * from fr_clean where FIGHTER1= '{}' or FIGHTER2='{}' ".format(fighter_filter,fighter_filter)))
+        st.write(spark.sql("select * from fr_clean where FIGHTER1= '{}' or FIGHTER2='{}' ".format(fighter_filter,fighter_filter)).toPandas().to_string())
 
     bout_filter = st.selectbox('Pick a bout',options=bouts['BOUT'].drop_duplicates())
 
