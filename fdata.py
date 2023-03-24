@@ -90,8 +90,8 @@ def getData():
     
 
     fighters_df = spark.sql("select FIGHTER,HEIGHT,WEIGHT,REACH,STANCE,DOB,FIRST,LAST,NICKNAME,frd.URL from ft inner join frd on frd.URL = ft.URL")
-    fighters_df.createOrReplaceTempView("fighters")
-    return ed_clean_df,fed_df,fr_df,fs_df,frd_df,ft_df
+    
+    return ed_clean_df,fed_df,fr_df,fs_df,frd_df,ft_df,fighters_df
 
 fightdata=getData()
 fightdata[0].createOrReplaceTempView("ed_clean")
@@ -100,6 +100,7 @@ fightdata[2].createOrReplaceTempView("fr_clean")
 fightdata[3].createOrReplaceTempView("fs")
 fightdata[4].createOrReplaceTempView("frd")
 fightdata[5].createOrReplaceTempView("ft")
+fightdata[6].createOrReplaceTempView("fighters")
 
 st.header('REWRITING WITH PYSPARK!!!')
 
