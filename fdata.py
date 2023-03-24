@@ -93,12 +93,13 @@ def getData():
     fighters_df.createOrReplaceTempView("fighters")
     return ed_clean_df,fed_df,fr_df,fs_df,frd_df,ft_df
 
-ed_clean_df.createOrReplaceTempView("ed_clean")
-fed_df.createOrReplaceTempView("fed")
-fr_df.createOrReplaceTempView("fr_clean")
-fs_df.createOrReplaceTempView("fs")
-frd_df.createOrReplaceTempView("frd")
-ft_df.createOrReplaceTempView("ft")
+fightdata=getData()
+fightdata[0].createOrReplaceTempView("ed_clean")
+fightdata[1].createOrReplaceTempView("fed")
+fightdata[2].createOrReplaceTempView("fr_clean")
+fightdata[3].createOrReplaceTempView("fs")
+fightdata[4].createOrReplaceTempView("frd")
+fightdata[5].createOrReplaceTempView("ft")
 
 st.header('REWRITING WITH PYSPARK!!!')
 
