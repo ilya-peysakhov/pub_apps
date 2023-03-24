@@ -30,17 +30,13 @@ spark.sparkContext.addFile(ed_url)
 ed_df = spark.read.csv(SparkFiles.get('ufc_event_details.csv'), header=True)
 ed_df.createOrReplaceTempView("ed")
 
-if st.button("ed"):
-    st.write(ed_df.printSchema)
-
 fd_url="https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_details.csv"
 spark.sparkContext.addFile(fd_url)
 fd_df = spark.read.csv(SparkFiles.get('ufc_fight_details.csv'), header=True)
 fd_df.createOrReplaceTempView("fd")
 
-if st.button("fd"):
-    st.write(fd_df)
-             
+fed_df = spark.sql("select * from ed inner join fd on ed.EVENT=fd.EVENT")
+st.write(fed_df.show(5))
              
 fr_url="https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_results.csv"
 spark.sparkContext.addFile(fr_url)
@@ -62,8 +58,7 @@ spark.sparkContext.addFile(ft_url)
 ft_df = spark.read.csv(SparkFiles.get('ufc_fighter_tott.csv'), header=True)
 ft_df.createOrReplaceTempView("ft")
 
-fed_df = spark.sql("select fd.*, date, location from ed inner join fd on ed.EVENT=fd.EVENT")
-st.write(fed_df.show(5))
+
 
 st.header('REWRITING WITH PYSPARK!!!')
 
