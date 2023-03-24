@@ -104,7 +104,7 @@ fightdata[5].createOrReplaceTempView("ft")
 fightdata[6].createOrReplaceTempView("fighters")
 
 fighters_df = spark.sql("select * from fighters")
-
+                      
 st.header('REWRITING WITH PYSPARK!!!')
 
 audio_file = open('song.mp3', 'rb')
@@ -170,7 +170,8 @@ if view =='Single Fighter Stats':
             st.subheader('Total UFC Fights - '+str(fights.count()))
             st.subheader(str(wins)+' Wins')
             st.subheader(str(losses)+' Losses')
-            st.write(spark.sql("select max(date) max_date from fr_clean where FIGHTER1= '{}' or FIGHTER2='{}' ".format(fighter_filter,fighter_filter)[0]["max_date"])
+            last_fight= spark.sql("select max(date) max_date from fr_clean where FIGHTER1= '{}' or FIGHTER2='{}' ".format(fighter_filter,fighter_filter)
+            st.write(last_fight[0]["max_date"])
         with col2:
             st.subheader(str(opp_stats['SIG_STR'].sum())+' Total Career Significant Strikes Absored')
             st.subheader(str(opp_stats['HEAD_STR'].sum())+' Total Career Head Strikes Absored')
