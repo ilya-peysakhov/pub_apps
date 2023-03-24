@@ -60,6 +60,7 @@ cleaned_fs_df = spark.sql("select EVENT,BOUT,ROUND,FIGHTER,KD,
                           split(HEAD,' of ')[0] head_str_l,
                           split(HEAD,' of ')[1] head_str_a  
                           from fs limit 5")
+
 st.write(cleaned_fs_df)
 
 frd_url="https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fighter_details.csv"
