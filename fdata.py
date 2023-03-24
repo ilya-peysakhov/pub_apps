@@ -102,6 +102,8 @@ fightdata[4].createOrReplaceTempView("frd")
 fightdata[5].createOrReplaceTempView("ft")
 fightdata[6].createOrReplaceTempView("fighters")
 
+fighters_df = spark.sql("select * from fighters")
+
 st.header('REWRITING WITH PYSPARK!!!')
 
 audio_file = open('song.mp3', 'rb')
