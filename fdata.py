@@ -26,28 +26,33 @@ def _max_width_():
 st.set_page_config(page_icon="👊", page_title="UFC Data Explorer v0.2", layout="wide")
 spark = SparkSession.builder.getOrCreate()
 
+#event details
 ed_url="https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_event_details.csv"
 spark.sparkContext.addFile(ed_url)
 ed_df = spark.read.csv(SparkFiles.get('ufc_event_details.csv'), header=True)
 ed_df.createOrReplaceTempView("ed")
-
+#fight details
 fd_url="https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_details.csv"
 spark.sparkContext.addFile(fd_url)
 fd_df = spark.read.csv(SparkFiles.get('ufc_fight_details.csv'), header=True)
 fd_df.createOrReplaceTempView("fd")
-
+#event + fight details
 fed_df = spark.sql("select fd.*, DATE,LOCATION from ed inner join fd on ed.EVENT=fd.EVENT")
-             
+fed_df.createOrReplaceTempView("fed")
+
+#fight results
 fr_url="https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_results.csv"
 spark.sparkContext.addFile(fr_url)
 fr_df = spark.read.csv(SparkFiles.get('ufc_fight_results.csv'), header=True)
 fr_df.createOrReplaceTempView("fr")
 
+#fight stats
 fs_url="https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_stats.csv"
 spark.sparkContext.addFile(fs_url)
 fs_df = spark.read.csv(SparkFiles.get('ufc_fight_stats.csv'), header=True)
 fs_df.createOrReplaceTempView("fs")
 
+#cleanup fight stats
 cleaned_fs_df = spark.sql("""select EVENT,BOUT,ROUND,FIGHTER,KD,
                           split(`SIG.STR.`,' of ')[0] sig_str_l,
                           split(`SIG.STR.`,' of ')[1] sig_str_a,
@@ -60,19 +65,20 @@ cleaned_fs_df = spark.sql("""select EVENT,BOUT,ROUND,FIGHTER,KD,
                           split(HEAD,' of ')[1] head_str_a  
                           from fs limit 5""")
 
-st.write(cleaned_fs_df)
+
 
 frd_url="https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fighter_details.csv"
 spark.sparkContext.addFile(frd_url)
 frd_df = spark.read.csv(SparkFiles.get('ufc_fighter_details.csv'), header=True)
-frd_df.createOrReplaceTempView("fd")
+frd_df.createOrReplaceTempView("frd")
 
 ft_url="https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fighter_tott.csv"
 spark.sparkContext.addFile(ft_url)
 ft_df = spark.read.csv(SparkFiles.get('ufc_fighter_tott.csv'), header=True)
 ft_df.createOrReplaceTempView("ft")
 
-
+fighters_df = spark.sql("select * from ft inner join frd on frd.URL = ft.URL")
+fighters_df.createOrReplaceTempView("fighters")
 
 st.header('REWRITING WITH PYSPARK!!!')
 
@@ -152,14 +158,12 @@ if view =='Single Fighter Stats':
         st.write(fight_stats[(fight_stats['BOUT']==bout_filter) & (fight_stats['FIGHTER']==fighter_filter)])
 
 elif view =='Show all data':
-    st.write('Events')
-    st.write(events.head(5))
-    st.write('Fight Details')
-    st.write(fight_results.head(5))
+    st.write('Events & Fights')
+    st.write(spark.sql("select * from fed limit 5"))
     st.write('Fight Stats')
-    st.write(fight_stats.head(5))
+    st.write(spark.sql("select * from fs limit 5"))
     st.write('Fighter Details')
-    st.write(fighter_merged.head(5))
+    st.write(spark.sql("select * from fighters"))
 else:
     st.write("Building")
 
