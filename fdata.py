@@ -40,7 +40,7 @@ spark.sparkContext.addFile(fd_url)
 fd_df = spark.read.csv(SparkFiles.get('ufc_fight_details.csv'), header=True)
 fd_df.createOrReplaceTempView("fd")
 #event + fight details
-fed_df = spark.sql("select fd.*, to_date(DATE, 'MMMM d, yyyy') DATE,LOCATION from ed_clean inner join fd on ed.EVENT=fd.EVENT")
+fed_df = spark.sql("select fd.*, date,LOCATION from ed_clean inner join fd on ed.EVENT=fd.EVENT")
 fed_df.createOrReplaceTempView("fed")
 
 #fight results
@@ -53,7 +53,7 @@ fr_df = spark.sql("""select fr.EVENT, fr.BOUT,
                     split(fr.BOUT,' vs. ')[1] FIGHTER2,
                     split(OUTCOME,'/')[0] FIGHTER1_OUTCOME,
                     split(OUTCOME,'/')[1] FIGHTER2_OUTCOME,
-                    WEIGHTCLASS,METHOD,ROUND,TIME,left(`TIME FORMAT`,1) TIME_FORMAT,REFEREE,DETAILS,fr.URL,to_date(DATE, 'MMMM d, yyyy') DATE 
+                    WEIGHTCLASS,METHOD,ROUND,TIME,left(`TIME FORMAT`,1) TIME_FORMAT,REFEREE,DETAILS,fr.URL,date 
                     from fr
                     left join fed on fed.BOUT = fr.BOUT """)
 fr_df.createOrReplaceTempView("fr_clean")
