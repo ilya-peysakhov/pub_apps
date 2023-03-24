@@ -144,7 +144,7 @@ if view =='Single Fighter Stats':
     fighter_list = list(fighters_df.select('FIGHTER').toPandas()['FIGHTER'])
     fighter_filter = st.selectbox('Pick a fighter',options=fighter_list)
     #fights = fight_results[fight_results['BOUT'].str.contains(fighter_filter,case=False)]
-    fights = list(spark.sql("select BOUT from fr_clean where FIGHTER1 = '{}' or FIGHTER2='{}'".format(fighter_filter,fighter_filter)).toPandas())
+    fights = spark.sql("select BOUT from fr_clean where FIGHTER1 = '{}' or FIGHTER2='{}'".format(fighter_filter,fighter_filter)
     bouts = fight_stats[fight_stats['BOUT'].str.contains(fighter_filter, case=False)]
     opp_stats = fight_stats[(fight_stats['BOUT'].isin(bouts['BOUT'])) & (fight_stats['FIGHTER']!=fighter_filter)]
     fighter_stats = fight_stats[(fight_stats['BOUT'].isin(bouts['BOUT'])) & (fight_stats['FIGHTER']==fighter_filter)]
@@ -154,7 +154,7 @@ if view =='Single Fighter Stats':
     if fighter_filter:
         col1,col2,col3 = st.columns(3)
         with col1:
-            st.subheader('Total UFC Fights - '+str(fights.shape[0]))
+            st.subheader('Total UFC Fights - '+str(fights.count()))
             st.subheader(str(wins)+' Wins')
             st.subheader(str(losses)+' Losses')
             st.write(spark.sql("select max(date) from fr_clean where FIGHTER1= '{}' or FIGHTER2='{}' ".format(fighter_filter,fighter_filter)))
