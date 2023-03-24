@@ -45,7 +45,7 @@ fr_url="https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_results
 spark.sparkContext.addFile(fr_url)
 fr_df = spark.read.csv(SparkFiles.get('ufc_fight_results.csv'), header=True)
 fr_df.createOrReplaceTempView("fr")
-fr_df = spark.sql("""select EVENT, BOUT, 
+fr_df = spark.sql("""select fr.EVENT, fr.BOUT, 
                     split(BOUT,' vs. ')[0] FIGHTER1,
                     split(BOUT,' vs. ')[1] FIGHTER2,
                     split(OUTCOME,'/')[0] FIGHTER1_OUTCOME,
