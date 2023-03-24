@@ -163,7 +163,7 @@ elif view =='Show all data':
     st.write('Fight Stats')
     st.write(spark.sql("select * from fs limit 5"))
     st.write('Fighter Details')
-    st.write(spark.sql("select * from fighters"))
+    st.write(spark.sql("select * from fighters order by LAST asc"))
 else:
     st.write("Building")
 
