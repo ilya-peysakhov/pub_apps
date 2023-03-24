@@ -50,7 +50,7 @@ fr_df = spark.sql("""select fr.EVENT, fr.BOUT,
                     split(fr.BOUT,' vs. ')[1] FIGHTER2,
                     split(OUTCOME,'/')[0] FIGHTER1_OUTCOME,
                     split(OUTCOME,'/')[1] FIGHTER2_OUTCOME,
-                    WEIGHTCLASS,METHOD,ROUND,TIME,left(`TIME FORMAT`,1) TIME_FORMAT,REFEREE,DETAILS,URL,DATE 
+                    WEIGHTCLASS,METHOD,ROUND,TIME,left(`TIME FORMAT`,1) TIME_FORMAT,REFEREE,DETAILS,fr.URL,DATE 
                     from fr
                     left join fed on fed.BOUT = fr.BOUT """)
 fr_df.createOrReplaceTempView("fr_clean")
