@@ -30,11 +30,18 @@ spark.sparkContext.addFile(ed_url)
 ed_df = spark.read.csv(SparkFiles.get('ufc_event_details.csv'), header=True)
 ed_df.createOrReplaceTempView("ed")
 
+if st.button("ed"):
+    st.write(ed_df.show(5)
+
 fd_url="https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_details.csv"
 spark.sparkContext.addFile(fd_url)
 fd_df = spark.read.csv(SparkFiles.get('ufc_fight_details.csv'), header=True)
 fd_df.createOrReplaceTempView("fd")
 
+if st.button("fd"):
+    st.write(fd_df.show(5)
+             
+             
 fr_url="https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_results.csv"
 spark.sparkContext.addFile(fr_url)
 fr_df = spark.read.csv(SparkFiles.get('ufc_fight_results.csv'), header=True)
