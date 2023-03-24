@@ -77,7 +77,7 @@ spark.sparkContext.addFile(ft_url)
 ft_df = spark.read.csv(SparkFiles.get('ufc_fighter_tott.csv'), header=True)
 ft_df.createOrReplaceTempView("ft")
 
-fighters_df = spark.sql("select * from ft inner join frd on frd.URL = ft.URL")
+fighters_df = spark.sql("select FIGHTER,HEIGHT,WEIGHT,REACH,STANCE,DOB,FIRST,LAST,NICKNAME,frd.URL from ft inner join frd on frd.URL = ft.URL")
 fighters_df.createOrReplaceTempView("fighters")
 
 st.header('REWRITING WITH PYSPARK!!!')
