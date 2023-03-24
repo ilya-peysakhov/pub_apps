@@ -149,14 +149,14 @@ if view =='Single Fighter Stats':
     fighter_stats = fight_stats[(fight_stats['BOUT'].isin(bouts['BOUT'])) & (fight_stats['FIGHTER']==fighter_filter)]
     wins = len(fight_results[(fight_results['OUTCOME_1'] == 'W') & (fight_results['FIGHTER_1'] == fighter_filter) | (fight_results['OUTCOME_2'] == 'W') & (fight_results['FIGHTER_2'] == fighter_filter)])
     losses = len(fight_results[(fight_results['OUTCOME_1'] == 'L') & (fight_results['FIGHTER_1'] == fighter_filter) | (fight_results['OUTCOME_2'] == 'L') & (fight_results['FIGHTER_2'] == fighter_filter)])
-
+    ayo= st.text_input('text')
     if fighter_filter:
         col1,col2,col3 = st.columns(3)
         with col1:
             st.subheader('Total UFC Fights - '+str(fights.shape[0]))
             st.subheader(str(wins)+' Wins')
             st.subheader(str(losses)+' Losses')
-            st.write(spark.sql("select max(date) from fr where FIGHTER1='{}'".format(fighter_filter)))
+            st.write(spark.sql("select max(date) from fr where FIGHTER1='{}'".format(ayo)))
         with col2:
             st.subheader(str(opp_stats['SIG_STR'].sum())+' Total Career Significant Strikes Absored')
             st.subheader(str(opp_stats['HEAD_STR'].sum())+' Total Career Head Strikes Absored')
