@@ -36,7 +36,6 @@ fd_df = spark.read.csv(SparkFiles.get('ufc_fight_details.csv'), header=True)
 fd_df.createOrReplaceTempView("fd")
 
 fed_df = spark.sql("select fd.*, DATE,LOCATION from ed inner join fd on ed.EVENT=fd.EVENT")
-st.dataframe(fed_df)
              
 fr_url="https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_results.csv"
 spark.sparkContext.addFile(fr_url)
@@ -47,6 +46,9 @@ fs_url="https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_stats.c
 spark.sparkContext.addFile(fs_url)
 fs_df = spark.read.csv(SparkFiles.get('ufc_fight_stats.csv'), header=True)
 fs_df.createOrReplaceTempView("fs")
+
+cleaned_fs_df = spark.sql('select *, split("SIG.STR.",' of ')[0] SIG_STR_L,split("SIG.STR.",' of ')[1] SIG_STR_AT  from fs')
+st.write(cleaned_fs_df)
 
 frd_url="https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fighter_details.csv"
 spark.sparkContext.addFile(frd_url)
