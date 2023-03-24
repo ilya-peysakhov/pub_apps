@@ -57,7 +57,7 @@ def getData():
                         split(OUTCOME,'/')[1] FIGHTER2_OUTCOME,
                         WEIGHTCLASS,METHOD,ROUND,TIME,left(`TIME FORMAT`,1) TIME_FORMAT,REFEREE,DETAILS,fr.URL,date 
                         from fr
-                        left join fed on fed.EVENT = fr.EVENT and fed.BOUT=fr.BOUT """)
+                        left join fed on fed.URL = fr.URL""")
     
 
     #fight stats
