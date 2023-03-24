@@ -170,7 +170,7 @@ if view =='Single Fighter Stats':
             st.subheader('Total UFC Fights - '+str(fights.count()))
             st.subheader(str(wins)+' Wins')
             st.subheader(str(losses)+' Losses')
-            last_fight= spark.sql("select max(date) max_date from fr_clean where FIGHTER1= '{}' or FIGHTER2='{}' ".format(fighter_filter,fighter_filter)
+            last_fight= spark.sql("select max(date) max_date from fr_clean where FIGHTER1= '{}' or FIGHTER2='{}' ".format(fighter_filter,fighter_filter).collect()
             st.write(last_fight[0]["max_date"])
         with col2:
             st.subheader(str(opp_stats['SIG_STR'].sum())+' Total Career Significant Strikes Absored')
