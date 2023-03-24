@@ -45,10 +45,10 @@ spark.sparkContext.addFile(fs_url)
 fs_df = spark.read.csv(SparkFiles.get('ufc_fight_stats.csv'), header=True)
 fs_df.createOrReplaceTempView("fs")
 
-fd_url="https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fighter_details.csv"
-spark.sparkContext.addFile(fd_url)
-fd_df = spark.read.csv(SparkFiles.get('ufc_fighter_details.csv'), header=True)
-fd_df.createOrReplaceTempView("fd")
+frd_url="https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fighter_details.csv"
+spark.sparkContext.addFile(frd_url)
+frd_df = spark.read.csv(SparkFiles.get('ufc_fighter_details.csv'), header=True)
+frd_df.createOrReplaceTempView("fd")
 
 ft_url="https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fighter_tott.csv"
 spark.sparkContext.addFile(ft_url)
