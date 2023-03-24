@@ -176,7 +176,7 @@ elif view =='Show all data':
     st.write('Fight Stats')
     st.write(spark.sql("select * from fs limit 5"))    
 else:
-    st.line_chart(spark.sql("select to_date(DATE, 'MMMM d, yyyy') date,count(*) from fed group by 1 order by 1 asc"))
+    st.write(spark.sql("select to_date(DATE, 'MMMM d, yyyy') date,count(*) from fed group by 1 order by 1 asc"))
 
 
 
