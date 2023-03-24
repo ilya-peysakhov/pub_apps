@@ -37,7 +37,7 @@ spark.sparkContext.addFile(fd_url)
 fd_df = spark.read.csv(SparkFiles.get('ufc_fight_details.csv'), header=True)
 fd_df.createOrReplaceTempView("fd")
 #event + fight details
-fed_df = spark.sql("select fd.*, DATE,LOCATION from ed inner join fd on ed.EVENT=fd.EVENT")
+fed_df = spark.sql("select fd.*, DATE,LOCATION, from ed inner join fd on ed.EVENT=fd.EVENT")
 fed_df.createOrReplaceTempView("fed")
 
 #fight results
@@ -50,7 +50,8 @@ fr_df = spark.sql("""select EVENT, BOUT,
                     split(BOUT,' vs. ')[1] FIGHTER2,
                     split(OUTCOME,'/')[0] FIGHTER1_OUTCOME,
                     split(OUTCOME,'/')[1] FIGHTER2_OUTCOME,
-                    WEIGHTCLASS,METHOD,ROUND,TIME,left(`TIME FORMAT`,1) TIME_FORMAT,REFEREE,DETAILS,URL from fr""")
+                    WEIGHTCLASS,METHOD,ROUND,TIME,left(`TIME FORMAT`,1) TIME_FORMAT,REFEREE,DETAILS,URL,DATE from fr 
+                    left join fed on fed.BOUT = fr.BOUT""")
 fr_df.createOrReplaceTempView("fr_clean")
 
 #fight stats
@@ -180,7 +181,7 @@ else:
     st.area_chart(spark.sql("select date_trunc('month',to_date(DATE, 'MMMM d, yyyy')) date,count(*) fights from fed group by 1 order by 1 asc").toPandas().set_index("date"))
     st.write("Events by month")
     st.area_chart(spark.sql("select date_trunc('month',to_date(DATE, 'MMMM d, yyyy')) date, count(distinct EVENT) events from fed group by 1 order by 1 asc").toPandas().set_index("date"))
-
+    st.write(spark.sql("select count(distinct fighter) from (select FIGHTER1 fighter from fr_clean group by 1 UNION select fighter2 from fr_clean group by 1)") 
 
 
 
