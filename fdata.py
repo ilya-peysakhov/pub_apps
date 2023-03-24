@@ -160,12 +160,14 @@ if view =='Single Fighter Stats':
         st.write(fight_stats[(fight_stats['BOUT']==bout_filter) & (fight_stats['FIGHTER']==fighter_filter)])
 
 elif view =='Show all data':
-    st.write('Events & Fights')
-    st.write(spark.sql("select * from fed limit 5"))
-    st.write('Fight Stats')
-    st.write(spark.sql("select * from fs limit 5"))
     st.write('Fighter Details')
     st.write(spark.sql("select * from fighters order by FIGHTER asc"))
+    st.write('Events & Fights')
+    st.write(spark.sql("select * from fed limit 5"))
+    st.write('Fight Results')
+    st.write(spark.sql("select * from fr limit 5"))
+    st.write('Fight Stats')
+    st.write(spark.sql("select * from fs limit 5"))    
 else:
     st.write("Building")
 
