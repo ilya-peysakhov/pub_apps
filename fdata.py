@@ -5,7 +5,6 @@ import numpy as np
 import pyspark
 from pyspark.sql import SparkSession
 from pyspark import SparkFiles
-from pyspark.sql.functions import col
 
 
 
