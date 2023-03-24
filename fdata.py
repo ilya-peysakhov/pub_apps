@@ -51,8 +51,8 @@ def getData():
     fr_df = spark.read.csv(SparkFiles.get('ufc_fight_results.csv'), header=True)
     fr_df.createOrReplaceTempView("fr")
     fr_df = spark.sql("""select trim(fr.EVENT) EVENT, fr.BOUT, 
-                        split(fr.BOUT,' vs. ')[0] FIGHTER1,
-                        split(fr.BOUT,' vs. ')[1] FIGHTER2,
+                        trim(split(fr.BOUT,' vs. ')[0]) FIGHTER1,
+                        trim(split(fr.BOUT,' vs. ')[1]) FIGHTER2,
                         split(OUTCOME,'/')[0] FIGHTER1_OUTCOME,
                         split(OUTCOME,'/')[1] FIGHTER2_OUTCOME,
                         WEIGHTCLASS,METHOD,ROUND,TIME,left(`TIME FORMAT`,1) TIME_FORMAT,REFEREE,DETAILS,fr.URL,date 
