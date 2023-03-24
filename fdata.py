@@ -103,7 +103,7 @@ st.header('UFC Fight Stats data explorer')
 st.write('This pulls data from Greco1899''s scraper of UFC Fight Stats - https://github.com/Greco1899/scrape_ufc_stats')
 st.image('https://media.tenor.com/3igI9osXP0UAAAAM/just-bleed.gif',width=200)
 
-view = st.sidebar.radio('Select a view',('Single Fighter Stats','All Time Stats','Show all data'))
+view = st.sidebar.radio('Select a view',('Single Fighter Stats','All Time Stats','Show all dataset samples'))
 
 
 @st.cache_data
@@ -171,12 +171,12 @@ if view =='Single Fighter Stats':
     if bout_filter:
         st.write(fight_stats[(fight_stats['BOUT']==bout_filter) & (fight_stats['FIGHTER']==fighter_filter)])
 
-elif view =='Show all data':
-    st.write('Fighter Details')
+elif view =='Show all dataset samples':
+    st.write('Fighter Details (cleaned)')
     st.write(spark.sql("select * from fighters order by FIGHTER asc"))
-    st.write('Events & Fights')
+    st.write('Events & Fights (cleaned)')
     st.write(spark.sql("select * from fed limit 5"))
-    st.write('Fight Results')
+    st.write('Fight Results (cleaned)')
     st.write(spark.sql("select * from fr_clean limit 5"))
     st.write('Fight Stats')
     st.write(spark.sql("select * from fs limit 5"))    
