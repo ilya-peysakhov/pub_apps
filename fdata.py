@@ -36,7 +36,7 @@ fd_df = spark.read.csv(SparkFiles.get('ufc_fight_details.csv'), header=True)
 fd_df.createOrReplaceTempView("fd")
 
 fed_df = spark.sql("select * from ed inner join fd on ed.EVENT=fd.EVENT")
-st.write(fed_df.show(5))
+st.dataframe(fed_df.show(6))
              
 fr_url="https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_results.csv"
 spark.sparkContext.addFile(fr_url)
