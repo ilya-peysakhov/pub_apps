@@ -32,7 +32,7 @@ spark.sparkContext.addFile(ed_url)
 ed_df = spark.read.csv(SparkFiles.get('ufc_event_details.csv'), header=True)
 ed_df.createOrReplaceTempView("ed")
 ed_clean_df = spark.sql("select EVENT,URL,to_date(DATE,'MMMM d, yyyy') DATE,LOCATION from ed")
-ed_clean.createOrReplaceTempView("ed_clean")
+ed_clean_df.createOrReplaceTempView("ed_clean")
 
 #fight details
 fd_url="https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_details.csv"
