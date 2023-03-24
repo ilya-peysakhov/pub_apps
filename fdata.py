@@ -26,7 +26,7 @@ def _max_width_():
 st.set_page_config(page_icon="👊", page_title="UFC Data Explorer v0.2", layout="wide")
 spark = SparkSession.builder.getOrCreate()
 
-@st.cache_data
+@st.cache_resource
 def getData():
 #event details
     ed_url="https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_event_details.csv"
