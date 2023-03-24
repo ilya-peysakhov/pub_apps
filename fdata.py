@@ -31,13 +31,16 @@ ed_url="https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_event_details
 spark.sparkContext.addFile(ed_url)
 ed_df = spark.read.csv(SparkFiles.get('ufc_event_details.csv'), header=True)
 ed_df.createOrReplaceTempView("ed")
+ed_clean_df = spark.sql("select EVENT,URL,to_date(DATE,'MMMM d, yyyy') DATE,LOCATION from ed")
+ed_clean.createOrReplaceTempView("ed_clean")
+
 #fight details
 fd_url="https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_details.csv"
 spark.sparkContext.addFile(fd_url)
 fd_df = spark.read.csv(SparkFiles.get('ufc_fight_details.csv'), header=True)
 fd_df.createOrReplaceTempView("fd")
 #event + fight details
-fed_df = spark.sql("select fd.*, to_date(DATE, 'MMMM d, yyyy') DATE,LOCATION from ed inner join fd on ed.EVENT=fd.EVENT")
+fed_df = spark.sql("select fd.*, to_date(DATE, 'MMMM d, yyyy') DATE,LOCATION from ed_clean inner join fd on ed.EVENT=fd.EVENT")
 fed_df.createOrReplaceTempView("fed")
 
 #fight results
