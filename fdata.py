@@ -143,7 +143,8 @@ fight_results = fight_results.drop('OUTCOME',axis=1)
 if view =='Single Fighter Stats':
     fighter_list = list(fighters_df.select('FIGHTER').toPandas()['FIGHTER'])
     fighter_filter = st.selectbox('Pick a fighter',options=fighter_list)
-    fights = fight_results[fight_results['BOUT'].str.contains(fighter_filter,case=False)]
+    #fights = fight_results[fight_results['BOUT'].str.contains(fighter_filter,case=False)]
+    fights = list(spark.sql("select BOUT from fr_clean where BOUT like '%'{}'%'".format(fighter_filter)).toPandas())
     bouts = fight_stats[fight_stats['BOUT'].str.contains(fighter_filter, case=False)]
     opp_stats = fight_stats[(fight_stats['BOUT'].isin(bouts['BOUT'])) & (fight_stats['FIGHTER']!=fighter_filter)]
     fighter_stats = fight_stats[(fight_stats['BOUT'].isin(bouts['BOUT'])) & (fight_stats['FIGHTER']==fighter_filter)]
