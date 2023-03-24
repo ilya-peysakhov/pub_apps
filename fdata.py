@@ -37,7 +37,7 @@ spark.sparkContext.addFile(fd_url)
 fd_df = spark.read.csv(SparkFiles.get('ufc_fight_details.csv'), header=True)
 fd_df.createOrReplaceTempView("fd")
 #event + fight details
-fed_df = spark.sql("select fd.*, DATE,LOCATION, from ed inner join fd on ed.EVENT=fd.EVENT")
+fed_df = spark.sql("select fd.*, DATE,LOCATION from ed inner join fd on ed.EVENT=fd.EVENT")
 fed_df.createOrReplaceTempView("fed")
 
 #fight results
