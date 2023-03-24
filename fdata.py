@@ -62,7 +62,7 @@ spark.sparkContext.addFile(ft_url)
 ft_df = spark.read.csv(SparkFiles.get('ufc_fighter_tott.csv'), header=True)
 ft_df.createOrReplaceTempView("ft")
 
-fed_df = spark.sql("select fd.*, date, location from ed inner join fd on ed.event=fd.event")
+fed_df = spark.sql("select fd.*, date, location from ed inner join fd on ed.EVENT=fd.EVENT")
 st.write(fed_df.show(5))
 
 st.header('REWRITING WITH PYSPARK!!!')
