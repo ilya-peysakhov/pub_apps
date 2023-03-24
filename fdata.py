@@ -50,7 +50,8 @@ fr_df = spark.sql("""select EVENT, BOUT,
                     split(BOUT,' vs. ')[1] FIGHTER2,
                     split(OUTCOME,'/')[0] FIGHTER1_OUTCOME,
                     split(OUTCOME,'/')[1] FIGHTER2_OUTCOME,
-                    WEIGHTCLASS,METHOD,ROUMD,TIME,left(`TIME FORMAT`,1) TIME_FORMAT,REFEREE,DETAILS,URL""")
+                    WEIGHTCLASS,METHOD,ROUND,TIME,left(`TIME FORMAT`,1) TIME_FORMAT,REFEREE,DETAILS,URL from fr""")
+fr_df.createOrReplaceTempView("fr_clean")
 
 #fight stats
 fs_url="https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_stats.csv"
@@ -171,7 +172,7 @@ elif view =='Show all data':
     st.write('Events & Fights')
     st.write(spark.sql("select * from fed limit 5"))
     st.write('Fight Results')
-    st.write(spark.sql("select * from fr limit 5"))
+    st.write(spark.sql("select * from fr_clean limit 5"))
     st.write('Fight Stats')
     st.write(spark.sql("select * from fs limit 5"))    
 else:
