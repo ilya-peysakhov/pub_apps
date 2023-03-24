@@ -49,7 +49,7 @@ spark.sparkContext.addFile(fs_url)
 fs_df = spark.read.csv(SparkFiles.get('ufc_fight_stats.csv'), header=True)
 fs_df.createOrReplaceTempView("fs")
 
-cleaned_fs_df = spark.sql("select *, `column_"SIG.STR."` newc  from fs")
+cleaned_fs_df = spark.sql("select *, 'SIG.STR.' newc  from fs")
 st.write(cleaned_fs_df)
 
 frd_url="https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fighter_details.csv"
