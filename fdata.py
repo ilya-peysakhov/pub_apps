@@ -208,7 +208,7 @@ else:
                     select FIGHTER2 fighter from fr_clean where date between current_date() -730 and current_date() group by 1)
                     """))
     st.write('Most experienced referees')
-    st.bar_chart(spark.sql("select REFEREE,count(*) fights from fr_clean group by 1 order by 2 desc").toPandas().set_index("REFEREE"))
+    st.bar_chart(spark.sql("select REFEREE,count(*) fights from fr_clean group by 1 order by 2 desc limit 100"), x="REFEREE")
 
 
 
