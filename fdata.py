@@ -212,7 +212,7 @@ else:
         st.write("Events by month")
         st.area_chart(spark.sql("select date_trunc('month', date) date, count(distinct EVENT) events from fed group by 1 order by 1 asc").toPandas().set_index("date"))
         st.write('Most experienced referees')
-        st.bar_chart(spark.sql("select REFEREE,count(*) fights from fr_clean group by 1 order by 2 desc limit 100"), x="REFEREE")
+        st.write(spark.sql("select REFEREE,count(*) fights from fr_clean group by 1 order by 2 desc limit 100"))
 
 
 
