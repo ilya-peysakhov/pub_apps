@@ -196,19 +196,23 @@ elif view =='Show all dataset samples':
     st.write('Fight Stats')
     st.write(spark.sql("select * from fs limit 5"))    
 else:
-    st.write("Fights by month")
-    st.area_chart(spark.sql("select date_trunc('month',date) date,count(*) fights from fed group by 1 order by 1 asc").toPandas().set_index("date"))
-    st.write("Events by month")
-    st.area_chart(spark.sql("select date_trunc('month', date) date, count(distinct EVENT) events from fed group by 1 order by 1 asc").toPandas().set_index("date"))
-    st.write('Fighters fought in the last 730 days (2 years)')
-    st.write(spark.sql("""
-                   select count(distinct fighter) from 
-                    (select FIGHTER1 fighter from fr_clean where date between current_date() -730 and current_date() group by 1 
-                    UNION 
-                    select FIGHTER2 fighter from fr_clean where date between current_date() -730 and current_date() group by 1)
-                    """))
-    st.write('Most experienced referees')
-    st.bar_chart(spark.sql("select REFEREE,count(*) fights from fr_clean group by 1 order by 2 desc limit 100"), x="REFEREE")
+    c1, c2 = st.columns(2)
+    with c1:
+        st.write("Fights by month")
+        st.area_chart(spark.sql("select date_trunc('month',date) date,count(*) fights from fed group by 1 order by 1 asc").toPandas().set_index("date"))
+        st.write('Fighters fought in the last 730 days (2 years)')
+        st.write(spark.sql("""
+                       select count(distinct fighter) from 
+                        (select FIGHTER1 fighter from fr_clean where date between current_date() -730 and current_date() group by 1 
+                        UNION 
+                        select FIGHTER2 fighter from fr_clean where date between current_date() -730 and current_date() group by 1)
+                        """))
+    
+    with c2:
+        st.write("Events by month")
+        st.area_chart(spark.sql("select date_trunc('month', date) date, count(distinct EVENT) events from fed group by 1 order by 1 asc").toPandas().set_index("date"))
+        st.write('Most experienced referees')
+        st.bar_chart(spark.sql("select REFEREE,count(*) fights from fr_clean group by 1 order by 2 desc limit 100"), x="REFEREE")
 
 
 
