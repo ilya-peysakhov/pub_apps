@@ -2,4 +2,3 @@ pip
 pandas
 numpy
 pyspark
-polars
