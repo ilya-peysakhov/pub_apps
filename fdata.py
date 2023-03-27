@@ -133,9 +133,9 @@ else:
     
     with c2:
         st.write("Events by month")
-        st.area_chart(duckdb.sql("select date_trunc('month', date) date, count(distinct EVENT) events from fed group by 1 order by 1 asc").toPandas().set_index("date"))
+        st.area_chart(duckdb.sql("select date_trunc('month', date) date, count(distinct EVENT) events from fed group by 1 order by 1 asc").df().set_index("date"))
         st.write('Most experienced referees in the last 2 years')
-        st.write(duckdb.sql("select REFEREE,count(*) fights from fr_clean where date between current_date() -730 and current_date() group by 1 order by 2 desc limit 10"))
+        st.write(duckdb.sql("select REFEREE,count(*) fights from fr_df where date between current_date() -730 and current_date() group by 1 order by 2 desc limit 10").df())
 
 
 
