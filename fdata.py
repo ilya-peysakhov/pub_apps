@@ -92,7 +92,7 @@ if view =='Single Fighter Stats':
             st.subheader('Total UFC Fights - '+str(fights.count()))
             st.subheader(str(wins)+' Wins')
             st.subheader(str(losses)+' Losses')
-            last_fight= duckdb.sql("select max(date) max_date from fr_clean where FIGHTER1= '{}' or FIGHTER2='{}' ".format(fighter_filter,fighter_filter)).collect()
+            last_fight= duckdb.sql("select max(date) max_date from fr_df where FIGHTER1= '{}' or FIGHTER2='{}' ".format(fighter_filter,fighter_filter)).collect()
             if fights.count()>0:
                 st.write('Last Fight - '+str(last_fight[0]["max_date"].strftime("%Y-%m-%d")))
         with col2:
@@ -102,7 +102,7 @@ if view =='Single Fighter Stats':
             st.subheader(str(fighter_stats['SIG_STR'].sum())+' Total Career Significant Strikes Landed')
         
         st.write('Fight Results')
-        st.write(duckdb.sql("select * from fr_clean where FIGHTER1= '{}' or FIGHTER2='{}' ".format(fighter_filter,fighter_filter)))
+        st.write(duckdb.sql("select * from fr_df where FIGHTER1= '{}' or FIGHTER2='{}' ".format(fighter_filter,fighter_filter)))
 
     bout_filter = st.selectbox('Pick a bout',options=bouts['BOUT'].drop_duplicates())
 
