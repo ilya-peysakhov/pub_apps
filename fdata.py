@@ -111,7 +111,7 @@ if view =='Single Fighter Stats':
 
 elif view =='Show all dataset samples':
     st.write('Fighter Details (cleaned)')
-    st.write(spark.sql("select * from fighters order by FIGHTER asc"))
+    st.write(duckdb.sql("select * from fighters order by FIGHTER asc"))
     st.write('Events & Fights (cleaned)')
     st.write(spark.sql("select * from fed limit 5"))
     st.write('Fight Results (cleaned)')
