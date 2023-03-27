@@ -22,7 +22,7 @@ def _max_width_():
     )
 
 
-st.set_page_config(page_icon="👊", page_title="UFC Data Explorer v0.2", layout="wide")
+st.set_page_config(page_icon="👊", page_title="UFC Data Explorer v0.3", layout="wide")
 
 ########start of app
 st.header('REWRITING WITH POLARS/DUCKDB!!!')
@@ -77,7 +77,7 @@ fighters= duckdb.sql("SELECT FIGHTER,HEIGHT,WEIGHT,REACH,STANCE,DOB,FIRST,LAST,N
 
 #
 if view =='Single Fighter Stats':
-    fighter_list = list(fighters_df.select('FIGHTER').toPandas()['FIGHTER'])
+    fighter_list = duckdb.sql("SELECT FIGHTER from fighters group by 1 order by 1").df()
     fighter_filter = st.selectbox('Pick a fighter',options=fighter_list)
     #fights = fight_results[fight_results['BOUT'].str.contains(fighter_filter,case=False)]
     fights = spark.sql("select BOUT from fr_clean where FIGHTER1 = '{}' or FIGHTER2='{}'".format(fighter_filter,fighter_filter))
