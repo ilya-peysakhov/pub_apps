@@ -5,6 +5,7 @@ import numpy as np
 import pyspark
 from pyspark.sql import SparkSession
 from pyspark import SparkFiles
+import polars as pl
 
 
 
@@ -27,8 +28,27 @@ st.set_page_config(page_icon="👊", page_title="UFC Data Explorer v0.2", layout
 spark = SparkSession.builder.getOrCreate()
 
 @st.cache_resource
+def getPolars():
+    ed = pl.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_event_details.csv").lazy()
+    sql = pl.SQLContext()
+    sql.register("ed", ed)
+    ed_c = sql.query("select trim(EVENT) EVENT, URL, to_date(DATE,'MMMM d, yyyy') DATE, LOCATION from ed")
+    return ed_c
+
+polarsdata = getPolars()
+ed_c = polarsdata[0]
+
+st.write(ed_c)
+ 
+
+@st.cache_resource
 def getData():
-#event details
+
+    ed = pl.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_event_details.csv"
+).lazy()
+    sql = pl.SQLContext()
+    sql.register("pokemon", pokemon)
+
     ed_url="https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_event_details.csv"
     spark.sparkContext.addFile(ed_url)
     ed_df = spark.read.csv(SparkFiles.get('ufc_event_details.csv'), header=True)
