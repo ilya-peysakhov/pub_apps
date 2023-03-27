@@ -2,9 +2,8 @@ import streamlit as st
 import pandas as pd
 import time
 import numpy as np
-import pyspark
-from pyspark.sql import SparkSession
-from pyspark import SparkFiles
+import polars as pl
+import duckdb
 
 
 
@@ -24,88 +23,9 @@ def _max_width_():
 
 
 st.set_page_config(page_icon="👊", page_title="UFC Data Explorer v0.2", layout="wide")
-spark = SparkSession.builder.getOrCreate()
 
-@st.cache_resource
-def getData():
-#event details
-    ed_url="https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_event_details.csv"
-    spark.sparkContext.addFile(ed_url)
-    ed_df = spark.read.csv(SparkFiles.get('ufc_event_details.csv'), header=True)
-    ed_df.createOrReplaceTempView("ed")
-    ed_clean_df = spark.sql("select trim(EVENT) EVENT,URL,to_date(DATE,'MMMM d, yyyy') DATE,LOCATION from ed")
-    
-
-    #fight details
-    fd_url="https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_details.csv"
-    spark.sparkContext.addFile(fd_url)
-    fd_df = spark.read.csv(SparkFiles.get('ufc_fight_details.csv'), header=True)
-    fd_df.createOrReplaceTempView("fd")
-    #event + fight details
-    fed_df = spark.sql("select trim(fd.EVENT) EVENT, trim(fd.BOUT) BOUT, fd.URL, date,LOCATION from ed_clean inner join fd on ed_clean.EVENT=fd.EVENT")
-    
-
-    #fight results
-    fr_url="https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_results.csv"
-    spark.sparkContext.addFile(fr_url)
-    fr_df = spark.read.csv(SparkFiles.get('ufc_fight_results.csv'), header=True)
-    fr_df.createOrReplaceTempView("fr")
-    fr_df = spark.sql("""select trim(fr.EVENT) EVENT, trim(fr.BOUT) BOUT, 
-                        trim(split(fr.BOUT,' vs. ')[0]) FIGHTER1,
-                        trim(split(fr.BOUT,' vs. ')[1]) FIGHTER2,
-                        split(OUTCOME,'/')[0] FIGHTER1_OUTCOME,
-                        split(OUTCOME,'/')[1] FIGHTER2_OUTCOME,
-                        WEIGHTCLASS,METHOD,ROUND,TIME,left(`TIME FORMAT`,1) TIME_FORMAT,REFEREE,DETAILS,fr.URL,date 
-                        from fr
-                        left join fed on fed.URL = fr.URL""")
-    
-
-    #fight stats
-    fs_url="https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_stats.csv"
-    spark.sparkContext.addFile(fs_url)
-    fs_df = spark.read.csv(SparkFiles.get('ufc_fight_stats.csv'), header=True)
-    
-
-    #cleanup fight stats
-    cleaned_fs_df = spark.sql("""select EVENT,BOUT,ROUND,FIGHTER,KD,
-                              split(`SIG.STR.`,' of ')[0] sig_str_l,
-                              split(`SIG.STR.`,' of ')[1] sig_str_a,
-                              split(`TOTAL STR.`,' of ')[0] total_str_l,
-                              split(`TOTAL STR.`,' of ')[1] total_str_a,
-                              split(TD,' of ')[0] td_l,
-                              split(TD,' of ')[1] td_a,
-                              `SUB.ATT`,`REV.`,CTRL,
-                              split(HEAD,' of ')[0] head_str_l,
-                              split(HEAD,' of ')[1] head_str_a  
-                              from fs limit 5""")
-
-
-
-    frd_url="https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fighter_details.csv"
-    spark.sparkContext.addFile(frd_url)
-    frd_df = spark.read.csv(SparkFiles.get('ufc_fighter_details.csv'), header=True)
-
-    ft_url="https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fighter_tott.csv"
-    spark.sparkContext.addFile(ft_url)
-    ft_df = spark.read.csv(SparkFiles.get('ufc_fighter_tott.csv'), header=True)
-    
-
-    fighters_df = spark.sql("select FIGHTER,HEIGHT,WEIGHT,REACH,STANCE,DOB,FIRST,LAST,NICKNAME,frd.URL from ft inner join frd on frd.URL = ft.URL")
-    
-    return ed_clean_df,fed_df,fr_df,fs_df,frd_df,ft_df,fighters_df
-
-fightdata=getData()
-fightdata[0].createOrReplaceTempView("ed_clean")
-fightdata[1].createOrReplaceTempView("fed")
-fightdata[2].createOrReplaceTempView("fr_clean")
-fightdata[3].createOrReplaceTempView("fs")
-fightdata[4].createOrReplaceTempView("frd")
-fightdata[5].createOrReplaceTempView("ft")
-fightdata[6].createOrReplaceTempView("fighters")
-
-fighters_df = spark.sql("select * from fighters")
-                      
-st.header('REWRITING WITH PYSPARK!!!')
+########start of app
+st.header('REWRITING WITH POLARS/DUCKDB!!!')
 
 audio_file = open('song.mp3', 'rb')
 audio_bytes = audio_file.read()
@@ -119,38 +39,41 @@ st.image('https://media.tenor.com/3igI9osXP0UAAAAM/just-bleed.gif',width=200)
 view = st.sidebar.radio('Select a view',('Single Fighter Stats','All Time Stats','Show all dataset samples'))
 
 
-@st.cache_data
-def refreshData():
-    events = pd.read_csv('https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_event_details.csv')
-    fight_details = pd.read_csv('https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_details.csv')
-    fight_results = pd.read_csv('https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_results.csv')
-    fight_stats = pd.read_csv('https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_stats.csv')
-    fighter_details = pd.read_csv('https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fighter_details.csv')
-    fighter_tot = pd.read_csv('https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fighter_tott.csv')
-    return events,fight_details,fight_results,fight_stats,fighter_details,fighter_tot
+###################### data pull and clean
 
-alldata = refreshData()
-events = alldata[0]
-fight_details = alldata[1]
-fight_results = alldata[2]
-fight_stats = alldata[3]
-fighter_details = alldata[4]
-fighter_tot = alldata[5]
+ed = pl.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_event_details.csv")
+ed_c = duckdb.sql("SELECT TRIM(EVENT) as EVENT, strptime(DATE, '%B %d, %Y') as  DATE, URL, LOCATION FROM ed")
+fd = pl.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_details.csv")
+fed = duckdb.sql("SELECT TRIM(fd.EVENT) as EVENT, TRIM(fd.BOUT) as BOUT, fd.URL, DATE,LOCATION from ed_c inner join fd on ed_c.EVENT=fd.EVENT ")
+fr = pl.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_results.csv")
+fr_df = duckdb.sql("""SELECT trim(fr.EVENT) as EVENT, 
+                             trim(fr.BOUT) as BOUT, 
+                            trim(split_part(fr.BOUT, ' vs. ' ,1)) as FIGHTER1,
+                            trim(split_part(fr.BOUT, ' vs. ', 2)) as FIGHTER2,
+                            split_part(OUTCOME, '/' ,1) as FIGHTER1_OUTCOME,
+                            split_part(OUTCOME, '/', 2) as FIGHTER2_OUTCOME,
+                            WEIGHTCLASS,METHOD,ROUND,TIME,left("TIME FORMAT",1) as TIME_FORMAT,REFEREE,DETAILS,fr.URL,date 
+                        from fr
+                        left join fed on fed.URL = fr.URL""")
+fs = pl.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_stats.csv")
+cleaned_fs_df = duckdb.sql("""SELECT EVENT,BOUT,ROUND,FIGHTER,KD,
+                              split_part("SIG.STR.",' of ',1) sig_str_l,
+                              split_part("SIG.STR.",' of ',2) sig_str_a,
+                              split_part("TOTAL STR.",' of ',1) total_str_l,
+                              split_part("TOTAL STR.",' of ',2) total_str_a,
+                              split_part(TD,' of ',1) td_l,
+                              split_part(TD,' of ',2) td_a,
+                              "SUB.ATT","REV.",CTRL,
+                              split_part(HEAD,' of ',1) head_str_l,
+                              split_part(HEAD,' of ',2) head_str_a  
+                              from fs """)
+frd = pl.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fighter_details.csv")
+ft = pl.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fighter_tott.csv")
+fighters= duckdb.sql("SELECT FIGHTER,HEIGHT,WEIGHT,REACH,STANCE,DOB,FIRST,LAST,NICKNAME,frd.URL from ft inner join frd on frd.URL = ft.URL")
+########################
+                      
 
-#transforms
-fighter_merged = fighter_details.merge(fighter_tot, on='URL')
-fight_stats[['SIG_STR', 'SIG_STR_ATTEMPTED']] = fight_stats['SIG.STR.'].str.split(' of ', expand=True)
-fight_stats['SIG_STR'] = fight_stats['SIG_STR'].fillna('0').str.replace('\D+', '').astype(int)
-fight_stats = fight_stats.drop('SIG.STR.', axis=1)
-fight_stats[['HEAD_STR', 'HEAD_STR_ATTEMPTED']] = fight_stats['HEAD'].str.split(' of ', expand=True)
-fight_stats['HEAD_STR'] = fight_stats['HEAD_STR'].fillna('0').str.replace('\D+', '').astype(int)
-fight_stats = fight_stats.drop('HEAD', axis=1)
 
-fight_results[['OUTCOME_1', 'OUTCOME_2']] = fight_results['OUTCOME'].str.split('/', expand=True)
-fight_results[['FIGHTER_1', 'FIGHTER_2']] = fight_results['BOUT'].str.split('  vs. ', expand=True)
-fight_results['FIGHTER_2'] = fight_results['FIGHTER_2'].str.strip()
-
-fight_results = fight_results.drop('OUTCOME',axis=1)
 
 #
 if view =='Single Fighter Stats':
