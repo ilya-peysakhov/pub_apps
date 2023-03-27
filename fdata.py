@@ -92,7 +92,7 @@ if view =='Single Fighter Stats':
             st.subheader('Total UFC Fights - '+str(fights.count()))
             st.subheader(str(wins)+' Wins')
             st.subheader(str(losses)+' Losses')
-            last_fight= spark.sql("select max(date) max_date from fr_clean where FIGHTER1= '{}' or FIGHTER2='{}' ".format(fighter_filter,fighter_filter)).collect()
+            last_fight= duckdb.sql("select max(date) max_date from fr_clean where FIGHTER1= '{}' or FIGHTER2='{}' ".format(fighter_filter,fighter_filter)).collect()
             if fights.count()>0:
                 st.write('Last Fight - '+str(last_fight[0]["max_date"].strftime("%Y-%m-%d")))
         with col2:
@@ -102,7 +102,7 @@ if view =='Single Fighter Stats':
             st.subheader(str(fighter_stats['SIG_STR'].sum())+' Total Career Significant Strikes Landed')
         
         st.write('Fight Results')
-        st.write(spark.sql("select * from fr_clean where FIGHTER1= '{}' or FIGHTER2='{}' ".format(fighter_filter,fighter_filter)))
+        st.write(duckdb.sql("select * from fr_clean where FIGHTER1= '{}' or FIGHTER2='{}' ".format(fighter_filter,fighter_filter)))
 
     bout_filter = st.selectbox('Pick a bout',options=bouts['BOUT'].drop_duplicates())
 
@@ -113,18 +113,18 @@ elif view =='Show all dataset samples':
     st.write('Fighter Details (cleaned)')
     st.write(duckdb.sql("select * from fighters order by FIGHTER asc"))
     st.write('Events & Fights (cleaned)')
-    st.write(spark.sql("select * from fed limit 5"))
+    st.write(duckdb.sql("select * from fed limit 5"))
     st.write('Fight Results (cleaned)')
-    st.write(spark.sql("select * from fr_clean limit 5"))
+    st.write(duckdb.sql("select * from fr_clean limit 5"))
     st.write('Fight Stats')
-    st.write(spark.sql("select * from fs limit 5"))    
+    st.write(duckdb.sql("select * from fs limit 5"))    
 else:
     c1, c2 = st.columns(2)
     with c1:
         st.write("Fights by month")
-        st.area_chart(spark.sql("select date_trunc('month',date) date,count(*) fights from fed group by 1 order by 1 asc").toPandas().set_index("date"))
+        st.area_chart(duckdb.sql("select date_trunc('month',date) date,count(*) fights from fed group by 1 order by 1 asc").toPandas().set_index("date"))
         st.write('Fighters fought in the last 730 days (2 years)')
-        st.write(spark.sql("""
+        st.write(duckdb.sql("""
                        select count(distinct fighter) from 
                         (select FIGHTER1 fighter from fr_clean where date between current_date() -730 and current_date() group by 1 
                         UNION 
@@ -133,9 +133,9 @@ else:
     
     with c2:
         st.write("Events by month")
-        st.area_chart(spark.sql("select date_trunc('month', date) date, count(distinct EVENT) events from fed group by 1 order by 1 asc").toPandas().set_index("date"))
+        st.area_chart(duckdb.sql("select date_trunc('month', date) date, count(distinct EVENT) events from fed group by 1 order by 1 asc").toPandas().set_index("date"))
         st.write('Most experienced referees in the last 2 years')
-        st.write(spark.sql("select REFEREE,count(*) fights from fr_clean where date between current_date() -730 and current_date() group by 1 order by 2 desc limit 10"))
+        st.write(duckdb.sql("select REFEREE,count(*) fights from fr_clean where date between current_date() -730 and current_date() group by 1 order by 2 desc limit 10"))
 
 
 
