@@ -111,7 +111,7 @@ if view =='Single Fighter Stats':
 
 elif view =='Show all dataset samples':
     st.write('Fighter Details (cleaned)')
-    st.dataframe(duckdb.sql("select * from fighters order by FIGHTER asc").df())
+    st.dataframe(duckdb.sql("select * from fighters where FIGTHER = 'Jon Jones' order by FIGHTER asc limit 5").df())
     st.write('Events & Fights (cleaned)')
     st.write(duckdb.sql("select * from fed limit 5").df())
     st.write('Fight Results (cleaned)')
