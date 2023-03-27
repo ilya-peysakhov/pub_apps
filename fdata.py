@@ -30,11 +30,7 @@ spark = SparkSession.builder.getOrCreate()
 
 @st.cache_resource
 def getData():
-
-    ed = pl.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_event_details.csv"
-).lazy()
-    sql = pl.SQLContext()
-    sql.register("pokemon", pokemon)
+  
 
     ed_url="https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_event_details.csv"
     spark.sparkContext.addFile(ed_url)
