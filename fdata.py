@@ -77,7 +77,7 @@ fighters= duckdb.sql("SELECT FIGHTER,HEIGHT,WEIGHT,REACH,STANCE,DOB,FIRST,LAST,N
 
 #
 if view =='Single Fighter Stats':
-    fighter_list = duckdb.sql("SELECT FIGHTER from fighters group by 1 order by 1").df()
+    fighter_list = duckdb.sql("SELECT FIGHTER from fighters  where DOB is not null group by 1 order by 1").df()
     fighter_filter = st.selectbox('Pick a fighter',options=fighter_list)
     fights = duckdb.sql("select BOUT from fr_df where FIGHTER1 = '{}' or FIGHTER2='{}'".format(fighter_filter,fighter_filter))
     bouts = fight_stats[fight_stats['BOUT'].str.contains(fighter_filter, case=False)]
