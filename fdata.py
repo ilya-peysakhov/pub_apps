@@ -46,7 +46,7 @@ ed_c = duckdb.sql("SELECT TRIM(EVENT) as EVENT, strptime(DATE, '%B %d, %Y') as  
 fd = pl.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_details.csv")
 fed = duckdb.sql("SELECT TRIM(fd.EVENT) as EVENT, TRIM(fd.BOUT) as BOUT, fd.URL, DATE,LOCATION from ed_c inner join fd on ed_c.EVENT=fd.EVENT ")
 fr = pl.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_results.csv")
-fr_df = duckdb.sql("""SELECT trim(fr.EVENT) as EVENT, 
+fr_cleaned = duckdb.sql("""SELECT trim(fr.EVENT) as EVENT, 
                              trim(fr.BOUT) as BOUT, 
                             trim(split_part(fr.BOUT, ' vs. ' ,1)) as FIGHTER1,
                             trim(split_part(fr.BOUT, ' vs. ', 2)) as FIGHTER2,
@@ -56,7 +56,7 @@ fr_df = duckdb.sql("""SELECT trim(fr.EVENT) as EVENT,
                         from fr
                         left join fed on fed.URL = fr.URL""")
 fs = pl.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_stats.csv")
-cleaned_fs_df = duckdb.sql("""SELECT EVENT,BOUT,ROUND,FIGHTER,KD,
+fs_cleaned = duckdb.sql("""SELECT EVENT,BOUT,ROUND,FIGHTER,KD,
                               split_part("SIG.STR.",' of ',1) sig_str_l,
                               split_part("SIG.STR.",' of ',2) sig_str_a,
                               split_part("TOTAL STR.",' of ',1) total_str_l,
@@ -79,9 +79,9 @@ fighters= duckdb.sql("SELECT FIGHTER,HEIGHT,WEIGHT,REACH,STANCE,DOB,FIRST,LAST,N
 if view =='Single Fighter Stats':
     fighter_list = duckdb.sql("SELECT FIGHTER from fighters  where DOB is not null group by 1 order by 1").df()
     fighter_filter = st.selectbox('Pick a fighter',options=fighter_list)
-    fights = duckdb.sql("select BOUT from fr_df where FIGHTER1 = '{}' or FIGHTER2='{}'".format(fighter_filter,fighter_filter))
+    fights = duckdb.sql("select BOUT from fr_cleaned where FIGHTER1 = '{}' or FIGHTER2='{}'".format(fighter_filter,fighter_filter))
 
-    st.write(fights.df())
+    st.write(fr_cleaned.df())
 
     if fighter_filter:
         col1,col2,col3 = st.columns(3)
@@ -89,7 +89,7 @@ if view =='Single Fighter Stats':
             st.subheader('Total UFC Fights - '+str(len(fights.df())))
             st.subheader(str(wins)+' Wins')
             st.subheader(str(losses)+' Losses')
-            last_fight= duckdb.sql("select max(date) max_date from fr_df where FIGHTER1= '{}' or FIGHTER2='{}' ".format(fighter_filter,fighter_filter)).collect()
+            last_fight= duckdb.sql("select max(date) max_date from fr_cleaned where FIGHTER1= '{}' or FIGHTER2='{}' ".format(fighter_filter,fighter_filter)).collect()
             if fights.count()>0:
                 st.write('Last Fight - '+str(last_fight[0]["max_date"].strftime("%Y-%m-%d")))
         with col2:
@@ -99,7 +99,7 @@ if view =='Single Fighter Stats':
             st.subheader(str(fighter_stats['SIG_STR'].sum())+' Total Career Significant Strikes Landed')
         
         st.write('Fight Results')
-        st.write(duckdb.sql("select * from fr_df where FIGHTER1= '{}' or FIGHTER2='{}' ".format(fighter_filter,fighter_filter)))
+        st.write(duckdb.sql("select * from fr_cleaned where FIGHTER1= '{}' or FIGHTER2='{}' ".format(fighter_filter,fighter_filter)))
 
     bout_filter = st.selectbox('Pick a bout',options=bouts['BOUT'].drop_duplicates())
 
@@ -112,9 +112,9 @@ elif view =='Show all dataset samples':
     st.write('Events & Fights (cleaned)')
     st.write(duckdb.sql("select * from fed limit 5").df())
     st.write('Fight Results (cleaned)')
-    st.write(duckdb.sql("select * from fr_df limit 5").df())
+    st.write(duckdb.sql("select * from fr_cleaned limit 5").df())
     st.write('Fight Stats')
-    st.write(duckdb.sql("select * from cleaned_fs_df limit 5").df())    
+    st.write(duckdb.sql("select * from fs_cleaned limit 5").df())    
 else:
     c1, c2 = st.columns(2)
     with c1:
@@ -123,16 +123,16 @@ else:
         st.write('Fighters fought in the last 730 days (2 years)')
         st.write(duckdb.sql("""
                        select count(distinct fighter) from 
-                        (select FIGHTER1 fighter from fr_df where date between current_date() -730 and current_date() group by 1 
+                        (select FIGHTER1 fighter from fr_cleaned where date between current_date() -730 and current_date() group by 1 
                         UNION 
-                        select FIGHTER2 fighter from fr_df where date between current_date() -730 and current_date() group by 1)
+                        select FIGHTER2 fighter from fr_cleaned where date between current_date() -730 and current_date() group by 1)
                         """).df())
     
     with c2:
         st.write("Events by month")
         st.area_chart(duckdb.sql("select date_trunc('month', date) date, count(distinct EVENT) events from fed group by 1 order by 1 asc").df().set_index("date"))
         st.write('Most experienced referees in the last 2 years')
-        st.write(duckdb.sql("select REFEREE,count(*) fights from fr_df where date between current_date() -730 and current_date() group by 1 order by 2 desc limit 10").df())
+        st.write(duckdb.sql("select REFEREE,count(*) fights from fr_cleaned where date between current_date() -730 and current_date() group by 1 order by 2 desc limit 10").df())
 
 
 
