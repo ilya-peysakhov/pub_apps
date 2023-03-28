@@ -80,7 +80,7 @@ if view =='Single Fighter Stats':
     fighter_list = duckdb.sql("SELECT FIGHTER from fighters  where DOB is not null group by 1 order by 1").df()
     fighter_filter = st.selectbox('Pick a fighter',options=fighter_list)
     fights = duckdb.sql("select BOUT from fr_df where FIGHTER1 = '{}' or FIGHTER2='{}'".format(fighter_filter,fighter_filter))
-    fights.count
+    st.write(fights.count)
     st.write("works")
 
     if fighter_filter:
