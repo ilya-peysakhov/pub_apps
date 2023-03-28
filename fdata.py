@@ -107,13 +107,13 @@ if view =='Single Fighter Stats':
             st.subheader(str(sig_landed['s'].values[0])+' Total Career Significant Strikes Landed')
             st.subheader(str(head_landed['s'].values[0])+' Total Career Head Strikes Landed')
             st.subheader(str(td_landed['td'].values[0])+' Total Takedowns Landed')
-        st.write('Fight Results')
-        st.write(duckdb.sql("SELECT * from fr_cleaned where FIGHTER1= '{}' or FIGHTER2='{}' ".format(fighter_filter,fighter_filter)))
+    #     st.write('Fight Results')
+    #     st.write(duckdb.sql("SELECT * from fr_cleaned where FIGHTER1= '{}' or FIGHTER2='{}' ".format(fighter_filter,fighter_filter)))
 
-    bout_filter = st.selectbox('Pick a bout',options=fights.df().drop_duplicates())
+    # bout_filter = st.selectbox('Pick a bout',options=fights.df().drop_duplicates())
 
-    if bout_filter:
-        st.write(fight_stats[(fight_stats['BOUT']==bout_filter) & (fight_stats['FIGHTER']==fighter_filter)])
+    # if bout_filter:
+    #     st.write(fight_stats[(fight_stats['BOUT']==bout_filter) & (fight_stats['FIGHTER']==fighter_filter)])
 
 elif view =='Show all dataset samples':
     st.write('Fighter Details (cleaned)')
