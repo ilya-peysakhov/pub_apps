@@ -89,7 +89,7 @@ if view =='Single Fighter Stats':
 
 
     if fighter_filter:
-        st.write(fs_cleaned.df())
+        st.write(duckdb.sql("SELECT * from fs_cleaned where BOUT in (select * from fights) and FIGHTER !='{}' ".format(fighter_filter)).df())
    
         col1,col2,col3 = st.columns(3)
         with col1:
