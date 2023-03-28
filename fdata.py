@@ -91,7 +91,7 @@ if view =='Single Fighter Stats':
             st.subheader(str(len(duckdb.sql("SELECT count(*) from winloss where result='L'").df()))+' Losses')
             last_fight= duckdb.sql("SELECT max(date) max_date from fr_cleaned where FIGHTER1= '{}' or FIGHTER2='{}' ".format(fighter_filter,fighter_filter)).df()
             if len(fights.df()) >0:
-                st.write('Last Fight - '+str(last_fight[0]["max_date"].strftime("%Y-%m-%d")))
+                st.write('Last Fight - '+str(last_fight))
         with col2:
             st.subheader(str(opp_stats['SIG_STR'].sum())+' Total Career Significant Strikes Absored')
             st.subheader(str(opp_stats['HEAD_STR'].sum())+' Total Career Head Strikes Absored')
