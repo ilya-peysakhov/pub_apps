@@ -87,15 +87,15 @@ if view =='Single Fighter Stats':
     if fighter_filter:
         col1,col2,col3 = st.columns(3)
         with col1:
-            st.subheader('Total UFC Fights - '+str(len(fights.df())))
-            st.subheader(str(len(duckdb.sql("SELECT * from winloss where result='W'").df()))+' Wins')
-            st.subheader(str(len(duckdb.sql("SELECT * from winloss where result='L'").df()))+' Losses')
-            st.write('Latest fight - '+str(last_fight['max_date'].values[0])+' '+str(last_fight['days_since'].values[0])+ ' ago')
-#             if len(fights.df()) >0:
-#                 st.write('Last Fight - '+str(last_fight))
-#         with col2:
-#             st.subheader(str(opp_stats['SIG_STR'].sum())+' Total Career Significant Strikes Absored')
-#             st.subheader(str(opp_stats['HEAD_STR'].sum())+' Total Career Head Strikes Absored')
+            st.write('Total UFC Fights - '+str(len(fights.df())))
+            st.write(str(len(duckdb.sql("SELECT * from winloss where result='W'").df()))+' Wins')
+            st.write(str(len(duckdb.sql("SELECT * from winloss where result='L'").df()))+' Losses')
+            
+            if len(fights.df()) >0:
+                st.write('Latest fight - '+str(last_fight['max_date'].values[0])+' -- '+str(last_fight['days_since'].values[0])+ ' ago')
+        with col2:
+            st.subheader(str(opp_stats['SIG_STR'].sum())+' Total Career Significant Strikes Absored')
+            st.subheader(str(opp_stats['HEAD_STR'].sum())+' Total Career Head Strikes Absored')
 #         with col3:
 #             st.subheader(str(fighter_stats['SIG_STR'].sum())+' Total Career Significant Strikes Landed')
         
@@ -107,15 +107,15 @@ if view =='Single Fighter Stats':
 #     if bout_filter:
 #         st.write(fight_stats[(fight_stats['BOUT']==bout_filter) & (fight_stats['FIGHTER']==fighter_filter)])
 
-# elif view =='Show all dataset samples':
-#     st.write('Fighter Details (cleaned)')
-#     st.dataframe(duckdb.sql("SELECT * from fighters order by FIGHTER asc limit 5").df())
-#     st.write('Events & Fights (cleaned)')
-#     st.write(duckdb.sql("SELECT * from fed limit 5").df())
-#     st.write('Fight Results (cleaned)')
-#     st.write(duckdb.sql("SELECT * from fr_cleaned limit 5").df())
-#     st.write('Fight Stats')
-#     st.write(duckdb.sql("SELECT * from fs_cleaned limit 5").df())    
+elif view =='Show all dataset samples':
+    st.write('Fighter Details (cleaned)')
+    st.dataframe(duckdb.sql("SELECT * from fighters order by FIGHTER asc limit 5").df())
+    st.write('Events & Fights (cleaned)')
+    st.write(duckdb.sql("SELECT * from fed limit 5").df())
+    st.write('Fight Results (cleaned)')
+    st.write(duckdb.sql("SELECT * from fr_cleaned limit 5").df())
+    st.write('Fight Stats')
+    st.write(duckdb.sql("SELECT * from fs_cleaned limit 5").df())    
 # else:
 #     c1, c2 = st.columns(2)
 #     with c1:
