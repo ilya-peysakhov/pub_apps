@@ -87,7 +87,10 @@ if view =='Single Fighter Stats':
     opp_stats = duckdb.sql("SELECT * from fs_cleaned where BOUT in (select * from fights) and FIGHTER !='{}' ".format(fighter_filter))
     sig_abs = duckdb.sql("SELECT sum(sig_str_l::INTEGER) as s from opp_stats").df()
 
+
     if fighter_filter:
+        st.write(fighter_stats)
+        st.write(opp_stats)
         col1,col2,col3 = st.columns(3)
         with col1:
             st.write('Total UFC Fights - '+str(len(fights.df())))
