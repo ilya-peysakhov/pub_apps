@@ -89,7 +89,6 @@ if view =='Single Fighter Stats':
 
 
     if fighter_filter:
-        st.write(sig_abs)
         col1,col2,col3 = st.columns(3)
         with col1:
             st.write('Total UFC Fights - '+str(len(fights.df())))
