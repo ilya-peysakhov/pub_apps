@@ -103,10 +103,10 @@ if view =='Single Fighter Stats':
         with col2:
             st.subheader(str(sig_absored['s'].values[0])+' Total Career Significant Strikes Absored')
             st.subheader(str(head_absored['s'].values[0])+' Total Career Head Strikes Absored')
-        with col3:
-            st.subheader(str(sig_landed['s'].values[0])+' Total Career Significant Strikes Landed')
-            st.subheader(str(head_landed['s'].values[0])+' Total Career Head Strikes Landed')
-            st.subheader(str(td_landed['td'].values[0])+' Total Takedowns Landed')
+        # with col3:
+        #     st.subheader(str(sig_landed['s'].values[0])+' Total Career Significant Strikes Landed')
+        #     st.subheader(str(head_landed['s'].values[0])+' Total Career Head Strikes Landed')
+        #     st.subheader(str(td_landed['td'].values[0])+' Total Takedowns Landed')
     #     st.write('Fight Results')
     #     st.write(duckdb.sql("SELECT * from fr_cleaned where FIGHTER1= '{}' or FIGHTER2='{}' ".format(fighter_filter,fighter_filter)))
 
