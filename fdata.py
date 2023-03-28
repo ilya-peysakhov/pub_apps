@@ -56,7 +56,7 @@ fr_cleaned = duckdb.sql("""SELECT trim(fr.EVENT) as EVENT,
                         from fr
                         left join fed on fed.URL = fr.URL""")
 fs = pl.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_stats.csv")
-fs_cleaned = duckdb.sql("""SELECT EVENT,trim(BOUT) as BOUT,ROUND,trim(FIGHTER) as FIGHTER,KD,
+fs_cleaned = duckdb.sql("""SELECT EVENT,replace(trim(BOUT),'  ',' ') as BOUT,ROUND,trim(FIGHTER) as FIGHTER,KD,
                               split_part("SIG.STR.",' of ',1) sig_str_l,
                               split_part("SIG.STR.",' of ',2) sig_str_a,
                               split_part("TOTAL STR.",' of ',1) total_str_l,
@@ -74,7 +74,6 @@ fighters= duckdb.sql("SELECT trim(FIGHTER) as FIGHTER,HEIGHT,WEIGHT,REACH,STANCE
                       
 
 
-
 #
 if view =='Single Fighter Stats':
     fighter_list = duckdb.sql("SELECT FIGHTER from fighters  where DOB is not null group by 1 order by 1").df()
@@ -89,14 +88,11 @@ if view =='Single Fighter Stats':
 
 
     if fighter_filter:
-        st.write(fights.df())
-        st.write(duckdb.sql("SELECT * from fs_cleaned where BOUT in (select * from fights)").df())
-   
-        # col1,col2,col3 = st.columns(3)
-        # with col1:
-        #     st.write('Total UFC Fights - '+str(len(fights.df())))
-        #     st.write(str(len(duckdb.sql("SELECT * from winloss where result='W'").df()))+' Wins')
-        #     st.write(str(len(duckdb.sql("SELECT * from winloss where result='L'").df()))+' Losses')
+        col1,col2,col3 = st.columns(3)
+        with col1:
+            st.write('Total UFC Fights - '+str(len(fights.df())))
+            st.write(str(len(duckdb.sql("SELECT * from winloss where result='W'").df()))+' Wins')
+            st.write(str(len(duckdb.sql("SELECT * from winloss where result='L'").df()))+' Losses')
             
         #     if len(fights.df()) >0:
         #         st.write('Latest fight - '+str(last_fight['max_date'].values[0])+' -- '+str(last_fight['days_since'].values[0])+ ' ago')
