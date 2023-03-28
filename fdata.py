@@ -81,6 +81,7 @@ if view =='Single Fighter Stats':
     fighter_filter = st.selectbox('Pick a fighter',options=fighter_list)
     fights = duckdb.sql("select BOUT from fr_df where FIGHTER1 = '{}' or FIGHTER2='{}'".format(fighter_filter,fighter_filter))
     bouts = duckdb.sql("select BOUT from cleaned_fs_df where FIGHTER = '{}' group by 1".format(fighter_filter))
+    st.write('got this far')
     opp_stats = fight_stats[(fight_stats['BOUT'].isin(bouts['BOUT'])) & (fight_stats['FIGHTER']!=fighter_filter)]
     fighter_stats = fight_stats[(fight_stats['BOUT'].isin(bouts['BOUT'])) & (fight_stats['FIGHTER']==fighter_filter)]
     wins = len(fight_results[(fight_results['OUTCOME_1'] == 'W') & (fight_results['FIGHTER_1'] == fighter_filter) | (fight_results['OUTCOME_2'] == 'W') & (fight_results['FIGHTER_2'] == fighter_filter)])
