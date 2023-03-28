@@ -85,7 +85,8 @@ if view =='Single Fighter Stats':
     last_fight= duckdb.sql("SELECT left(max(date),10) max_date, left( current_date() - max(date),10) days_since from fr_cleaned where FIGHTER1= '{}' or FIGHTER2='{}' ".format(fighter_filter,fighter_filter)).df()
     fighter_stats = duckdb.sql("SELECT * from fs_cleaned where BOUT in (select * from fights) and FIGHTER ='{}' ".format(fighter_filter))
     opp_stats = duckdb.sql("SELECT * from fs_cleaned where BOUT in (select * from fights) and FIGHTER !='{}' ".format(fighter_filter))
-   
+    sig_abs = duckdb.sql("SELECT sum(sig_str_l::INTEGER) as s from opp_stats").df()
+
     if fighter_filter:
         col1,col2,col3 = st.columns(3)
         with col1:
@@ -96,7 +97,7 @@ if view =='Single Fighter Stats':
             if len(fights.df()) >0:
                 st.write('Latest fight - '+str(last_fight['max_date'].values[0])+' -- '+str(last_fight['days_since'].values[0])+ ' ago')
         with col2:
-            st.subheader(str(duckdb.sql("SELECT sum(sig_str_l::INTEGER) as s from opp_stats").df()['s'].values[0])+' Total Career Significant Strikes Absored')
+            st.subheader(str(sig_abs['s'].values[0])+' Total Career Significant Strikes Absored')
             st.subheader(str(head_absored['s'].values[0])+' Total Career Head Strikes Absored')
         # with col3:
         #     st.subheader(str(sig_landed['s'].values[0])+' Total Career Significant Strikes Landed')
