@@ -90,7 +90,7 @@ if view =='Single Fighter Stats':
             st.subheader('Total UFC Fights - '+str(len(fights.df())))
             st.subheader(str(len(duckdb.sql("SELECT count(*) from winloss where result='W'").df()))+' Wins')
             st.subheader(str(len(duckdb.sql("SELECT count(*) from winloss where result='L'").df()))+' Losses')
-            st.write(last_fight[0])
+            st.write(last_fight)
             if len(fights.df()) >0:
                 st.write('Last Fight - '+str(last_fight))
         with col2:
