@@ -93,12 +93,11 @@ if view =='Single Fighter Stats':
             st.write('Total UFC Fights - '+str(len(fights.df())))
             st.write(str(len(duckdb.sql("SELECT * from winloss where result='W'").df()))+' Wins')
             st.write(str(len(duckdb.sql("SELECT * from winloss where result='L'").df()))+' Losses')
-            
-        #     if len(fights.df()) >0:
-        #         st.write('Latest fight - '+str(last_fight['max_date'].values[0])+' -- '+str(last_fight['days_since'].values[0])+ ' ago')
-        # with col2:
-        #     st.subheader(str(sig_abs['s'].values[0])+' Total Career Significant Strikes Absored')
-        #     st.subheader(str(head_absored['s'].values[0])+' Total Career Head Strikes Absored')
+            if len(fights.df()) >0:
+                st.write('Latest fight - '+str(last_fight['max_date'].values[0])+' -- '+str(last_fight['days_since'].values[0])+ ' ago')
+        with col2:
+            st.subheader(str(sig_abs['s'].values[0])+' Total Career Significant Strikes Absored')
+            st.subheader(str(head_absored['s'].values[0])+' Total Career Head Strikes Absored')
         # with col3:
         #     st.subheader(str(sig_landed['s'].values[0])+' Total Career Significant Strikes Landed')
         #     st.subheader(str(head_landed['s'].values[0])+' Total Career Head Strikes Landed')
