@@ -85,11 +85,11 @@ if view =='Single Fighter Stats':
     last_fight= duckdb.sql("SELECT left(max(date),10) max_date, left( current_date() - max(date),10) days_since from fr_cleaned where FIGHTER1= '{}' or FIGHTER2='{}' ".format(fighter_filter,fighter_filter)).df()
     fighter_stats = duckdb.sql("SELECT * from fs_cleaned where BOUT in (select * from fights) and FIGHTER ='{}' ".format(fighter_filter))
     opp_stats = duckdb.sql("SELECT * from fs_cleaned where BOUT in (select * from fights) and FIGHTER !='{}' ".format(fighter_filter))
-    sig_absorbed = duckdb.sql("SELECT sum(sig_str_l::int) as s from opp_stats").df()
-    head_absored = duckdb.sql("SELECT sum(head_str_l::int) as s from opp_stats").df()
-    sig_landed = duckdb.sql("SELECT sum(sig_str_l::int) as s from fighter_stats").df()
-    head_landed = duckdb.sql("SELECT sum(sig_str_l::int) as s from fighter_stats").df()
-    td_landed = duckdb.sql("SELECT sum(td_l::int) as td from fighter_stats").df()
+    sig_absorbed = duckdb.sql("SELECT sum(sig_str_l::INTEGER) as s from opp_stats").df()
+    head_absored = duckdb.sql("SELECT sum(head_str_l::INTEGER) as s from opp_stats").df()
+    sig_landed = duckdb.sql("SELECT sum(sig_str_l::INTEGER) as s from fighter_stats").df()
+    head_landed = duckdb.sql("SELECT sum(sig_str_l::INTEGER) as s from fighter_stats").df()
+    td_landed = duckdb.sql("SELECT sum(td_l::INTEGER) as td from fighter_stats").df()
 
     if fighter_filter:
         col1,col2,col3 = st.columns(3)
