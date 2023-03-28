@@ -78,7 +78,7 @@ fighters= duckdb.sql("SELECT FIGHTER,HEIGHT,WEIGHT,REACH,STANCE,DOB,FIRST,LAST,N
 #
 if view =='Single Fighter Stats':
     fighter_list = duckdb.sql("SELECT FIGHTER from fighters  where DOB is not null group by 1 order by 1").df()
-    fighter_filter = st.SELECTbox('Pick a fighter',options=fighter_list)
+    fighter_filter = st.selectbox('Pick a fighter',options=fighter_list)
     fights = duckdb.sql("SELECT BOUT from fr_cleaned where FIGHTER1 = '{}' or FIGHTER2='{}'".format(fighter_filter,fighter_filter))
 
     winloss = duckdb.sql("SELECT case when FIGHTER1 = '{}' then FIGHTE1_OUTCOME else FIGHTER2_COUTCOME end result from fr_cleaned where FIGHTER1 = '{}' or FIGHTER2='{}'".format(fighter_filter,fighter_filter,fighter_filter))
@@ -101,7 +101,7 @@ if view =='Single Fighter Stats':
         st.write('Fight Results')
         st.write(duckdb.sql("SELECT * from fr_cleaned where FIGHTER1= '{}' or FIGHTER2='{}' ".format(fighter_filter,fighter_filter)))
 
-    bout_filter = st.SELECTbox('Pick a bout',options=bouts['BOUT'].drop_duplicates())
+    bout_filter = st.selectbox('Pick a bout',options=bouts['BOUT'].drop_duplicates())
 
     if bout_filter:
         st.write(fight_stats[(fight_stats['BOUT']==bout_filter) & (fight_stats['FIGHTER']==fighter_filter)])
