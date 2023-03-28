@@ -123,7 +123,7 @@ elif view =='Show all dataset samples':
     st.write('Fight Results (cleaned)')
     st.write(duckdb.sql("SELECT * from fr_cleaned limit 5").df())
     st.write('Fight Stats')
-    st.write(duckdb.sql("SELECT * from fs_cleaned limit 5").df())    
+    st.write(duckdb.sql("SELECT * from fs limit 5").df())    
 # else:
 #     c1, c2 = st.columns(2)
 #     with c1:
