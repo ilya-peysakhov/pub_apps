@@ -56,7 +56,7 @@ fr_cleaned = duckdb.sql("""SELECT trim(fr.EVENT) as EVENT,
                         from fr
                         left join fed on fed.URL = fr.URL""")
 fs = pl.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_stats.csv")
-fs_cleaned = duckdb.sql("""SELECT EVENT,BOUT,ROUND,trim(FIGHTER) as FIGHTER,KD,
+fs_cleaned = duckdb.sql("""SELECT EVENT,trim(BOUT) as BOUT,ROUND,trim(FIGHTER) as FIGHTER,KD,
                               split_part("SIG.STR.",' of ',1) sig_str_l,
                               split_part("SIG.STR.",' of ',2) sig_str_a,
                               split_part("TOTAL STR.",' of ',1) total_str_l,
