@@ -81,7 +81,7 @@ if view =='Single Fighter Stats':
     fighter_filter = st.selectbox('Pick a fighter',options=fighter_list)
     fights = duckdb.sql("SELECT BOUT from fr_cleaned where FIGHTER1 = '{}' or FIGHTER2='{}'".format(fighter_filter,fighter_filter))
 
-    winloss = duckdb.sql("SELECT case when FIGHTER1 = '{}' then FIGHTE1_OUTCOME else FIGHTER2_COUTCOME end result from fr_cleaned where FIGHTER1 = '{}' or FIGHTER2='{}'".format(fighter_filter,fighter_filter,fighter_filter))
+    winloss = duckdb.sql("SELECT case when FIGHTER1 = '{}' then FIGHTER1_OUTCOME else FIGHTER2_COUTCOME end result from fr_cleaned where FIGHTER1 = '{}' or FIGHTER2='{}'".format(fighter_filter,fighter_filter,fighter_filter))
 
     if fighter_filter:
         col1,col2,col3 = st.columns(3)
