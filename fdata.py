@@ -84,14 +84,13 @@ if view =='Single Fighter Stats':
     winloss = duckdb.sql("SELECT case when FIGHTER1 = '{}' then FIGHTER1_OUTCOME else FIGHTER2_OUTCOME end result from fr_cleaned where FIGHTER1 = '{}' or FIGHTER2='{}' ".format(fighter_filter,fighter_filter,fighter_filter))
     last_fight= duckdb.sql("SELECT max(date) max_date from fr_cleaned where FIGHTER1= '{}' or FIGHTER2='{}' ".format(fighter_filter,fighter_filter)).df()
 
-    st.write(winloss.df())
     if fighter_filter:
         col1,col2,col3 = st.columns(3)
         with col1:
             st.subheader('Total UFC Fights - '+str(len(fights.df())))
-            st.subheader(str(len(duckdb.sql("SELECT count(*) from winloss where result='W'").df()))+' Wins')
-            st.subheader(str(len(duckdb.sql("SELECT count(*) from winloss where result='L'").df()))+' Losses')
-            st.write(last_fight[0]["max_date"])
+            st.subheader(str(len(duckdb.sql("SELECT * from winloss where result='W'").df()))+' Wins')
+            st.subheader(str(len(duckdb.sql("SELECT * from winloss where result='L'").df()))+' Losses')
+            st.write('Latest fight - '+str(last_fight['max_date'].values[0]))
 #             if len(fights.df()) >0:
 #                 st.write('Last Fight - '+str(last_fight))
 #         with col2:
