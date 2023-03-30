@@ -91,7 +91,7 @@ if view =='Fighter One Sheet':
     sig_str = duckdb.sql("SELECT sum(sig_str_l::INTEGER) s from fighter_stats").df()
     head_str = duckdb.sql("SELECT sum(head_str_l::INTEGER) s from fighter_stats").df()
     td = duckdb.sql("SELECT sum(td_l::INTEGER) s from fighter_stats").df()
-    td_rate = duckdb.sql("SELECT sum(td_l::REAL)/sum(td_a::REAL) s from fighter_stats").df()
+    td_rate = duckdb.sql("SELECT cast(sum(td_l::INTEGER)/sum(td_a::INTEGER) as REAL) s from fighter_stats").df()
 
     opp_stats = duckdb.sql("SELECT * from fs_cleaned where BOUT in (select * from fights) and FIGHTER !='{}' ".format(fighter_filter))
     sig_abs = duckdb.sql("SELECT sum(sig_str_l::INTEGER) as s from opp_stats").df()
@@ -112,7 +112,7 @@ if view =='Fighter One Sheet':
         with col3:
             st.write(str(int(sig_str['s'].sum()))+' Total Career Significant Strikes Landed')
             st.write(str(int(head_str['s'].sum()))+' Total Career Head Strikes Landed')
-            st.write(str(int(td['s'].sum()))+' Total Takedowns Landed'+' at a rate of '+str(int(td_rate['s'].sum())))
+            st.write(str(int(td['s'].sum()))+' Total Takedowns Landed'+' at a rate of '+str(td_rate['s'].sum()))
         st.subheader('Fight Results')
         st.write(duckdb.sql("SELECT * from fr_cleaned where FIGHTER1= '{}' or FIGHTER2='{}' order by date desc".format(fighter_filter,fighter_filter)).df())
 
