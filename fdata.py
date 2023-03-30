@@ -97,14 +97,14 @@ if view =='Single Fighter Stats':
             if len(fights.df()) >0:
                 st.write('Latest fight - '+str(last_fight['max_date'].values[0])+' -- '+str(last_fight['days_since'].values[0])+ ' ago')
         with col2:
-            st.subheader(str(int(sig_abs['s'].sum()))+' Total Career Significant Strikes Absored')
-            st.subheader(str(int(head_abs['s'].sum()))+' Total Career Head Strikes Absored')
+            st.write(str(int(sig_abs['s'].sum()))+' Total Career Significant Strikes Absored')
+            st.write(str(int(head_abs['s'].sum()))+' Total Career Head Strikes Absored')
         # with col3:
-        #     st.subheader(str(sig_landed['s'].values[0])+' Total Career Significant Strikes Landed')
-        #     st.subheader(str(head_landed['s'].values[0])+' Total Career Head Strikes Landed')
-        #     st.subheader(str(td_landed['td'].values[0])+' Total Takedowns Landed')
-    #     st.write('Fight Results')
-    #     st.write(duckdb.sql("SELECT * from fr_cleaned where FIGHTER1= '{}' or FIGHTER2='{}' ".format(fighter_filter,fighter_filter)))
+            st.write(str(int(fighter_stats['sig_str_l'].sum()))+' Total Career Significant Strikes Landed')
+            st.write(str(int(fighter_stats['head_str_l'].sum()))+' Total Career Head Strikes Landed')
+            st.write(str(int(fighter_stats['td_l'].sum()))+' Total Takedowns Landed')
+        st.write('Fight Results')
+        st.write(duckdb.sql("SELECT * from fr_cleaned where FIGHTER1= '{}' or FIGHTER2='{}' ".format(fighter_filter,fighter_filter)))
 
     # bout_filter = st.selectbox('Pick a bout',options=fights.df().drop_duplicates())
 
