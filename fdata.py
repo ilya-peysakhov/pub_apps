@@ -25,7 +25,6 @@ def _max_width_():
 st.set_page_config(page_icon="👊", page_title="UFC Data Explorer v0.3", layout="wide")
 
 ########start of app
-st.header('REWRITING WITH POLARS/DUCKDB!!!')
 
 audio_file = open('song.mp3', 'rb')
 audio_bytes = audio_file.read()
