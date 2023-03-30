@@ -41,7 +41,7 @@ st.write('This pulls data from Greco1899''s scraper of UFC Fight Stats - https:/
 # st.image('https://media.tenor.com/3igI9osXP0UAAAAM/just-bleed.gif',width=200)
 st.image('https://media.tenor.com/fU8GQhzIDDwAAAAC/smash-khabib.gif',width=300)
 
-view = st.sidebar.radio('Select a view',('Single Fighter Stats','All Time Stats','Show all dataset samples'))
+view = st.sidebar.radio('Select a view',('Fighter One Sheet','All Time Stats','Show all dataset samples'))
 
 
 ###################### data pull and clean
