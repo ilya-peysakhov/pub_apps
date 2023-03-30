@@ -96,6 +96,7 @@ if view =='Single Fighter Stats':
     if fighter_filter:
         col1,col2,col3 = st.columns(3)
         with col1:
+            st.subheader('Highlights')
             st.write('Total UFC Fights - '+str(len(fights.df())))
             st.write(str(len(duckdb.sql("SELECT * from winloss where result='W'").df()))+' Wins')
             st.write(str(len(duckdb.sql("SELECT * from winloss where result='L'").df()))+' Losses')
@@ -108,12 +109,13 @@ if view =='Single Fighter Stats':
             st.write(str(int(sig_str['s'].sum()))+' Total Career Significant Strikes Landed')
             st.write(str(int(head_str['s'].sum()))+' Total Career Head Strikes Landed')
             st.write(str(int(td['s'].sum()))+' Total Takedowns Landed')
-        st.write('Fight Results')
+        st.subheader('Fight Results')
         st.write(duckdb.sql("SELECT * from fr_cleaned where FIGHTER1= '{}' or FIGHTER2='{}' order by date desc".format(fighter_filter,fighter_filter)).df())
 
     bout_filter = st.selectbox('Pick a bout',options=fights.df().drop_duplicates())
 
     if bout_filter:
+        st.subheader('Bout Stats')
         st.write(duckdb.sql("SELECT * from fighter_stats where BOUT ='{}' ".format(bout_filter)).df())
 
 elif view =='Show all dataset samples':
