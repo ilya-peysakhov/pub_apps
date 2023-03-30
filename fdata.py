@@ -107,11 +107,11 @@ if view =='Fighter One Sheet':
             if len(fights.df()) >0:
                 st.write('Latest fight - '+str(last_fight['max_date'].values[0])+' -- '+str(last_fight['days_since'].values[0])+ ' ago')
         with col2:
-            st.write(str(int(sig_abs['s'].sum()))+' Total Career Significant Strikes Absored')
-            st.write(str(int(head_abs['s'].sum()))+' Total Career Head Strikes Absored')
+            st.write(str(int(sig_abs['s'].sum()))+' Career Significant Strikes Absored')
+            st.write(str(int(head_abs['s'].sum()))+' Career Head Strikes Absored')
         with col3:
-            st.write(str(int(sig_str['s'].sum()))+' Total Career Significant Strikes Landed')
-            st.write(str(int(head_str['s'].sum()))+' Total Career Head Strikes Landed')
+            st.write(str(int(sig_str['s'].sum()))+' Career Significant Strikes Landed')
+            st.write(str(int(head_str['s'].sum()))+' Career Head Strikes Landed')
             st.write(str(int(td['s'].sum()))+' Total Takedowns Landed'+' at a rate of '+"{:.0%}".format(td_rate['s'].sum()) )
         st.subheader('Fight Results')
         st.write(duckdb.sql("SELECT * from fr_cleaned where FIGHTER1= '{}' or FIGHTER2='{}' order by date desc".format(fighter_filter,fighter_filter)).df())
