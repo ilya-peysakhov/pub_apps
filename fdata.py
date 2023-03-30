@@ -97,8 +97,8 @@ if view =='Single Fighter Stats':
             if len(fights.df()) >0:
                 st.write('Latest fight - '+str(last_fight['max_date'].values[0])+' -- '+str(last_fight['days_since'].values[0])+ ' ago')
         with col2:
-            st.subheader(str(sig_abs['s'].sum())+' Total Career Significant Strikes Absored')
-            st.subheader(str(head_abs['s'].sum())+' Total Career Head Strikes Absored')
+            st.subheader(str(int(sig_abs['s'].sum()))+' Total Career Significant Strikes Absored')
+            st.subheader(str(int(head_abs['s'].sum()))+' Total Career Head Strikes Absored')
         # with col3:
         #     st.subheader(str(sig_landed['s'].values[0])+' Total Career Significant Strikes Landed')
         #     st.subheader(str(head_landed['s'].values[0])+' Total Career Head Strikes Landed')
