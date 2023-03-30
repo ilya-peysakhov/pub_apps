@@ -47,7 +47,7 @@ fd = pl.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fig
 fed = duckdb.sql("SELECT TRIM(fd.EVENT) as EVENT, TRIM(fd.BOUT) as BOUT, fd.URL, DATE,LOCATION from ed_c inner join fd on ed_c.EVENT=fd.EVENT ")
 fr = pl.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_results.csv")
 fr_cleaned = duckdb.sql("""SELECT trim(fr.EVENT) as EVENT, 
-                             trim(fr.BOUT) as BOUT, 
+                             replace(trim(fr.BOUT),'  ',' ') as BOUT, 
                             trim(split_part(fr.BOUT, ' vs. ' ,1)) as FIGHTER1,
                             trim(split_part(fr.BOUT, ' vs. ', 2)) as FIGHTER2,
                             split_part(OUTCOME, '/' ,1) as FIGHTER1_OUTCOME,
@@ -97,9 +97,8 @@ if view =='Single Fighter Stats':
             if len(fights.df()) >0:
                 st.write('Latest fight - '+str(last_fight['max_date'].values[0])+' -- '+str(last_fight['days_since'].values[0])+ ' ago')
         with col2:
-            st.write(duckdb.sql("select BOUT from fights UNION select bout from fs_cleaned limit 50").df())
-            # st.subheader(str(sig_abs['s'].sum())+' Total Career Significant Strikes Absored')
-            # st.subheader(str(head_abs['s'].sum())+' Total Career Head Strikes Absored')
+            st.subheader(str(sig_abs['s'].sum())+' Total Career Significant Strikes Absored')
+            st.subheader(str(head_abs['s'].sum())+' Total Career Head Strikes Absored')
         # with col3:
         #     st.subheader(str(sig_landed['s'].values[0])+' Total Career Significant Strikes Landed')
         #     st.subheader(str(head_landed['s'].values[0])+' Total Career Head Strikes Landed')
