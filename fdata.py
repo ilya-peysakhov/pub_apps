@@ -113,7 +113,7 @@ if view =='Single Fighter Stats':
     bout_filter = st.selectbox('Pick a bout',options=fights.df().drop_duplicates())
 
     if bout_filter:
-        st.write(duckdb.sql("SELECT * from fighter_stats where BOUT ='{}' ".format(bout_filter).df()))
+        st.write(duckdb.sql("SELECT * from fighter_stats where BOUT ='{}' ".format(bout_filter)).df())
 
 elif view =='Show all dataset samples':
     st.write('Fighter Details (cleaned)')
