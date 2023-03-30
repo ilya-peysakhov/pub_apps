@@ -125,24 +125,24 @@ elif view =='Show all dataset samples':
     st.write(duckdb.sql("SELECT * from fr_cleaned limit 5").df())
     st.write('Fight Stats')
     st.write(duckdb.sql("SELECT * from fs limit 5").df())    
-# else:
-#     c1, c2 = st.columns(2)
-#     with c1:
-#         st.write("Fights by month")
-#         st.area_chart(duckdb.sql("SELECT date_trunc('month',date) date,count(*) fights from fed group by 1 order by 1 asc").df().set_index("date"))
-#         st.write('Fighters fought in the last 730 days (2 years)')
-#         st.write(duckdb.sql("""
-#                        SELECT count(distinct fighter) from 
-#                         (SELECT FIGHTER1 fighter from fr_cleaned where date between current_date() -730 and current_date() group by 1 
-#                         UNION 
-#                         SELECT FIGHTER2 fighter from fr_cleaned where date between current_date() -730 and current_date() group by 1)
-#                         """).df())
+else:
+    c1, c2 = st.columns(2)
+    with c1:
+        st.write("Fights by month")
+        st.area_chart(duckdb.sql("SELECT date_trunc('month',date) date,count(*) fights from fed group by 1 order by 1 asc").df().set_index("date"))
+        st.write('Fighters fought in the last 730 days (2 years)')
+        st.write(duckdb.sql("""
+                       SELECT count(distinct fighter) from 
+                        (SELECT FIGHTER1 fighter from fr_cleaned where date between current_date() -730 and current_date() group by 1 
+                        UNION 
+                        SELECT FIGHTER2 fighter from fr_cleaned where date between current_date() -730 and current_date() group by 1)
+                        """).df())
     
-#     with c2:
-#         st.write("Events by month")
-#         st.area_chart(duckdb.sql("SELECT date_trunc('month', date) date, count(distinct EVENT) events from fed group by 1 order by 1 asc").df().set_index("date"))
-#         st.write('Most experienced referees in the last 2 years')
-#         st.write(duckdb.sql("SELECT REFEREE,count(*) fights from fr_cleaned where date between current_date() -730 and current_date() group by 1 order by 2 desc limit 10").df())
+    with c2:
+        st.write("Events by month")
+        st.area_chart(duckdb.sql("SELECT date_trunc('month', date) date, count(distinct EVENT) events from fed group by 1 order by 1 asc").df().set_index("date"))
+        st.write('Most experienced referees in the last 2 years')
+        st.write(duckdb.sql("SELECT REFEREE,count(*) fights from fr_cleaned where date between current_date() -730 and current_date() group by 1 order by 2 desc limit 10").df())
 
 
 
