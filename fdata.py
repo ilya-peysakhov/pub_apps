@@ -95,8 +95,8 @@ if view =='Single Fighter Stats':
 
     if fighter_filter:
         col1,col2,col3 = st.columns(3)
+        st.subheader('Highlights')
         with col1:
-            st.subheader('Highlights')
             st.write('Total UFC Fights - '+str(len(fights.df())))
             st.write(str(len(duckdb.sql("SELECT * from winloss where result='W'").df()))+' Wins')
             st.write(str(len(duckdb.sql("SELECT * from winloss where result='L'").df()))+' Losses')
