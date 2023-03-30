@@ -103,12 +103,12 @@ if view =='Single Fighter Stats':
         with col2:
             st.write(str(int(sig_abs['s'].sum()))+' Total Career Significant Strikes Absored')
             st.write(str(int(head_abs['s'].sum()))+' Total Career Head Strikes Absored')
-        # with col3:
+        with col3:
             st.write(str(int(sig_str['s'].sum()))+' Total Career Significant Strikes Landed')
             st.write(str(int(head_str['s'].sum()))+' Total Career Head Strikes Landed')
             st.write(str(int(td['s'].sum()))+' Total Takedowns Landed')
         st.write('Fight Results')
-        st.write(duckdb.sql("SELECT * from fr_cleaned where FIGHTER1= '{}' or FIGHTER2='{}' ".format(fighter_filter,fighter_filter)))
+        st.write(duckdb.sql("SELECT * from fr_cleaned where FIGHTER1= '{}' or FIGHTER2='{}' ".format(fighter_filter,fighter_filter)).df())
 
     # bout_filter = st.selectbox('Pick a bout',options=fights.df().drop_duplicates())
 
