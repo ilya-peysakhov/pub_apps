@@ -82,7 +82,7 @@ if view =='Single Fighter Stats':
 
     winloss = duckdb.sql("SELECT case when FIGHTER1 = '{}' then FIGHTER1_OUTCOME else FIGHTER2_OUTCOME end result from fr_cleaned where FIGHTER1 = '{}' or FIGHTER2='{}' ".format(fighter_filter,fighter_filter,fighter_filter))
     last_fight= duckdb.sql("SELECT left(max(date),10) max_date, left( current_date() - max(date),10) days_since from fr_cleaned where FIGHTER1= '{}' or FIGHTER2='{}' ".format(fighter_filter,fighter_filter)).df()
-    fighter_stats = duckdb.sql("SELECT * from fs_cleaned where BOUT in (select BOUT from fights) and FIGHTER ='{}' ".format(fighter_filter))
+    fighter_stats = duckdb.sql("SELECT * from fs_cleaned where BOUT in (select BOUT from fights) and FIGHTER ='{}' ".format(fighter_filter)).df()
     opp_stats = duckdb.sql("SELECT * from fs_cleaned where BOUT in (select * from fights) and FIGHTER !='{}' ".format(fighter_filter))
     sig_abs = duckdb.sql("SELECT sum(sig_str_l::INTEGER) as s from opp_stats").df()
     head_abs= duckdb.sql("SELECT sum(head_str_l::INTEGER) as s from opp_stats").df()
