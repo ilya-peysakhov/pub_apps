@@ -29,14 +29,14 @@ def _max_width_():
 st.set_page_config(page_icon="👊", page_title="UFC Data Explorer v0.3", layout="wide")
 
 ########start of app
-
-audio_file = open('song.mp3', 'rb')
-audio_bytes = audio_file.read()
-
-st.audio(audio_bytes, format='audio/ogg')
-
 st.header('UFC Fight Stats data explorer')
 st.write('This pulls data from Greco1899''s scraper of UFC Fight Stats - https://github.com/Greco1899/scrape_ufc_stats')
+
+with st.expander("Surprise and Delight"):
+    audio_file = open('song.mp3', 'rb')
+    audio_bytes = audio_file.read()
+    st.audio(audio_bytes, format='audio/ogg')
+
 #st.image('https://media.tenor.com/3igI9osXP0UAAAAM/just-bleed.gif',width=200)
 #st.image('https://media.tenor.com/fU8GQhzIDDwAAAAC/smash-khabib.gif',width=300)
 
