@@ -128,6 +128,12 @@ else:
     with c1:
         st.write("Fights by month")
         st.area_chart(duckdb.sql("SELECT date_trunc('month',date) date,count(*) fights from fed group by 1 order by 1 asc").df().set_index("date"))
+        st.write("Events by month")
+        st.area_chart(duckdb.sql("SELECT date_trunc('month', date) date, count(distinct EVENT) events from fed group by 1 order by 1 asc").df().set_index("date"))
+            
+    with c2:
+        st.write('Most experienced referees in the last 2 years')
+        st.dataframe(duckdb.sql("SELECT REFEREE,count(*) fights from fr_cleaned where date between current_date() -730 and current_date() group by 1 order by 2 desc limit 10").df())
         st.write('Fighters fought in the last 2 years')
         st.write(str(duckdb.sql("""
                        SELECT count(distinct fighter) s from 
@@ -138,14 +144,6 @@ else:
         st.write('Most commonly used venues in the last 2 years')
         st.dataframe(duckdb.sql("SELECT LOCATION,count(distinct EVENT) events from fed where date between current_date() -730 and current_date() group by 1 order by 2 desc limit 10").df())
 
-    
-    with c2:
-        st.write("Events by month")
-        st.area_chart(duckdb.sql("SELECT date_trunc('month', date) date, count(distinct EVENT) events from fed group by 1 order by 1 asc").df().set_index("date"))
-        st.write('Most experienced referees in the last 2 years')
-        refs = duckdb.sql("SELECT REFEREE,count(*) fights from fr_cleaned where date between current_date() -730 and current_date() group by 1 order by 2 desc limit 10").df()
-        st.dataframe(refs.style.hide_index())
-        
 
 
 with st.expander("Surprise and Delight",expanded=False):
