@@ -143,7 +143,7 @@ else:
                         SELECT FIGHTER2 fighter from fr_cleaned where date between current_date() -730 and current_date() group by 1)
                         """).df()['s'].sum())
         st.write('Most commonly used venues in the last 2 years')
-        st.bar_chart(duckdb.sql("SELECT LOCATION,count(distinct EVENT) events from fed where date between current_date() -730 and current_date() group by 1 order by 2 desc limit 10").df().set_index("LOCATION"))
+        st.write(duckdb.sql("SELECT LOCATION,count(distinct EVENT) events from fed where date between current_date() -730 and current_date() group by 1 order by 2 desc limit 10").df())
 
     
     with c2:
