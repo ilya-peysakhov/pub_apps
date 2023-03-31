@@ -35,9 +35,7 @@ st.write('This pulls data from Greco1899''s scraper of UFC Fight Stats - https:/
 with st.expander("Surprise and Delight",expanded=False):
     audio_file = open('song.mp3', 'rb')
     audio_bytes = audio_file.read()
-    if st.audio(audio_bytes, format='audio/ogg'):
-        st.image('https://media.tenor.com/3igI9osXP0UAAAAM/just-bleed.gif',width=200)
-        st.image('https://media.tenor.com/fU8GQhzIDDwAAAAC/smash-khabib.gif',width=300)
+    st.audio(audio_bytes, format='audio/ogg')        
 
 view = st.sidebar.radio('Select a view',('Fighter One Sheet','All Time Stats','Show all dataset samples'))
 
