@@ -135,7 +135,7 @@ else:
     with c1:
         st.write("Fights by month")
         st.area_chart(duckdb.sql("SELECT date_trunc('month',date) date,count(*) fights from fed group by 1 order by 1 asc").df().set_index("date"))
-        st.write('Fighters fought in the last 730 days (2 years)')
+        st.write('Fighters fought in the last 2 years')
         st.write(str(duckdb.sql("""
                        SELECT count(distinct fighter) s from 
                         (SELECT FIGHTER1 fighter from fr_cleaned where date between current_date() -730 and current_date() group by 1 
