@@ -97,7 +97,7 @@ if view =='Fighter One Sheet':
             st.write('Total UFC Fights - '+str(len(fights.df())))
             st.write(str(len(duckdb.sql("SELECT * from winloss where result='W'").df()))+' Wins'+' / '+str(len(duckdb.sql("SELECT * from winloss where result='L'").df()))+' Losses')
             if len(fights.df()) >0:
-                st.write('Latest fight - '+str(last_fight['max_date'].values[0])+' -- '+str(last_fight['days_since'].values[0])+ ' ago')
+                st.write('Latest fight - '+str(last_fight['max_date'].values[0])+' - '+str(last_fight['days_since'].values[0])+ ' ago')
         with col2:
             st.subheader('Striking')
             st.write(str(int(sig_abs['s'].sum()))+' Career Significant Strikes Absored')
