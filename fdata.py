@@ -85,7 +85,7 @@ if view =='Fighter One Sheet':
     td = duckdb.sql("SELECT sum(td_l::INTEGER) s from fighter_stats").df()
     td_rate = duckdb.sql("SELECT round(sum(td_l::INTEGER)/cast(sum(td_a::REAL) as REAL),2) s from fighter_stats").df()
     kd = duckdb.sql("SELECT sum(kd::INTEGER) s from fighter_stats").df()
-    ko_wins = duckdb.sql("SELECT count(*) as s from fr_cleaned where ((FIGHTER1='{}' and FIGHTER1_OUTCOME='W') OR (FIGHTER2='{}' and FIGHTER2_OUTCOME='W')) and METHOD='KO/TKO' ".format(fighter_filter,fighter_filter)).df()
+    ko_wins = duckdb.sql("SELECT count(*) as s from fr_cleaned where ((FIGHTER1='{}' and FIGHTER1_OUTCOME='W') OR (FIGHTER2='{}' and FIGHTER2_OUTCOME='W')) and trim(METHOD)='KO/TKO' ".format(fighter_filter,fighter_filter)).df()
     
     opp_stats = duckdb.sql("SELECT * from fs_cleaned where BOUT in (select * from fights) and FIGHTER !='{}' ".format(fighter_filter))
     sig_abs = duckdb.sql("SELECT sum(sig_str_l::INTEGER) as s from opp_stats").df()
@@ -93,7 +93,7 @@ if view =='Fighter One Sheet':
     td_abs = duckdb.sql("SELECT sum(td_l::INTEGER) as s from opp_stats").df()
     td_abs_rate = duckdb.sql("SELECT round(sum(td_l::INTEGER)/cast(sum(td_a::REAL) as REAL),2) s from opp_stats").df()
     kd_abs = duckdb.sql("SELECT sum(kd::INTEGER) s from opp_stats").df()
-    ko_losses = duckdb.sql("SELECT count(*) as s from fr_cleaned where ((FIGHTER1='{}' and FIGHTER1_OUTCOME='L') OR (FIGHTER2='{}' and FIGHTER2_OUTCOME='L')) and METHOD='KO/TKO' ".format(fighter_filter,fighter_filter)).df()
+    ko_losses = duckdb.sql("SELECT count(*) as s from fr_cleaned where ((FIGHTER1='{}' and FIGHTER1_OUTCOME='L') OR (FIGHTER2='{}' and FIGHTER2_OUTCOME='L')) and trim(METHOD)='KO/TKO' ".format(fighter_filter,fighter_filter)).df()
 
     if fighter_filter:
         col1,col2,col3 = st.columns(3)
