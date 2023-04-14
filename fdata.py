@@ -84,12 +84,16 @@ if view =='Fighter One Sheet':
     head_str = duckdb.sql("SELECT sum(head_str_l::INTEGER) s from fighter_stats").df()
     td = duckdb.sql("SELECT sum(td_l::INTEGER) s from fighter_stats").df()
     td_rate = duckdb.sql("SELECT round(sum(td_l::INTEGER)/cast(sum(td_a::REAL) as REAL),2) s from fighter_stats").df()
-
+    kd = duckdb.sql("SELECT sum(kd::INTEGER) s from fighter_stats").df()
+    ko_wins = duckdb.sql("SELECT count(*) as s from fr_cleaned where ((FIGHTER1='{}' and FIGHTER1_OUTCOME='W') OR (FIGHTER2='{}' and FIGHTER2_OUTCOME='W')) and METHOD='KO/TKO' ").format(fighter_filter,fighter_filter)
+    
     opp_stats = duckdb.sql("SELECT * from fs_cleaned where BOUT in (select * from fights) and FIGHTER !='{}' ".format(fighter_filter))
     sig_abs = duckdb.sql("SELECT sum(sig_str_l::INTEGER) as s from opp_stats").df()
     head_abs= duckdb.sql("SELECT sum(head_str_l::INTEGER) as s from opp_stats").df()
     td_abs = duckdb.sql("SELECT sum(td_l::INTEGER) as s from opp_stats").df()
     td_abs_rate = duckdb.sql("SELECT round(sum(td_l::INTEGER)/cast(sum(td_a::REAL) as REAL),2) s from opp_stats").df()
+    kd_abs = duckdb.sql("SELECT sum(kd::INTEGER) s from opp_stats").df()
+    ko_losses = duckdb.sql("SELECT count(*) as s from fr_cleaned where ((FIGHTER1='{}' and FIGHTER1_OUTCOME='L') OR (FIGHTER2='{}' and FIGHTER2_OUTCOME='L')) and METHOD='KO/TKO' ").format(fighter_filter,fighter_filter)
 
     if fighter_filter:
         col1,col2,col3 = st.columns(3)
@@ -99,12 +103,16 @@ if view =='Fighter One Sheet':
             st.write(str(len(duckdb.sql("SELECT * from winloss where result='W'").df()))+' Wins'+' / '+str(len(duckdb.sql("SELECT * from winloss where result='L'").df()))+' Losses')
             if len(fights.df()) >0:
                 st.write('Latest fight - '+str(last_fight['max_date'].values[0])+' - '+str(last_fight['days_since'].values[0])+ ' ago')
+            st.write(str(int(ko_wins['s'].sum()))+' KO/TKO Wins')
+            st.write(str(int(ko_losses['s'].sum()))+' KO/TKO Losses')
         with col2:
             st.subheader('Striking')
-            st.write(str(int(sig_abs['s'].sum()))+' Career Significant Strikes Absored')
-            st.write(str(int(head_abs['s'].sum()))+' Career Head Strikes Absored')
-            st.write(str(int(sig_str['s'].sum()))+' Career Significant Strikes Landed')
-            st.write(str(int(head_str['s'].sum()))+' Career Head Strikes Landed')
+            st.write(str(int(sig_abs['s'].sum()))+' Significant Strikes Absored')
+            st.write(str(int(head_abs['s'].sum()))+' Head Strikes Absored')
+            st.write(str(int(sig_str['s'].sum()))+' Significant Strikes Landed')
+            st.write(str(int(head_str['s'].sum()))+' Head Strikes Landed')
+            st.write(str(int(kd['s'].sum()))+' Knockdowns Landed')
+            st.write(str(int(kd_abs['s'].sum()))+' Knockdowns Absored')
         with col3:
             st.subheader('Grappling/Wrestling')
             st.write(str(int(td['s'].sum()))+' Total Takedowns Landed'+' at a rate of '+"{:.0%}".format(td_rate['s'].sum()) )
