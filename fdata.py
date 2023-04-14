@@ -88,7 +88,7 @@ if view =='Fighter One Sheet':
     opp_stats = duckdb.sql("SELECT * from fs_cleaned where BOUT in (select * from fights) and FIGHTER !='{}' ".format(fighter_filter))
     sig_abs = duckdb.sql("SELECT sum(sig_str_l::INTEGER) as s from opp_stats").df()
     head_abs= duckdb.sql("SELECT sum(head_str_l::INTEGER) as s from opp_stats").df()
-    td_abs = duckdb.sql("SELECT sum(td_l) as s from opp_stats").df()
+    td_abs = duckdb.sql("SELECT sum(td_l::INTEGER) as s from opp_stats").df()
     td_abs_rate = duckdb.sql("SELECT round(sum(td_l::INTEGER)/cast(sum(td_a::REAL) as REAL),2) s from opp_stats").df()
 
     if fighter_filter:
