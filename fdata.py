@@ -159,11 +159,11 @@ else:
         st.dataframe(duckdb.sql("SELECT LOCATION,count(distinct EVENT) events from fed where date between current_date() -730 and current_date() group by 1 order by 2 desc limit 10").df())
 
 
-st.code('This pulls data from Greco1899''s scraper of UFC Fight Stats - "https://github.com/Greco1899/scrape_ufc_stats"')
 
-with st.expander("Surprise and Delight",expanded=False):
+with st.expander("Real UFC fans ONLY",expanded=False):
     audio_file = open('song.mp3', 'rb')
     audio_bytes = audio_file.read()
     st.audio(audio_bytes, format='audio/ogg')        
 
+st.code('This pulls data from Greco1899''s scraper of UFC Fight Stats - "https://github.com/Greco1899/scrape_ufc_stats"')
 
