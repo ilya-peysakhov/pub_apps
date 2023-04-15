@@ -160,10 +160,10 @@ else:
 
 
 
-with st.expander("Real UFC fans ONLY",expanded=False):
-    audio_file = open('song.mp3', 'rb')
-    audio_bytes = audio_file.read()
-    st.audio(audio_bytes, format='audio/ogg')        
+#with st.expander("Real UFC fans ONLY",expanded=False):
+#    audio_file = open('song.mp3', 'rb')
+#    audio_bytes = audio_file.read()
+#    st.audio(audio_bytes, format='audio/ogg')        
 
-st.code('This pulls data from Greco1899''s scraper of UFC Fight Stats - "https://github.com/Greco1899/scrape_ufc_stats"')
+st.code('This application uses data from Greco1899''s scraper of UFC Fight Stats - "https://github.com/Greco1899/scrape_ufc_stats"')
 
