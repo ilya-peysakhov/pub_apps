@@ -116,7 +116,7 @@ if view =='Fighter One Sheet':
             st.write(str(round(float(cleaned_fighter_stats['sig_str']/cleaned_opp_stats['sig_abs']),1))+' Significant Strikes Differential')
             st.write(str(round(float(cleaned_fighter_stats['head_str']/cleaned_opp_stats['head_abs']),1))+' Head Strikes Differential')
             st.write(str(round(float(cleaned_fighter_stats['kd']/cleaned_opp_stats['kd_abs']),1))+' Power Differential (Knockdowns)')
-            st.write(str(round(float(cleaned_fighter_stats['td']/cleaned_opp_stats['td_abs']),1))+' Takedown Differential')
+            st.write(str(round(float(cleaned_fighter_stats['td_l']/cleaned_opp_stats['td_abs']),1))+' Takedown Differential')
         st.divider()
         st.subheader('Fight Results')
         st.write(duckdb.sql("SELECT * EXCLUDE (DATE,BOUT,WEIGHTCLASS,TIME_FORMAT,URL),left(DATE,10) date from fr_cleaned where FIGHTER1= '{}' or FIGHTER2='{}' order by date desc".format(fighter_filter,fighter_filter)).df())
