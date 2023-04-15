@@ -6,10 +6,8 @@ import duckdb
 
 
 #additions
-#TD % defense
 #strikes landed per minute over time with % over time
 #strikes absored per fight
-#KOs, TKOs KDs taken
 
 ###################################
 def _max_width_():
@@ -26,7 +24,7 @@ def _max_width_():
     )
 
 
-st.set_page_config(page_icon="👊", page_title="UFC Data Explorer v0.3", layout="wide")
+st.set_page_config(page_icon="👊", page_title="UFC Data Explorer v0.5", layout="wide")
 
 ########start of app
 st.header('UFC Fight Stats data explorer')
@@ -121,7 +119,7 @@ if view =='Fighter One Sheet':
         with col4:
             st.subheader('Advanced Stats')
             st.write(str(round(float(sig_str['s']/sig_abs['s']),1))+' Significant Strikes Differential')
-             st.write(str(round(float(head_str['s']/head_abs['s']),1))+' Head Strikes Differential')
+            st.write(str(round(float(head_str['s']/head_abs['s']),1))+' Head Strikes Differential')
             st.write(str(round(float(kd['s']/kd_abs['s']),1))+' Power Differential (Knockdowns)')
             st.write(str(round(float(td['s']/td_abs['s']),1))+' Takedown Differential')
         st.divider()
