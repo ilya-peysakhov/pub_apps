@@ -97,7 +97,7 @@ if view =='Fighter One Sheet':
     ko_losses = duckdb.sql("SELECT count(*) as s from fr_cleaned where ((FIGHTER1='{}' and FIGHTER1_OUTCOME='L') OR (FIGHTER2='{}' and FIGHTER2_OUTCOME='L')) and trim(METHOD)='KO/TKO' ".format(fighter_filter,fighter_filter)).df()
 
     if fighter_filter:
-        col1,col2,col3 = st.columns(3)
+        col1,col2,col3, col4 = st.columns(4)
         with col1:
             st.subheader('Highlights')
             st.write('Total UFC Fights - '+str(len(fights.df())))
@@ -118,6 +118,10 @@ if view =='Fighter One Sheet':
             st.subheader('Grappling/Wrestling')
             st.write(str(int(td['s'].sum()))+' Total Takedowns Landed'+' at a rate of '+"{:.0%}".format(td_rate['s'].sum()) )
             st.write(str(int(td_abs['s'].sum()))+' Total Takedowns Given Up'+' at a rate of '+"{:.0%}".format(td_abs_rate['s'].sum()) )
+        with col4:
+            st.subheader('Advanced Stats')
+            st.write('Significant Strikes Differential')
+            st.write(sig_str['s']/sig_abs['s'])
         st.divider()
         st.subheader('Fight Results')
         st.write(duckdb.sql("SELECT * EXCLUDE (DATE,BOUT,WEIGHTCLASS,TIME_FORMAT,URL),left(DATE,10) date from fr_cleaned where FIGHTER1= '{}' or FIGHTER2='{}' order by date desc".format(fighter_filter,fighter_filter)).df())
