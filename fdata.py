@@ -117,13 +117,14 @@ if view =='Fighter One Sheet':
             st.subheader('Grappling/Wrestling')
             st.write(str(int(td['s'].sum()))+' Total Takedowns Landed'+' at a rate of '+"{:.0%}".format(td_rate['s'].sum()) )
             st.write(str(int(td_abs['s'].sum()))+' Total Takedowns Given Up'+' at a rate of '+"{:.0%}".format(td_abs_rate['s'].sum()) )
-        
+        st.divider()
         st.subheader('Fight Results')
         st.write(duckdb.sql("SELECT * EXCLUDE (DATE,BOUT,WEIGHTCLASS,TIME_FORMAT,URL),left(DATE,10) date from fr_cleaned where FIGHTER1= '{}' or FIGHTER2='{}' order by date desc".format(fighter_filter,fighter_filter)).df())
 
     bout_filter = st.selectbox('Pick a bout',options=fights.df().drop_duplicates())
 
     if bout_filter:
+        st.divider()
         st.subheader('Bout Stats')
         st.write(duckdb.sql("SELECT * EXCLUDE (BOUT) from fighter_stats where BOUT ='{}' ".format(bout_filter)).df())
 
