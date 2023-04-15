@@ -120,11 +120,11 @@ if view =='Fighter One Sheet':
         st.divider()
         st.subheader('Fight Results')
         st.write(duckdb.sql("SELECT * EXCLUDE (DATE,BOUT,WEIGHTCLASS,TIME_FORMAT,URL),left(DATE,10) date from fr_cleaned where FIGHTER1= '{}' or FIGHTER2='{}' order by date desc".format(fighter_filter,fighter_filter)).df())
-
+    
+    st.divider()
     bout_filter = st.selectbox('Pick a bout',options=fights.df().drop_duplicates())
 
     if bout_filter:
-        st.divider()
         st.subheader('Bout Stats')
         st.write(duckdb.sql("SELECT * EXCLUDE (BOUT) from fighter_stats where BOUT ='{}' ".format(bout_filter)).df())
 
