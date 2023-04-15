@@ -28,8 +28,6 @@ st.set_page_config(page_icon="👊", page_title="UFC Stats Explorer v0.5", layou
 
 ########start of app
 st.header('UFC Fight Stats explorer')
-st.code('This pulls data from Greco1899''s scraper of UFC Fight Stats - "https://github.com/Greco1899/scrape_ufc_stats"')
-
 
 view = st.sidebar.radio('Select a view',('Fighter One Sheet','All Time Stats','Show all dataset samples'))
 
@@ -71,6 +69,7 @@ fighters= duckdb.sql("SELECT trim(FIGHTER) as FIGHTER,HEIGHT,WEIGHT,REACH,STANCE
 
 #
 if view =='Fighter One Sheet':
+    st.write('Display all relevant fighter stats in just 1 click. Choose your fighter below to get started')
     fighter_list = duckdb.sql("SELECT FIGHTER from fighters  where DOB is not null group by 1 order by 1").df()
     f1, f2 = st.columns(2)
     with f1:
@@ -168,6 +167,7 @@ else:
         st.dataframe(duckdb.sql("SELECT LOCATION,count(distinct EVENT) events from fed where date between current_date() -730 and current_date() group by 1 order by 2 desc limit 10").df())
 
 
+st.code('This pulls data from Greco1899''s scraper of UFC Fight Stats - "https://github.com/Greco1899/scrape_ufc_stats"')
 
 with st.expander("Surprise and Delight",expanded=False):
     audio_file = open('song.mp3', 'rb')
