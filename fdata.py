@@ -28,7 +28,7 @@ st.set_page_config(page_icon="👊", page_title="UFC Data Explorer v0.5", layout
 
 ########start of app
 st.header('UFC Fight Stats data explorer')
-st.write('This pulls data from Greco1899''s scraper of UFC Fight Stats - https://github.com/Greco1899/scrape_ufc_stats')
+st.code('This pulls data from Greco1899''s scraper of UFC Fight Stats - https://github.com/Greco1899/scrape_ufc_stats')
 
 
 view = st.sidebar.radio('Select a view',('Fighter One Sheet','All Time Stats','Show all dataset samples'))
