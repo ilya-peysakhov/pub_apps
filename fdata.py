@@ -109,8 +109,8 @@ if view =='Fighter One Sheet':
             st.write(str(int(cleaned_opp_stats['kd_abs']))+' Knockdowns Absored')
         with col3:
             st.subheader('Wrestling')
-            st.write(str(int(cleaned_fighter_stats['td_l']))+' Total Takedowns Landed'+' at a rate of '+"{:.0%}".format(cleaned_fighter_stats['td_rate']) )
-            st.write(str(int(cleaned_opp_stats['td_abs']))+' Total Takedowns Given Up'+' at a rate of '+"{:.0%}".format(cleaned_opp_stats['td_abs_rate']) )
+            st.write(str(int(cleaned_fighter_stats['td_l']))+' Total Takedowns Landed'+' at a rate of '+"{:.0%}".format(cleaned_fighter_stats['td_rate'].sum()) )
+            st.write(str(int(cleaned_opp_stats['td_abs']))+' Total Takedowns Given Up'+' at a rate of '+"{:.0%}".format(cleaned_opp_stats['td_abs_rate'].sum()) )
         with col4:
             st.subheader('Advanced Stats')
             st.write(str(round(float(cleaned_fighter_stats['sig_str']/cleaned_opp_stats['sig_abs']),1))+' Significant Strikes Differential')
