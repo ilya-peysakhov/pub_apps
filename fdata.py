@@ -126,7 +126,7 @@ if view =='Fighter One Sheet':
         bout_filter = st.selectbox('Pick a bout',options=fights.df().drop_duplicates())
 
         if bout_filter:
-            st.write(duckdb.sql("SELECT * EXCLUDE (BOUT) from fighter_stats where BOUT ='{}' ".format(bout_filter)).df().T)
+            st.write(duckdb.sql("SELECT * EXCLUDE (BOUT,FIGHTER,EVENT) from fighter_stats where BOUT ='{}' ".format(bout_filter)).df().T)
 
 elif view =='Show all dataset samples':
     st.write('Fighter Details (cleaned)')
