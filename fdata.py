@@ -115,12 +115,12 @@ if view =='Fighter One Sheet':
             st.write(str(int(kd['s'].sum()))+' Knockdowns Landed')
             st.write(str(int(kd_abs['s'].sum()))+' Knockdowns Absored')
         with col3:
-            st.subheader('Grappling/Wrestling')
+            st.subheader('Wrestling')
             st.write(str(int(td['s'].sum()))+' Total Takedowns Landed'+' at a rate of '+"{:.0%}".format(td_rate['s'].sum()) )
             st.write(str(int(td_abs['s'].sum()))+' Total Takedowns Given Up'+' at a rate of '+"{:.0%}".format(td_abs_rate['s'].sum()) )
         with col4:
             st.subheader('Advanced Stats')
-            st.write(str(sig_str['s']/sig_abs['s'])+'Significant Strikes Differential')
+            st.write(str(int(sig_str['s']/sig_abs['s']))+'Significant Strikes Differential')
         st.divider()
         st.subheader('Fight Results')
         st.write(duckdb.sql("SELECT * EXCLUDE (DATE,BOUT,WEIGHTCLASS,TIME_FORMAT,URL),left(DATE,10) date from fr_cleaned where FIGHTER1= '{}' or FIGHTER2='{}' order by date desc".format(fighter_filter,fighter_filter)).df())
