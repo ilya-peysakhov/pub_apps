@@ -101,7 +101,7 @@ if view =='Fighter One Sheet':
             st.write(str(int(ko_losses['s'].sum()))+' KO/TKO Losses')
         with col2:
             st.subheader('Striking')
-            st.write(str(int(cleaned_opp_stats['sig_abs'].sum()))+' Significant Strikes Absored')
+            st.write(str(int(cleaned_opp_stats['sig_abs'])+' Significant Strikes Absored')
             st.write(str(int(cleaned_opp_stats['head_abs'].sum()))+' Head Strikes Absored')
             st.write(str(int(cleaned_fighter_stats['sig_str'].sum()))+' Significant Strikes Landed')
             st.write(str(int(cleaned_fighter_stats['head_str'].sum()))+' Head Strikes Landed')
