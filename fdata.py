@@ -118,15 +118,14 @@ if view =='Fighter One Sheet':
             st.write(str(round(float(cleaned_fighter_stats['kd']/cleaned_opp_stats['kd_abs']),1))+' Power Differential (Knockdowns)')
             st.write(str(round(float(cleaned_fighter_stats['td_l']/cleaned_opp_stats['td_abs']),1))+' Takedown Differential')
         st.divider()
-        st.subheader('Fight Results')
-        st.write(duckdb.sql("SELECT * EXCLUDE (DATE,BOUT,WEIGHTCLASS,TIME_FORMAT,URL),left(DATE,10) date from fr_cleaned where FIGHTER1= '{}' or FIGHTER2='{}' order by date desc".format(fighter_filter,fighter_filter)).df())
+        with st.expander("Career Results",expanded=False):
+            st.write(duckdb.sql("SELECT * EXCLUDE (DATE,BOUT,WEIGHTCLASS,TIME_FORMAT,URL),left(DATE,10) date from fr_cleaned where FIGHTER1= '{}' or FIGHTER2='{}' order by date desc".format(fighter_filter,fighter_filter)).df())
     
     st.divider()
     with st.expander("Single Fight Stats",expanded=False):
         bout_filter = st.selectbox('Pick a bout',options=fights.df().drop_duplicates())
 
         if bout_filter:
-            st.subheader('Bout Stats')
             st.write(duckdb.sql("SELECT * EXCLUDE (BOUT) from fighter_stats where BOUT ='{}' ".format(bout_filter)).df())
 
 elif view =='Show all dataset samples':
