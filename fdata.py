@@ -155,7 +155,7 @@ else:
         for f in fighters['FIGHTER']:
             query = f"SELECT '{f}' AS fighter,count(distinct BOUT) fights,count(*) rounds, SUM(head_str_l::INTEGER) AS head_str FROM fs_cleaned WHERE BOUT LIKE '%{f}%' AND fighter != '{f}' "
             result = duckdb.sql(query).df()
-            results = pd.concat([str_results, result]) # Append the result to the DataFrame
+            str_results = pd.concat([str_results, result]) # Append the result to the DataFrame
         st.write(str_results)
         
     with c2:
