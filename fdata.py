@@ -153,10 +153,10 @@ else:
         fsc['BOUT'] = fsc['BOUT'].str.replace("'", "")
         str_results = pd.DataFrame()
         for f in fighters['FIGHTER']:
-            query = f"SELECT '{f}' AS FIGHTER,count(distinct BOUT) FIGHTS,count(*) ROUNDS, SUM(head_str_l::INTEGER) AS HEAD_STRIKES_ABSORED FROM fs_cleaned WHERE BOUT LIKE '%{f}%' AND fighter != '{f}' "
+            query = f"SELECT '{f}' AS FIGHTER,count(distinct BOUT) as FIGHTS,count(*) as ROUNDS, SUM(head_str_l::INTEGER) AS HEAD_STRIKES_ABSORED FROM fs_cleaned WHERE BOUT LIKE '%{f}%' AND fighter != '{f}' "
             result = duckdb.sql(query).df()
             str_results = pd.concat([str_results, result]) # Append the result to the DataFrame
-        st.write(str_results.sort_values(by='head_strikes_absored', ascending=False))
+        st.write(str_results.sort_values(by='HEAD_STRIKES_ABSORED', ascending=False))
         
     with c2:
         st.write('Most experienced referees in the last 2 years')
