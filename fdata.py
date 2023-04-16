@@ -59,7 +59,7 @@ fs_cleaned = duckdb.sql("""SELECT EVENT,replace(trim(BOUT),'  ',' ') as BOUT,ROU
                               "SUB.ATT","REV.",CTRL,
                               split_part(HEAD,' of ',1) head_str_l,
                               split_part(HEAD,' of ',2) head_str_a  
-                              from fs """)
+                              from fs WHERE FIGHTER IS NOT NULL """)
 frd = pl.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fighter_details.csv")
 ft = pl.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fighter_tott.csv")
 fighters= duckdb.sql("SELECT trim(FIGHTER) as FIGHTER,HEIGHT,WEIGHT,REACH,STANCE,DOB,FIRST,LAST,NICKNAME,frd.URL from ft inner join frd on frd.URL = ft.URL")
@@ -144,7 +144,20 @@ else:
         st.area_chart(duckdb.sql("SELECT date_trunc('month',date) date,count(*) fights from fed group by 1 order by 1 asc").df().set_index("date"))
         st.write("Events by month")
         st.area_chart(duckdb.sql("SELECT date_trunc('month', date) date, count(distinct EVENT) events from fed group by 1 order by 1 asc").df().set_index("date"))
-            
+        st.write("Most hit fighters (head strikes absored) all time")
+        
+        fighters = duckdb.sql("SELECT fighter FROM fs_cleaned GROUP BY 1 order by count(distinct BOUT) desc limit 250").df()
+        fighters['FIGHTER'] = fighters['FIGHTER'].str.replace("'", "") 
+        fsc = fs_cleaned.df()
+        fsc['FIGHTER'] = fsc['FIGHTER'].str.replace("'", "")
+        fsc['BOUT'] = fsc['BOUT'].str.replace("'", "")
+        str_results = pd.DataFrame()
+        for f in fighters['FIGHTER']:
+            query = f"SELECT '{f}' AS fighter,count(distinct BOUT) fights,count(*) rounds, SUM(head_str_l::INTEGER) AS head_str FROM fs_cleaned WHERE BOUT LIKE '%{f}%' AND fighter != '{f}' "
+            result = duckdb.sql(query).df()
+            results = pd.concat([str_results, result]) # Append the result to the DataFrame
+        st.write(str_results)
+        
     with c2:
         st.write('Most experienced referees in the last 2 years')
         st.dataframe(duckdb.sql("SELECT REFEREE,count(*) fights from fr_cleaned where date between current_date() -730 and current_date() group by 1 order by 2 desc limit 10").df())
@@ -157,7 +170,7 @@ else:
                         """).df()['s'].sum()))
         st.write('Most commonly used venues in the last 2 years')
         st.dataframe(duckdb.sql("SELECT LOCATION,count(distinct EVENT) events from fed where date between current_date() -730 and current_date() group by 1 order by 2 desc limit 10").df())
-
+        
 
 
 #with st.expander("Real UFC fans ONLY",expanded=False):
