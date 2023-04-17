@@ -146,7 +146,7 @@ else:
         st.area_chart(duckdb.sql("SELECT date_trunc('month', date) date, count(distinct EVENT) events from fed group by 1 order by 1 asc").df().set_index("date"))
         st.write("250 Most hit (head), knocked down and taken down fighters all time")
         
-        fighters = duckdb.sql("SELECT fighter FROM fs_cleaned GROUP BY 1 order by count(distinct BOUT) desc limit 250").df()
+        fighters = duckdb.sql("SELECT fighter FROM fs_cleaned GROUP BY 1 order by count(distinct BOUT) desc limit 500").df()
         fighters['FIGHTER'] = fighters['FIGHTER'].str.replace("'", "") 
         fsc = fs_cleaned.df()
         fsc['FIGHTER'] = fsc['FIGHTER'].str.replace("'", "")
