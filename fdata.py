@@ -160,17 +160,17 @@ else:
         st.dataframe(duckdb.sql("SELECT LOCATION,count(distinct EVENT) events from fed where date between current_date() -730 and current_date() group by 1 order by 2 desc limit 10").df())
     
     st.write("500 Most hit (head), knocked down and taken down fighters all time")        
-        fighters = duckdb.sql("SELECT fighter FROM fs_cleaned GROUP BY 1 order by count(distinct BOUT) desc limit 500").df()
-        fighters['FIGHTER'] = fighters['FIGHTER'].str.replace("'", "") 
-        fsc = fs_cleaned.df()
-        fsc['FIGHTER'] = fsc['FIGHTER'].str.replace("'", "")
-        fsc['BOUT'] = fsc['BOUT'].str.replace("'", "")
-        str_results = pd.DataFrame()
-        for f in fighters['FIGHTER']:
-            query = f"SELECT '{f}' AS FIGHTER,count(distinct BOUT) as FIGHTS,count(*) as ROUNDS, SUM(head_str_l::INTEGER) AS HEAD_STRIKES_ABSORED,sum(KD::INTEGER) as KD, sum(TD_L::INT) as TD FROM fs_cleaned WHERE BOUT LIKE '%{f}%' AND fighter != '{f}' "
-            result = duckdb.sql(query).df()
-            str_results = pd.concat([str_results, result]) # Append the result to the DataFrame
-        st.write(str_results.sort_values(by='HEAD_STRIKES_ABSORED', ascending=False))   
+    fighters = duckdb.sql("SELECT fighter FROM fs_cleaned GROUP BY 1 order by count(distinct BOUT) desc limit 500").df()
+    fighters['FIGHTER'] = fighters['FIGHTER'].str.replace("'", "") 
+    fsc = fs_cleaned.df()
+    fsc['FIGHTER'] = fsc['FIGHTER'].str.replace("'", "")
+    fsc['BOUT'] = fsc['BOUT'].str.replace("'", "")
+    str_results = pd.DataFrame()
+    for f in fighters['FIGHTER']:
+        query = f"SELECT '{f}' AS FIGHTER,count(distinct BOUT) as FIGHTS,count(*) as ROUNDS, SUM(head_str_l::INTEGER) AS HEAD_STRIKES_ABSORED,sum(KD::INTEGER) as KD, sum(TD_L::INT) as TD FROM fs_cleaned WHERE BOUT LIKE '%{f}%' AND fighter != '{f}' "
+        result = duckdb.sql(query).df()
+        str_results = pd.concat([str_results, result]) # Append the result to the DataFrame
+    st.write(str_results.sort_values(by='HEAD_STRIKES_ABSORED', ascending=False))   
 
 
 #with st.expander("Real UFC fans ONLY",expanded=False):
