@@ -103,7 +103,7 @@ if view =='Fighter One Sheet':
                 st.metric('Losses',value=len(duckdb.sql("SELECT * from winloss where result='L'").df()) )
             
             if len(fights.df()) >0:
-                st.write('Latest fight - '+str(last_fight['max_date'].values[0])+' - '+str(last_fight['days_since'].values[0])+ ' ago')
+                st.caption('Latest fight - '+str(last_fight['max_date'].values[0])+' - '+str(last_fight['days_since'].values[0])+ ' ago')
             st.metric('KO/TKO Wins', value = int(ko_wins['s']) )
             st.metric('KO/TKO Losses', value = int(ko_losses['s']))
         with col2:
