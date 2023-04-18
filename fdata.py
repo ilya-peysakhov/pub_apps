@@ -113,10 +113,10 @@ if view =='Fighter One Sheet':
             st.write(str(int(cleaned_opp_stats['td_abs']))+' Total Takedowns Given Up'+' at a rate of '+"{:.0%}".format(cleaned_opp_stats['td_abs_rate'].sum()) )
         with col4:
             st.subheader('Advanced Stats')
-            st.write(str(round(float(cleaned_fighter_stats['sig_str']/cleaned_opp_stats['sig_abs']),1))+' Significant Strikes Differential')
-            st.write(str(round(float(cleaned_fighter_stats['head_str']/cleaned_opp_stats['head_abs']),1))+' Head Strikes Differential')
-            st.write(str(round(float(cleaned_fighter_stats['kd']/cleaned_opp_stats['kd_abs']),1))+' Power Differential (Knockdowns)')
-            st.write(str(round(float(cleaned_fighter_stats['td_l']/cleaned_opp_stats['td_abs']),1))+' Takedown Differential')
+            st.metric('Significant Strikes Differential',value=round(float(cleaned_fighter_stats['sig_str']/cleaned_opp_stats['sig_abs']),1))
+            st.metric('Head Strikes Differential',value=round(float(cleaned_fighter_stats['head_str']/cleaned_opp_stats['head_abs']),1))
+            st.metric('Power Differential (Knockdowns)',value=round(float(cleaned_fighter_stats['kd']/cleaned_opp_stats['kd_abs']),1))
+            st.metric('Takedown Differential',value=round(float(cleaned_fighter_stats['td_l']/cleaned_opp_stats['td_abs']),1))
         st.divider()
         with st.expander("Career Results",expanded=False):
             st.write(duckdb.sql("SELECT * EXCLUDE (DATE,BOUT,WEIGHTCLASS,TIME_FORMAT,URL),left(DATE,10) date from fr_cleaned where FIGHTER1= '{}' or FIGHTER2='{}' order by date desc".format(fighter_filter,fighter_filter)).df())
