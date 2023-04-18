@@ -93,7 +93,7 @@ if view =='Fighter One Sheet':
         col1,col2,col3, col4 = st.columns(4)
         with col1:
             st.subheader('Highlights')
-            st.write('Total UFC Fights - '+str(len(fights.df())))
+            st.metric('Total UFC Fights',value=len(fights.df()) )
             st.write(str(len(duckdb.sql("SELECT * from winloss where result='W'").df()))+' Wins'+' / '+str(len(duckdb.sql("SELECT * from winloss where result='L'").df()))+' Losses')
             if len(fights.df()) >0:
                 st.write('Latest fight - '+str(last_fight['max_date'].values[0])+' - '+str(last_fight['days_since'].values[0])+ ' ago')
