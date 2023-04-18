@@ -109,8 +109,8 @@ if view =='Fighter One Sheet':
             st.metric('Knockdowns Absored',value=int(cleaned_opp_stats['kd_abs']))
         with col3:
             st.subheader('Wrestling')
-            st.metric('Total Takedowns Landed',value=int(cleaned_fighter_stats['td_l']),delta=round(float(cleaned_fighter_stats['td_rate']),2))
-            st.metric('Total Takedowns Given Up',value=int(cleaned_opp_stats['td_abs']),delta=round(float(cleaned_opp_stats['td_abs_rate']),2))
+            st.metric('Total Takedowns Landed',value=int(cleaned_fighter_stats['td_l']),delta="{0:.0%}".format(round(float(cleaned_fighter_stats['td_rate']),2)))
+            st.metric('Total Takedowns Given Up',value=int(cleaned_opp_stats['td_abs']),delta="{0:.0%}".format(round(float(cleaned_opp_stats['td_abs_rate']),2)))
         with col4:
             st.subheader('Advanced Stats')
             st.metric('Significant Strikes Differential',value=round(float(cleaned_fighter_stats['sig_str']/cleaned_opp_stats['sig_abs']),1))
