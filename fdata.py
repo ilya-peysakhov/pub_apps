@@ -93,11 +93,13 @@ if view =='Fighter One Sheet':
         col1,col2,col3, col4 = st.columns(4)
         with col1:
             st.subheader('Highlights')
-            st.metric('Total UFC Fights',value=len(fights.df()) )
+            
             w1,w2 = st.columns(2)
             with w1:
-                st.metric('Wins',value=len(duckdb.sql("SELECT * from winloss where result='W'").df()) )
+                st.metric('Total UFC Fights',value=len(fights.df()) )
+                st.metric('Rounds',value=fighter_stats.shape[0] )
             with w2:
+                st.metric('Wins',value=len(duckdb.sql("SELECT * from winloss where result='W'").df()) )
                 st.metric('Losses',value=len(duckdb.sql("SELECT * from winloss where result='L'").df()) )
             
             if len(fights.df()) >0:
