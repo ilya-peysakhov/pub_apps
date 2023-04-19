@@ -174,7 +174,7 @@ else:
                         (SELECT FIGHTER1 fighter from fr_cleaned where date between current_date() -730 and current_date() group by 1 
                         UNION 
                         SELECT FIGHTER2 fighter from fr_cleaned where date between current_date() -730 and current_date() group by 1)
-                        """).df()['s']))
+                        """).df().iloc[0,0]))
         st.write('Most experienced referees in the last 2 years')
         st.dataframe(duckdb.sql("SELECT REFEREE,count(*) fights from fr_cleaned where date between current_date() -730 and current_date() group by 1 order by 2 desc limit 10").df())
         
