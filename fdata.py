@@ -104,7 +104,7 @@ if view =='Fighter One Sheet':
             age = datetime.datetime.now() - dob
             age_years = age.days // 365
 
-            st.metric('DOB',value=dob_str, delta =age_years )
+            st.metric('DOB',value=dob_str, delta =age_years, delta_color="off")
             if len(fights.df()) >0:
                 st.caption('Latest fight - '+str(last_fight['max_date'].values[0])+' - '+str(last_fight['days_since'].values[0])+ ' ago')
         with col2:
@@ -129,8 +129,8 @@ if view =='Fighter One Sheet':
             st.metric('Knockdowns Absored',value=int(cleaned_opp_stats['kd_abs']))
         with col4:
             st.subheader('Wrestling')
-            st.metric('Total Takedowns Landed',value=int(cleaned_fighter_stats['td_l']),delta="{0:.0%}".format(round(float(cleaned_fighter_stats['td_rate']),2)))
-            st.metric('Total Takedowns Given Up',value=int(cleaned_opp_stats['td_abs']),delta="{0:.0%}".format(round(float(cleaned_opp_stats['td_abs_rate']),2)))
+            st.metric('Total Takedowns Landed',value=int(cleaned_fighter_stats['td_l']),delta="{0:.0%}".format(round(float(cleaned_fighter_stats['td_rate']),2)), delta_color="off")
+            st.metric('Total Takedowns Given Up',value=int(cleaned_opp_stats['td_abs']),delta="{0:.0%}".format(round(float(cleaned_opp_stats['td_abs_rate']),2)), delta_color="off")
         with col5:
             st.subheader('Advanced Stats')
             st.metric('Significant Strikes Differential',value=round(float(cleaned_fighter_stats['sig_str']/cleaned_opp_stats['sig_abs']),1))
