@@ -95,6 +95,9 @@ if view =='Fighter One Sheet':
         with col1:
             st.subheader('Bio')
             st.metric('Height',value=str(duckdb.sql("SELECT HEIGHT FROM fighters WHERE FIGHTER = '{}'".format(fighter_filter)).df().iloc[0,0]))
+            st.metric('Division',value=str(duckdb.sql("SELECT WEIGHT FROM fighters WHERE FIGHTER = '{}'".format(fighter_filter)).df().iloc[0,0]))
+            st.metric('Reach',value=str(duckdb.sql("SELECT REACH FROM fighters WHERE FIGHTER = '{}'".format(fighter_filter)).df().iloc[0,0]))
+            st.metric('Stance',value=str(duckdb.sql("SELECT STANCE FROM fighters WHERE FIGHTER = '{}'".format(fighter_filter)).df().iloc[0,0]))
             if len(fights.df()) >0:
                 st.caption('Latest fight - '+str(last_fight['max_date'].values[0])+' - '+str(last_fight['days_since'].values[0])+ ' ago')
         with col2:
