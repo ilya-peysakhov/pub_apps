@@ -119,7 +119,7 @@ if view =='Fighter One Sheet':
             with w2:
                 st.metric(:green[Wins],value=len(duckdb.sql("SELECT * from winloss where result='W'").df()) )
                 st.metric(:red[Losses],value=len(duckdb.sql("SELECT * from winloss where result='L'").df()) )
-            st.metric(l :green[KO/TKO Wins] , value = int(ko_wins['s']) )
+            st.metric(:green[KO/TKO Wins] , value = int(ko_wins['s']) )
             st.metric(:red[KO/TKO Losses], value = int(ko_losses['s']))
         with col3:
             st.subheader('Striking')
