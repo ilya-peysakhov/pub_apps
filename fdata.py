@@ -171,8 +171,7 @@ else:
     with c2:
         st.write('Most experienced referees in the last 2 years')
         st.dataframe(duckdb.sql("SELECT REFEREE,count(*) fights from fr_cleaned where date between current_date() -730 and current_date() group by 1 order by 2 desc limit 10").df())
-        st.write('Fighters fought in the last 2 years')
-        st.write(str(duckdb.sql("""
+        st.metric('Fighters fought in the last 2 years',value=str(duckdb.sql("""
                        SELECT count(distinct fighter) s from 
                         (SELECT FIGHTER1 fighter from fr_cleaned where date between current_date() -730 and current_date() group by 1 
                         UNION 
@@ -181,7 +180,7 @@ else:
         st.write('Most commonly used venues in the last 2 years')
         st.dataframe(duckdb.sql("SELECT LOCATION,count(distinct EVENT) events from fed where date between current_date() -730 and current_date() group by 1 order by 2 desc limit 10").df())
     
-    st.write("1000 Most hit (head), knocked down and taken down fighters all time")        
+    st.write("Of the top 500 fighters ranked by number of fights, most hit (head), knocked down and taken down fighters all time")        
     fighters = duckdb.sql("SELECT fighter FROM fs_cleaned GROUP BY 1 order by count(distinct BOUT) desc limit 1000").df()
     fighters['FIGHTER'] = fighters['FIGHTER'].str.replace("'", "") 
     fsc = fs_cleaned.df()
