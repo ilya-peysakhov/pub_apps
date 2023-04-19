@@ -90,9 +90,14 @@ if view =='Fighter One Sheet':
     ko_losses = duckdb.sql("SELECT count(*) as s from fr_cleaned where ((FIGHTER1='{}' and FIGHTER1_OUTCOME='L') OR (FIGHTER2='{}' and FIGHTER2_OUTCOME='L')) and trim(METHOD)='KO/TKO' ".format(fighter_filter,fighter_filter)).df()
 
     if fighter_filter:
-        col1,col2,col3, col4 = st.columns(4)
+        col1,col2,col3,col4,col5 = st.columns(5)
         with col1:
+            st.subheader('Bio')
+
+        with col2:
             st.subheader('Highlights')
+            if len(fights.df()) >0:
+                st.caption('Latest fight - '+str(last_fight['max_date'].values[0])+' - '+str(last_fight['days_since'].values[0])+ ' ago')
             
             w1,w2 = st.columns(2)
             with w1:
@@ -101,12 +106,9 @@ if view =='Fighter One Sheet':
             with w2:
                 st.metric('Wins',value=len(duckdb.sql("SELECT * from winloss where result='W'").df()) )
                 st.metric('Losses',value=len(duckdb.sql("SELECT * from winloss where result='L'").df()) )
-            
-            if len(fights.df()) >0:
-                st.caption('Latest fight - '+str(last_fight['max_date'].values[0])+' - '+str(last_fight['days_since'].values[0])+ ' ago')
             st.metric('KO/TKO Wins', value = int(ko_wins['s']) )
             st.metric('KO/TKO Losses', value = int(ko_losses['s']))
-        with col2:
+        with col3:
             st.subheader('Striking')
             st.metric('Significant Strikes Absored',value=int(cleaned_opp_stats['sig_abs']))
             st.metric('Head Strikes Absored',value=int(cleaned_opp_stats['head_abs']))
@@ -114,11 +116,11 @@ if view =='Fighter One Sheet':
             st.metric('Head Strikes Landed',value=int(cleaned_fighter_stats['head_str']))
             st.metric('Knockdowns Landed',value=int(cleaned_fighter_stats['kd']))
             st.metric('Knockdowns Absored',value=int(cleaned_opp_stats['kd_abs']))
-        with col3:
+        with col4:
             st.subheader('Wrestling')
             st.metric('Total Takedowns Landed',value=int(cleaned_fighter_stats['td_l']),delta="{0:.0%}".format(round(float(cleaned_fighter_stats['td_rate']),2)))
             st.metric('Total Takedowns Given Up',value=int(cleaned_opp_stats['td_abs']),delta="{0:.0%}".format(round(float(cleaned_opp_stats['td_abs_rate']),2)))
-        with col4:
+        with col5:
             st.subheader('Advanced Stats')
             st.metric('Significant Strikes Differential',value=round(float(cleaned_fighter_stats['sig_str']/cleaned_opp_stats['sig_abs']),1))
             st.metric('Head Strikes Differential',value=round(float(cleaned_fighter_stats['head_str']/cleaned_opp_stats['head_abs']),1))
