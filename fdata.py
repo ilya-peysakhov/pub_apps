@@ -89,11 +89,13 @@ if view =='Fighter One Sheet':
     cleaned_opp_stats = duckdb.sql("SELECT sum(sig_str_l::INTEGER) as sig_abs ,sum(head_str_l::INTEGER) as head_abs,sum(td_l::INTEGER) as td_abs,round(sum(td_l::INTEGER)/cast(sum(td_a::REAL) as REAL),2) as td_abs_rate,sum(kd::INTEGER) as kd_abs from opp_stats").df()
     ko_losses = duckdb.sql("SELECT count(*) as s from fr_cleaned where ((FIGHTER1='{}' and FIGHTER1_OUTCOME='L') OR (FIGHTER2='{}' and FIGHTER2_OUTCOME='L')) and trim(METHOD)='KO/TKO' ".format(fighter_filter,fighter_filter)).df()
 
+    height = duckdb.sql("SELECT HEIGHT FROM fighters WHERE FIGHTER = '{}'".format(fighter_filter)).df()
+
     if fighter_filter:
         col1,col2,col3,col4,col5 = st.columns(5)
         with col1:
             st.subheader('Bio')
-            st.metric('Height',value= str(duckdb.sql("SELECT HEIGHT FROM fighters WHERE FIGHTER = '{}'".format(fighter_filter)).df()['HEIGHT'] ))
+            st.metric('Height',value= height['HEIGHT'])
             if len(fights.df()) >0:
                 st.caption('Latest fight - '+str(last_fight['max_date'].values[0])+' - '+str(last_fight['days_since'].values[0])+ ' ago')
         with col2:
