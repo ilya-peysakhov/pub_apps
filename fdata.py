@@ -97,7 +97,12 @@ if view =='Fighter One Sheet':
             st.metric('Height',value=str(duckdb.sql("SELECT HEIGHT FROM fighters WHERE FIGHTER = '{}'".format(fighter_filter)).df().iloc[0,0]))
             st.metric('Division',value=str(duckdb.sql("SELECT WEIGHT FROM fighters WHERE FIGHTER = '{}'".format(fighter_filter)).df().iloc[0,0]))
             st.metric('Reach',value=str(duckdb.sql("SELECT REACH FROM fighters WHERE FIGHTER = '{}'".format(fighter_filter)).df().iloc[0,0]))
-            st.metric('DOB',value=str(duckdb.sql("SELECT DOB FROM fighters WHERE FIGHTER = '{}'".format(fighter_filter)).df().iloc[0,0]))
+            dob_str = str(duckdb.sql("SELECT DOB FROM fighters WHERE FIGHTER = '{}'".format(fighter_filter)).df().iloc[0,0])
+            dob = datetime.datetime.strptime(dob_str, '%b %d, %Y')
+            age = datetime.datetime.now() - dob
+            age_years = age.days // 365
+
+            st.metric('DOB',value=dob_str, delta =age_years )
             if len(fights.df()) >0:
                 st.caption('Latest fight - '+str(last_fight['max_date'].values[0])+' - '+str(last_fight['days_since'].values[0])+ ' ago')
         with col2:
