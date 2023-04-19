@@ -112,7 +112,7 @@ if view =='Fighter One Sheet':
             
             w1,w2 = st.columns(2)
             with w1:
-                st.metric('Total UFC Fights',value=len(fights.df()) )
+                st.metric('UFC Fights',value=len(fights.df()) )
                 st.metric('Rounds',value=fighter_stats.shape[0] )
             with w2:
                 st.metric('Wins',value=len(duckdb.sql("SELECT * from winloss where result='W'").df()) )
@@ -129,8 +129,8 @@ if view =='Fighter One Sheet':
             st.metric('Knockdowns Absored',value=int(cleaned_opp_stats['kd_abs']))
         with col4:
             st.subheader('Wrestling')
-            st.metric('Total Takedowns Landed',value=int(cleaned_fighter_stats['td_l']),delta="{0:.0%}".format(round(float(cleaned_fighter_stats['td_rate']),2)), delta_color="off")
-            st.metric('Total Takedowns Given Up',value=int(cleaned_opp_stats['td_abs']),delta="{0:.0%}".format(round(float(cleaned_opp_stats['td_abs_rate']),2)), delta_color="off")
+            st.metric('Total Takedowns Landed',value=int(cleaned_fighter_stats['td_l']),delta="{0:.0%}".format(round(float(cleaned_fighter_stats['td_rate']),2)), delta_color="green")
+            st.metric('Total Takedowns Given Up',value=int(cleaned_opp_stats['td_abs']),delta="{0:.0%}".format(round(float(cleaned_opp_stats['td_abs_rate']),2)), delta_color="red")
         with col5:
             st.subheader('Advanced Stats')
             st.metric('Significant Strikes Differential',value=round(float(cleaned_fighter_stats['sig_str']/cleaned_opp_stats['sig_abs']),1))
