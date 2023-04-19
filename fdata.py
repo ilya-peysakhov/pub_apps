@@ -117,10 +117,10 @@ if view =='Fighter One Sheet':
                 st.metric('UFC Fights',value=len(fights.df()) )
                 st.metric('Rounds',value=fighter_stats.shape[0] )
             with w2:
-                st.metric(label=:green['Wins'],value=len(duckdb.sql("SELECT * from winloss where result='W'").df()) )
-                st.metric(label=:red['Losses'],value=len(duckdb.sql("SELECT * from winloss where result='L'").df()) )
-            st.metric(label= :green['KO/TKO Wins'] , value = int(ko_wins['s']) )
-            st.metric(label=:red['KO/TKO Losses'], value = int(ko_losses['s']))
+                st.metric(:green[Wins],value=len(duckdb.sql("SELECT * from winloss where result='W'").df()) )
+                st.metric(:red[Losses],value=len(duckdb.sql("SELECT * from winloss where result='L'").df()) )
+            st.metric(l :green[KO/TKO Wins] , value = int(ko_wins['s']) )
+            st.metric(:red[KO/TKO Losses], value = int(ko_losses['s']))
         with col3:
             st.subheader('Striking')
             st.metric('Significant Strikes Absored',value=int(cleaned_opp_stats['sig_abs']))
