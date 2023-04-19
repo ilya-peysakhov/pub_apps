@@ -93,11 +93,12 @@ if view =='Fighter One Sheet':
         col1,col2,col3,col4,col5 = st.columns(5)
         with col1:
             st.subheader('Bio')
+            if len(fights.df()) >0:
+                st.caption('Latest fight - '+str(last_fight['max_date'].values[0])+' - '+str(last_fight['days_since'].values[0])+ ' ago')
+           
 
         with col2:
             st.subheader('Highlights')
-            if len(fights.df()) >0:
-                st.caption('Latest fight - '+str(last_fight['max_date'].values[0])+' - '+str(last_fight['days_since'].values[0])+ ' ago')
             
             w1,w2 = st.columns(2)
             with w1:
