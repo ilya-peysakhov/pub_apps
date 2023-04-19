@@ -3,6 +3,8 @@ import pandas as pd
 import time
 import polars as pl
 import duckdb
+import datetime
+
 
 
 #additions
