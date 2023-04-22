@@ -187,8 +187,8 @@ else:
     fsc = fs_cleaned.df()
     fsc['FIGHTER'] = fsc['FIGHTER'].str.replace("'", "")
     fsc['BOUT'] = fsc['BOUT'].str.replace("'", "")
-    str_results = pd.DataFrame()
-    str_results = duckdb.from_df(str_results)
+    # str_results = pd.DataFrame()
+    str_results = []
     for f in fighters['FIGHTER']:
         query = f"SELECT '{f}' AS FIGHTER,count(distinct BOUT||EVENT) as FIGHTS,count(*) as ROUNDS, SUM(head_str_l::INTEGER) AS HEAD_STRIKES_ABSORED,sum(KD::INTEGER) as KD, sum(TD_L::INT) as TD FROM fs_cleaned WHERE BOUT LIKE '%{f}%' AND fighter != '{f}' "
         # result = duckdb.sql(query).df()
