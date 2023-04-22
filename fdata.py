@@ -107,7 +107,7 @@ if view =='Fighter One Sheet':
             dob = datetime.datetime.strptime(dob_str, '%b %d, %Y')
             age = datetime.datetime.now() - dob
             age_years = age.days // 365
-            st.metric('DOB',value=age_years, delta =dob_str, delta_color="off")
+            st.metric('Age',value=age_years, delta =dob_str, delta_color="off")
             if len(fights.df()) >0:
                 st.caption('Latest fight - '+str(last_fight['max_date'].values[0])+' - '+str(last_fight['days_since'].values[0])+ ' ago')
 
