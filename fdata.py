@@ -109,7 +109,7 @@ if view =='Fighter One Sheet':
             age_years = age.days // 365
             st.metric('Age',value=age_years, delta =dob_str, delta_color="off")
             if len(fights.df()) >0:
-                st.metric('Last fought (days ago)', delta=str(last_fight['max_date'].values[0]),value=str(last_fight['days_since'].values[0]))
+                st.metric('Last fought', delta=str(last_fight['max_date'].values[0]),value=str(last_fight['days_since'].values[0]))
 
 
         with col2:
