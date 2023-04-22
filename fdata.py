@@ -181,8 +181,8 @@ else:
         st.write('Most commonly used venues in the last 2 years')
         st.dataframe(duckdb.sql("SELECT LOCATION,count(distinct EVENT) events from fed where date between current_date() -730 and current_date() group by 1 order by 2 desc limit 10").df())
     
-    st.write("Of the top 250 fighters ranked by number of fights, most hit (head), knocked down and taken down fighters all time")        
-    fighters = duckdb.sql("SELECT fighter FROM fs_cleaned GROUP BY 1 order by count(distinct BOUT) desc limit 250").df()
+    st.write("Of the top 500 fighters ranked by number of fights, most hit (head), knocked down and taken down fighters all time")        
+    fighters = duckdb.sql("SELECT fighter FROM fs_cleaned GROUP BY 1 order by count(distinct BOUT) desc limit 500").df()
     fighters['FIGHTER'] = fighters['FIGHTER'].str.replace("'", "") 
     fsc = fs_cleaned.df()
     fsc['FIGHTER'] = fsc['FIGHTER'].str.replace("'", "")
