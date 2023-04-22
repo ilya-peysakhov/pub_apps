@@ -147,8 +147,9 @@ if view =='Fighter One Sheet':
         with c1:
             st.write("Strikes Attempted over time")
             st.area_chart(duckdb.sql(f"SELECT DATE, sum(total_str_a::INT) as Total_Strikes_At from fighter_stats group by 1").df(),x='DATE')
+            
         with c2:
-            st.write("Strikes Attempted over time")
+            st.write("Takedowns Attempted over time")
             st.area_chart(duckdb.sql(f"SELECT DATE,  sum(td_a::int) TD_At from fighter_stats group by 1").df(),x='DATE')
         
 
