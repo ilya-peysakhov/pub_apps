@@ -26,7 +26,7 @@ def _max_width_():
     )
 
 
-st.set_page_config(page_icon="👊", page_title="UFC Stats Explorer v0.5", layout="wide")
+st.set_page_config(page_icon="👊", page_title="UFC Stats Explorer v0.6", layout="wide")
 
 ########start of app
 st.header('UFC Fight Stats explorer')
