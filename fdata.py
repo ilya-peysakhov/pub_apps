@@ -192,9 +192,10 @@ else:
         query = f"SELECT '{f}' AS FIGHTER,count(distinct BOUT||EVENT) as FIGHTS,count(*) as ROUNDS, SUM(head_str_l::INTEGER) AS HEAD_STRIKES_ABSORED,sum(KD::INTEGER) as KD, sum(TD_L::INT) as TD FROM fs_cleaned WHERE BOUT LIKE '%{f}%' AND fighter != '{f}' "
         # result = duckdb.sql(query).df()
         result = duckdb.sql(query)
-        duckdb.sql(f"INSERT INTO str_results ({query})")
-        str_results.df()
+        str_result.insert(result)
+        
         # str_results = pd.concat([str_results, result]) # Append the result to the DataFrame
+    str_results.df()
     st.write(str_results.set_index(str_results.columns[0]).sort_values(by='HEAD_STRIKES_ABSORED', ascending=False))   
 
 
