@@ -186,7 +186,8 @@ elif view =='Show all dataset samples':
     st.write('Fight Results (cleaned)')
     st.write(duckdb.sql("SELECT * from fr_cleaned limit 5").df())
     st.write('Fight Stats')
-    st.write(duckdb.sql("SELECT * from fs limit 5").df())    
+    st.write(duckdb.sql("SELECT * from fs limit 5").df())
+    st.write(duckdb.sql("select DATE,EVENT, count(fs.*) as stats from ed_c left join fs on ed_c.EVENT =fs.EVENT group by 1,2 order by 1 desc limit 10").df())
 else:
     c1, c2 = st.columns(2)
     with c1:
