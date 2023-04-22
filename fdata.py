@@ -201,8 +201,10 @@ else:
         
         
     with c2:
-        st.write("Events by month")
-        st.bar_chart(duckdb.sql("SELECT date_trunc('month', date) date, count(distinct EVENT) events from fed group by 1 order by 1 asc").df().set_index("date"))
+        st.write("Career number of fights per fighter")
+        fight_distro = duckdb.sql("select FIGHTS,count(1) FIGHTERS from (select FIGHTER,COUNT(DISTINCT EVENT||BOUT) FIGHTS from fs_cleaned group by 1) group by 1 order by 1").df()
+        fight_distro_chart = alt.Chart(fight_distro).mark_bar().encode(x='FIGHTS',y='FIGHTERS')
+        st.altair_chart(fight_distro_chart, theme="streamlit")
         
         st.metric('Fighters fought in the last 2 years',value=str(duckdb.sql("""
                        SELECT count(distinct fighter) s from 
