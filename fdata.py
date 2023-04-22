@@ -107,7 +107,7 @@ if view =='Fighter One Sheet':
             dob = datetime.datetime.strptime(dob_str, '%b %d, %Y')
             age = datetime.datetime.now() - dob
             age_years = age.days // 365
-            st.metric('DOB',value=dob_str, delta =age_years, delta_color="off")
+            st.metric('DOB',value=age_years, delta =dob_str, delta_color="off")
             if len(fights.df()) >0:
                 st.caption('Latest fight - '+str(last_fight['max_date'].values[0])+' - '+str(last_fight['days_since'].values[0])+ ' ago')
 
@@ -202,7 +202,7 @@ else:
         locations = duckdb.sql("SELECT LOCATION,count(distinct EVENT) events from fed where date between current_date() -730 and current_date() group by 1 order by 2 desc limit 10").df()
         st.dataframe(locations.set_index(locations.columns[0]),use_container_width=True)
     
-    st.write("Of the top 250 fighters ranked by number of fights, most hit (head), knocked down and taken down fighters all time")        
+    st.write("Minimum 10 career fights, total career offensive and defensive stats")        
     fighters = duckdb.sql("SELECT fighter FROM fs_cleaned GROUP BY 1 having count(distinct BOUT||EVENT) >=10 ").df()
     fighters['FIGHTER'] = fighters['FIGHTER'].str.replace("'", "") 
     fsc = fs_cleaned.df()
