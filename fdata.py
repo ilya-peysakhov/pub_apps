@@ -153,7 +153,7 @@ if view =='Fighter One Sheet':
                     x='DATE',
                     y='Strike_Diff'
                 )
-            st.altair_chart(chart)
+            st.altair_chart(chart, theme="streamlit")
               
         with c2:
             st.write("Takedowns Attempted")
