@@ -75,7 +75,7 @@ fighters= duckdb.sql("SELECT trim(FIGHTER) as FIGHTER,HEIGHT,WEIGHT,REACH,STANCE
 #
 if view =='Fighter One Sheet':
     st.text('Display all relevant fighter stats in just 1 click. Choose your fighter below to get started')
-    fighter_list = duckdb.sql("SELECT FIGHTER from fighters  where DOB is not null group by 1 order by 1").df()
+    fighter_list = duckdb.sql("SELECT FIGHTER from fighters  where length(DOB) >3 group by 1 order by 1").df()
     f1, f2 = st.columns(2)
     with f1:
         fighter_filter = st.selectbox('Pick a fighter',options=fighter_list)
