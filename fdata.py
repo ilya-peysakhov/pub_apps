@@ -144,7 +144,7 @@ if view =='Fighter One Sheet':
             st.metric('Takedown Differential',value=round(float(cleaned_fighter_stats['td_l']/cleaned_opp_stats['td_abs']),1))
         
         st.write("Stats over time")
-        st.bar_chart(duckdb.sql(f"SELECT DATE, sum(total_str_a::INT) as Total_Strikes_At, sum(td_a::int) TD_At from fighter_stats group by 1").df(),x='DATE')
+        st.bar_chart(duckdb.sql(f"SELECT DATE, sum(total_str_a::INT) as Total_Strikes_At, sum(td_a::int) TD_At from fighter_stats group by 1").df(),x='DATE', y=('TD_At','Total_Strikes_At'))
         st.divider()
         with st.expander("Career Results",expanded=False):
             st.write(duckdb.sql(f"SELECT * EXCLUDE (DATE,BOUT,WEIGHTCLASS,TIME_FORMAT,URL),left(DATE,10) date from fr_cleaned where FIGHTER1= '{fighter_filter}' or FIGHTER2='{fighter_filter}' order by date desc").df())
