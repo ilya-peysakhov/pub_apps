@@ -180,7 +180,7 @@ if view =='Fighter One Sheet':
 
 elif view =='Show all dataset samples':
     st.write('Fighter Details (cleaned)')
-    st.dataframe(fighters.df().head(5).set_index(fighters.columns([0])))
+    st.dataframe(fighters.df().set_index(fighters.columns([0])).head(5))
     st.write('Events & Fights (cleaned)')
     st.write(duckdb.sql("SELECT * from fed limit 5").df())
     st.write('Fight Results (cleaned)')
