@@ -194,9 +194,11 @@ else:
         # result = duckdb.sql(query).df()
         result = duckdb.sql(query)
         str_results.append(result)
-        
+
         # str_results = pd.concat([str_results, result]) # Append the result to the DataFrame
-    str_results.df()
+    combined_result = duckdb.execute(' UNION ALL '.join(str_results))
+
+    str_results = pd.Dataframe(combined_result)
     st.write(str_results.set_index(str_results.columns[0]).sort_values(by='HEAD_STRIKES_ABSORED', ascending=False))   
 
 
