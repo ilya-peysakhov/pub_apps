@@ -194,8 +194,8 @@ else:
     c1, c2 = st.columns(2)
     with c1:
         st.write("Fights by month")
-        fights_monthly= duckdb.sql("SELECT date_trunc('month',date) date,count(*) fights from fed group by 1 order by 1 asc").df()
-        fights_monthly_chart = alt.Chart(fights_monthly).mark_area().encode(x='date',y='fights')
+        fights_monthly= duckdb.sql("SELECT date_trunc('month',date) MONTH,count(*) FIGHTS from fed group by 1 order by 1 asc").df()
+        fights_monthly_chart = alt.Chart(fights_monthly).mark_bar().encode(x='MONTH',y='FIGHTS')
         st.altair_chart(fights_monthly_chart, theme="streamlit")
         st.write('Most experienced referees in the last 2 years')
         refs = duckdb.sql("SELECT REFEREE,count(*) fights from fr_cleaned where date between current_date() -730 and current_date() group by 1 order by 2 desc limit 10").df()
