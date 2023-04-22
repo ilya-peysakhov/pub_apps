@@ -165,9 +165,9 @@ if view =='Fighter One Sheet':
     st.divider()
     with st.expander("Single Fight Stats",expanded=False):
         bout_filter = st.selectbox('Pick a bout',options=fights.df().drop_duplicates())
-
+        fight_results = duckdb.sql(f"SELECT * EXCLUDE (BOUT,FIGHTER,EVENT) from fs where replace(trim(BOUT),'  ',' ') ='{bout_filter}'  and trim(FIGHTER)='{fighter_filter}' ").df().T
         if bout_filter:
-            st.write(duckdb.sql(f"SELECT * EXCLUDE (BOUT,FIGHTER,EVENT) from fs where replace(trim(BOUT),'  ',' ') ='{bout_filter}'  and trim(FIGHTER)='{fighter_filter}' ").df().T)
+            st.write(fight_results.set_index(fight_results.rows[0]))
 
 elif view =='Show all dataset samples':
     st.write('Fighter Details (cleaned)')
