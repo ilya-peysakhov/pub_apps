@@ -96,9 +96,9 @@ if view =='Fighter One Sheet':
         col1,col2,col3,col4,col5 = st.columns(5)
         with col1:
             st.subheader('Bio')
-            st.metric('Height',value=str(duckdb.sql("SELECT HEIGHT FROM fighters WHERE FIGHTER = '{}'".format(fighter_filter)).df().iloc[0,0]))
-            st.metric('Division',value=str(duckdb.sql("SELECT WEIGHT FROM fighters WHERE FIGHTER = '{}'".format(fighter_filter)).df().iloc[0,0]))
-            st.metric('Reach',value=str(duckdb.sql("SELECT REACH FROM fighters WHERE FIGHTER = '{}'".format(fighter_filter)).df().iloc[0,0]))
+            st.metric('Height',value=str(duckdb.sql(f"SELECT HEIGHT FROM fighters WHERE FIGHTER = '{fighter_filter}'").df().iloc[0,0]))
+            st.metric('Division',value=str(duckdb.sql(f"SELECT WEIGHT FROM fighters WHERE FIGHTER = '{fighter_filter}'").df().iloc[0,0]))
+            st.metric('Reach',value=str(duckdb.sql(f"SELECT REACH FROM fighters WHERE FIGHTER = '{fighter_filter}'").df().iloc[0,0]))
             
             dob_str = str(duckdb.sql("SELECT DOB FROM fighters WHERE FIGHTER = '{}'".format(fighter_filter)).df().iloc[0,0])
             dob = datetime.datetime.strptime(dob_str, '%b %d, %Y')
