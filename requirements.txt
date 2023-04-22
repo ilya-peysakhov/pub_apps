@@ -2,4 +2,3 @@ pip
 pandas
 duckdb
 polars
-ipyvizzu
