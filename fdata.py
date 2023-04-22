@@ -146,14 +146,13 @@ if view =='Fighter One Sheet':
         c1, c2 = st.columns(2)
         with c1:
             st.write("Strikes Attempted")
-            st.area_chart(duckdb.sql(f"SELECT DATE, sum(total_str_a::INT) as Total_Strikes_At from fighter_stats group by 1").df(),x='DATE')
+            str_a = duckdb.sql(f"SELECT DATE, sum(total_str_a::INT) as Total_Strikes_At from fighter_stats group by 1").df()
+            str_a_chart = alt.Chart(str_a).mark_area().encode(x='DATE',y='Total_Strikes_At')
+            st.altair_chart(str_a_chart, theme="streamlit")
             st.write("Net Sig Strike Landed difference")
             str_dif = duckdb.sql(f"SELECT a.DATE, sum(a.sig_str_l::INT)-sum(b.sig_str_l::INT) as Strike_Diff from fighter_stats as a inner join opp_stats as b on a.DATE = b.DATE and a.BOUT=b.BOUT and a.ROUND=b.ROUND group by 1").df()
-            chart = alt.Chart(str_dif).mark_area().encode(
-                    x='DATE',
-                    y='Strike_Diff'
-                )
-            st.altair_chart(chart, theme="streamlit")
+            str_dif_chart = alt.Chart(str_dif).mark_area().encode(x='DATE',y='Strike_Diff')
+            st.altair_chart(str_dif_chart, theme="streamlit")
               
         with c2:
             st.write("Takedowns Attempted")
