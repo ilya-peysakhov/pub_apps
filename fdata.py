@@ -142,6 +142,8 @@ if view =='Fighter One Sheet':
             st.metric('Head Strikes Differential',value=round(float(cleaned_fighter_stats['head_str']/cleaned_opp_stats['head_abs']),1))
             st.metric('Power Differential (Knockdowns)',value=round(float(cleaned_fighter_stats['kd']/cleaned_opp_stats['kd_abs']),1))
             st.metric('Takedown Differential',value=round(float(cleaned_fighter_stats['td_l']/cleaned_opp_stats['td_abs']),1))
+        
+        st.bar_chart(duckdb.sql(f"SELECT DATE, sum(sig_str) from fighter_stats group by 1").df())
         st.divider()
         with st.expander("Career Results",expanded=False):
             st.write(duckdb.sql(f"SELECT * EXCLUDE (DATE,BOUT,WEIGHTCLASS,TIME_FORMAT,URL),left(DATE,10) date from fr_cleaned where FIGHTER1= '{fighter_filter}' or FIGHTER2='{fighter_filter}' order by date desc").df())
