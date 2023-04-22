@@ -159,7 +159,7 @@ if view =='Fighter One Sheet':
 
         st.divider()
         with st.expander("Career Results",expanded=False):
-            st.write(duckdb.sql(f"SELECT left(DATE,10) AS DATE ,EVENT,case when FIGHTER1='{fighter_filter}' then FIGHTER2 else FIGHTER1 end as OPPONENT,case when FIGHTER1='{fighter_filter}' then FIGHTER2_OUTCOME else FIGHTER1_OUTCOME end as RESULT,METHOD,ROUND, TIME,DETAILS from fr_cleaned where FIGHTER1= '{fighter_filter}' or FIGHTER2='{fighter_filter}' order by DATE desc").df())
+            st.write(duckdb.sql(f"SELECT left(DATE,10) AS DATE ,EVENT,case when FIGHTER1='{fighter_filter}' then FIGHTER2 else FIGHTER1 end as OPPONENT,case when FIGHTER1='{fighter_filter}' then FIGHTER1_OUTCOME else FIGHTER2_OUTCOME end as RESULT,METHOD,ROUND, TIME,DETAILS from fr_cleaned where FIGHTER1= '{fighter_filter}' or FIGHTER2='{fighter_filter}' order by DATE desc").df())
     
     st.divider()
     with st.expander("Single Fight Stats",expanded=False):
