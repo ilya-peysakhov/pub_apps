@@ -187,9 +187,10 @@ elif view =='Show all dataset samples':
     st.write(duckdb.sql("SELECT * from fr_cleaned limit 5").df())
     st.write('Fight Stats')
     st.write(duckdb.sql("SELECT * from fs limit 5").df())
-    st.write("Data Check")
+    st.write("Data Check - last 50 events")
     anomalies = duckdb.sql("select DATE,ed_c.EVENT, count(BOUT) as bouts_with_stats from ed_c left join fs on ed_c.EVENT =fs.EVENT group by 1,2 order by 1 desc limit 50").df()
-    st.write(anomalies.set_index(anomalies.columns[0]))
+    anomalies_chart = alt.Chart(anomalies).mark_bar().encode(x='EVENT',y='bouts_with_stats')
+    st.altair_chart(anomalies_chart, theme="streamlit")
 else:
     c1, c2 = st.columns(2)
     with c1:
