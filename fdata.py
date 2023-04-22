@@ -180,7 +180,7 @@ if view =='Fighter One Sheet':
 
 elif view =='Show all dataset samples':
     st.write('Fighter Details (cleaned)')
-    st.dataframe(duckdb.sql("SELECT * from fighters order by FIGHTER asc limit 5").df())
+    st.dataframe(fighters.df().head(5).set_index(fighters.columns([0])))
     st.write('Events & Fights (cleaned)')
     st.write(duckdb.sql("SELECT * from fed limit 5").df())
     st.write('Fight Results (cleaned)')
@@ -188,7 +188,7 @@ elif view =='Show all dataset samples':
     st.write('Fight Stats')
     st.write(duckdb.sql("SELECT * from fs limit 5").df())
     st.write("Data Check - Events without data")
-    anomalies = duckdb.sql("select DATE,ed_c.EVENT, count(BOUT) as bouts_with_stats from ed_c left join fs on ed_c.EVENT =fs.EVENT group by 1,2 having bouts_with_stats=0 order by 1 desc").df()
+    anomalies = duckdb.sql("select left(DATE,10) as DATE,ed_c.EVENT, count(BOUT) as bouts_with_stats from ed_c left join fs on ed_c.EVENT =fs.EVENT group by 1,2 having bouts_with_stats=0 order by 1 desc").df()
     st.write(anomalies.set_index(anomalies.columns[0]))
 else:
     c1, c2 = st.columns(2)
