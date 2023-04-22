@@ -100,7 +100,7 @@ if view =='Fighter One Sheet':
             st.metric('Division',value=str(duckdb.sql(f"SELECT WEIGHT FROM fighters WHERE FIGHTER = '{fighter_filter}'").df().iloc[0,0]))
             st.metric('Reach',value=str(duckdb.sql(f"SELECT REACH FROM fighters WHERE FIGHTER = '{fighter_filter}'").df().iloc[0,0]))
             
-            dob_str = str(duckdb.sql("SELECT DOB FROM fighters WHERE FIGHTER = '{}'".format(fighter_filter)).df().iloc[0,0])
+            dob_str = str(duckdb.sql(f"SELECT DOB FROM fighters WHERE FIGHTER = '{fighter_filter}'").df().iloc[0,0])
             dob = datetime.datetime.strptime(dob_str, '%b %d, %Y')
             age = datetime.datetime.now() - dob
             age_years = age.days // 365
@@ -141,14 +141,14 @@ if view =='Fighter One Sheet':
             st.metric('Takedown Differential',value=round(float(cleaned_fighter_stats['td_l']/cleaned_opp_stats['td_abs']),1))
         st.divider()
         with st.expander("Career Results",expanded=False):
-            st.write(duckdb.sql("SELECT * EXCLUDE (DATE,BOUT,WEIGHTCLASS,TIME_FORMAT,URL),left(DATE,10) date from fr_cleaned where FIGHTER1= '{}' or FIGHTER2='{}' order by date desc".format(fighter_filter,fighter_filter)).df())
+            st.write(duckdb.sql(f"SELECT * EXCLUDE (DATE,BOUT,WEIGHTCLASS,TIME_FORMAT,URL),left(DATE,10) date from fr_cleaned where FIGHTER1= '{fighter_filter}' or FIGHTER2='{fighter_filter}' order by date desc").df())
     
     st.divider()
     with st.expander("Single Fight Stats",expanded=False):
         bout_filter = st.selectbox('Pick a bout',options=fights.df().drop_duplicates())
 
         if bout_filter:
-            st.write(duckdb.sql("SELECT * EXCLUDE (BOUT,FIGHTER,EVENT) from fs where replace(trim(BOUT),'  ',' ') ='{}'  and trim(FIGHTER)='{}' ".format(bout_filter,fighter_filter)).df().T)
+            st.write(duckdb.sql(f"SELECT * EXCLUDE (BOUT,FIGHTER,EVENT) from fs where replace(trim(BOUT),'  ',' ') ='{bout_filter}'  and trim(FIGHTER)='{fighter_filter}' ").df().T)
 
 elif view =='Show all dataset samples':
     st.write('Fighter Details (cleaned)')
