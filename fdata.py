@@ -143,13 +143,13 @@ if view =='Fighter One Sheet':
             st.metric('Power Differential (Knockdowns)',value=round(float(cleaned_fighter_stats['kd']/cleaned_opp_stats['kd_abs']),1))
             st.metric('Takedown Differential',value=round(float(cleaned_fighter_stats['td_l']/cleaned_opp_stats['td_abs']),1))
         
-        c1, c2, c3 = st.columns(3)
+        c1, c2 = st.columns(2)
         with c1:
             st.write("Strikes Attempted over time")
-            st.line_chart(duckdb.sql(f"SELECT DATE, sum(total_str_a::INT) as Total_Strikes_At from fighter_stats group by 1").df(),x='DATE')
+            st.area_chart(duckdb.sql(f"SELECT DATE, sum(total_str_a::INT) as Total_Strikes_At from fighter_stats group by 1").df(),x='DATE')
         with c2:
             st.write("Strikes Attempted over time")
-            st.line_chart(duckdb.sql(f"SELECT DATE,  sum(td_a::int) TD_At from fighter_stats group by 1").df(),x='DATE')
+            st.area_chart(duckdb.sql(f"SELECT DATE,  sum(td_a::int) TD_At from fighter_stats group by 1").df(),x='DATE')
         
 
         st.divider()
