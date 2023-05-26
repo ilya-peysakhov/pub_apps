@@ -56,7 +56,7 @@ fr_cleaned = duckdb.sql("""SELECT trim(fr.EVENT) as EVENT,
 fs = pl.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_stats.csv")
 fs = fs.to_pandas()
 fs['FIGHTER'] = fs['FIGHTER'].str.replace("'", "") 
-
+fs['BOUT'] = fs['BOUT'].str.replace("'", "") 
 fs_cleaned = duckdb.sql("""SELECT fs.EVENT,replace(trim(BOUT),'  ',' ') as BOUT,ROUND, trim(FIGHTER) as FIGHTER,KD,
                               split_part("SIG.STR.",' of ',1) sig_str_l,
                               split_part("SIG.STR.",' of ',2) sig_str_a,
