@@ -220,8 +220,10 @@ else:
         locations = duckdb.sql("SELECT LOCATION,count(distinct EVENT) events from fed where date between current_date() -730 and current_date() group by 1 order by 2 desc limit 10").df()
         st.dataframe(locations.set_index(locations.columns[0]),use_container_width=True)
     
-    st.write("Minimum 10 career fights, total career offensive and defensive stats")        
-    fighters = duckdb.sql("SELECT fighter FROM fs_cleaned GROUP BY 1 having count(distinct BOUT||EVENT) >=10 ").df()
+    st.write("Filter to minimum career fights to generate historical rankings for total career offensive and defensive stats")
+    min_f = st.number_input('Minimum Fights')
+    if min_f is not None:
+        fighters = duckdb.sql(f"SELECT fighter FROM fs_cleaned GROUP BY 1 having count(distinct BOUT||EVENT) >={min_f} ").df()
     fighters['FIGHTER'] = fighters['FIGHTER'].str.replace("'", "") 
     fsc = fs_cleaned.df()
     fsc['FIGHTER'] = fsc['FIGHTER'].str.replace("'", "")
