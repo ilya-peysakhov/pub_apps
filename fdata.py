@@ -251,16 +251,14 @@ else:
             SELECT FIGHTER2 fighter from fr_cleaned where date between current_date() -730 and current_date() group by 1)
             """).df().iloc[0,0]))
 
-        methods_over_time = duckdb.sql("SELECT METHOD, date_trunc('month',date) as MONTH, count(*) FIGHTS from fr_cleaned  group by 1,2 ").df()
-        methods_over_time_chart = alt.Chart(methods_over_time).mark_area().encode(
-                x="MONTH:T",
-                y="FIGHTS:Q",
-                color="METHOD:N",
-                legend=alt.Legend(
-                    orient='bottom'
-                    ))
-            
-        st.write(methods_over_time_chart)
+    methods_over_time = duckdb.sql("SELECT METHOD, date_trunc('month',date) as MONTH, count(*) FIGHTS from fr_cleaned  group by 1,2 ").df()
+    methods_over_time_chart = alt.Chart(methods_over_time).mark_area().encode(
+            x="MONTH:T",
+            y="FIGHTS:Q",
+            color="METHOD:N"
+            )
+        
+    st.write(methods_over_time_chart)
 
     st.write("Minimum 10 fights, historical rankings for total career offensive and defensive stats")
     fighters = duckdb.sql("SELECT fighter FROM fs_cleaned GROUP BY 1 having count(distinct BOUT||EVENT) >=10 ").df()
