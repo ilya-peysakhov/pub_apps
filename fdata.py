@@ -215,7 +215,7 @@ else:
         base = alt.Chart(locations).encode(
             x='LOCATION',
             y="EVENTS:O",
-            text='Events by Location'
+            text='EVENTS'
         )
         st.write(base.mark_bar())
     
