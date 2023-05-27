@@ -262,7 +262,7 @@ else:
         
     st.write(methods_over_time_chart.properties(width=1100, height=500))
 
-    st.write("Minimum 10 fights, historical rankings for total career offensive and defensive stats")
+    st.write("Minimum 10 fights, historical rankings for total career offensive and defensive stats (load time ~20 seconds at this moment /sad)")
     fighters = duckdb.sql("SELECT fighter FROM fs_cleaned GROUP BY 1 having count(distinct BOUT||EVENT) >=10 ").df()
     fighters['FIGHTER'] = fighters['FIGHTER'].str.replace("'", "") 
     fsc = fs_cleaned.df()
