@@ -255,12 +255,8 @@ else:
         methods_over_time_chart = alt.Chart(methods_over_time).mark_area().encode(
                 x="MONTH:T",
                 y="FIGHTS:Q",
-                color="METHOD:N"
-            )
-        methods_over_time_chart=methods_over_time_chart.resolve_legend(
-                legend=alt.Legend(
-                    orient='bottom'
-                )
+                color="METHOD:N",
+                legend=alt.Legend(orient='bottom')
             )
         st.write(methods_over_time_chart)
 
