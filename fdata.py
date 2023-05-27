@@ -251,7 +251,7 @@ else:
             SELECT FIGHTER2 fighter from fr_cleaned where date between current_date() -730 and current_date() group by 1)
             """).df().iloc[0,0]))
 
-    methods_over_time = duckdb.sql("SELECT case when METHOD like 'Decision%' then 'Decision' else METHOD end as METHOD, date_trunc('month',date) as MONTH, count(*) FIGHTS from fr_cleaned where date between current_date() -730 and current_date()  group by 1,2 ").df()
+    methods_over_time = duckdb.sql("SELECT case when METHOD like 'Decision%' then 'Decision' else METHOD end as METHOD, date_trunc('month',date) as MONTH, count(*)/count(*) over () FIGHTS from fr_cleaned where date between current_date() -730 and current_date()  group by 1,2 ").df()
     methods_over_time_chart = alt.Chart(methods_over_time).mark_area().encode(
             x="MONTH:T",
             y="FIGHTS:Q",
