@@ -220,10 +220,8 @@ else:
         st.altair_chart(fight_distro_chart, theme="streamlit")
         
         
-        st.write("Fights by result method")
+        st.write("Fights by result method in the last 2 years")
         methods = duckdb.sql("SELECT method, count(*) FIGHTS from fr_cleaned where date between current_date() -730 and current_date() group by 1 ").df()
-        st.write(methods)
-
         method_chart = alt.Chart(methods).mark_arc().encode(
                 theta="FIGHTS",
                 color="METHOD"
