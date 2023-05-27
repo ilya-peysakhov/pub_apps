@@ -235,13 +235,13 @@ else:
     fsc['FIGHTER'] = fsc['FIGHTER'].str.replace("'", "")
     fsc['BOUT'] = fsc['BOUT'].str.replace("'", "")
     str_results = pd.DataFrame()
-    for f in fighters['FIGHTER']:
-        query = f"SELECT '{f}' AS FIGHTER, SUM(head_str_l::INTEGER) AS HEAD_STRIKES_ABSORED,SUM(sig_str_l::INTEGER) AS SIG_STRIKES_ABSORED,sum(KD::INTEGER) as KD_ABSORED, sum(TD_L::INT) as TD_GIVEN_UP FROM fs_cleaned WHERE BOUT LIKE '%{f}%' AND fighter != '{f}' "
-        result = duckdb.sql(query).df()
-        str_results = pd.concat([str_results, result]) # Append the result to the DataFrame
-    all_time_offense = duckdb.sql("select FIGHTER, COUNT(DISTINCT BOUT||EVENT) as FIGHTS, COUNT(*) AS ROUNDS,  ROUND(ROUNDS/CAST(FIGHTS as REAL),1) as ROUNDS_PER_FIGHT ,SUM(head_str_l::INTEGER) AS HEAD_STRIKES_LANDED,sum(KD::INTEGER) as KD_LANDED, sum(TD_L::INT) as TD_LANDED from fs_cleaned group by 1 having FIGHTS>=10")
-    combined_stats = duckdb.sql("select a.*, b.* EXCLUDE (FIGHTER) from all_time_offense as a left join str_results as b on a.FIGHTER=b.FIGHTER").df()
-    st.write(combined_stats.set_index(combined_stats.columns[0]).sort_values(by='FIGHTS', ascending=False))   
+    # for f in fighters['FIGHTER']:
+    #     query = f"SELECT '{f}' AS FIGHTER, SUM(head_str_l::INTEGER) AS HEAD_STRIKES_ABSORED,SUM(sig_str_l::INTEGER) AS SIG_STRIKES_ABSORED,sum(KD::INTEGER) as KD_ABSORED, sum(TD_L::INT) as TD_GIVEN_UP FROM fs_cleaned WHERE BOUT LIKE '%{f}%' AND fighter != '{f}' "
+    #     result = duckdb.sql(query).df()
+    #     str_results = pd.concat([str_results, result]) # Append the result to the DataFrame
+    # all_time_offense = duckdb.sql("select FIGHTER, COUNT(DISTINCT BOUT||EVENT) as FIGHTS, COUNT(*) AS ROUNDS,  ROUND(ROUNDS/CAST(FIGHTS as REAL),1) as ROUNDS_PER_FIGHT ,SUM(head_str_l::INTEGER) AS HEAD_STRIKES_LANDED,sum(KD::INTEGER) as KD_LANDED, sum(TD_L::INT) as TD_LANDED from fs_cleaned group by 1 having FIGHTS>=10")
+    # combined_stats = duckdb.sql("select a.*, b.* EXCLUDE (FIGHTER) from all_time_offense as a left join str_results as b on a.FIGHTER=b.FIGHTER").df()
+    # st.write(combined_stats.set_index(combined_stats.columns[0]).sort_values(by='FIGHTS', ascending=False))   
 
     with c3:
         st.write('Most experienced referees in the last 2 years')
