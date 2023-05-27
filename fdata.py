@@ -224,7 +224,7 @@ else:
         methods = duckdb.sql("SELECT method, count(*) FIGHTS from fr_cleaned where date between current_date() -730 and current_date() group by 1 ").df()
         st.write(methods)
 
-        method_chart = alt.Chart(methods).mark_bar().encode(
+        method_chart = alt.Chart(methods).mark_arc().encode(
             alt.X('FIGHTS:Q', stack='zero', axis=None),
             alt.Y('METHOD:O'),
             color=alt.Color('METHOD:N', scale=alt.Scale(scheme='category20')),
