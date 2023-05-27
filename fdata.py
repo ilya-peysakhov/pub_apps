@@ -252,7 +252,6 @@ else:
             """).df().iloc[0,0]))
 
         methods_over_time = duckdb.sql("SELECT METHOD, date_trunc('month',date) as MONTH, count(*) FIGHTS from fr_cleaned  group by 1,2 ").df()
-        st.write(methods_over_time.head(5))
         methods_over_time_chart = alt.Chart(methods_over_time).mark_area().encode(
                 x="MONTH:T",
                 y="FIGHTS:Q",
