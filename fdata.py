@@ -225,8 +225,9 @@ else:
                         UNION 
                         SELECT FIGHTER2 fighter from fr_cleaned where date between current_date() -730 and current_date() group by 1)
                         """).df().iloc[0,0]))
-        
-       
+        st.write("Fights by result method")
+        methods = duckdb.sql("SELECT method, count(*() FIGHTS from fr_cleaned where date between current_date() -730 and current_date() group by 1 )").df()
+        st.write(methods)
     st.write("Minimum 10 fights, historical rankings for total career offensive and defensive stats")
     fighters = duckdb.sql("SELECT fighter FROM fs_cleaned GROUP BY 1 having count(distinct BOUT||EVENT) >=10 ").df()
     fighters['FIGHTER'] = fighters['FIGHTER'].str.replace("'", "") 
@@ -246,7 +247,7 @@ else:
         st.write('Most experienced referees in the last 2 years')
         refs = duckdb.sql("SELECT REFEREE,count(*) fights from fr_cleaned where date between current_date() -730 and current_date() group by 1 order by 2 desc limit 10").df()
         st.dataframe(refs.set_index(refs.columns[0]),use_container_width=False)
-        
+            
 
 #with st.expander("Real UFC fans ONLY",expanded=False):
 #    audio_file = open('song.mp3', 'rb')
