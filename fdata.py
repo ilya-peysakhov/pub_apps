@@ -219,12 +219,7 @@ else:
         fight_distro_chart = alt.Chart(fight_distro).mark_bar().encode(x='FIGHTS',y='FIGHTERS')
         st.altair_chart(fight_distro_chart, theme="streamlit")
         
-        st.metric('Fighters fought in the last 2 years',value=str(duckdb.sql("""
-                       SELECT count(distinct fighter) s from 
-                        (SELECT FIGHTER1 fighter from fr_cleaned where date between current_date() -730 and current_date() group by 1 
-                        UNION 
-                        SELECT FIGHTER2 fighter from fr_cleaned where date between current_date() -730 and current_date() group by 1)
-                        """).df().iloc[0,0]))
+        
         st.write("Fights by result method")
         methods = duckdb.sql("SELECT method, count(*) FIGHTS from fr_cleaned where date between current_date() -730 and current_date() group by 1 ").df()
         st.write(methods)
@@ -248,7 +243,13 @@ else:
         st.write('Most experienced referees in the last 2 years')
         refs = duckdb.sql("SELECT REFEREE,count(*) fights from fr_cleaned where date between current_date() -730 and current_date() group by 1 order by 2 desc limit 10").df()
         st.dataframe(refs.set_index(refs.columns[0]),use_container_width=False)
-            
+        
+        st.metric('Fighters fought in the last 2 years',value=str(duckdb.sql("""
+                       SELECT count(distinct fighter) s from 
+                        (SELECT FIGHTER1 fighter from fr_cleaned where date between current_date() -730 and current_date() group by 1 
+                        UNION 
+                        SELECT FIGHTER2 fighter from fr_cleaned where date between current_date() -730 and current_date() group by 1)
+                        """).df().iloc[0,0]))
 
 #with st.expander("Real UFC fans ONLY",expanded=False):
 #    audio_file = open('song.mp3', 'rb')
