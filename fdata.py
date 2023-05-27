@@ -253,13 +253,13 @@ else:
 
         methods_over_time = duckdb.sql("SELECT METHOD, date_trunc('month',date) as MONTH, count(*) FIGHTS from fr_cleaned  group by 1,2 ").df()
         st.write(methods_over_time.head(5))
-        # methods_over_time_chart = alt.Chart(methods_over_time).mark_area().encode(
-        # x='MONTH:O',
-        # y='FIGHTS:Q',
-        # color='METHOD:N',
-        # order=alt.Order('Method', sort='ascending')
-        #     )
-        # st.write(methods_over_time_chart)
+        methods_over_time_chart = alt.Chart(methods_over_time).mark_area().encode(
+            x='MONTH:O',
+            y='FIGHTS:Q',
+            color='METHOD:N',
+            order=alt.Order('Method', sort='ascending')
+                )
+        st.write(methods_over_time_chart)
 
     st.write("Minimum 10 fights, historical rankings for total career offensive and defensive stats")
     fighters = duckdb.sql("SELECT fighter FROM fs_cleaned GROUP BY 1 having count(distinct BOUT||EVENT) >=10 ").df()
