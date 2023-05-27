@@ -203,13 +203,14 @@ elif view =='Show all dataset samples':
     st.write(anomalies.set_index(anomalies.columns[0]))
 else:
     c1, c2 , c3 = st.columns(3)
+    st.subheader('Lifetime stats unless otherwise noted (last 2 years)')
     with c1:
         st.write("Fights by month")
         fights_monthly= duckdb.sql("SELECT date_trunc('month',date) as MONTH,count(*) as FIGHTS from fed group by 1 order by 1 asc").df()
         fights_monthly_chart = alt.Chart(fights_monthly).mark_bar().encode(x='MONTH',y='FIGHTS')
         st.altair_chart(fights_monthly_chart, theme="streamlit")
         
-        st.write('Most commonly used venues in the last 2 years')
+        st.write('Most commonly used venues (2yr)')
         locations = duckdb.sql("SELECT LOCATION,count(distinct EVENT) EVENTS from fed where date between current_date() -730 and current_date() group by 1 order by 2 desc limit 10").df()
         # st.dataframe(locations.set_index(locations.columns[0]),use_container_width=True)
         location_chart = alt.Chart(locations).mark_bar().encode(
@@ -220,13 +221,13 @@ else:
 
     
     with c2:
-        st.write("Fighters bucketed by number of fights (left side represents fights with only 1 fight)")
+        st.write("Number of Fights per Fighter")
         fight_distro = duckdb.sql("select FIGHTS,count(1) FIGHTERS from (select FIGHTER,COUNT(DISTINCT EVENT||BOUT) FIGHTS from fs_cleaned group by 1) group by 1 order by 1").df()
         fight_distro_chart = alt.Chart(fight_distro).mark_bar().encode(x='FIGHTS',y='FIGHTERS')
         st.altair_chart(fight_distro_chart, theme="streamlit")
         
         
-        st.write("Fights by result method in the last 2 years")
+        st.write("Fights by result method (2yr)")
         methods = duckdb.sql("SELECT method, count(*) FIGHTS from fr_cleaned where date between current_date() -730 and current_date() group by 1 ").df()
         method_chart = alt.Chart(methods).mark_arc().encode(
                 theta="FIGHTS",
@@ -250,11 +251,11 @@ else:
     # st.write(combined_stats.set_index(combined_stats.columns[0]).sort_values(by='FIGHTS', ascending=False))   
 
     with c3:
-        st.write('Most experienced referees in the last 2 years')
+        st.write('Most experienced referees (2yr)')
         refs = duckdb.sql("SELECT REFEREE,count(*) fights from fr_cleaned where date between current_date() -730 and current_date() group by 1 order by 2 desc limit 10").df()
         st.dataframe(refs.set_index(refs.columns[0]),use_container_width=False)
         
-        st.metric('Fighters fought in the last 2 years',value=str(duckdb.sql("""
+        st.metric('Number of Fighters fought (2yr)',value=str(duckdb.sql("""
                        SELECT count(distinct fighter) s from 
                         (SELECT FIGHTER1 fighter from fr_cleaned where date between current_date() -730 and current_date() group by 1 
                         UNION 
