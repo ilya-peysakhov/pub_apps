@@ -257,6 +257,11 @@ else:
                 y="FIGHTS:Q",
                 color="METHOD:N"
             )
+        methods_over_time_chart=methods_over_time_chart.resolve_legend(
+                legend=alt.Legend(
+                    orient='bottom'
+                )
+            )
         st.write(methods_over_time_chart)
 
     st.write("Minimum 10 fights, historical rankings for total career offensive and defensive stats")
