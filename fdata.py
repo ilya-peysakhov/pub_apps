@@ -216,7 +216,7 @@ else:
             x=alt.X('EVENTS:Q', axis=alt.Axis(title='EVENTS')),
             y=alt.Y('LOCATION:O', sort='-x', axis=alt.Axis(title='LOCATION'))
         )
-        st.write(location_chart)
+        st.write(location_chart.properties(width=400,height=200))
 
     
     with c2:
