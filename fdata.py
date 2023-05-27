@@ -226,7 +226,7 @@ else:
                         SELECT FIGHTER2 fighter from fr_cleaned where date between current_date() -730 and current_date() group by 1)
                         """).df().iloc[0,0]))
         st.write("Fights by result method")
-        methods = duckdb.sql("SELECT method, count(*) FIGHTS from fr_cleaned where date between current_date() -730 and current_date() group by 1 )").df()
+        methods = duckdb.sql("SELECT method, count(*) FIGHTS from fr_cleaned where date between current_date() -730 and current_date() group by 1 ").df()
         st.write(methods)
 
     st.write("Minimum 10 fights, historical rankings for total career offensive and defensive stats")
