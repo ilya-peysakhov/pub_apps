@@ -252,7 +252,7 @@ else:
             """).df().iloc[0,0]))
 
     methods_over_time = duckdb.sql("SELECT case when METHOD like 'Decision%' then 'Decision' else METHOD end as METHOD, date_trunc('month',date) as MONTH, count(*)/sum(sum(1)) over (partition by MONTH) METHOD_PCT from fr_cleaned  group by 1,2 ").df()
-    methods_over_time_chart = alt.Chart(methods_over_time).mark_line().encode(
+    methods_over_time_chart = alt.Chart(methods_over_time).mark_area().encode(
             x="MONTH:T",
             y="METHOD_PCT:Q",
             color="METHOD:N"
