@@ -212,9 +212,9 @@ else:
         locations = duckdb.sql("SELECT LOCATION,count(distinct EVENT) events from fed where date between current_date() -730 and current_date() group by 1 order by 2 desc limit 10").df()
         st.dataframe(locations.set_index(locations.columns[0]),use_container_width=True)
     
-        
+    
     with c2:
-        st.write("Career number of fights per fighter")
+        st.write("Fighters bucketed by number of fights (left side represents fights with only 1 fight)")
         fight_distro = duckdb.sql("select FIGHTS,count(1) FIGHTERS from (select FIGHTER,COUNT(DISTINCT EVENT||BOUT) FIGHTS from fs_cleaned group by 1) group by 1 order by 1").df()
         fight_distro_chart = alt.Chart(fight_distro).mark_bar().encode(x='FIGHTS',y='FIGHTERS')
         st.altair_chart(fight_distro_chart, theme="streamlit")
