@@ -202,15 +202,12 @@ elif view =='Show all dataset samples':
     anomalies = duckdb.sql("select left(DATE,10) as DATE,ed_c.EVENT, count(BOUT) as bouts_with_stats from ed_c left join fs on ed_c.EVENT =fs.EVENT group by 1,2 having bouts_with_stats=0 order by 1 desc").df()
     st.write(anomalies.set_index(anomalies.columns[0]))
 else:
-    c1, c2 = st.columns(2)
+    c1, c2 , c3 = st.columns(3)
     with c1:
         st.write("Fights by month")
         fights_monthly= duckdb.sql("SELECT date_trunc('month',date) as MONTH,count(*) as FIGHTS from fed group by 1 order by 1 asc").df()
         fights_monthly_chart = alt.Chart(fights_monthly).mark_bar().encode(x='MONTH',y='FIGHTS')
         st.altair_chart(fights_monthly_chart, theme="streamlit")
-        st.write('Most experienced referees in the last 2 years')
-        refs = duckdb.sql("SELECT REFEREE,count(*) fights from fr_cleaned where date between current_date() -730 and current_date() group by 1 order by 2 desc limit 10").df()
-        st.dataframe(refs.set_index(refs.columns[0]),use_container_width=False)
         
         
     with c2:
@@ -245,6 +242,11 @@ else:
     combined_stats = duckdb.sql("select a.*, b.* EXCLUDE (FIGHTER) from all_time_offense as a left join str_results as b on a.FIGHTER=b.FIGHTER").df()
     st.write(combined_stats.set_index(combined_stats.columns[0]).sort_values(by='FIGHTS', ascending=False))   
 
+    with c3:
+        st.write('Most experienced referees in the last 2 years')
+        refs = duckdb.sql("SELECT REFEREE,count(*) fights from fr_cleaned where date between current_date() -730 and current_date() group by 1 order by 2 desc limit 10").df()
+        st.dataframe(refs.set_index(refs.columns[0]),use_container_width=False)
+        
 
 #with st.expander("Real UFC fans ONLY",expanded=False):
 #    audio_file = open('song.mp3', 'rb')
