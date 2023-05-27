@@ -239,7 +239,7 @@ else:
         # st.dataframe(locations.set_index(locations.columns[0]),use_container_width=True)
         location_chart = alt.Chart(locations).mark_bar().encode(
             x=alt.X('EVENTS:Q'),
-            y=alt.Y('LOCATION:O', sort='-x', axis=alt.Axis(title=''))
+            y=alt.Y('LOCATION:O', sort='-x')
         )
         st.write(location_chart.properties(width=300,height=400))
 
