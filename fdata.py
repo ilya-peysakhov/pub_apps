@@ -212,12 +212,11 @@ else:
         st.write('Most commonly used venues in the last 2 years')
         locations = duckdb.sql("SELECT LOCATION,count(distinct EVENT) EVENTS from fed where date between current_date() -730 and current_date() group by 1 order by 2 desc limit 10").df()
         # st.dataframe(locations.set_index(locations.columns[0]),use_container_width=True)
-        base = alt.Chart(locations).encode(
-            x='LOCATION',
-            y="EVENTS:O",
-            text='EVENTS'
+        location_chart = alt.Chart(locations).mark_bar().encode(
+            x=alt.X('EVENTS:Q', axis=alt.Axis(title='EVENTS')),
+            y=alt.Y('LOCATION:O', sort='-x', axis=alt.Axis(title='LOCATION'))
         )
-        st.write(base.mark_bar() + base.mark_text(align='left', dx=2) )
+        st.write(location_chart)
 
     
     with c2:
