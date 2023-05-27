@@ -210,11 +210,12 @@ else:
         fights_monthly_chart = alt.Chart(fights_monthly).mark_bar().encode(x='MONTH',y='FIGHTS')
         st.altair_chart(fights_monthly_chart, theme="streamlit")
         
+        st.divider()
 
         st.write('Most experienced referees (2yr)')
         refs = duckdb.sql("SELECT REFEREE,count(*) fights from fr_cleaned where date between current_date() -730 and current_date() group by 1 order by 2 desc limit 10").df()
         st.dataframe(refs.set_index(refs.columns[0]),use_container_width=False)
-        
+        st.divider()
         st.write("Fights by result method (2yr)")
         methods = duckdb.sql("SELECT method, count(*) FIGHTS from fr_cleaned where date between current_date() -730 and current_date() group by 1 ").df()
         method_chart = alt.Chart(methods).mark_arc().encode(
@@ -231,6 +232,7 @@ else:
         fight_distro_chart = alt.Chart(fight_distro).mark_bar().encode(x='FIGHTS',y='FIGHTERS')
         st.altair_chart(fight_distro_chart, theme="streamlit")
         
+        st.divider()
         
         st.write('Most commonly used venues (2yr)')
         locations = duckdb.sql("SELECT LOCATION,count(distinct EVENT) EVENTS from fed where date between current_date() -730 and current_date() group by 1 order by 2 desc limit 10").df()
@@ -240,6 +242,8 @@ else:
             y=alt.Y('LOCATION:O', sort='-x', axis=alt.Axis(title=''))
         )
         st.write(location_chart.properties(width=300,height=400))
+
+        st.divider()
 
         st.metric('Number of Fighters fought (2yr)',value=str(duckdb.sql("""SELECT count(distinct fighter) s from 
             (SELECT FIGHTER1 fighter from fr_cleaned where date between current_date() -730 and current_date() group by 1 
