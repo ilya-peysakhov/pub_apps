@@ -252,7 +252,7 @@ else:
             """).df().iloc[0,0]))
 
     st.write("Method of winning as a percentage of all methods over time")
-    methods_over_time = duckdb.sql("SELECT case when METHOD like 'Decision%' then 'Decision' else METHOD end as METHOD, date_trunc('year',date) as DATE, count(*)/sum(sum(1)) over (partition by DATE) METHOD_PCT from fr_cleaned  group by 1,2 ").df()
+    methods_over_time = duckdb.sql("SELECT case when METHOD like 'Decision%' then 'Decision' else METHOD end as METHOD, date_trunc('month',date) as DATE, count(*)/sum(sum(1)) over (partition by DATE) METHOD_PCT from fr_cleaned  group by 1,2 ").df()
     methods_over_time_chart = alt.Chart(methods_over_time).mark_area(stroke='black', strokeWidth=0.3).encode(
             x="DATE:T",
             y="METHOD_PCT:Q",
