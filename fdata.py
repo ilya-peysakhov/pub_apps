@@ -225,11 +225,9 @@ else:
         st.write(methods)
 
         method_chart = alt.Chart(methods).mark_arc().encode(
-            alt.X('FIGHTS:Q', stack='zero', axis=None),
-            alt.Y('METHOD:O'),
-            color=alt.Color('METHOD:N', scale=alt.Scale(scheme='category20')),
-            order=alt.Order('FIGHTS:Q', sort='ascending')
-        )
+                theta="FIGHTS",
+                color="METHOD"
+            )
         st.write(method_chart)
 
     st.write("Minimum 10 fights, historical rankings for total career offensive and defensive stats")
