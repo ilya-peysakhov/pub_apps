@@ -213,7 +213,7 @@ else:
         locations = duckdb.sql("SELECT LOCATION,count(distinct EVENT) EVENTS from fed where date between current_date() -730 and current_date() group by 1 order by 2 desc limit 10").df()
         # st.dataframe(locations.set_index(locations.columns[0]),use_container_width=True)
         location_chart = alt.Chart(locations).mark_bar().encode(
-            x=alt.X('EVENTS:Q', axis=alt.Axis(title='EVENTS')),
+            x=alt.X('EVENTS:Q'),
             y=alt.Y('LOCATION:O', sort='-x')
         )
         st.write(location_chart.properties(width=300,height=400))
