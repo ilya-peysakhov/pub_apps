@@ -251,6 +251,7 @@ else:
             SELECT FIGHTER2 fighter from fr_cleaned where date between current_date() -730 and current_date() group by 1)
             """).df().iloc[0,0]))
 
+    st.write("Method of winning as a percentage of all methods over time")
     methods_over_time = duckdb.sql("SELECT case when METHOD like 'Decision%' then 'Decision' else METHOD end as METHOD, date_trunc('month',date) as MONTH, count(*)/sum(sum(1)) over (partition by MONTH) METHOD_PCT from fr_cleaned  group by 1,2 ").df()
     methods_over_time_chart = alt.Chart(methods_over_time).mark_area().encode(
             x="MONTH:T",
