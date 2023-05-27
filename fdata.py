@@ -208,10 +208,16 @@ else:
         fights_monthly= duckdb.sql("SELECT date_trunc('month',date) as MONTH,count(*) as FIGHTS from fed group by 1 order by 1 asc").df()
         fights_monthly_chart = alt.Chart(fights_monthly).mark_bar().encode(x='MONTH',y='FIGHTS')
         st.altair_chart(fights_monthly_chart, theme="streamlit")
+        
         st.write('Most commonly used venues in the last 2 years')
-        locations = duckdb.sql("SELECT LOCATION,count(distinct EVENT) events from fed where date between current_date() -730 and current_date() group by 1 order by 2 desc limit 10").df()
-        st.dataframe(locations.set_index(locations.columns[0]),use_container_width=True)
-    
+        locations = duckdb.sql("SELECT LOCATION,count(distinct EVENT) EVENTS from fed where date between current_date() -730 and current_date() group by 1 order by 2 desc limit 10").df()
+        # st.dataframe(locations.set_index(locations.columns[0]),use_container_width=True)
+        base = alt.Chart(locations).encode(
+            x='LOCATION',
+            y="EVENTS:O",
+            text='Events by Location'
+        )
+        st.write(base.mark_bar())
     
     with c2:
         st.write("Fighters bucketed by number of fights (left side represents fights with only 1 fight)")
