@@ -217,7 +217,8 @@ else:
             y="EVENTS:O",
             text='EVENTS'
         )
-        st.write(base.mark_bar())
+        st.write(base.mark_bar() + base.mark_text(align='left', dx=2) )
+
     
     with c2:
         st.write("Fighters bucketed by number of fights (left side represents fights with only 1 fight)")
