@@ -256,8 +256,12 @@ else:
                 x="MONTH:T",
                 y="FIGHTS:Q",
                 color="METHOD:N",
-                legend=alt.Legend(orient='bottom')
-            )
+                legend=alt.Legend(
+                    orient='none',
+                    legendX=130, legendY=-40,
+                    direction='horizontal',
+                    titleAnchor='middle'))
+            
         st.write(methods_over_time_chart)
 
     st.write("Minimum 10 fights, historical rankings for total career offensive and defensive stats")
