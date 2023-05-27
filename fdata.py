@@ -202,8 +202,8 @@ elif view =='Show all dataset samples':
     anomalies = duckdb.sql("select left(DATE,10) as DATE,ed_c.EVENT, count(BOUT) as bouts_with_stats from ed_c left join fs on ed_c.EVENT =fs.EVENT group by 1,2 having bouts_with_stats=0 order by 1 desc").df()
     st.write(anomalies.set_index(anomalies.columns[0]))
 else:
-    c1, c2  = st.columns(2)
     st.subheader('Lifetime stats unless otherwise noted (last 2 years)')
+    c1, c2  = st.columns(2)
     with c1:
         st.write("Fights by month")
         fights_monthly= duckdb.sql("SELECT date_trunc('month',date) as MONTH,count(*) as FIGHTS from fed group by 1 order by 1 asc").df()
