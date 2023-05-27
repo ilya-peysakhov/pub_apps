@@ -256,7 +256,7 @@ else:
     methods_over_time_chart = alt.Chart(methods_over_time).mark_area().encode(
             x="MONTH:T",
             y="METHOD_PCT:Q",
-            color=alt.Color('METHOD', scale=alt.Scale(scheme='purplebluegreen'))
+            color=alt.Color('METHOD', scale=alt.Scale(scheme='darkmulti'))
             )
         
     st.write(methods_over_time_chart.properties(width=1100, height=500))
