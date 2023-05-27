@@ -257,10 +257,8 @@ else:
                 y="FIGHTS:Q",
                 color="METHOD:N",
                 legend=alt.Legend(
-                    orient='none',
-                    legendX=130, legendY=-40,
-                    direction='horizontal',
-                    titleAnchor='middle'))
+                    orient='bottom'
+                    ))
             
         st.write(methods_over_time_chart)
 
