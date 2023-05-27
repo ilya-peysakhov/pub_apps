@@ -241,7 +241,7 @@ else:
             x=alt.X('EVENTS:Q'),
             y=alt.Y('LOCATION:O', sort='-x')
         )
-        st.write(location_chart.properties(width=300,height=400))
+        st.write(location_chart)
 
         st.divider()
 
