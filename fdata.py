@@ -26,7 +26,7 @@ def _max_width_():
     )
 
 
-st.set_page_config(page_icon="👊", page_title="UFC Stats Explorer v0.6", layout="wide")
+st.set_page_config(page_icon="👊", page_title="UFC Stats Explorer v0.9", layout="wide")
 
 ########start of app
 st.header('UFC Fight Stats explorer')
@@ -286,3 +286,4 @@ else:
 
 st.code('This application uses data from Greco1899''s scraper of UFC Fight Stats - "https://github.com/Greco1899/scrape_ufc_stats"')
 
+st.code('Recent changes - new charts in All Time section, fixed stats for fighters with apostraphes, all data recovered by Greco1899' )
