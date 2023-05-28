@@ -270,7 +270,7 @@ else:
     fighters = duckdb.sql(f"SELECT fighter FROM fs_cleaned GROUP BY 1 having count(distinct BOUT||EVENT) >={min_fights} ").df()
     str_results = pd.DataFrame()
     for f in fighters['FIGHTER']:
-        query = f"SELECT '{f}' AS FIGHTER, SUM(head_str_l::INTEGER) AS HEAD_STRIKES_ABSORED,SUM(sig_str_l::INTEGER) AS SIG_STRIKES_ABSORED,SUM(leg_str_l::INTEGER) as LEG_STRIKES_ABSORBED,sum(KD::INTEGER) as KD_ABSORED, sum(TD_L::INT) as TD_GIVEN_UP FROM fs_cleaned WHERE BOUT LIKE '%{f}%' AND fighter != '{f}' "
+        query = f"SELECT '{f}' AS FIGHTER, SUM(head_str_l::INTEGER) AS HEAD_STRIKES_ABSORED,SUM(sig_str_l::INTEGER) AS SIG_STRIKES_ABSORBED,SUM(leg_str_l::INTEGER) as LEG_STRIKES_ABSORBED,sum(KD::INTEGER) as KD_ABSORED, sum(TD_L::INT) as TD_GIVEN_UP FROM fs_cleaned WHERE BOUT LIKE '%{f}%' AND fighter != '{f}' "
         result = duckdb.sql(query).df()
         str_results = pd.concat([str_results, result]) # Append the result to the DataFrame
     all_time_offense = duckdb.sql(f"SELECT FIGHTER, COUNT(DISTINCT BOUT||EVENT) as FIGHTS, COUNT(*) AS ROUNDS,  ROUND(ROUNDS/CAST(FIGHTS as REAL),1) as ROUNDS_PER_FIGHT ,SUM(head_str_l::INTEGER) AS HEAD_STRIKES_LANDED, SUM(leg_str_l::INTEGER) as LEG_STRIKES_LANDED,sum(sig_str_l::INTEGER) as SIG_STRIKES_LANDED,sum(KD::INTEGER) as KD_LANDED, sum(TD_L::INT) as TD_LANDED from fs_cleaned group by 1 having FIGHTS>={min_fights}")
