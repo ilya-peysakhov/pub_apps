@@ -264,11 +264,8 @@ else:
 
     st.write("Minimum 10 fights, historical rankings for total career offensive and defensive stats (load time ~20 seconds at this moment /sad)")
     fighters = duckdb.sql("SELECT fighter FROM fs_cleaned GROUP BY 1 having count(distinct BOUT||EVENT) >=10 ").df()
-#     fighters['FIGHTER'] = fighters['FIGHTER'].str.replace("'", "") 
-#     fsc = fs_cleaned.df()
-#     fsc['FIGHTER'] = fsc['FIGHTER'].str.replace("'", "")
-#     fsc['BOUT'] = fsc['BOUT'].str.replace("'", "")
     str_results = pd.DataFrame()
+    fs_cleaned = fs_cleaned.pl()
     for f in fighters['FIGHTER']:
         query = f"SELECT '{f}' AS FIGHTER, SUM(head_str_l::INTEGER) AS HEAD_STRIKES_ABSORED,SUM(sig_str_l::INTEGER) AS SIG_STRIKES_ABSORED,sum(KD::INTEGER) as KD_ABSORED, sum(TD_L::INT) as TD_GIVEN_UP FROM fs_cleaned WHERE BOUT LIKE '%{f}%' AND fighter != '{f}' "
         result = duckdb.sql(query).df()
