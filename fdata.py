@@ -105,7 +105,7 @@ if view =='Fighter One Sheet':
     ko_wins = duckdb.sql(f"SELECT count(*) as s from fr_cleaned where ((FIGHTER1='{fighter_filter}' and FIGHTER1_OUTCOME='W') OR (FIGHTER2='{fighter_filter}' and FIGHTER2_OUTCOME='W')) and trim(METHOD)='KO/TKO' ").df()
     
     opp_stats = duckdb.sql(f"SELECT * from fs_cleaned where BOUT in (select * from fights) and FIGHTER !='{fighter_filter}' ")
-    cleaned_opp_stats = duckdb.sql("SELECT sum(sig_str_l::INTEGER) as sig_abs ,sum(head_str_l::INTEGER) as head_abs,sum(td_l::INTEGER) as td_abs,round(sum(td_l::INTEGER)/cast(sum(td_a::REAL) as REAL),2) as td_abs_rate,sum(kd::INTEGER) as kd_abs from opp_stats").df()
+    cleaned_opp_stats = duckdb.sql("SELECT sum(sig_str_l::INTEGER) as sig_abs ,sum(head_str_l::INTEGER) as head_abs,sum(head_str_a::INTEGER) as head_at,sum(td_l::INTEGER) as td_abs,round(sum(td_l::INTEGER)/cast(sum(td_a::REAL) as REAL),2) as td_abs_rate,sum(kd::INTEGER) as kd_abs from opp_stats").df()
     ko_losses = duckdb.sql(f"SELECT count(*) as s from fr_cleaned where ((FIGHTER1='{fighter_filter}' and FIGHTER1_OUTCOME='L') OR (FIGHTER2='{fighter_filter}' and FIGHTER2_OUTCOME='L')) and trim(METHOD)='KO/TKO' ").df()
 
 
@@ -156,7 +156,7 @@ if view =='Fighter One Sheet':
             st.metric('Head Strikes Differential',value=round(float(cleaned_fighter_stats['head_str']/cleaned_opp_stats['head_abs']),1))
             st.metric('Power Differential (Knockdowns)',value=round(float(cleaned_fighter_stats['kd']/cleaned_opp_stats['kd_abs']),1))
             st.metric('Takedown Differential',value=round(float(cleaned_fighter_stats['td_l']/cleaned_opp_stats['td_abs']),1))
-        
+            st.metric('Head Movement',value=round(float(cleaned_pp_stats['head_abs']/cleaned_pp_stats['head_at']),2))
         c1, c2 = st.columns(2)
         with c1:
             st.write("Strikes Attempted")
