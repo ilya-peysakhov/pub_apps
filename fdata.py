@@ -43,7 +43,8 @@ fed = duckdb.sql("SELECT TRIM(fd.EVENT) as EVENT, TRIM(fd.BOUT) as BOUT, fd.URL,
 fr = pl.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_results.csv")
 fr = fr.to_pandas()
 fr['EVENT'] = fr['EVENT'].str.replace("'", "") 
-fr['BOUT'] = fr['BOUT'].str.replace("'", "") 
+fr['BOUT'] = fr['BOUT'].str.replace("'", "")
+fr = pl.from_pandas(fr)
 fr_cleaned = duckdb.sql("""SELECT trim(fr.EVENT) as EVENT, 
                              replace(trim(fr.BOUT),'  ',' ') as BOUT, 
                             trim(split_part(fr.BOUT, ' vs. ' ,1)) as FIGHTER1,
@@ -57,6 +58,7 @@ fs = pl.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fig
 fs = fs.to_pandas()
 fs['FIGHTER'] = fs['FIGHTER'].str.replace("'", "") 
 fs['BOUT'] = fs['BOUT'].str.replace("'", "") 
+fs = pl.from_pandas(fs)
 fs_cleaned = duckdb.sql("""SELECT fs.EVENT,replace(trim(BOUT),'  ',' ') as BOUT,ROUND, trim(FIGHTER) as FIGHTER,KD,
                               split_part("SIG.STR.",' of ',1) sig_str_l,
                               split_part("SIG.STR.",' of ',2) sig_str_a,
@@ -76,7 +78,6 @@ ft = pl.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fig
 
 ft = ft.to_pandas()
 ft['FIGHTER'] = ft['FIGHTER'].str.replace("'", "") 
-
 
 fighters= duckdb.sql("SELECT trim(FIGHTER) as FIGHTER,HEIGHT,WEIGHT,REACH,STANCE,DOB,FIRST,LAST,NICKNAME,frd.URL from ft inner join frd on frd.URL = ft.URL")
 ########################
