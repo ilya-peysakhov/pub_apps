@@ -261,7 +261,7 @@ else:
             )
         
     st.write(methods_over_time_chart.properties(width=1100, height=500))
-    min_fights = 5
+    min_fights = st.number_input('Minimum Fights',step=1,value=5)
     st.write(f"Minimum {min_fights} fights, historical rankings for total career offensive and defensive stats")
     fs_cleaned = fs_cleaned.pl()
     fighters = duckdb.sql(f"SELECT fighter FROM fs_cleaned GROUP BY 1 having count(distinct BOUT||EVENT) >={min_fights} ").df()
