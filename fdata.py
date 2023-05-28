@@ -69,6 +69,8 @@ fs_cleaned = duckdb.sql("""SELECT fs.EVENT,replace(trim(BOUT),'  ',' ') as BOUT,
                               "SUB.ATT","REV.",CTRL,
                               split_part(HEAD,' of ',1) head_str_l,
                               split_part(HEAD,' of ',2) head_str_a,
+                              split_part(LEG,' of ',1) leg_str_l,
+                              split_part(LEG,' of ',2) leg_str_a,
                               DATE
                               from fs 
                               left join ed_c on ed_c.EVENT = fs.EVENT
@@ -268,11 +270,11 @@ else:
     fighters = duckdb.sql(f"SELECT fighter FROM fs_cleaned GROUP BY 1 having count(distinct BOUT||EVENT) >={min_fights} ").df()
     str_results = pd.DataFrame()
     for f in fighters['FIGHTER']:
-        query = f"SELECT '{f}' AS FIGHTER, SUM(head_str_l::INTEGER) AS HEAD_STRIKES_ABSORED,SUM(sig_str_l::INTEGER) AS SIG_STRIKES_ABSORED,sum(KD::INTEGER) as KD_ABSORED, sum(TD_L::INT) as TD_GIVEN_UP FROM fs_cleaned WHERE BOUT LIKE '%{f}%' AND fighter != '{f}' "
+        query = f"SELECT '{f}' AS FIGHTER, SUM(head_str_l::INTEGER) AS HEAD_STRIKES_ABSORED,SUM(sig_str_l::INTEGER) AS SIG_STRIKES_ABSORED,SUM(leg_str_l::INTEGER) as LEG_STRIKES_ABSORBED,sum(KD::INTEGER) as KD_ABSORED, sum(TD_L::INT) as TD_GIVEN_UP FROM fs_cleaned WHERE BOUT LIKE '%{f}%' AND fighter != '{f}' "
         result = duckdb.sql(query).df()
         str_results = pd.concat([str_results, result]) # Append the result to the DataFrame
-    all_time_offense = duckdb.sql(f"SELECT FIGHTER, COUNT(DISTINCT BOUT||EVENT) as FIGHTS, COUNT(*) AS ROUNDS,  ROUND(ROUNDS/CAST(FIGHTS as REAL),1) as ROUNDS_PER_FIGHT ,SUM(head_str_l::INTEGER) AS HEAD_STRIKES_LANDED,sum(KD::INTEGER) as KD_LANDED, sum(TD_L::INT) as TD_LANDED from fs_cleaned group by 1 having FIGHTS>={min_fights}")
-    combined_stats = duckdb.sql("SELECT a.*, b.* EXCLUDE (FIGHTER) from all_time_offense as a left join str_results as b on a.FIGHTER=b.FIGHTER").df()
+    all_time_offense = duckdb.sql(f"SELECT FIGHTER, COUNT(DISTINCT BOUT||EVENT) as FIGHTS, COUNT(*) AS ROUNDS,  ROUND(ROUNDS/CAST(FIGHTS as REAL),1) as ROUNDS_PER_FIGHT ,SUM(head_str_l::INTEGER) AS HEAD_STRIKES_LANDED, SUM(leg_str_l::INTEGER) as LEG_STRIKES_LANDED,sum(sig_str_l::INTEGER) as SIG_STRIKES_LANDED,sum(KD::INTEGER) as KD_LANDED, sum(TD_L::INT) as TD_LANDED from fs_cleaned group by 1 having FIGHTS>={min_fights}")
+    combined_stats = duckdb.sql("SELECT a.*,ROUND(SIG_STRIKES_LANDED/SIG_STRIKES_ABSORBED,1) as SIG_STR_DIFF, b.* EXCLUDE (FIGHTER) from all_time_offense as a left join str_results as b on a.FIGHTER=b.FIGHTER").df()
     st.write(combined_stats.set_index(combined_stats.columns[0]).sort_values(by='FIGHTS', ascending=False))   
 
        
@@ -284,4 +286,4 @@ else:
 
 st.code('This application uses data from Greco1899''s scraper of UFC Fight Stats - "https://github.com/Greco1899/scrape_ufc_stats"')
 
-st.code('Recent changes - new charts in All Time section, fixed stats for fighters with apostraphes, all data recovered by Greco1899' )
+st.code('Recent changes - new charts in All Time section, fixed stats for fighters with apostraphes,sped up all time rankings to 5s, add leg strikes, all data recovered by Greco1899' )
