@@ -271,11 +271,11 @@ else:
     fighters = duckdb.sql(f"SELECT fighter FROM fs_cleaned GROUP BY 1 having count(distinct BOUT||EVENT) >={min_fights} ").df()
     str_results = pd.DataFrame()
     for f in fighters['FIGHTER']:
-        query = f"SELECT '{f}' AS FIGHTER, SUM(head_str_l::INTEGER) AS HEAD_STRIKES_ABSORED, SUM(head_str_a::INTEGER) AS HEAD_STRIKES_AT ,SUM(sig_str_l::INTEGER) AS SIG_STRIKES_ABSORBED,SUM(leg_str_l::INTEGER) as LEG_STRIKES_ABSORBED,sum(KD::INTEGER) as KD_ABSORED, sum(TD_L::INT) as TD_GIVEN_UP FROM fs_cleaned WHERE BOUT LIKE '%{f}%' AND fighter != '{f}' "
+        query = f"SELECT '{f}' AS FIGHTER, SUM(head_str_l::INTEGER) AS HEAD_STRIKES_ABS, SUM(head_str_a::INTEGER) AS HEAD_STRIKES_AT ,SUM(sig_str_l::INTEGER) AS SIG_STRIKES_ABS,SUM(leg_str_l::INTEGER) as LEG_STRIKES_ABSORBED,sum(KD::INTEGER) as KD_ABSORED, sum(TD_L::INT) as TD_GIVEN_UP FROM fs_cleaned WHERE BOUT LIKE '%{f}%' AND fighter != '{f}' "
         result = duckdb.sql(query).df()
         str_results = pd.concat([str_results, result]) # Append the result to the DataFrame
     all_time_offense = duckdb.sql(f"SELECT FIGHTER, COUNT(DISTINCT BOUT||EVENT) as FIGHTS, COUNT(*) AS ROUNDS,  ROUND(ROUNDS/CAST(FIGHTS as REAL),1) as ROUNDS_PER_FIGHT ,SUM(head_str_l::INTEGER) AS HEAD_STRIKES_LANDED, SUM(leg_str_l::INTEGER) as LEG_STRIKES_LANDED,sum(sig_str_l::INTEGER) as SIG_STRIKES_LANDED,sum(KD::INTEGER) as KD_LANDED, sum(TD_L::INT) as TD_LANDED from fs_cleaned group by 1 having FIGHTS>={min_fights}")
-    combined_stats = duckdb.sql("SELECT a.*,ROUND(SIG_STRIKES_LANDED/SIG_STRIKES_ABSORBED,1) as SIG_STR_DIFF,ROUND(FLOAT(HEAD_STRIKES_ABSORED/HEAD_STRIKES_AT),2) as HEAD_MOVEMENT, b.* EXCLUDE (FIGHTER) from all_time_offense as a left join str_results as b on a.FIGHTER=b.FIGHTER").df()
+    combined_stats = duckdb.sql("SELECT a.*,ROUND(SIG_STRIKES_LANDED/SIG_STRIKES_ABS,1) as SIG_STR_DIFF,ROUND(FLOAT(HEAD_STRIKES_ABS/HEAD_STRIKES_AT),2) as HEAD_MOVEMENT, b.* EXCLUDE (FIGHTER) from all_time_offense as a left join str_results as b on a.FIGHTER=b.FIGHTER").df()
     st.write(combined_stats.set_index(combined_stats.columns[0]).sort_values(by='FIGHTS', ascending=False))   
 
        
