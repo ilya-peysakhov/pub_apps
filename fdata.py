@@ -262,10 +262,10 @@ else:
         
     st.write(methods_over_time_chart.properties(width=1100, height=500))
 
-    st.write("Minimum 10 fights, historical rankings for total career offensive and defensive stats")
+    st.write("Minimum 5 fights, historical rankings for total career offensive and defensive stats")
+    fs_cleaned = fs_cleaned.pl()
     fighters = duckdb.sql("SELECT fighter FROM fs_cleaned GROUP BY 1 having count(distinct BOUT||EVENT) >=5 ").df()
     str_results = pd.DataFrame()
-    fs_cleaned = fs_cleaned.pl()
     for f in fighters['FIGHTER']:
         query = f"SELECT '{f}' AS FIGHTER, SUM(head_str_l::INTEGER) AS HEAD_STRIKES_ABSORED,SUM(sig_str_l::INTEGER) AS SIG_STRIKES_ABSORED,sum(KD::INTEGER) as KD_ABSORED, sum(TD_L::INT) as TD_GIVEN_UP FROM fs_cleaned WHERE BOUT LIKE '%{f}%' AND fighter != '{f}' "
         result = duckdb.sql(query).df()
