@@ -158,7 +158,7 @@ if view =='Fighter One Sheet':
             st.metric('Takedown Differential',value=round(cleaned_fighter_stats['td_l']/cleaned_opp_stats['td_abs'],1))
             st.caption('Success rate at evading head strikes')
             head_movement = round(1-(cleaned_opp_stats['head_abs']/cleaned_opp_stats['head_at']),2)
-            st.metric('Head Movement',value="{0:.0%}".format(head_movement) )
+            st.metric('Head Movement',value=head_movement )
         c1, c2 = st.columns(2)
         with c1:
             st.write("Strikes Attempted")
