@@ -156,8 +156,8 @@ if view =='Fighter One Sheet':
             st.metric('Head Strikes Differential',value=round(cleaned_fighter_stats['head_str']/cleaned_opp_stats['head_abs'],1))
             st.metric('Power Differential (Knockdowns)',value=round(cleaned_fighter_stats['kd']/cleaned_opp_stats['kd_abs'],1))
             st.metric('Takedown Differential',value=round(cleaned_fighter_stats['td_l']/cleaned_opp_stats['td_abs'],1))
-            st.caption('opponent head str %')
-            st.metric('Head Movement',value=round(cleaned_opp_stats['head_abs']/cleaned_opp_stats['head_at'],2))
+            st.caption('Success rate at evading head strikes')
+            st.metric('Head Movement',value=round({0:.0%}".format(1-(cleaned_opp_stats['head_abs']/cleaned_opp_stats['head_at'],2))))
         c1, c2 = st.columns(2)
         with c1:
             st.write("Strikes Attempted")
