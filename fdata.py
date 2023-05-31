@@ -140,12 +140,12 @@ if view =='Fighter One Sheet':
             st.metric('KO/TKO Losses', value = int(ko_losses['s']))
         with col3:
             st.subheader('Striking')
-            st.metric('Significant Strikes Absored',value=int(cleaned_opp_stats['sig_abs']))
-            st.metric('Head Strikes Absored',value=int(cleaned_opp_stats['head_abs']))
-            st.metric('Significant Strikes Landed',value=int(cleaned_fighter_stats['sig_str']))
-            st.metric('Head Strikes Landed',value=int(cleaned_fighter_stats['head_str']))
-            st.metric('Knockdowns Landed',value=int(cleaned_fighter_stats['kd']))
-            st.metric('Knockdowns Absored',value=int(cleaned_opp_stats['kd_abs']))
+            st.metric('Significant Strikes Absored',value=int(cleaned_opp_stats['sig_abs'].iloc[0]))
+            st.metric('Head Strikes Absored',value=int(cleaned_opp_stats['head_abs'].iloc[0]))
+            st.metric('Significant Strikes Landed',value=int(cleaned_fighter_stats['sig_str'].iloc[0]))
+            st.metric('Head Strikes Landed',value=int(cleaned_fighter_stats['head_str'].iloc[0]))
+            st.metric('Knockdowns Landed',value=int(cleaned_fighter_stats['kd'].iloc[0]))
+            st.metric('Knockdowns Absored',value=int(cleaned_opp_stats['kd_abs'].iloc[0]))
         with col4:
             st.subheader('Wrestling')
             st.metric('Total Takedowns Landed',value=int(cleaned_fighter_stats['td_l']),delta="{0:.0%}".format(round(float(cleaned_fighter_stats['td_rate']),2)), delta_color="normal")
