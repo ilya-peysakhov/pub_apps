@@ -41,6 +41,7 @@ ed_c = duckdb.sql("SELECT TRIM(EVENT) as EVENT, strptime(DATE, '%B %d, %Y') as  
 fd = pl.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_details.csv")
 fed = duckdb.sql("SELECT TRIM(fd.EVENT) as EVENT, TRIM(fd.BOUT) as BOUT, fd.URL, DATE,LOCATION from ed_c inner join fd on ed_c.EVENT=fd.EVENT ")
 fr = pl.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_results.csv")
+
 # fr = fr.to_pandas()
 # fr['EVENT'] = fr['EVENT'].str.replace("'", "") 
 # fr['BOUT'] = fr['BOUT'].str.replace("'", "")
@@ -60,10 +61,16 @@ fr_cleaned = duckdb.sql("""SELECT trim(fr.EVENT) as EVENT,
                         from fr
                         left join fed on fed.URL = fr.URL""")
 fs = pl.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_stats.csv")
-fs = fs.to_pandas()
-fs['FIGHTER'] = fs['FIGHTER'].str.replace("'", "") 
-fs['BOUT'] = fs['BOUT'].str.replace("'", "") 
-fs = pl.from_pandas(fs)
+# fs = fs.to_pandas()
+# fs['FIGHTER'] = fs['FIGHTER'].str.replace("'", "") 
+# fs['BOUT'] = fs['BOUT'].str.replace("'", "") 
+# fs = pl.from_pandas(fs)
+
+fs = fs.with_columns(
+    pl.col("FIGHTER").str.replace("'",""),
+    pl.col("BOUT").str.replace("'","")
+)  
+
 fs_cleaned = duckdb.sql("""SELECT fs.EVENT,replace(trim(BOUT),'  ',' ') as BOUT,ROUND, trim(FIGHTER) as FIGHTER,KD,
                               split_part("SIG.STR.",' of ',1) sig_str_l,
                               split_part("SIG.STR.",' of ',2) sig_str_a,
@@ -83,9 +90,12 @@ fs_cleaned = duckdb.sql("""SELECT fs.EVENT,replace(trim(BOUT),'  ',' ') as BOUT,
 frd = pl.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fighter_details.csv")
 ft = pl.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fighter_tott.csv")
 
-ft = ft.to_pandas()
-ft['FIGHTER'] = ft['FIGHTER'].str.replace("'", "") 
+# ft = ft.to_pandas()
+# ft['FIGHTER'] = ft['FIGHTER'].str.replace("'", "") 
 
+ft = ft.with_columns(
+    pl.col("EVENT").str.replace("'","")
+)  
 fighters= duckdb.sql("SELECT trim(FIGHTER) as FIGHTER,HEIGHT,WEIGHT,REACH,STANCE,DOB,FIRST,LAST,NICKNAME,frd.URL from ft inner join frd on frd.URL = ft.URL")
 ########################
                       
