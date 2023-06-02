@@ -94,7 +94,7 @@ ft = pl.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fig
 # ft['FIGHTER'] = ft['FIGHTER'].str.replace("'", "") 
 
 ft = ft.with_columns(
-    pl.col("EVENT").str.replace("'","")
+    pl.col("FIGHTER").str.replace("'","")
 )  
 fighters= duckdb.sql("SELECT trim(FIGHTER) as FIGHTER,HEIGHT,WEIGHT,REACH,STANCE,DOB,FIRST,LAST,NICKNAME,frd.URL from ft inner join frd on frd.URL = ft.URL")
 ########################
