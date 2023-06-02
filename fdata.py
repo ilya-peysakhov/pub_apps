@@ -42,15 +42,11 @@ fd = pl.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fig
 fed = duckdb.sql("SELECT TRIM(fd.EVENT) as EVENT, TRIM(fd.BOUT) as BOUT, fd.URL, DATE,LOCATION from ed_c inner join fd on ed_c.EVENT=fd.EVENT ")
 fr = pl.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_results.csv")
 
-# fr = fr.to_pandas()
-# fr['EVENT'] = fr['EVENT'].str.replace("'", "") 
-# fr['BOUT'] = fr['BOUT'].str.replace("'", "")
-# fr = pl.from_pandas(fr)
-
 fr = fr.with_columns(
     pl.col("EVENT").str.replace("'",""),
     pl.col("BOUT").str.replace("'","")
 )  
+
 fr_cleaned = duckdb.sql("""SELECT trim(fr.EVENT) as EVENT, 
                              replace(trim(fr.BOUT),'  ',' ') as BOUT, 
                             trim(split_part(fr.BOUT, ' vs. ' ,1)) as FIGHTER1,
@@ -61,10 +57,6 @@ fr_cleaned = duckdb.sql("""SELECT trim(fr.EVENT) as EVENT,
                         from fr
                         left join fed on fed.URL = fr.URL""")
 fs = pl.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_stats.csv")
-# fs = fs.to_pandas()
-# fs['FIGHTER'] = fs['FIGHTER'].str.replace("'", "") 
-# fs['BOUT'] = fs['BOUT'].str.replace("'", "") 
-# fs = pl.from_pandas(fs)
 
 fs = fs.with_columns(
     pl.col("FIGHTER").str.replace("'",""),
@@ -90,8 +82,6 @@ fs_cleaned = duckdb.sql("""SELECT fs.EVENT,replace(trim(BOUT),'  ',' ') as BOUT,
 frd = pl.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fighter_details.csv")
 ft = pl.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fighter_tott.csv")
 
-# ft = ft.to_pandas()
-# ft['FIGHTER'] = ft['FIGHTER'].str.replace("'", "") 
 
 ft = ft.with_columns(
     pl.col("FIGHTER").str.replace("'","")
