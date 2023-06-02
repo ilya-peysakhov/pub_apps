@@ -48,7 +48,7 @@ fr = pl.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fig
 
 fr = fr.with_columns(
     pl.col("EVENT").str.replace("'",""),
-    pl.col("text").str.replace("'","")
+    pl.col("BOUT").str.replace("'","")
 )  
 fr_cleaned = duckdb.sql("""SELECT trim(fr.EVENT) as EVENT, 
                              replace(trim(fr.BOUT),'  ',' ') as BOUT, 
