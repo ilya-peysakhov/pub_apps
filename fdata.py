@@ -261,7 +261,7 @@ else:
             SELECT replace(weightclass,' Bout','') as weightclass,FIGHTER2 fighter from fr_cleaned where date between current_date() -730 and current_date() group by 1,2)
             group by 1
             """).df()
-        st.write(fighters_by_class.set_index(fighters_by_class.columns[0]) ))
+        st.write(fighters_by_class.set_index(fighters_by_class.columns[0]) )
 
     st.write("Method of winning as a percentage of all methods over time")
     frame = st.selectbox('Pick a time dimension',['year','quarter','month','week','day'])
