@@ -254,12 +254,13 @@ else:
         st.write(location_chart)
 
         st.divider()
-
-        st.metric('Number of Fighters fought (2yr)',value=str(duckdb.sql("""SELECT count(distinct fighter) s from 
-            (SELECT FIGHTER1 fighter from fr_cleaned where date between current_date() -730 and current_date() group by 1 
+        st.write('Number of Fighters fought (2yr)')
+        st.write(duckdb.sql("""SELECT weightclass,count(distinct fighter) as fighters from 
+            (SELECT replace(weightclass,' Bout','') as weightclass,FIGHTER1 fighter from fr_cleaned where date between current_date() -730 and current_date() group by 1,2 
             UNION 
-            SELECT FIGHTER2 fighter from fr_cleaned where date between current_date() -730 and current_date() group by 1)
-            """).df().iloc[0,0]))
+            SELECT replace(weightclass,' Bout','') as weightclass,FIGHTER2 fighter from fr_cleaned where date between current_date() -730 and current_date() group by 1,2)
+            group by 1
+            """).df() )
 
     st.write("Method of winning as a percentage of all methods over time")
     frame = st.selectbox('Pick a time dimension',['year','quarter','month','week','day'])
