@@ -254,7 +254,7 @@ else:
         st.write(location_chart)
 
         st.divider()
-        st.write('Number of Fighters fought (2yr)')
+        st.write('Number of Fighters fought by Weight/Type (2yr)')
         fighters_by_class = duckdb.sql("""SELECT weightclass,count(distinct fighter) as fighters from 
             (SELECT replace(weightclass,' Bout','') as weightclass,FIGHTER1 fighter from fr_cleaned where date between current_date() -730 and current_date() group by 1,2 
             UNION 
