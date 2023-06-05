@@ -189,7 +189,7 @@ if view =='Fighter One Sheet':
         st.divider()
         with st.expander("Career Results",expanded=False):
             career_results = duckdb.sql(f"SELECT left(DATE,10) AS DATE ,EVENT,case when FIGHTER1='{fighter_filter}' then FIGHTER2 else FIGHTER1 end as OPPONENT,case when FIGHTER1='{fighter_filter}' then FIGHTER1_OUTCOME else FIGHTER2_OUTCOME end as RESULT,METHOD,ROUND, TIME,DETAILS from fr_cleaned where FIGHTER1= '{fighter_filter}' or FIGHTER2='{fighter_filter}' order by DATE desc").df()
-            st.write(career_results.set_index(career_results.columns[0]))
+            st.dataframe(career_results,hide_index=True)
     
     st.divider()
     with st.expander("Single Fight Stats",expanded=False):
@@ -197,7 +197,7 @@ if view =='Fighter One Sheet':
         fight_results = duckdb.sql(f"SELECT * EXCLUDE (BOUT,FIGHTER,EVENT) from fs where replace(trim(BOUT),'  ',' ') ='{bout_filter}'  and trim(FIGHTER)='{fighter_filter}' ").df()
         
         if bout_filter:
-            st.write(fight_results.set_index(fight_results.columns[0]).T)
+            st.dataframe(fight_results.T,hide_index=True)
 
 elif view =='Show all dataset samples':
     st.write('Fighter Details (cleaned)')
@@ -210,7 +210,7 @@ elif view =='Show all dataset samples':
     st.write(duckdb.sql("SELECT * from fs limit 5").df())
     st.write("Data Check - Events without data")
     anomalies = duckdb.sql("select left(DATE,10) as DATE,ed_c.EVENT, count(BOUT) as bouts_with_stats from ed_c left join fs on ed_c.EVENT =fs.EVENT group by 1,2 having bouts_with_stats=0 order by 1 desc").df()
-    st.write(anomalies.set_index(anomalies.columns[0]))
+    st.dataframe(anomalies,hide_index=True)
 else:
     st.subheader('Lifetime stats unless otherwise noted (last 2 years)')
     c1, c2  = st.columns(2)
@@ -224,7 +224,7 @@ else:
 
         st.write('Most experienced referees (2yr)')
         refs = duckdb.sql("SELECT REFEREE,count(*) fights from fr_cleaned where date between current_date() -730 and current_date() group by 1 order by 2 desc limit 10").df()
-        st.dataframe(refs.set_index(refs.columns[0]),use_container_width=False)
+        st.dataframe(refs,hide_index=True,use_container_width=False)
         st.divider()
         st.write("Fights by result method (2yr)")
         methods = duckdb.sql("SELECT method, count(*) FIGHTS from fr_cleaned where date between current_date() -730 and current_date() group by 1 ").df()
@@ -246,7 +246,7 @@ else:
         
         st.write('Most commonly used venues (2yr)')
         locations = duckdb.sql("SELECT LOCATION,count(distinct EVENT) EVENTS from fed where date between current_date() -730 and current_date() group by 1 order by 2 desc limit 10").df()
-        # st.dataframe(locations.set_index(locations.columns[0]),use_container_width=True)
+        # st.dataframe(locations,hide_index=True,use_container_width=True)
         location_chart = alt.Chart(locations).mark_bar().encode(
             x=alt.X('EVENTS:Q'),
             y=alt.Y('LOCATION:O', sort='-x')
@@ -261,7 +261,7 @@ else:
             SELECT replace(weightclass,' Bout','') as weightclass,FIGHTER2 fighter from fr_cleaned where date between current_date() -730 and current_date() group by 1,2)
             group by 1
             """).df()
-        st.write(fighters_by_class.set_index(fighters_by_class.columns[0]) )
+        st.dataframe(fighters_by_class,hide_index=True)
 
     st.write("Method of winning as a percentage of all methods over time")
     frame = st.selectbox('Pick a time dimension',['year','quarter','month','week','day'])
@@ -284,7 +284,7 @@ else:
         str_results = pd.concat([str_results, result]) # Append the result to the DataFrame
     all_time_offense = duckdb.sql(f"SELECT FIGHTER, COUNT(DISTINCT BOUT||EVENT) as FIGHTS, COUNT(*) AS ROUNDS,  ROUND(ROUNDS/CAST(FIGHTS as REAL),1) as ROUNDS_PER_FIGHT ,SUM(head_str_l::INTEGER) AS HEAD_STRIKES_LANDED, SUM(leg_str_l::INTEGER) as LEG_STRIKES_LANDED,sum(sig_str_l::INTEGER) as SIG_STRIKES_LANDED,sum(KD::INTEGER) as KD_LANDED, sum(TD_L::INT) as TD_LANDED from fs_cleaned group by 1 having FIGHTS>={min_fights}")
     combined_stats = duckdb.sql("SELECT a.*, ROUND(SIG_STRIKES_LANDED/SIG_STRIKES_ABS,1) as SIG_STR_DIFF, ROUND((1-HEAD_STRIKES_ABS/HEAD_STRIKES_AT),2) as HEAD_MOVEMENT, b.* EXCLUDE (FIGHTER) from all_time_offense as a left join str_results as b on a.FIGHTER=b.FIGHTER").df()
-    st.write(combined_stats.set_index(combined_stats.columns[0]).sort_values(by='FIGHTS', ascending=False))   
+    st.dataframe(combined_stats.sort_values(by='FIGHTS', ascending=False),hide_index=True)   
 
        
        
