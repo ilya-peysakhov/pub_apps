@@ -197,17 +197,17 @@ if view =='Fighter One Sheet':
         fight_results = duckdb.sql(f"SELECT * EXCLUDE (BOUT,FIGHTER,EVENT) from fs where replace(trim(BOUT),'  ',' ') ='{bout_filter}'  and trim(FIGHTER)='{fighter_filter}' ").df()
         
         if bout_filter:
-            st.dataframe(fight_results.T,hide_index=True)
+             st.write(fight_results.set_index(fight_results.columns[0]).T)
 
 elif view =='Show all dataset samples':
     st.write('Fighter Details (cleaned)')
-    st.dataframe(duckdb.sql("select * from fighters limit 5").df())
+    st.dataframe(duckdb.sql("select * from fighters limit 5").df(),hide_index=True)
     st.write('Events & Fights (cleaned)')
-    st.write(duckdb.sql("SELECT * from fed limit 5").df())
+    st.dataframe(duckdb.sql("SELECT * from fed limit 5").df(),hide_index=True)
     st.write('Fight Results (cleaned)')
-    st.write(duckdb.sql("SELECT * from fr_cleaned limit 5").df())
+    st.dataframe(duckdb.sql("SELECT * from fr_cleaned limit 5").df(),hide_index=True)
     st.write('Fight Stats')
-    st.write(duckdb.sql("SELECT * from fs limit 5").df())
+    st.dataframe(duckdb.sql("SELECT * from fs limit 5").df(),hide_index=True)
     st.write("Data Check - Events without data")
     anomalies = duckdb.sql("select left(DATE,10) as DATE,ed_c.EVENT, count(BOUT) as bouts_with_stats from ed_c left join fs on ed_c.EVENT =fs.EVENT group by 1,2 having bouts_with_stats=0 order by 1 desc").df()
     st.dataframe(anomalies,hide_index=True)
