@@ -168,6 +168,7 @@ if view =='Fighter One Sheet':
             st.caption('Success rate at evading head strikes')
             head_movement = round(1-(cleaned_opp_stats['head_abs']/cleaned_opp_stats['head_at']),2)
             st.metric('Head Movement',value=head_movement )
+        st.divider()
         c1, c2 = st.columns(2)
         with c1:
             st.write("Strikes Attempted")
