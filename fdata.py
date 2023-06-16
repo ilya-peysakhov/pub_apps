@@ -159,7 +159,7 @@ if view =='Fighter One Sheet':
             st.metric('Total Takedowns Landed',value=int(cleaned_fighter_stats['td_l'].iloc[0]),delta="{0:.0%}".format(round(float(cleaned_fighter_stats['td_rate'].iloc[0]),2)), delta_color="normal")
             st.metric('Total Takedowns Given Up',value=int(cleaned_opp_stats['td_abs'].iloc[0]),delta="{0:.0%}".format(round(float(cleaned_opp_stats['td_abs_rate'].iloc[0]),2)), delta_color="inverse")
         with col5:
-            st.subheader('Advanced Stats')
+            st.subheader('Adv. Stats')
             st.divider()
             st.metric('Significant Strikes Differential',value=round(cleaned_fighter_stats['sig_str']/cleaned_opp_stats['sig_abs'],1))
             st.metric('Head Strikes Differential',value=round(cleaned_fighter_stats['head_str']/cleaned_opp_stats['head_abs'],1))
