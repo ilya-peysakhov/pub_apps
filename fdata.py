@@ -118,6 +118,7 @@ if view =='Fighter One Sheet':
         col1,col2,col3,col4,col5 = st.columns(5)
         with col1:
             st.subheader('Bio')
+            st.divider()
             st.metric('Height',value=str(duckdb.sql(f"SELECT HEIGHT FROM fighters WHERE FIGHTER = '{fighter_filter}'").df().iloc[0,0]))
             st.metric('Division',value=str(duckdb.sql(f"SELECT WEIGHT FROM fighters WHERE FIGHTER = '{fighter_filter}'").df().iloc[0,0]))
             st.metric('Reach',value=str(duckdb.sql(f"SELECT REACH FROM fighters WHERE FIGHTER = '{fighter_filter}'").df().iloc[0,0]))
@@ -133,7 +134,7 @@ if view =='Fighter One Sheet':
 
         with col2:
             st.subheader('Highlights')
-            
+            st.divider()
             w1,w2 = st.columns(2)
             with w1:
                 st.metric('UFC Fights',value=len(fights.df()) )
@@ -145,6 +146,7 @@ if view =='Fighter One Sheet':
             st.metric('KO/TKO Losses', value = int(ko_losses['s'].iloc[0]))
         with col3:
             st.subheader('Striking')
+            st.divider()
             st.metric('Significant Strikes Absored',value=int(cleaned_opp_stats['sig_abs'].iloc[0]))
             st.metric('Head Strikes Absored',value=int(cleaned_opp_stats['head_abs'].iloc[0]))
             st.metric('Significant Strikes Landed',value=int(cleaned_fighter_stats['sig_str'].iloc[0]))
@@ -153,10 +155,12 @@ if view =='Fighter One Sheet':
             st.metric('Knockdowns Absored',value=int(cleaned_opp_stats['kd_abs'].iloc[0]))
         with col4:
             st.subheader('Wrestling')
+            st.divider()
             st.metric('Total Takedowns Landed',value=int(cleaned_fighter_stats['td_l'].iloc[0]),delta="{0:.0%}".format(round(float(cleaned_fighter_stats['td_rate'].iloc[0]),2)), delta_color="normal")
             st.metric('Total Takedowns Given Up',value=int(cleaned_opp_stats['td_abs'].iloc[0]),delta="{0:.0%}".format(round(float(cleaned_opp_stats['td_abs_rate'].iloc[0]),2)), delta_color="inverse")
         with col5:
             st.subheader('Advanced Stats')
+            st.divider()
             st.metric('Significant Strikes Differential',value=round(cleaned_fighter_stats['sig_str']/cleaned_opp_stats['sig_abs'],1))
             st.metric('Head Strikes Differential',value=round(cleaned_fighter_stats['head_str']/cleaned_opp_stats['head_abs'],1))
             st.metric('Power Differential (Knockdowns)',value=round(cleaned_fighter_stats['kd']/cleaned_opp_stats['kd_abs'],1))
@@ -167,6 +171,7 @@ if view =='Fighter One Sheet':
         c1, c2 = st.columns(2)
         with c1:
             st.write("Strikes Attempted")
+            st.divider()
             str_a = duckdb.sql(f"SELECT DATE, sum(total_str_a::INT) as Total_Strikes_At from fighter_stats group by 1").df()
             str_a_chart = alt.Chart(str_a).mark_bar().encode(x='DATE',y='Total_Strikes_At')
             st.altair_chart(str_a_chart, theme="streamlit")
