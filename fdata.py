@@ -172,7 +172,7 @@ if view =='Fighter One Sheet':
         c1, c2 = st.columns(2)
         with c1:
             st.write("Strikes Attempted")
-            st.divider()
+            
             str_a = duckdb.sql(f"SELECT DATE, sum(total_str_a::INT) as Total_Strikes_At from fighter_stats group by 1").df()
             str_a_chart = alt.Chart(str_a).mark_bar().encode(x='DATE',y='Total_Strikes_At')
             st.altair_chart(str_a_chart, theme="streamlit")
