@@ -178,7 +178,7 @@ if view =='Fighter One Sheet':
             st.altair_chart(str_a_chart, theme="streamlit")
             st.write("Net Sig Strike Landed difference")
             str_dif = duckdb.sql(f"SELECT a.DATE, sum(a.sig_str_l::INT)-sum(b.sig_str_l::INT) as Strike_Diff from fighter_stats as a inner join opp_stats as b on a.DATE = b.DATE and a.BOUT=b.BOUT and a.ROUND=b.ROUND group by 1").df()
-            str_dif_chart = alt.Chart(str_dif).mark_bar().encode(x='DATE',y='Strike_Diff')
+            str_dif_chart = alt.Chart(str_dif).mark_area().encode(x='DATE',y='Strike_Diff')
             st.altair_chart(str_dif_chart, theme="streamlit")
               
         with c2:
