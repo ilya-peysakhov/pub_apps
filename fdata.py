@@ -219,7 +219,7 @@ else:
     with c1:
         st.write("Fights by month")
         fights_monthly= duckdb.sql("SELECT date_trunc('month',date) as MONTH,count(*) as FIGHTS from fed group by 1 order by 1 asc").df()
-        fig = px.area(fights_monthly, x='MONTH',y='FIGHTS', template='simple_white')
+        fig = px.bar(fights_monthly, x='MONTH',y='FIGHTS', template='simple_white')
         st.plotly_chart(fig,use_container_width=True)
         
         st.divider()
@@ -241,19 +241,16 @@ else:
     with c2:
         st.write("Number of Fights per Fighter")
         fight_distro = duckdb.sql("select FIGHTS,count(1) FIGHTERS from (select FIGHTER,COUNT(DISTINCT EVENT||BOUT) FIGHTS from fs_cleaned group by 1) group by 1 order by 1").df()
-        fig = px.area(fight_distro, x='FIGHTS',y='FIGHTERS', template='simple_white')
+        fig = px.bar(fight_distro, x='FIGHTS',y='FIGHTERS', template='simple_white')
         st.plotly_chart(fig,use_container_width=True)
         
         st.divider()
         
         st.write('Most commonly used venues (2yr)')
         locations = duckdb.sql("SELECT LOCATION,count(distinct EVENT) EVENTS from fed where date between current_date() -730 and current_date() group by 1 order by 2 desc limit 10").df()
-        # st.dataframe(locations,hide_index=True,use_container_width=True)
-        location_chart = alt.Chart(locations).mark_bar().encode(
-            x=alt.X('EVENTS:Q'),
-            y=alt.Y('LOCATION:O', sort='-x')
-        )
         st.write(location_chart)
+        fig = px.bar(locations, x='EVENTS',y='LOCATION', template='simple_white')
+        st.plotly_chart(fig,use_container_width=True)
 
         st.divider()
         st.write('Number of Fighters fought by Weight/Type (2yr)')
