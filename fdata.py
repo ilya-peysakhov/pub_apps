@@ -219,8 +219,8 @@ else:
     with c1:
         st.write("Fights by month")
         fights_monthly= duckdb.sql("SELECT date_trunc('month',date) as MONTH,count(*) as FIGHTS from fed group by 1 order by 1 asc").df()
-        fights_monthly_chart = alt.Chart(fights_monthly).mark_bar().encode(x='MONTH',y='FIGHTS')
-        st.altair_chart(fights_monthly_chart, theme="streamlit")
+        fig = px.area(fights_monthly, x='MONTH',y='FIGHTS', template='simple_white')
+        st.plotly_chart(fig,use_container_width=True)
         
         st.divider()
 
@@ -241,8 +241,8 @@ else:
     with c2:
         st.write("Number of Fights per Fighter")
         fight_distro = duckdb.sql("select FIGHTS,count(1) FIGHTERS from (select FIGHTER,COUNT(DISTINCT EVENT||BOUT) FIGHTS from fs_cleaned group by 1) group by 1 order by 1").df()
-        fight_distro_chart = alt.Chart(fight_distro).mark_bar().encode(x='FIGHTS',y='FIGHTERS')
-        st.altair_chart(fight_distro_chart, theme="streamlit")
+        fig = px.area(fight_distro, x='FIGHTS',y='FIGHTERS', template='simple_white')
+        st.plotly_chart(fig,use_container_width=True)
         
         st.divider()
         
