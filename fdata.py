@@ -170,8 +170,8 @@ if view =='Fighter One Sheet':
             st.write("Strikes Attempted")
             
             str_a = duckdb.sql(f"SELECT DATE, sum(total_str_a::INT) as Total_Strikes_At from fighter_stats group by 1").df()
-            str_a_chart = alt.Chart(str_a).mark_area().encode(x='DATE',y='Total_Strikes_At')
-            st.altair_chart(str_a_chart, theme="streamlit")
+            # str_a_chart = alt.Chart(str_a).mark_area().encode(x='DATE',y='Total_Strikes_At')
+            # st.altair_chart(str_a_chart, theme="streamlit")
             fig = px.area(str_a, x='DATE', y='Total_Strikes_At')
             st.plotly_chart(fig)
             st.write("Net Sig Strike Landed difference")
