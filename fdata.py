@@ -12,18 +12,6 @@ import altair as alt
 #strikes absored per fight
 
 ###################################
-def _max_width_():
-    max_width_str = f"max-width: 1800px;"
-    st.markdown(
-        f"""
-    <style>
-    .reportview-container .main .block-container{{
-        {max_width_str}
-    }}
-    </style>    
-    """,
-        unsafe_allow_html=True,
-    )
 
 
 st.set_page_config(page_icon="👊", page_title="UFC Stats Explorer v0.9", layout="wide")
@@ -102,11 +90,11 @@ if view =='Fighter One Sheet':
         st.radio("Analysis Length (under development)",('Career','Last 3 fights'),disabled=True)
     st.divider()
     
-    try:
-        fights = duckdb.sql(f"SELECT BOUT from fr_cleaned where FIGHTER1 = '{fighter_filter}' or FIGHTER2='{fighter_filter}'")
-    except:
+    fights = duckdb.sql(f"SELECT BOUT from fr_cleaned where FIGHTER1 = '{fighter_filter}' or FIGHTER2='{fighter_filter}'")
+    if len(fights)==0:
         st.write("No data for this fighter")
-        st.stop()
+        st.stop
+
         
     winloss = duckdb.sql(f"SELECT case when FIGHTER1 = '{fighter_filter}' then FIGHTER1_OUTCOME else FIGHTER2_OUTCOME end result from fr_cleaned where FIGHTER1 = '{fighter_filter}' or FIGHTER2='{fighter_filter}' ")
     last_fight= duckdb.sql(f"SELECT left(max(date),10) max_date, left( current_date() - max(date),10) days_since from fr_cleaned where FIGHTER1= '{fighter_filter}' or FIGHTER2='{fighter_filter}' ").df()
