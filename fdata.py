@@ -230,11 +230,13 @@ else:
         st.divider()
         st.write("Fights by result method (2yr)")
         methods = duckdb.sql("SELECT method, count(*) FIGHTS from fr_cleaned where date between current_date() -730 and current_date() group by 1 ").df()
-        method_chart = alt.Chart(methods).mark_arc(stroke='black', strokeWidth=0.3).encode(
-                theta="FIGHTS",
-                color=alt.Color('METHOD', scale=alt.Scale(scheme='blueorange'))
-            )
-        st.write(method_chart)
+        # method_chart = alt.Chart(methods).mark_arc(stroke='black', strokeWidth=0.3).encode(
+        #         theta="FIGHTS",
+        #         color=alt.Color('METHOD', scale=alt.Scale(scheme='blueorange'))
+        #     )
+        # st.write(method_chart)
+        fig = px.pie(methods,color='METHOD', template='simple_white')
+        st.plotly_chart(fig,use_container_width=True)
 
         
     
