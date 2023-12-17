@@ -235,7 +235,8 @@ else:
         #         color=alt.Color('METHOD', scale=alt.Scale(scheme='blueorange'))
         #     )
         # st.write(method_chart)
-        fig = px.pie(methods,color='METHOD', template='simple_white')
+        fig = px.pie(methods,values='FIGHTS', names='METHOD', template='simple_white')
+        
         st.plotly_chart(fig,use_container_width=True)
 
         
