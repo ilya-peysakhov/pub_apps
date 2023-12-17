@@ -180,12 +180,12 @@ if view =='Fighter One Sheet':
         with c2:
             st.write("Takedowns Attempted")
             td_a = duckdb.sql(f"SELECT DATE,  sum(td_a::int) TD_At from fighter_stats group by 1").df()
-            td_a_chart = alt.Chart(td_a).mark_area().encode(x='DATE',y='TD_At')
-            st.altair_chart(td_a_chart, theme="streamlit")
+            fig = px.area(td_a, x='DATE', y='TD_At', template='plotly_dark')
+            st.plotly_chart(fig,use_container_width=True)
             st.write("Net Takedown difference")
             td_dif = duckdb.sql(f"SELECT a.DATE, sum(a.td_a::INT)-sum(b.td_a::INT) as TD_At_Diff from fighter_stats as a inner join opp_stats as b on a.DATE = b.DATE and a.BOUT=b.BOUT and a.ROUND=b.ROUND group by 1").df()
-            td_dif_chart = alt.Chart(td_dif).mark_area().encode(x='DATE',y='TD_At_Diff')
-            st.altair_chart(td_dif_chart, theme="streamlit")
+            fig = px.area(td_dif, x='DATE', y='TD_At_Diff', template='plotly_dark')
+            st.plotly_chart(fig,use_container_width=True)
 
 
         st.divider()
