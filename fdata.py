@@ -230,13 +230,7 @@ else:
         st.divider()
         st.write("Fights by result method (2yr)")
         methods = duckdb.sql("SELECT method, count(*) FIGHTS from fr_cleaned where date between current_date() -730 and current_date() group by 1 ").df()
-        # method_chart = alt.Chart(methods).mark_arc(stroke='black', strokeWidth=0.3).encode(
-        #         theta="FIGHTS",
-        #         color=alt.Color('METHOD', scale=alt.Scale(scheme='blueorange'))
-        #     )
-        # st.write(method_chart)
         fig = px.pie(methods,values='FIGHTS', names='METHOD', template='simple_white')
-        
         st.plotly_chart(fig,use_container_width=True)
 
         
@@ -267,11 +261,13 @@ else:
     st.write("Method of winning as a percentage of all methods over time")
     frame = st.selectbox('Pick a time dimension',['year','quarter','month','week','day'])
     methods_over_time = duckdb.sql(f"SELECT case when METHOD like 'Decision%' then 'Decision' else METHOD end as METHOD, date_trunc('{frame}',date) as MONTH, count(*)/sum(sum(1)) over (partition by MONTH) METHOD_PCT from fr_cleaned  group by 1,2 ").df()
-    methods_over_time_chart = alt.Chart(methods_over_time).mark_area(stroke='black', strokeWidth=0.3).encode(
-            x="MONTH:T",
-            y="METHOD_PCT:Q",
-            color=alt.Color('METHOD', scale=alt.Scale(scheme='blueorange'))
-            )
+    # methods_over_time_chart = alt.Chart(methods_over_time).mark_area(stroke='black', strokeWidth=0.3).encode(
+    #         x="MONTH:T",
+    #         y="METHOD_PCT:Q",
+    #         color=alt.Color('METHOD', scale=alt.Scale(scheme='blueorange'))
+    #         )
+    fig = px.bar(methods_over_time, x='MONTH',y='METHOD_PCT',color='METHOD' template='simple_white')
+    st.plotly_chart(fig,use_container_width=True)
         
     st.write(methods_over_time_chart.properties(width=1100, height=500))
     min_fights = st.number_input('Minimum Fights',step=1,value=10)
