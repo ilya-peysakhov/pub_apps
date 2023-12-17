@@ -173,7 +173,7 @@ if view =='Fighter One Sheet':
             # str_a_chart = alt.Chart(str_a).mark_area().encode(x='DATE',y='Total_Strikes_At')
             # st.altair_chart(str_a_chart, theme="streamlit")
             fig = px.area(str_a, x='DATE', y='Total_Strikes_At')
-            st.plotly_chart(fig)
+            st.plotly_chart(fig,use_container_width=True,theme=None)
             st.write("Net Sig Strike Landed difference")
             str_dif = duckdb.sql(f"SELECT a.DATE, sum(a.sig_str_l::INT)-sum(b.sig_str_l::INT) as Strike_Diff from fighter_stats as a inner join opp_stats as b on a.DATE = b.DATE and a.BOUT=b.BOUT and a.ROUND=b.ROUND group by 1").df()
             str_dif_chart = alt.Chart(str_dif).mark_area().encode(x='DATE',y='Strike_Diff')
