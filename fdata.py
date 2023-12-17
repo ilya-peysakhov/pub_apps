@@ -248,7 +248,7 @@ else:
         
         st.write('Most commonly used venues (2yr)')
         locations = duckdb.sql("SELECT LOCATION,count(distinct EVENT) EVENTS from fed where date between current_date() -730 and current_date() group by 1 order by 2 desc limit 10").df()
-        fig = px.bar(locations, x='EVENTS',y='LOCATION', template='simple_white')
+        fig = px.bar(locations.sort_values(by='EVENTS'), x='EVENTS',y='LOCATION', template='simple_white')
         st.plotly_chart(fig,use_container_width=True)
 
         st.divider()
