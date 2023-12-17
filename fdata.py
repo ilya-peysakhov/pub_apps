@@ -91,9 +91,10 @@ if view =='Fighter One Sheet':
     st.divider()
     
     fights = duckdb.sql(f"SELECT BOUT from fr_cleaned where FIGHTER1 = '{fighter_filter}' or FIGHTER2='{fighter_filter}'")
+    
     if len(fights)==0:
         st.write("No data for this fighter")
-        st.stop
+        st.stop()
 
         
     winloss = duckdb.sql(f"SELECT case when FIGHTER1 = '{fighter_filter}' then FIGHTER1_OUTCOME else FIGHTER2_OUTCOME end result from fr_cleaned where FIGHTER1 = '{fighter_filter}' or FIGHTER2='{fighter_filter}' ")
