@@ -266,7 +266,7 @@ else:
     #         y="METHOD_PCT:Q",
     #         color=alt.Color('METHOD', scale=alt.Scale(scheme='blueorange'))
     #         )
-    fig = px.bar(methods_over_time, x='MONTH',y='METHOD_PCT',color='METHOD', template='simple_white')
+    fig = px.area(methods_over_time, x='MONTH',y='METHOD_PCT',color='METHOD', template='simple_white')
     st.plotly_chart(fig,use_container_width=True)
         
     st.write(methods_over_time_chart.properties(width=1100, height=500))
