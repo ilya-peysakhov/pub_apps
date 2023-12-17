@@ -5,6 +5,8 @@ import polars as pl
 import duckdb
 import datetime
 import altair as alt
+import plotly.express as px
+
 
 
 #additions
@@ -170,6 +172,8 @@ if view =='Fighter One Sheet':
             str_a = duckdb.sql(f"SELECT DATE, sum(total_str_a::INT) as Total_Strikes_At from fighter_stats group by 1").df()
             str_a_chart = alt.Chart(str_a).mark_area().encode(x='DATE',y='Total_Strikes_At')
             st.altair_chart(str_a_chart, theme="streamlit")
+            fig = px.area(str_a_chart)
+            st.plotly_chart(fig)
             st.write("Net Sig Strike Landed difference")
             str_dif = duckdb.sql(f"SELECT a.DATE, sum(a.sig_str_l::INT)-sum(b.sig_str_l::INT) as Strike_Diff from fighter_stats as a inner join opp_stats as b on a.DATE = b.DATE and a.BOUT=b.BOUT and a.ROUND=b.ROUND group by 1").df()
             str_dif_chart = alt.Chart(str_dif).mark_area().encode(x='DATE',y='Strike_Diff')
