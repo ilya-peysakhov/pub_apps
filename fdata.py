@@ -89,7 +89,8 @@ if view =='Fighter One Sheet':
     with f1:
         fighter_filter = st.selectbox('Pick a fighter',options=fighter_list)
     with f2:
-        st.radio("Analysis Length (under development)",('Career','Last 3 fights'),disabled=True)
+        analysis_lengths = ['Career','Last 3 fights']
+        analysis_length = st.radio("Analysis Length (under development)",(analysis_legths))
     st.divider()
     
     fights = duckdb.sql(f"SELECT BOUT from fr_cleaned where FIGHTER1 = '{fighter_filter}' or FIGHTER2='{fighter_filter}'")
@@ -98,6 +99,9 @@ if view =='Fighter One Sheet':
         st.write("No data for this fighter")
         st.stop()
 
+    if analysis_length==analysis_lengths[1]:
+        fr_cleaned = duckdb.sql("select * from fr_cleaned order by date desc limit 3").df()
+    
         
     winloss = duckdb.sql(f"SELECT case when FIGHTER1 = '{fighter_filter}' then FIGHTER1_OUTCOME else FIGHTER2_OUTCOME end result from fr_cleaned where FIGHTER1 = '{fighter_filter}' or FIGHTER2='{fighter_filter}' ")
     last_fight= duckdb.sql(f"SELECT left(max(date),10) max_date, left( current_date() - max(date),10) days_since from fr_cleaned where FIGHTER1= '{fighter_filter}' or FIGHTER2='{fighter_filter}' ").df()
