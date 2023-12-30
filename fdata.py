@@ -4,7 +4,6 @@ import time
 import polars as pl
 import duckdb
 import datetime
-import altair as alt
 import plotly.express as px
 
 
@@ -95,7 +94,7 @@ if view =='Fighter One Sheet':
         if analysis_length==analysis_lengths[1]:
             fr_cleaned = duckdb.sql("select * from fr_cleaned order by date desc limit 3").df()
             fs_cleaned = duckdb.sql("select * from fs_cleaned order by date desc limit 3").df()
-            st.write(fr_cleaned.columns())
+            st.write(fr_cleaned.columns)
     
     st.divider()
     
