@@ -97,6 +97,7 @@ if view =='Fighter One Sheet':
     st.divider()
     
     fights = duckdb.sql(f"SELECT BOUT from fr_cleaned where FIGHTER1 = '{fighter_filter}' or FIGHTER2='{fighter_filter}'").df()
+    st.write(fights)
     
     if len(fights)==0:
         st.write("No data for this fighter")
