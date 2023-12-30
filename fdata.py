@@ -88,8 +88,7 @@ if view =='Fighter One Sheet':
     with f1:
         fighter_filter = st.selectbox('Pick a fighter',options=fighter_list)
     with f2:
-        st.write("Number of recent fights to analyze")
-        al = st.number_input('Fights',step=1)
+        al = st.number_input('Number of recent fights to analyze',step=1)
     with f3:
         analysis_lengths = ['Career','Last X fights']
         analysis_length = st.radio("Analysis Length",(analysis_lengths))
