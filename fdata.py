@@ -92,10 +92,7 @@ if view =='Fighter One Sheet':
         analysis_length = st.radio("Analysis Length (under development)",(analysis_lengths))
         
         if analysis_length==analysis_lengths[1]:
-            fr_cleaned = duckdb.sql("select * from fr_cleaned order by date").df()
-            fr_cleaned = fr_cleaned.head(3)
-            fr_cleaned = duckdb.sql("select * from fs_cleaned order by date").df()
-            fs_cleaned = fs_cleaned.head(3)
+            fr_cleaned = duckdb.sql("select * from fr_cleaned order by date limit 3").df()
     
     st.divider()
     
