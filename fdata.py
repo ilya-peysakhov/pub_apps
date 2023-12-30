@@ -92,9 +92,9 @@ if view =='Fighter One Sheet':
         analysis_length = st.radio("Analysis Length (under development)",(analysis_lengths))
         
         if analysis_length==analysis_lengths[1]:
-            fr_cleaned.sort_values(by='DATE', ascending=False, inplace=True)
+            fr_cleaned.sort_values(by='DATE', ascending=False)
             fr_cleaned = fr_cleaned.head(3)
-            fs_cleaned.sort_values(by='DATE', ascending=False, inplace=True)
+            fs_cleaned.sort_values(by='DATE', ascending=False)
             fs_cleaned = fs_cleaned.head(3)
     
     st.divider()
