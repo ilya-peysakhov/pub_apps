@@ -101,6 +101,7 @@ if view =='Fighter One Sheet':
 
     if analysis_length==analysis_lengths[1]:
         fr_cleaned = duckdb.sql("select * from fr_cleaned order by date desc limit 3").df()
+        fs_cleaned = duckdb.sql("select * from fs_cleaned order by date desc limit 3").df()
     
         
     winloss = duckdb.sql(f"SELECT case when FIGHTER1 = '{fighter_filter}' then FIGHTER1_OUTCOME else FIGHTER2_OUTCOME end result from fr_cleaned where FIGHTER1 = '{fighter_filter}' or FIGHTER2='{fighter_filter}' ")
