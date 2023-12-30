@@ -84,15 +84,19 @@ fighters= duckdb.sql("SELECT trim(FIGHTER) as FIGHTER,HEIGHT,WEIGHT,REACH,STANCE
 if view =='Fighter One Sheet':
     st.text('Display all relevant fighter stats in just 1 click. Choose your fighter below to get started')
     fighter_list = duckdb.sql("SELECT FIGHTER from fighters  where length(DOB) >3 group by 1 order by 1").df()
-    f1, f2 = st.columns(2)
+    f1, f2 , f3 = st.columns(3)
     with f1:
         fighter_filter = st.selectbox('Pick a fighter',options=fighter_list)
     with f2:
-        analysis_lengths = ['Career','Last 3 fights']
+        st.write("Number of recent fights to analyze")
+        al = st.number_input('Fights',step=1)
+    
+    with f2:
+        analysis_lengths = ['Career','Last X fights']
         analysis_length = st.radio("Analysis Length",(analysis_lengths))
         
         if analysis_length==analysis_lengths[1]:
-            fr_cleaned = duckdb.sql(f"select * from fr_cleaned where FIGHTER1 = '{fighter_filter}' or FIGHTER2='{fighter_filter}' order by date desc limit 3").df()
+            fr_cleaned = duckdb.sql(f"select * from fr_cleaned where FIGHTER1 = '{fighter_filter}' or FIGHTER2='{fighter_filter}' order by date desc limit {al}").df()
     
     st.divider()
     
