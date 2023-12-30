@@ -90,7 +90,7 @@ if view =='Fighter One Sheet':
         fighter_filter = st.selectbox('Pick a fighter',options=fighter_list)
     with f2:
         analysis_lengths = ['Career','Last 3 fights']
-        analysis_length = st.radio("Analysis Length (under development)",(analysis_legths))
+        analysis_length = st.radio("Analysis Length (under development)",(analysis_lengths))
     st.divider()
     
     fights = duckdb.sql(f"SELECT BOUT from fr_cleaned where FIGHTER1 = '{fighter_filter}' or FIGHTER2='{fighter_filter}'")
