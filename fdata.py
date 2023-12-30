@@ -130,7 +130,7 @@ if view =='Fighter One Sheet':
             age = datetime.datetime.now() - dob
             age_years = age.days // 365
             st.metric('Age',value=age_years, delta =dob_str, delta_color="off")
-            if len(fights.df()) >0:
+            if len(fights) >0:
                 st.metric('Last fought', delta=str(last_fight['max_date'].values[0]),value=str(last_fight['days_since'].values[0]))
 
 
@@ -139,7 +139,7 @@ if view =='Fighter One Sheet':
             st.divider()
             w1,w2 = st.columns(2)
             with w1:
-                st.metric('UFC Fights',value=len(fights.df()) )
+                st.metric('UFC Fights',value=len(fights) )
                 st.metric('Rounds',value=fighter_stats.shape[0] )
             with w2:
                 st.metric('Wins',value=len(duckdb.sql("SELECT * from winloss where result='W'").df()) )
@@ -201,7 +201,7 @@ if view =='Fighter One Sheet':
     
     st.divider()
     with st.expander("Single Fight Stats",expanded=False):
-        bout_filter = st.selectbox('Pick a bout',options=fights.df().drop_duplicates())
+        bout_filter = st.selectbox('Pick a bout',options=fights.drop_duplicates())
         fight_results = duckdb.sql(f"SELECT * EXCLUDE (BOUT,FIGHTER,EVENT) from fs where replace(trim(BOUT),'  ',' ') ='{bout_filter}'  and trim(FIGHTER)='{fighter_filter}' ").df()
         
         if bout_filter:
