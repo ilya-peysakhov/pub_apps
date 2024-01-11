@@ -1,4 +1,4 @@
-pip
+streamlit
 pandas==2.1.1
 pyarrow==10.0.1
 duckdb
