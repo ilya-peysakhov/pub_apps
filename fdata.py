@@ -164,6 +164,7 @@ if view =='Fighter One Sheet':
             st.divider()
             ui.metric_card('Total Takedowns Landed',content=int(cleaned_fighter_stats['td_l'].iloc[0]),description="{0:.0%}".format(round(float(cleaned_fighter_stats['td_rate'].iloc[0]),2)))
             ui.metric_card('Total Takedowns Given Up',content=int(cleaned_opp_stats['td_abs'].iloc[0]),description="{0:.0%}".format(round(float(cleaned_opp_stats['td_abs_rate'].iloc[0]),2))
+                           
         with col5:
             st.subheader('Adv. Stats')
             st.divider()
