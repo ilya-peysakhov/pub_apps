@@ -88,7 +88,7 @@ if view =='Fighter One Sheet':
     f1, f2 , f3 = st.columns(3)
     with f1:
         # fighter_filter = st.selectbox('Pick a fighter',options=fighter_list)
-        fighter_filter = ui.select('Pick a fighter',options=fighter_list)
+        fighter_filter = ui.select(options=fighter_list)
     with f2:
         al = st.number_input('Number of recent fights to analyze',step=1)
     with f3:
