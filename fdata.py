@@ -168,7 +168,7 @@ if view =='Fighter One Sheet':
         with col5:
             st.subheader('Adv. Stats')
             st.divider()
-            ui.metric_card('Significant Strikes Differential',content=round(cleaned_fighter_stats['sig_str']/cleaned_opp_stats['sig_abs'],1))
+            st.metric('Significant Strikes Differential',value=round(cleaned_fighter_stats['sig_str']/cleaned_opp_stats['sig_abs'],1))
             ui.metric_card('Head Strikes Differential',content=round(cleaned_fighter_stats['head_str']/cleaned_opp_stats['head_abs'],1))
             ui.metric_card('Power Differential (Knockdowns)',content=round(cleaned_fighter_stats['kd']/cleaned_opp_stats['kd_abs'],1))
             ui.metric_card('Takedown Differential',content=round(cleaned_fighter_stats['td_l']/cleaned_opp_stats['td_abs'],1))
