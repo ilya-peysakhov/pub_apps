@@ -87,7 +87,8 @@ if view =='Fighter One Sheet':
     fighter_list = duckdb.sql("SELECT FIGHTER from fighters  where length(DOB) >3 group by 1 order by 1").df()
     f1, f2 , f3 = st.columns(3)
     with f1:
-        fighter_filter = st.selectbox('Pick a fighter',options=fighter_list)
+        # fighter_filter = st.selectbox('Pick a fighter',options=fighter_list)
+        fighter_filter = ui.select('Pick a fighter',options=fighter_list)
     with f2:
         al = st.number_input('Number of recent fights to analyze',step=1)
     with f3:
