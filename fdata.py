@@ -143,13 +143,13 @@ if view =='Fighter One Sheet':
             st.divider()
             w1,w2 = st.columns(2)
             with w1:
-                st.metric('UFC Fights',value=len(fights) )
-                st.metric('Rounds',value=fighter_stats.shape[0] )
+                ui.metric_card('UFC Fights',content=len(fights) )
+                ui.metric_card('Rounds',content=fighter_stats.shape[0] )
             with w2:
-                st.metric('Wins',value=len(duckdb.sql("SELECT * from winloss where result='W'").df()) )
-                st.metric('Losses',value=len(duckdb.sql("SELECT * from winloss where result='L'").df()) )
-            st.metric('KO/TKO Wins', value = int(ko_wins['s'].iloc[0]) )
-            st.metric('KO/TKO Losses', value = int(ko_losses['s'].iloc[0]))
+                ui.metric_card('Wins',content=len(duckdb.sql("SELECT * from winloss where result='W'").df()) )
+                ui.metric_card('Losses',content=len(duckdb.sql("SELECT * from winloss where result='L'").df()) )
+            ui.metric_card('KO/TKO Wins', content = int(ko_wins['s'].iloc[0]) )
+            ui.metric_card('KO/TKO Losses', content = int(ko_losses['s'].iloc[0]))
         with col3:
             st.subheader('Striking')
             st.divider()
