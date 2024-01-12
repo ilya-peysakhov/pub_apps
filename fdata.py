@@ -300,6 +300,14 @@ elif view =='All Time Stats':
     st.dataframe(combined_stats.sort_values(by='FIGHTS', ascending=False),hide_index=True)   
 elif view=='SQL Editor':
     st.write("Write custom sql on the data")
+    query_text = st.text_input('Write SELECT')
+    def pullData(query_text):
+        query = duckdb.sql(f"{query_text}").df()
+        return query
+
+    if st.button('Pull data'):
+        data = pullData(query_text)
+        st.dataframe(data)
        
        
     #with st.expander("Real UFC fans ONLY",expanded=False):
