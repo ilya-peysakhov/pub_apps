@@ -21,7 +21,7 @@ st.set_page_config(page_icon="👊", page_title="UFC Stats Explorer v0.9", layou
 ########start of app
 st.header('UFC Fight Stats explorer')
 
-view = st.sidebar.radio('Select a view',('Fighter One Sheet','All Time Stats','Show all dataset samples'))
+view = st.sidebar.radio('Select a view',('Fighter One Sheet','All Time Stats','Show all dataset samples','SQL Editor'))
 
 
 ###################### data pull and clean
@@ -225,7 +225,7 @@ elif view =='Show all dataset samples':
     st.write("Data Check - Events without data")
     anomalies = duckdb.sql("select left(DATE,10) as DATE,ed_c.EVENT, count(BOUT) as bouts_with_stats from ed_c left join fs on ed_c.EVENT =fs.EVENT group by 1,2 having bouts_with_stats=0 order by 1 desc").df()
     st.dataframe(anomalies,hide_index=True)
-else:
+elif view =='All Time Stats:
     st.subheader('Lifetime stats unless otherwise noted (last 2 years)')
     c1, c2  = st.columns(2)
     with c1:
@@ -298,7 +298,8 @@ else:
         
     combined_stats = calcTotals(min_fights)
     st.dataframe(combined_stats.sort_values(by='FIGHTS', ascending=False),hide_index=True)   
-
+elif view=='SQL Editor':
+    st.write("Write custom sql on the data")
        
        
     #with st.expander("Real UFC fans ONLY",expanded=False):
