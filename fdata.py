@@ -309,11 +309,12 @@ elif view=='SQL Editor':
     with col2:
         query_text = st.text_input('Write SELECT')
         def pullData(query_text):
-            query = duckdb.sql(f"{query_text}").df()
+            query = duckdb.sql(f"{query_text}")
             return query
     
         if st.button('Pull data'):
             data = pullData(query_text)
+            data = data.df()
             st.dataframe(data.head(100))
             
        
