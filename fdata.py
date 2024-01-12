@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 import time
-import polars as pl
 import duckdb
 import datetime
 import plotly.express as px
