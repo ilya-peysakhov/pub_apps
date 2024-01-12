@@ -307,7 +307,7 @@ elif view=='SQL Editor':
 
     if st.button('Pull data'):
         data = pullData(query_text)
-        results = st.number_input('Result Rows', step=1, min=1)
+        results = st.number_input('Result Rows', step=1, min_value=1)
         st.dataframe(data.head(results))
        
        
