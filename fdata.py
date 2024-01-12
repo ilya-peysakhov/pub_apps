@@ -316,6 +316,6 @@ elif view=='SQL Editor':
     #    audio_bytes = audio_file.read()
     #    st.audio(audio_bytes, format='audio/ogg')        
 
+st.code('Built by Ilya')
 st.code('This application uses data from Greco1899''s scraper of UFC Fight Stats - "https://github.com/Greco1899/scrape_ufc_stats"')
-
 st.code('Recent changes - new charts in All Time section, fixed stats for fighters with apostraphes,sped up all time rankings to 5s, add leg strikes, all data recovered by Greco1899' )
