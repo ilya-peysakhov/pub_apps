@@ -1,7 +1,7 @@
+pip
 streamlit
-pandas==2.1.1
+pandas
 pyarrow==10.0.1
 duckdb
-polars
 plotly
 streamlit-shadcn-ui
