@@ -122,7 +122,7 @@ if view =='Fighter One Sheet':
 
 
     if fighter_filter:
-        col1,col2,col3,col4,col5 = st.columns([0.3,0.5,0.3,0.5,6])
+        col1,col2,col3,col4,col5 = st.columns([0.3,0.5,0.3,0.5,0.6])
         with col1:
             st.subheader('Bio')
             st.divider()
