@@ -26,15 +26,15 @@ view = st.sidebar.radio('Select a view',('Fighter One Sheet','All Time Stats','S
 
 ###################### data pull and clean
 
-ed = pl.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_event_details.csv")
+ed = pd.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_event_details.csv")
 ed_c = duckdb.sql("SELECT TRIM(EVENT) as EVENT, strptime(DATE, '%B %d, %Y') as  DATE, URL, LOCATION FROM ed")
-fd = pl.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_details.csv")
+fd = pd.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_details.csv")
 fed = duckdb.sql("SELECT TRIM(fd.EVENT) as EVENT, TRIM(fd.BOUT) as BOUT, fd.URL, DATE,LOCATION from ed_c inner join fd on ed_c.EVENT=fd.EVENT ")
-fr = pl.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_results.csv")
+fr = pd.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_results.csv")
 
 fr = fr.with_columns(
-    pl.col("EVENT").str.replace("'",""),
-    pl.col("BOUT").str.replace("'","")
+    pd.col("EVENT").str.replace("'",""),
+    pd.col("BOUT").str.replace("'","")
 )  
 
 fr_cleaned = duckdb.sql("""SELECT trim(fr.EVENT) as EVENT, 
@@ -46,11 +46,11 @@ fr_cleaned = duckdb.sql("""SELECT trim(fr.EVENT) as EVENT,
                             WEIGHTCLASS,METHOD,ROUND,TIME,left("TIME FORMAT",1) as TIME_FORMAT,REFEREE,DETAILS,fr.URL,date 
                         from fr
                         left join fed on fed.URL = fr.URL""")
-fs = pl.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_stats.csv")
+fs = pd.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_stats.csv")
 
 fs = fs.with_columns(
-    pl.col("FIGHTER").str.replace("'",""),
-    pl.col("BOUT").str.replace("'","")
+    pd.col("FIGHTER").str.replace("'",""),
+    pd.col("BOUT").str.replace("'","")
 )  
 
 fs_cleaned = duckdb.sql("""SELECT fs.EVENT,replace(trim(BOUT),'  ',' ') as BOUT,ROUND, trim(FIGHTER) as FIGHTER,KD,
@@ -69,12 +69,12 @@ fs_cleaned = duckdb.sql("""SELECT fs.EVENT,replace(trim(BOUT),'  ',' ') as BOUT,
                               from fs 
                               left join ed_c on ed_c.EVENT = fs.EVENT
                               WHERE FIGHTER IS NOT NULL """)
-frd = pl.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fighter_details.csv")
-ft = pl.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fighter_tott.csv")
+frd = pd.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fighter_details.csv")
+ft = pd.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fighter_tott.csv")
 
 
 ft = ft.with_columns(
-    pl.col("FIGHTER").str.replace("'","")
+    pd.col("FIGHTER").str.replace("'","")
 )  
 fighters= duckdb.sql("SELECT trim(FIGHTER) as FIGHTER,HEIGHT,WEIGHT,REACH,STANCE,DOB,FIRST,LAST,NICKNAME,frd.URL from ft inner join frd on frd.URL = ft.URL")
 ########################
