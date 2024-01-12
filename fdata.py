@@ -96,6 +96,8 @@ if view =='Fighter One Sheet':
             if analysis_length==analysis_lengths[1]:
                 al = st.number_input('Number of recent fights to analyze',step=1)
                 fr_cleaned = duckdb.sql(f"select * from fr_cleaned where FIGHTER1 = '{fighter_filter}' or FIGHTER2='{fighter_filter}' order by date desc limit {al}").df()
+            else:
+                pass
     
     st.divider()
     
