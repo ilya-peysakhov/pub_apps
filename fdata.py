@@ -300,7 +300,7 @@ elif view =='All Time Stats':
     st.dataframe(combined_stats.sort_values(by='FIGHTS', ascending=False),hide_index=True)   
 elif view=='SQL Editor':
     st.write("Write custom sql on the data")
-    col1,col2 = st.columns([1,10])
+    col1,col2 = st.columns([3,10])
     with col1:
         st.write('Tables')
         st.write('fs_cleaned = fight stats')
