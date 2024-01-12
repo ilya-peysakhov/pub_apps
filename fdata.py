@@ -32,10 +32,9 @@ fd = pd.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fig
 fed = duckdb.sql("SELECT TRIM(fd.EVENT) as EVENT, TRIM(fd.BOUT) as BOUT, fd.URL, DATE,LOCATION from ed_c inner join fd on ed_c.EVENT=fd.EVENT ")
 fr = pd.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_results.csv")
 
-fr = fr.with_columns(
-    pd.col("EVENT").str.replace("'",""),
-    pd.col("BOUT").str.replace("'","")
-)  
+
+fr["EVENT"] = fr["EVENT"].str.replace("'", "")  # Replace single quotes in EVENT column
+fr["BOUT"] = fr["BOUT"].str.replace("'", "")  # Replace single quotes in BOUT column
 
 fr_cleaned = duckdb.sql("""SELECT trim(fr.EVENT) as EVENT, 
                              replace(trim(fr.BOUT),'  ',' ') as BOUT, 
@@ -48,10 +47,9 @@ fr_cleaned = duckdb.sql("""SELECT trim(fr.EVENT) as EVENT,
                         left join fed on fed.URL = fr.URL""")
 fs = pd.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_stats.csv")
 
-fs = fs.with_columns(
-    pd.col("FIGHTER").str.replace("'",""),
-    pd.col("BOUT").str.replace("'","")
-)  
+
+fs["FIGHTER"] = fs["FIGHTER"].str.replace("'", "")  # Replace single quotes in EVENT column
+fs["BOUT"] = fs["BOUT"].str.replace("'", "")  # Replace single quotes in BOUT column
 
 fs_cleaned = duckdb.sql("""SELECT fs.EVENT,replace(trim(BOUT),'  ',' ') as BOUT,ROUND, trim(FIGHTER) as FIGHTER,KD,
                               split_part("SIG.STR.",' of ',1) sig_str_l,
@@ -73,9 +71,9 @@ frd = pd.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fi
 ft = pd.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fighter_tott.csv")
 
 
-ft = ft.with_columns(
-    pd.col("FIGHTER").str.replace("'","")
-)  
+ft["FIGHTER"] = ft["FIGHTER"].str.replace("'", "")  # Replace single quotes in BOUT column
+
+
 fighters= duckdb.sql("SELECT trim(FIGHTER) as FIGHTER,HEIGHT,WEIGHT,REACH,STANCE,DOB,FIRST,LAST,NICKNAME,frd.URL from ft inner join frd on frd.URL = ft.URL")
 ########################
                       
