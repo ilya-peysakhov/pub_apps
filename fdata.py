@@ -89,9 +89,10 @@ if view =='Fighter One Sheet':
     with f1:
         fighter_filter = st.selectbox('Pick a fighter',options=fighter_list)
     
-    al = st.number_input('Number of recent fights to analyze',step=1)
+    
     with st.expander('Custom Analysis Period'):
         analysis_lengths = ['Career','Last X fights']
+        al = st.number_input('Number of recent fights to analyze',step=1)
         analysis_length = st.radio("Analysis Length",(analysis_lengths))
         if analysis_length==analysis_lengths[1]:
             fr_cleaned = duckdb.sql(f"select * from fr_cleaned where FIGHTER1 = '{fighter_filter}' or FIGHTER2='{fighter_filter}' order by date desc limit {al}").df()
