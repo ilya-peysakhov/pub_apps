@@ -314,7 +314,8 @@ elif view=='SQL Editor':
     
         if st.button('Pull data'):
             data = pullData(query_text)
-            st.dataframe(data.head(100)
+            st.dataframe(data.head(100))
+            
        
        
     #with st.expander("Real UFC fans ONLY",expanded=False):
