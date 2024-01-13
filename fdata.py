@@ -300,6 +300,7 @@ elif view =='All Time Stats':
     st.dataframe(combined_stats.sort_values(by='FIGHTS', ascending=False),hide_index=True)   
 elif view=='SQL Editor':
     st.write("Write custom sql on the data")
+    st.write("The Luke Thomas stat - select age(date , strptime(dob, '%b %d, %Y') ) as age, sum (case when fighter1_outcome = 'W' then  1 end) W, sum (case when fighter1_outcome = 'L' then  1 end) as L,  W/(W+L) w_pct, count(1) from fighters inner join fr_cleaned on fighter = fighter1 where dob !='--'  group by 1 order by 1 desc")
     col1,col2 = st.columns([3,10])
     with col1:
         st.write('Tables')
@@ -315,7 +316,7 @@ elif view=='SQL Editor':
         if st.button('Pull data'):
             data = pullData()
             data = data.df()
-            st.dataframe(data.head(100))
+            st.dataframe(data.head(100), hide_index=True)
             
        
        
