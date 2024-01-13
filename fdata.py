@@ -24,13 +24,21 @@ view = st.sidebar.radio('Select a view',('Fighter One Sheet','All Time Stats','S
 
 
 ###################### data pull and clean
+@st.cache_data(ttl = '7d')
+def getData():
+  ed = pd.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_event_details.csv")
+  fd = pd.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_details.csv")
+  fr = pd.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_results.csv")
+  fs = pd.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_stats.csv")
+  frd = pd.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fighter_details.csv")
+  ft = pd.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fighter_tott.csv")
+  return ed, fd, fr, fs, frd, ft
 
-ed = pd.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_event_details.csv")
+alldata = getData()
+ed, fd, fr, fs, frd, ft = alldata[0], alldata[1], alldata[2], alldata[3], alldata[4], alldata[5]
+
 ed_c = duckdb.sql("SELECT TRIM(EVENT) as EVENT, strptime(DATE, '%B %d, %Y') as  DATE, URL, LOCATION FROM ed")
-fd = pd.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_details.csv")
 fed = duckdb.sql("SELECT TRIM(fd.EVENT) as EVENT, TRIM(fd.BOUT) as BOUT, fd.URL, DATE,LOCATION from ed_c inner join fd on ed_c.EVENT=fd.EVENT ")
-fr = pd.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_results.csv")
-
 
 fr["EVENT"] = fr["EVENT"].str.replace("'", "")  # Replace single quotes in EVENT column
 fr["BOUT"] = fr["BOUT"].str.replace("'", "")  # Replace single quotes in BOUT column
@@ -44,7 +52,6 @@ fr_cleaned = duckdb.sql("""SELECT trim(fr.EVENT) as EVENT,
                             WEIGHTCLASS,METHOD,ROUND,TIME,left("TIME FORMAT",1) as TIME_FORMAT,REFEREE,DETAILS,fr.URL,date 
                         from fr
                         left join fed on fed.URL = fr.URL""")
-fs = pd.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_stats.csv")
 
 
 fs["FIGHTER"] = fs["FIGHTER"].str.replace("'", "")  # Replace single quotes in EVENT column
@@ -66,9 +73,6 @@ fs_cleaned = duckdb.sql("""SELECT fs.EVENT,replace(trim(BOUT),'  ',' ') as BOUT,
                               from fs 
                               left join ed_c on ed_c.EVENT = fs.EVENT
                               WHERE FIGHTER IS NOT NULL """)
-frd = pd.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fighter_details.csv")
-ft = pd.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fighter_tott.csv")
-
 
 ft["FIGHTER"] = ft["FIGHTER"].str.replace("'", "")  # Replace single quotes in BOUT column
 
