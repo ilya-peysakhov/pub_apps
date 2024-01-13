@@ -281,7 +281,6 @@ elif view =='All Time Stats':
         
     min_fights = st.number_input('Minimum Fights',step=1,value=10)
     st.write(f"Minimum {min_fights} fights, historical rankings for total career offensive and defensive stats")
-    fs_cleaned = fs_cleaned.pl()
     
     @st.cache_data(ttl='6d')
     def calcTotals(min_fights):
