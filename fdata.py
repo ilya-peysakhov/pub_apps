@@ -308,12 +308,12 @@ elif view=='SQL Editor':
         st.write('fighters = fighter details')
     with col2:
         query_text = st.text_input('Write SELECT')
-        def pullData(query_text):
+        def pullData():
             query = duckdb.sql(f"{query_text}")
             return query
     
         if st.button('Pull data'):
-            data = pullData(query_text)
+            data = pullData()
             data = data.df()
             st.dataframe(data.head(100))
             
