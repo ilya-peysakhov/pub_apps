@@ -232,7 +232,7 @@ elif view =='All Time Stats':
     with c1:
         st.write("Fights by month")
         fights_monthly= duckdb.sql("SELECT date_trunc('month',date) as MONTH,count(*) as FIGHTS from fed group by 1 order by 1 asc").df()
-        fig = px.bar(fights_monthly, x='MONTH',y='FIGHTS', template='simple_white')
+        fig = px.line(fights_monthly, x='MONTH',y='FIGHTS', template='simple_white')
         st.plotly_chart(fig,use_container_width=True)
         
         st.divider()
