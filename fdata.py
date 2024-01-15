@@ -316,9 +316,10 @@ elif view=='SQL Editor':
     
         if st.button('Pull data'):
             try:
-              data = pullData()
-              data = data.df()
-              st.dataframe(data.head(100), hide_index=True)
+              with st.spinner('Running Query'):
+                data = pullData()
+                data = data.df()
+                st.dataframe(data.head(100), hide_index=True)
             except Exception as e:
               st.write(e)
             
