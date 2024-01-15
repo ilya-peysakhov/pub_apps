@@ -315,9 +315,12 @@ elif view=='SQL Editor':
             return query
     
         if st.button('Pull data'):
-            data = pullData()
-            data = data.df()
-            st.dataframe(data.head(100), hide_index=True)
+            try:
+              data = pullData()
+              data = data.df()
+              st.dataframe(data.head(100), hide_index=True)
+            except Exception as e:
+              st.write(e)
             
        
        
