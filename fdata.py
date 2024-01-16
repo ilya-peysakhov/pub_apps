@@ -15,7 +15,7 @@ import streamlit_shadcn_ui as ui
 ###################################
 
 
-st.set_page_config(page_icon="👊", page_title="UFC Stats Explorer v0.9", layout="wide")
+st.set_page_config(page_icon="👊", page_title="UFC Stats Explorer v1.0", layout="wide")
 
 ########start of app
 st.header('UFC Fight Stats explorer')
@@ -337,4 +337,4 @@ elif view=='SQL Editor':
 
 st.code('Built by Ilya')
 st.code('This application uses data from Greco1899''s scraper of UFC Fight Stats - "https://github.com/Greco1899/scrape_ufc_stats"')
-st.code('Recent changes - new charts in All Time section, fixed stats for fighters with apostraphes,sped up all time rankings to 5s, add leg strikes, all data recovered by Greco1899' )
+st.code('Recent changes - SQL Editor, data retrieval cached via function' )
