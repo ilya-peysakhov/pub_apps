@@ -41,8 +41,8 @@ ed, fd, fr, fs, frd, ft = alldata[0], alldata[1], alldata[2], alldata[3], alldat
 
 @st.cache_data(ttl = '7d')
 def cleanData():
-  ed_c = duckdb.sql("SELECT TRIM(EVENT) as EVENT, strptime(DATE, '%B %d, %Y') as  DATE, URL, LOCATION FROM ed")
-  fed = duckdb.sql("SELECT TRIM(fd.EVENT) as EVENT, TRIM(fd.BOUT) as BOUT, fd.URL, DATE,LOCATION from ed_c inner join fd on ed_c.EVENT=fd.EVENT ")
+  ed_c = duckdb.sql("SELECT TRIM(EVENT) as EVENT, strptime(DATE, '%B %d, %Y') as  DATE, URL, LOCATION FROM ed").df()
+  fed = duckdb.sql("SELECT TRIM(fd.EVENT) as EVENT, TRIM(fd.BOUT) as BOUT, fd.URL, DATE,LOCATION from ed_c inner join fd on ed_c.EVENT=fd.EVENT ").df()
   fr["EVENT"] = fr["EVENT"].str.replace("'", "")  # Replace single quotes in EVENT column
   fr["BOUT"] = fr["BOUT"].str.replace("'", "")  # Replace single quotes in BOUT column
   fr_cleaned = duckdb.sql("""SELECT trim(fr.EVENT) as EVENT, 
