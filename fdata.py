@@ -300,7 +300,7 @@ elif view =='Aggregate Table':
 elif view=='SQL Editor':
     st.write("Write custom sql on the data")
     st.write("Example below - Win % by age")
-    st.text_area(""" select age, sum(W) as W, sum(L)as  L , sum(fights) as fights, 
+    st.text_area(label='Query', value=""" select age, sum(W) as W, sum(L)as  L , sum(fights) as fights, 
     W/(W+L) as win_pct from 
      (
     select date_diff('year',strptime(dob, '%b %d, %Y'),date)  as age, sum (case when fighter1_outcome = 'W' then 1 end) W, sum (case when fighter1_outcome = 'L' then 1 end) as L, count(1) fights from fighters inner join fr_cleaned on fighter = fighter1 where dob !='--' 
