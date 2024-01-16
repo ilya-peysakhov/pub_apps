@@ -295,7 +295,7 @@ elif view =='Aggregate Table':
     combined_stats = duckdb.sql("SELECT a.*, ROUND(SIG_STRIKES_LANDED/SIG_STRIKES_ABS,1) as SIG_STR_DIFF, ROUND((1-HEAD_STRIKES_ABS/HEAD_STRIKES_AT),2) as HEAD_MOVEMENT, b.* EXCLUDE (FIGHTER) from all_time_offense as a left join str_results as b on a.FIGHTER=b.FIGHTER").df()
     st.dataframe(combined_stats.sort_values(by='FIGHTS', ascending=False),hide_index=True)   
 elif view=='SQL Editor':
-    st.write("Write custom sql on the data using duckdb [link](https://duckdb.org/docs/archive/0.9.2/sql/introduction)")
+    st.write("Write custom sql on the data using [duckdb](https://duckdb.org/docs/archive/0.9.2/sql/introduction)")
     st.write("Example below - Win % by age")
     st.code("""select age,  sum(W) as wins, sum(L) as losses, sum(fights) as total_results, sum(W)/(sum(W)+sum(L)) as win_pct from 
      (
