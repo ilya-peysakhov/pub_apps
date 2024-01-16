@@ -297,7 +297,7 @@ elif view =='Aggregate Table':
     st.dataframe(combined_stats.sort_values(by='FIGHTS', ascending=False),hide_index=True)   
 elif view=='SQL Editor':
     st.write("Write custom sql on the data")
-    st.write("Win % by age")
+    st.write("Example below - Win % by age")
     st.text_area(""" select age, sum(W) as W, sum(L)as  L , sum(fights) as fights, 
     W/(W+L) as win_pct from 
      (
@@ -315,12 +315,12 @@ elif view=='SQL Editor':
         st.write('fr_cleaned = fight results')
         st.write('fighters = fighter details')
     with col2:
-        query_text = st.text_area('Write SELECT')
+        query_text = st.text_area('Write SELECT statement here')
         def pullData():
             query = duckdb.sql(f"{query_text}")
             return query
     
-        if st.button('Pull data'):
+        if st.button('Pull data') and query_text not None:
             try:
               with st.spinner('Running Query'):
                 data = pullData()
