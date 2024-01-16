@@ -53,7 +53,7 @@ def cleanData():
                               split_part(OUTCOME, '/', 2) as FIGHTER2_OUTCOME,
                               WEIGHTCLASS,METHOD,ROUND,TIME,left("TIME FORMAT",1) as TIME_FORMAT,REFEREE,DETAILS,fr.URL,date 
                           from fr
-                          left join fed on fed.URL = fr.URL""")
+                          left join fed on fed.URL = fr.URL""").df()
   fs["FIGHTER"] = fs["FIGHTER"].str.replace("'", "")  # Replace single quotes in EVENT column
   fs["BOUT"] = fs["BOUT"].str.replace("'", "")  # Replace single quotes in BOUT column
   fs_cleaned = duckdb.sql("""SELECT fs.EVENT,replace(trim(BOUT),'  ',' ') as BOUT,ROUND, trim(FIGHTER) as FIGHTER,KD,
@@ -71,7 +71,7 @@ def cleanData():
                                 DATE
                                 from fs 
                                 left join ed_c on ed_c.EVENT = fs.EVENT
-                                WHERE FIGHTER IS NOT NULL """)
+                                WHERE FIGHTER IS NOT NULL """).df()
   ft["FIGHTER"] = ft["FIGHTER"].str.replace("'", "")  # Replace single quotes in BOUT column
   fighters= duckdb.sql("SELECT trim(FIGHTER) as FIGHTER,HEIGHT,WEIGHT,REACH,STANCE,DOB,FIRST,LAST,NICKNAME,frd.URL from ft inner join frd on frd.URL = ft.URL where dob !='--'").df()
   return fr_cleaned, fs_cleaned, fighters
