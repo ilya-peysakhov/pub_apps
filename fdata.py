@@ -40,47 +40,45 @@ alldata = getData()
 
 ed, fd, fr, fs, frd, ft = alldata[0], alldata[1], alldata[2], alldata[3], alldata[4], alldata[5]
 
-ed_c = duckdb.sql("SELECT TRIM(EVENT) as EVENT, strptime(DATE, '%B %d, %Y') as  DATE, URL, LOCATION FROM ed")
-fed = duckdb.sql("SELECT TRIM(fd.EVENT) as EVENT, TRIM(fd.BOUT) as BOUT, fd.URL, DATE,LOCATION from ed_c inner join fd on ed_c.EVENT=fd.EVENT ")
+def cleanData(ttl = '7d'):
+  ed_c = duckdb.sql("SELECT TRIM(EVENT) as EVENT, strptime(DATE, '%B %d, %Y') as  DATE, URL, LOCATION FROM ed")
+  fed = duckdb.sql("SELECT TRIM(fd.EVENT) as EVENT, TRIM(fd.BOUT) as BOUT, fd.URL, DATE,LOCATION from ed_c inner join fd on ed_c.EVENT=fd.EVENT ")
+  fr["EVENT"] = fr["EVENT"].str.replace("'", "")  # Replace single quotes in EVENT column
+  fr["BOUT"] = fr["BOUT"].str.replace("'", "")  # Replace single quotes in BOUT column
+  fr_cleaned = duckdb.sql("""SELECT trim(fr.EVENT) as EVENT, 
+                               replace(trim(fr.BOUT),'  ',' ') as BOUT, 
+                              trim(split_part(fr.BOUT, ' vs. ' ,1)) as FIGHTER1,
+                              trim(split_part(fr.BOUT, ' vs. ', 2)) as FIGHTER2,
+                              split_part(OUTCOME, '/' ,1) as FIGHTER1_OUTCOME,
+                              split_part(OUTCOME, '/', 2) as FIGHTER2_OUTCOME,
+                              WEIGHTCLASS,METHOD,ROUND,TIME,left("TIME FORMAT",1) as TIME_FORMAT,REFEREE,DETAILS,fr.URL,date 
+                          from fr
+                          left join fed on fed.URL = fr.URL""")
+  fs["FIGHTER"] = fs["FIGHTER"].str.replace("'", "")  # Replace single quotes in EVENT column
+  fs["BOUT"] = fs["BOUT"].str.replace("'", "")  # Replace single quotes in BOUT column
+  fs_cleaned = duckdb.sql("""SELECT fs.EVENT,replace(trim(BOUT),'  ',' ') as BOUT,ROUND, trim(FIGHTER) as FIGHTER,KD,
+                                split_part("SIG.STR.",' of ',1) sig_str_l,
+                                split_part("SIG.STR.",' of ',2) sig_str_a,
+                                split_part("TOTAL STR.",' of ',1) total_str_l,
+                                split_part("TOTAL STR.",' of ',2) total_str_a,
+                                split_part(TD,' of ',1) td_l,
+                                split_part(TD,' of ',2) td_a,
+                                "SUB.ATT","REV.",CTRL,
+                                split_part(HEAD,' of ',1) head_str_l,
+                                split_part(HEAD,' of ',2) head_str_a,
+                                split_part(LEG,' of ',1) leg_str_l,
+                                split_part(LEG,' of ',2) leg_str_a,
+                                DATE
+                                from fs 
+                                left join ed_c on ed_c.EVENT = fs.EVENT
+                                WHERE FIGHTER IS NOT NULL """)
+  ft["FIGHTER"] = ft["FIGHTER"].str.replace("'", "")  # Replace single quotes in BOUT column
+  fighters= duckdb.sql("SELECT trim(FIGHTER) as FIGHTER,HEIGHT,WEIGHT,REACH,STANCE,DOB,FIRST,LAST,NICKNAME,frd.URL from ft inner join frd on frd.URL = ft.URL where dob !='--'")
+  return fr_cleaned, fs_cleaned, fighters
 
-fr["EVENT"] = fr["EVENT"].str.replace("'", "")  # Replace single quotes in EVENT column
-fr["BOUT"] = fr["BOUT"].str.replace("'", "")  # Replace single quotes in BOUT column
+cleandata = cleanData()
+fr_cleaned, fs_cleaned, fighters = cleandata[0],cleandata[1],cleandata[2]
 
-fr_cleaned = duckdb.sql("""SELECT trim(fr.EVENT) as EVENT, 
-                             replace(trim(fr.BOUT),'  ',' ') as BOUT, 
-                            trim(split_part(fr.BOUT, ' vs. ' ,1)) as FIGHTER1,
-                            trim(split_part(fr.BOUT, ' vs. ', 2)) as FIGHTER2,
-                            split_part(OUTCOME, '/' ,1) as FIGHTER1_OUTCOME,
-                            split_part(OUTCOME, '/', 2) as FIGHTER2_OUTCOME,
-                            WEIGHTCLASS,METHOD,ROUND,TIME,left("TIME FORMAT",1) as TIME_FORMAT,REFEREE,DETAILS,fr.URL,date 
-                        from fr
-                        left join fed on fed.URL = fr.URL""")
-
-
-fs["FIGHTER"] = fs["FIGHTER"].str.replace("'", "")  # Replace single quotes in EVENT column
-fs["BOUT"] = fs["BOUT"].str.replace("'", "")  # Replace single quotes in BOUT column
-
-fs_cleaned = duckdb.sql("""SELECT fs.EVENT,replace(trim(BOUT),'  ',' ') as BOUT,ROUND, trim(FIGHTER) as FIGHTER,KD,
-                              split_part("SIG.STR.",' of ',1) sig_str_l,
-                              split_part("SIG.STR.",' of ',2) sig_str_a,
-                              split_part("TOTAL STR.",' of ',1) total_str_l,
-                              split_part("TOTAL STR.",' of ',2) total_str_a,
-                              split_part(TD,' of ',1) td_l,
-                              split_part(TD,' of ',2) td_a,
-                              "SUB.ATT","REV.",CTRL,
-                              split_part(HEAD,' of ',1) head_str_l,
-                              split_part(HEAD,' of ',2) head_str_a,
-                              split_part(LEG,' of ',1) leg_str_l,
-                              split_part(LEG,' of ',2) leg_str_a,
-                              DATE
-                              from fs 
-                              left join ed_c on ed_c.EVENT = fs.EVENT
-                              WHERE FIGHTER IS NOT NULL """)
-
-ft["FIGHTER"] = ft["FIGHTER"].str.replace("'", "")  # Replace single quotes in BOUT column
-
-
-fighters= duckdb.sql("SELECT trim(FIGHTER) as FIGHTER,HEIGHT,WEIGHT,REACH,STANCE,DOB,FIRST,LAST,NICKNAME,frd.URL from ft inner join frd on frd.URL = ft.URL where dob !='--'")
 ########################
                       
 #
