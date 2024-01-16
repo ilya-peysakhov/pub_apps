@@ -74,10 +74,10 @@ def cleanData():
                                 WHERE FIGHTER IS NOT NULL """).df()
   ft["FIGHTER"] = ft["FIGHTER"].str.replace("'", "")  # Replace single quotes in BOUT column
   fighters= duckdb.sql("SELECT trim(FIGHTER) as FIGHTER,HEIGHT,WEIGHT,REACH,STANCE,DOB,FIRST,LAST,NICKNAME,frd.URL from ft inner join frd on frd.URL = ft.URL where dob !='--'").df()
-  return fed, fr_cleaned, fs_cleaned, fighters
+  return fed, fr_cleaned, fs_cleaned, fighters, ed_c
 
 cleandata = cleanData()
-fed, fr_cleaned, fs_cleaned, fighters = cleandata[0],cleandata[1],cleandata[2],cleandata[3] 
+fed, fr_cleaned, fs_cleaned, fighters ed_c = cleandata[0],cleandata[1],cleandata[2],cleandata[3],cleandata[4] 
 
 ########################
                       
@@ -223,7 +223,7 @@ elif view =='Show all dataset samples':
     st.write('Fight Stats')
     st.dataframe(duckdb.sql("SELECT * from fs limit 5").df(),hide_index=True)
     st.write("Data Check - Events without data")
-    anomalies = duckdb.sql("select left(fed.DATE,10) as DATE,fed.EVENT, count(fed.BOUT) as bouts_with_stats from fed left join fs_cleaned on fed.EVENT =fs_cleaned.EVENT group by 1,2 having bouts_with_stats=0 order by 1 desc").df()
+    anomalies = duckdb.sql("select left(DATE,10) as DATE,ed_c.EVENT, count(BOUT) as bouts_with_stats from ed_c left join fs on ed_c.EVENT =fs.EVENT group by 1,2 having bouts_with_stats=0 order by 1 desc").df()
     st.dataframe(anomalies,hide_index=True)
 elif view =='Interesting Stats':
     st.subheader('Lifetime stats unless otherwise noted (last 2 years)')
