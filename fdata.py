@@ -296,17 +296,17 @@ elif view =='Aggregate Table':
     st.dataframe(combined_stats.sort_values(by='FIGHTS', ascending=False),hide_index=True)   
 elif view=='SQL Editor':
     st.write("Write custom sql on the data using [🦆duckdb](https://duckdb.org/docs/archive/0.9.2/sql/introduction)")
-    st.write("Example below - Win % by age")
-    st.code("""select age,  sum(W) as wins, sum(L) as losses, sum(fights) as total_results, sum(W)/(sum(W)+sum(L)) as win_pct from 
-     (
-    select date_diff('year',strptime(dob, '%b %d, %Y'),date)  as age, sum (case when fighter1_outcome = 'W' then 1 end) W, sum (case when fighter1_outcome = 'L' then 1 end) as L, count(1) fights from fighters inner join fr_cleaned on fighter = fighter1 where (weightclass ilike '%welterweight%' or weightclass ilike '%middleweight%' or weightclass ilike '%heavyweight%')
-    group by 1 
-    UNION
-    select date_diff('year',strptime(dob, '%b %d, %Y'),date)  as age, sum (case when fighter2_outcome = 'W' then 1 end) W, sum (case when fighter2_outcome = 'L' then 1 end) as L, count(1) fights from fighters inner join fr_cleaned on fighter = fighter2 where (weightclass ilike '%welterweight%' or weightclass ilike '%middleweight%' or weightclass ilike '%heavyweight%')
-    group by 1 
-     )
-    group by 1   
-    """)
+    with st.expander("Example - Win % by age")
+      st.code("""select age,  sum(W) as wins, sum(L) as losses, sum(fights) as total_results, sum(W)/(sum(W)+sum(L)) as win_pct from 
+       (
+      select date_diff('year',strptime(dob, '%b %d, %Y'),date)  as age, sum (case when fighter1_outcome = 'W' then 1 end) W, sum (case when fighter1_outcome = 'L' then 1 end) as L, count(1) fights from fighters inner join fr_cleaned on fighter = fighter1 where (weightclass ilike '%welterweight%' or weightclass ilike '%middleweight%' or weightclass ilike '%heavyweight%')
+      group by 1 
+      UNION
+      select date_diff('year',strptime(dob, '%b %d, %Y'),date)  as age, sum (case when fighter2_outcome = 'W' then 1 end) W, sum (case when fighter2_outcome = 'L' then 1 end) as L, count(1) fights from fighters inner join fr_cleaned on fighter = fighter2 where (weightclass ilike '%welterweight%' or weightclass ilike '%middleweight%' or weightclass ilike '%heavyweight%')
+      group by 1 
+       )
+      group by 1   
+      """)
     col1,col2 = st.columns([3,10])
     with col1:
         st.write('Tables')
