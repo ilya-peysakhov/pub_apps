@@ -32,10 +32,11 @@ def getData():
   fs = pd.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_stats.csv")
   frd = pd.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fighter_details.csv")
   ft = pd.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fighter_tott.csv")
+  st.toast("Data retrieved from Greco") 
   return ed, fd, fr, fs, frd, ft
 
 alldata = getData()
-st.toast("Data retrieved from Greco") 
+
 
 ed, fd, fr, fs, frd, ft = alldata[0], alldata[1], alldata[2], alldata[3], alldata[4], alldata[5]
 
@@ -82,8 +83,6 @@ ft["FIGHTER"] = ft["FIGHTER"].str.replace("'", "")  # Replace single quotes in B
 fighters= duckdb.sql("SELECT trim(FIGHTER) as FIGHTER,HEIGHT,WEIGHT,REACH,STANCE,DOB,FIRST,LAST,NICKNAME,frd.URL from ft inner join frd on frd.URL = ft.URL where dob !='--'")
 ########################
                       
-
-st.toast("Data cleaned up")
 #
 if view =='Fighter One Sheet':
     st.text('Display all relevant fighter stats in just 1 click. Choose your fighter below to get started')
