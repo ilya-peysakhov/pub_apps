@@ -77,7 +77,7 @@ def cleanData():
   return fed, fr_cleaned, fs_cleaned, fighters, ed_c
 
 cleandata = cleanData()
-fed, fr_cleaned, fs_cleaned, fighters ed_c = cleandata[0],cleandata[1],cleandata[2],cleandata[3],cleandata[4] 
+fed, fr_cleaned, fs_cleaned, fighters, ed_c = cleandata[0],cleandata[1],cleandata[2],cleandata[3],cleandata[4] 
 
 ########################
                       
