@@ -320,7 +320,7 @@ elif view=='SQL Editor':
             query = duckdb.sql(f"{query_text}")
             return query
     
-        if st.button('Pull data') and query_text not None:
+        if st.button('Pull data') and query_text is not None:
             try:
               with st.spinner('Running Query'):
                 data = pullData()
