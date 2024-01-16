@@ -35,6 +35,8 @@ def getData():
   return ed, fd, fr, fs, frd, ft
 
 alldata = getData()
+st.toast("Data retrieved from Greco") 
+
 ed, fd, fr, fs, frd, ft = alldata[0], alldata[1], alldata[2], alldata[3], alldata[4], alldata[5]
 
 ed_c = duckdb.sql("SELECT TRIM(EVENT) as EVENT, strptime(DATE, '%B %d, %Y') as  DATE, URL, LOCATION FROM ed")
@@ -81,7 +83,7 @@ fighters= duckdb.sql("SELECT trim(FIGHTER) as FIGHTER,HEIGHT,WEIGHT,REACH,STANCE
 ########################
                       
 
-
+st.toast("Data cleaned up")
 #
 if view =='Fighter One Sheet':
     st.text('Display all relevant fighter stats in just 1 click. Choose your fighter below to get started')
