@@ -330,7 +330,7 @@ elif view=='SQL Editor':
             
        
        
-with st.expander("Real UFC fans ONLY",expanded=False):
+with st.expander("Real UFC fans ONLY 🖱️",expanded=False):
    audio_file = open('song.mp3', 'rb')
    audio_bytes = audio_file.read()
    st.audio(audio_bytes, format='audio/ogg')        
