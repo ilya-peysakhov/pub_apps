@@ -297,7 +297,7 @@ elif view =='Aggregate Table':
 elif view=='SQL Editor':
     st.write("Write custom sql on the data")
     st.write("Example below - Win % by age")
-    st.code(label='Query', value="""select age,  sum(W) as wins, sum(L) as losses, sum(fights) as total_results, sum(W)/(sum(W)+sum(L)) as win_pct from 
+    st.code("""select age,  sum(W) as wins, sum(L) as losses, sum(fights) as total_results, sum(W)/(sum(W)+sum(L)) as win_pct from 
      (
     select date_diff('year',strptime(dob, '%b %d, %Y'),date)  as age, sum (case when fighter1_outcome = 'W' then 1 end) W, sum (case when fighter1_outcome = 'L' then 1 end) as L, count(1) fights from fighters inner join fr_cleaned on fighter = fighter1 where (weightclass ilike '%welterweight%' or weightclass ilike '%middleweight%' or weightclass ilike '%heavyweight%')
     group by 1 
