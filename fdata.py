@@ -73,7 +73,7 @@ def cleanData():
                                 left join ed_c on ed_c.EVENT = fs.EVENT
                                 WHERE FIGHTER IS NOT NULL """)
   ft["FIGHTER"] = ft["FIGHTER"].str.replace("'", "")  # Replace single quotes in BOUT column
-  fighters= duckdb.sql("SELECT trim(FIGHTER) as FIGHTER,HEIGHT,WEIGHT,REACH,STANCE,DOB,FIRST,LAST,NICKNAME,frd.URL from ft inner join frd on frd.URL = ft.URL where dob !='--'")
+  fighters= duckdb.sql("SELECT trim(FIGHTER) as FIGHTER,HEIGHT,WEIGHT,REACH,STANCE,DOB,FIRST,LAST,NICKNAME,frd.URL from ft inner join frd on frd.URL = ft.URL where dob !='--'").df()
   return fr_cleaned, fs_cleaned, fighters
 
 cleandata = cleanData()
