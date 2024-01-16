@@ -306,7 +306,7 @@ elif view=='SQL Editor':
         st.write('fr_cleaned = fight results')
         st.write('fighters = fighter details')
     with col2:
-        query_text = st.text_input('Write SELECT')
+        query_text = st.text_area('Write SELECT')
         def pullData():
             query = duckdb.sql(f"{query_text}")
             return query
