@@ -279,7 +279,7 @@ elif view =='All Time Stats':
     fig = px.area(methods_over_time, x='MONTH',y='METHOD_PCT',color='METHOD', template='simple_white')
     st.plotly_chart(fig,use_container_width=True)
         
-    min_fights = st.number_input('Minimum Fights',step=1,value=10)
+    min_fights = st.number_input('Minimum Fights',step=1,value=20)
     st.write(f"Minimum {min_fights} fights, historical rankings for total career offensive and defensive stats")
     
     @st.cache_data(ttl='6d')
