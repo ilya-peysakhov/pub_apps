@@ -32,7 +32,6 @@ def getData():
   fs = pd.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_stats.csv")
   frd = pd.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fighter_details.csv")
   ft = pd.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fighter_tott.csv")
-  st.toast("Data retrieved from Greco") 
   return ed, fd, fr, fs, frd, ft
 
 alldata = getData()
