@@ -20,7 +20,7 @@ st.set_page_config(page_icon="👊", page_title="UFC Stats Explorer v0.9", layou
 ########start of app
 st.header('UFC Fight Stats explorer')
 
-view = st.sidebar.radio('Select a view',('Fighter One Sheet','All Time Stats','Show all dataset samples','SQL Editor'))
+view = st.sidebar.radio('Select a view',('Fighter One Sheet','Interesting Stats','Aggregate Table','Show all dataset samples','SQL Editor'))
 
 
 ###################### data pull and clean
@@ -226,7 +226,7 @@ elif view =='Show all dataset samples':
     st.write("Data Check - Events without data")
     anomalies = duckdb.sql("select left(DATE,10) as DATE,ed_c.EVENT, count(BOUT) as bouts_with_stats from ed_c left join fs on ed_c.EVENT =fs.EVENT group by 1,2 having bouts_with_stats=0 order by 1 desc").df()
     st.dataframe(anomalies,hide_index=True)
-elif view =='All Time Stats':
+elif view =='Interesting Stats':
     st.subheader('Lifetime stats unless otherwise noted (last 2 years)')
     c1, c2  = st.columns(2)
     with c1:
@@ -278,7 +278,8 @@ elif view =='All Time Stats':
 
     fig = px.area(methods_over_time, x='MONTH',y='METHOD_PCT',color='METHOD', template='simple_white')
     st.plotly_chart(fig,use_container_width=True)
-        
+
+elif view =='Aggregate Table':      
     min_fights = st.number_input('Minimum Fights',step=1,value=20)
     st.write(f"Minimum {min_fights} fights, historical rankings for total career offensive and defensive stats")
     
