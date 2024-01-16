@@ -330,7 +330,7 @@ elif view=='SQL Editor':
             
        
        
-     
+st.divider()
 col1,col2,col3 = st.columns(3)
 with col1:
   st.code('Built by Ilya')
@@ -338,7 +338,7 @@ with col2:
   st.code('This application uses data from Greco1899''s scraper of UFC Fight Stats - "https://github.com/Greco1899/scrape_ufc_stats"')
 with col3:
   st.code('Recent changes - SQL Editor, data retrieval cached via function' )
-
+st.divider()
 with st.expander("Real UFC fans ONLY 🖱️",expanded=False):
    audio_file = open('song.mp3', 'rb')
    audio_bytes = audio_file.read()
