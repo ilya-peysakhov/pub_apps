@@ -332,7 +332,7 @@ elif view=='SQL Editor':
                 data = pullData()
                 data = data.df()
                 st.dataframe(data.head(100), hide_index=True)
-                queries.concat(query_text)
+                queries.append(query_text)
                 st.write('Successful Queries This Session')
                 st.dataframe(queries)
             except Exception as e:
