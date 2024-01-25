@@ -321,17 +321,7 @@ elif view=='SQL Editor':
         st.write('fighters = fighter details')
     with col2:
         query_text = st.text_area('Write SELECT statement here')
-        
-        def create_queries():
-          if "queries_df" not in st.session_state:
-              queries = pd.DataFrame(columns=['QUERY'])
-              st.session_state['queries_df'] = queries
-          else:
-              queries = st.session_state['queries_df']
-          return queries
-          
-        queries = create_queries()
-      
+        st.caption('Will add history of previous queries for reference')
         def pullData():
             query = duckdb.sql(f"{query_text}")
             return query
@@ -342,12 +332,10 @@ elif view=='SQL Editor':
                 data = pullData()
                 data = data.df()
                 st.dataframe(data.head(100), hide_index=True)
-                duckdb.sql(f"INSERT INTO queries select '{query_text}' ")
+                
             except Exception as e:
               st.write(e)
     
-    st.write('Successful Queries This Session')
-    st.dataframe(queries)
 
   
        
