@@ -322,8 +322,11 @@ elif view=='SQL Editor':
     with col2:
         query_text = st.text_area('Write SELECT statement here')
         
-        if "queries" not in locals():
+        @st.cache_data
+        def createdf():
           queries = pd.DataFrame(columns=['QUERY'])
+          return queries
+        queries = createdf()
           
         def pullData():
             query = duckdb.sql(f"{query_text}")
