@@ -342,7 +342,7 @@ elif view=='SQL Editor':
                 data = pullData()
                 data = data.df()
                 st.dataframe(data.head(100), hide_index=True)
-                queries = pd.concat([queries, pd.DataFrame({'QUERY': [query_text]})], ignore_index=True)                
+                duckdb.sql(f"INSERT INTO queries select {query_text}")
             except Exception as e:
               st.write(e)
     
