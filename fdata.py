@@ -322,12 +322,15 @@ elif view=='SQL Editor':
     with col2:
         query_text = st.text_area('Write SELECT statement here')
         
-        @st.cache_data
-        def createdf():
-          queries = pd.DataFrame(columns=['QUERY'])
+        def create_queries():
+          if "queries" not in st.session_state:
+              queries = pd.DataFrame(columns=['QUERY'])
+              st.session_state['queries'] = queries
+          else:
+              queries = st.session_state['queries']
           return queries
-        queries = createdf()
-          
+        queries = create_queries()
+      
         def pullData():
             query = duckdb.sql(f"{query_text}")
             return query
