@@ -321,6 +321,7 @@ elif view=='SQL Editor':
         st.write('fighters = fighter details')
     with col2:
         query_text = st.text_area('Write SELECT statement here')
+        queries = pd.DataFrame()
         def pullData():
             query = duckdb.sql(f"{query_text}")
             return query
@@ -331,9 +332,15 @@ elif view=='SQL Editor':
                 data = pullData()
                 data = data.df()
                 st.dataframe(data.head(100), hide_index=True)
+                queries.append(query_text)
+                st.write('Successful Queries This Session')
+                st.dataframe(queries)
             except Exception as e:
               st.write(e)
-            
+    
+    
+
+  
        
        
 st.divider()
