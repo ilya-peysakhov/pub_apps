@@ -323,12 +323,13 @@ elif view=='SQL Editor':
         query_text = st.text_area('Write SELECT statement here')
         
         def create_queries():
-          if "queries" not in st.session_state:
+          if "queries_df" not in st.session_state:
               queries = pd.DataFrame(columns=['QUERY'])
-              st.session_state['queries'] = queries
+              st.session_state['queries_df'] = queries
           else:
-              queries = st.session_state['queries']
+              queries = st.session_state['queries_df']
           return queries
+          
         queries = create_queries()
       
         def pullData():
