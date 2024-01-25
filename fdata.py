@@ -321,7 +321,10 @@ elif view=='SQL Editor':
         st.write('fighters = fighter details')
     with col2:
         query_text = st.text_area('Write SELECT statement here')
-        queries = pd.DataFrame(columns=['QUERY'])
+        
+        if "queries" not in locals():
+          queries = pd.DataFrame(columns=['QUERY'])
+          
         def pullData():
             query = duckdb.sql(f"{query_text}")
             return query
@@ -332,7 +335,7 @@ elif view=='SQL Editor':
                 data = pullData()
                 data = data.df()
                 st.dataframe(data.head(100), hide_index=True)
-                pd.concat([queries, pd.DataFrame({'QUERY': [query_text]})], ignore_index=True)                
+                queries = pd.concat([queries, pd.DataFrame({'QUERY': [query_text]})], ignore_index=True)                
             except Exception as e:
               st.write(e)
     
