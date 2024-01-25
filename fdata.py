@@ -332,7 +332,7 @@ elif view=='SQL Editor':
                 data = pullData()
                 data = data.df()
                 st.dataframe(data.head(100), hide_index=True)
-                queries = pd.concat([queries, pd.DataFrame({'QUERY': [query_text]})], ignore_index=True)                
+                pd.concat([queries, pd.DataFrame({'QUERY': [query_text]})], ignore_index=True)                
             except Exception as e:
               st.write(e)
     
