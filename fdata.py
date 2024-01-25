@@ -321,7 +321,7 @@ elif view=='SQL Editor':
         st.write('fighters = fighter details')
     with col2:
         query_text = st.text_area('Write SELECT statement here')
-        queries = pd.DataFrame()
+        queries = pd.DataFrame(columns=['QUERY'])
         def pullData():
             query = duckdb.sql(f"{query_text}")
             return query
