@@ -305,10 +305,10 @@ elif view=='SQL Editor':
     with st.expander("Example - Win % by age"):
       st.code("""select age,  sum(W) as wins, sum(L) as losses, sum(fights) as total_results, sum(W)/(sum(W)+sum(L)) as win_pct from 
        (
-      select date_diff('year',strptime(dob, '%b %d, %Y'),date)  as age, sum (case when fighter1_outcome = 'W' then 1 end) W, sum (case when fighter1_outcome = 'L' then 1 end) as L, count(1) fights from fighters inner join fr_cleaned on fighter = fighter1 where (weightclass ilike '%welterweight%' or weightclass ilike '%middleweight%' or weightclass ilike '%heavyweight%')
+      select date_diff('year',strptime(dob, '%b %d, %Y'),date)  as age, sum (case when fighter1_outcome = 'W' then 1 else 0 end) W, sum (case when fighter1_outcome = 'L' then 1 else 0 end) as L, count(1) fights from fighters inner join fr_cleaned on fighter = fighter1 where (weightclass ilike '%featherweight title%' )
       group by 1 
       UNION
-      select date_diff('year',strptime(dob, '%b %d, %Y'),date)  as age, sum (case when fighter2_outcome = 'W' then 1 end) W, sum (case when fighter2_outcome = 'L' then 1 end) as L, count(1) fights from fighters inner join fr_cleaned on fighter = fighter2 where (weightclass ilike '%welterweight%' or weightclass ilike '%middleweight%' or weightclass ilike '%heavyweight%')
+      select date_diff('year',strptime(dob, '%b %d, %Y'),date)  as age, sum (case when fighter2_outcome = 'W' then 1 else 0 end) W, sum (case when fighter2_outcome = 'L' then 1 else 0 end) as L, count(1) fights from fighters inner join fr_cleaned on fighter = fighter2 where (weightclass ilike '%featherweight title%' )
       group by 1 
        )
       group by 1   
@@ -323,7 +323,7 @@ elif view=='SQL Editor':
         query_text = st.text_area('Write SELECT statement here')
         st.caption('Will add history of previous queries for reference')
         def pullData():
-            query = duckdb.sql(f"{query_text}")
+            query = duckdb.sql(f"{query_text.strip()}")
             return query
     
         if st.button('Pull data') and query_text is not None:
