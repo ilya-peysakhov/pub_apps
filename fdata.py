@@ -229,7 +229,7 @@ elif view =='Show all dataset samples':
     st.write('Fight Stats')
     st.dataframe(duckdb.sql("SELECT * from fs limit 5").df(),hide_index=True)
     st.write("Data Check - Events without data")
-    anomalies = duckdb.sql("select left(DATE,10) as DATE,ed_c.EVENT, count(BOUT) as bouts_with_stats from ed_c left join fs on ed_c.EVENT =fs.EVENT group by 1,2 having bouts_with_stats=0 order by 1 desc").df()
+    anomalies = duckdb.sql("select left(DATE::string,10) as DATE,ed_c.EVENT, count(BOUT) as bouts_with_stats from ed_c left join fs on ed_c.EVENT =fs.EVENT group by 1,2 having bouts_with_stats=0 order by 1 desc").df()
     st.dataframe(anomalies,hide_index=True)
 elif view =='Interesting Stats':
     st.subheader('Lifetime stats unless otherwise noted (last 2 years)')
