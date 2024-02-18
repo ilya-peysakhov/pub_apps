@@ -63,10 +63,10 @@ def cleanData():
   fs["FIGHTER"] = fs["FIGHTER"].str.replace("'", "")  # Replace single quotes in EVENT column
   fs["BOUT"] = fs["BOUT"].str.replace("'", "")  # Replace single quotes in BOUT column
   fs_cleaned = duckdb.sql("""SELECT fs.EVENT,replace(trim(BOUT),'  ',' ') as BOUT,ROUND, trim(FIGHTER) as FIGHTER,KD,
-                                split_part("SIG.STR.",' of ',1) sig_str_l,
-                                split_part("SIG.STR.",' of ',2) sig_str_a,
-                                split_part("TOTAL STR.",' of ',1) total_str_l,
-                                split_part("TOTAL STR.",' of ',2) total_str_a,
+                                split_part("SIG.STR."::string,' of ',1) sig_str_l,
+                                split_part("SIG.STR."::string,' of ',2) sig_str_a,
+                                split_part("TOTAL STR."::string,' of ',1) total_str_l,
+                                split_part("TOTAL STR."::string,' of ',2) total_str_a,
                                 split_part(TD,' of ',1) td_l,
                                 split_part(TD,' of ',2) td_a,
                                 "SUB.ATT","REV.",CTRL,
