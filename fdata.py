@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+pd.options.mode.copy_on_write = True
 import time
 import duckdb
 import datetime
