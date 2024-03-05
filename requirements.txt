@@ -3,4 +3,4 @@ pyarrow
 duckdb
 plotly
 streamlit-shadcn-ui
-streamlit_ace
+streamlit-ace
