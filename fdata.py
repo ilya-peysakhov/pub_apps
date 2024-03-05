@@ -6,6 +6,7 @@ import duckdb
 import datetime
 import plotly.express as px
 import streamlit_shadcn_ui as ui
+from streamlit_ace import st_ace
 
 
 
@@ -336,9 +337,11 @@ elif view=='SQL Editor':
                 
             except Exception as e:
               st.write(e)
-    
+        
+      content = st_ace()
+      st.write(type(content))
 
-  
+              
        
        
 st.divider()
