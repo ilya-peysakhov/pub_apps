@@ -339,10 +339,6 @@ elif view=='SQL Editor':
                 
             except Exception as e:
               st.write(e)
-        content = st_ace)
-        st.write(type(content))
-
-              
        
        
 st.divider()
