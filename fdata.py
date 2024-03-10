@@ -317,10 +317,10 @@ elif view =='Aggregate Table':
       return duckdb.sql(query).df()
 
     # str_results = pd.concat(fighters['FIGHTER'].apply(query_fighter_data).tolist(), ignore_index=True)
-    str_results = pd.concat([query_fighter_data(fighter) for fighter in fighters['FIGHTER']], ignore_index=True)
+    # str_results = pd.concat([query_fighter_data(fighter) for fighter in fighters['FIGHTER']], ignore_index=True)
 
-    # fighter_data = fighters['FIGHTER'].apply(query_fighter_data)
-    # str_results = pd.concat(fighter_data, ignore_index=True)
+    fighter_data = fighters['FIGHTER'].apply(query_fighter_data)
+    str_results = pd.concat(fighter_data, ignore_index=True)
   
     combined_stats = duckdb.sql("SELECT a.*, ROUND(SIG_STRIKES_LANDED/SIG_STRIKES_ABS,1) as SIG_STR_DIFF, ROUND((1-HEAD_STRIKES_ABS/HEAD_STRIKES_AT),2) as HEAD_MOVEMENT, b.* EXCLUDE (FIGHTER) from all_time_offense as a left join str_results as b on a.FIGHTER=b.FIGHTER").df()
     st.dataframe(combined_stats.sort_values(by='FIGHTS', ascending=False),hide_index=True)   
