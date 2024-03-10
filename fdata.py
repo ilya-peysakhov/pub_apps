@@ -28,18 +28,12 @@ view = st.sidebar.radio('Select a view',('Fighter One Sheet','Interesting Stats'
 ###################### data pull and clean
 @st.cache_data(ttl = '7d')
 def getData():
-  ed = pd.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_event_details.csv")
-  ed = ed.convert_dtypes(dtype_backend="pyarrow")
-  fd = pd.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_details.csv")
-  fd = fd.convert_dtypes(dtype_backend="pyarrow")
-  fr = pd.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_results.csv")
-  fr = fr.convert_dtypes(dtype_backend="pyarrow")
-  fs = pd.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_stats.csv")
-  fs = fs.convert_dtypes(dtype_backend="pyarrow")
-  frd = pd.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fighter_details.csv")
-  frd = frd.convert_dtypes(dtype_backend="pyarrow")
-  ft = pd.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fighter_tott.csv")
-  ft = ft.convert_dtypes(dtype_backend="pyarrow")
+  ed = pd.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_event_details.csv",dtype_backend='pyarrow',engine='pyarrow')
+  fd = pd.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_details.csv",dtype_backend='pyarrow',engine='pyarrow')
+  fr = pd.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_results.csv",dtype_backend='pyarrow',engine='pyarrow')
+  fs = pd.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_stats.csv",dtype_backend='pyarrow',engine='pyarrow')
+  frd = pd.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fighter_details.csv",dtype_backend='pyarrow',engine='pyarrow')
+  ft = pd.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fighter_tott.csv",dtype_backend='pyarrow',engine='pyarrow')
   return ed, fd, fr, fs, frd, ft
 
 alldata = getData()
