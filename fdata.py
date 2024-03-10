@@ -161,7 +161,7 @@ if view =='Fighter One Sheet':
                 st.metric(label='Rounds',value=fighter_stats.shape[0])
             with w2:
                 # ui.metric_card('Wins',content=len(duckdb.sql("SELECT * from winloss where result='W'").df()) )
-                st.metric(label='Wins',value=content=len(duckdb.sql("SELECT * from winloss where result='W'").df()) )
+                st.metric(label='Wins',value=len(duckdb.sql("SELECT * from winloss where result='W'").df()) )
                 # ui.metric_card('Losses',content=len(duckdb.sql("SELECT * from winloss where result='L'").df()) )
                 st.metric(label='Losses',value=len(duckdb.sql("SELECT * from winloss where result='L'").df()))
             
