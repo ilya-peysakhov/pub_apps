@@ -300,6 +300,8 @@ elif view =='Aggregate Table':
       return duckdb.sql(query).df()
 
     # str_results = pd.concat(fighters['FIGHTER'].apply(query_fighter_data).tolist(), ignore_index=True)
+    # str_results = pd.concat([query_fighter_data(fighter) for fighter in fighters['FIGHTER']], ignore_index=True)
+
     fighter_data = fighters['FIGHTER'].apply(query_fighter_data)
     str_results = pd.concat(fighter_data, ignore_index=True)
   
