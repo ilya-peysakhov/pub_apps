@@ -263,8 +263,8 @@ elif view =='Interesting Stats':
 
         st.write('Most experienced referees (2yr)')
         refs = duckdb.sql("SELECT REFEREE,count(*) fights from fr_cleaned where date between current_date() -730 and current_date() group by 1 order by 2 desc limit 10").df()
-        # st.dataframe(refs,hide_index=True,use_container_width=False)
-        ui.table(data=refs)
+        st.dataframe(refs,hide_index=True,use_container_width=False)
+        # ui.table(data=refs)
         st.divider()
         st.write("Fights by result method (2yr)")
         methods = duckdb.sql("SELECT method, count(*) FIGHTS from fr_cleaned where date between current_date() -730 and current_date() group by 1 ").df()
