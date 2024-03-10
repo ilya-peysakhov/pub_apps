@@ -2,5 +2,4 @@ pandas
 pyarrow
 duckdb
 plotly
-streamlit-shadcn-ui
 streamlit-ace
