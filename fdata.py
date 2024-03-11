@@ -86,7 +86,8 @@ fed, fr_cleaned, fs_cleaned, fighters, ed_c = cleandata[0],cleandata[1],cleandat
 #
 if view =='Fighter One Sheet':
     st.text('Display all relevant fighter stats in just 1 click. Choose your fighter below to get started')
-    fighter_list = duckdb.sql("SELECT FIGHTER from fighters  where length(DOB) >3 group by 1 order by 1").df()
+    # fighter_list = duckdb.sql("SELECT FIGHTER from fighters  where length(DOB) >3 group by 1 order by 1").df()
+    fighter_list = fighters.loc[fighters['DOB'].str.len() > 3, 'FIGHTER'].drop_duplicates().sort_values()
     f1, f2  = st.columns(2)
     with f1:
         fighter_filter = st.selectbox('Pick a fighter',options=fighter_list)
