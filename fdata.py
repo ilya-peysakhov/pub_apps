@@ -357,7 +357,7 @@ elif view=='Tale of the Tape':
   c1, c2 = st.columns(2)
   with c1:
     fighter1_filter = st.selectbox('Pick Fighter 1',options=fighter_list)
-    fights = duckdb.sql(f"SELECT BOUT from fr_cleaned where FIGHTER1 = '{fighter1_filter}' or FIGHTER2='{fighter_filter}'").df()
+    fights = duckdb.sql(f"SELECT BOUT from fr_cleaned where FIGHTER1 = '{fighter1_filter}' or FIGHTER2='{fighter1_filter}'").df()
     fighter_stats = duckdb.sql(f"SELECT * from fs_cleaned where BOUT in (select BOUT from fights) and FIGHTER ='{fighter1_filter}' ")
     cleaned_fighter_stats = duckdb.sql("SELECT sum(sig_str_l::INTEGER) as sig_str, sum(head_str_l::INTEGER) as head_str, sum(td_l::INTEGER) as td_l, round(sum(td_l::INTEGER)/cast(sum(td_a::REAL) as REAL),2)  as td_rate, sum(kd::INTEGER) as kd, from fighter_stats").df()
     opp_stats = duckdb.sql(f"SELECT * from fs_cleaned where BOUT in (select * from fights) and FIGHTER !='{fighter1_filter}' ")
@@ -373,7 +373,7 @@ elif view=='Tale of the Tape':
   
   with c2:
     fighter2_filter = st.selectbox('Pick Fighter 2',options=fighter_list)
-    fights = duckdb.sql(f"SELECT BOUT from fr_cleaned where FIGHTER1 = '{fighter2_filter}' or FIGHTER2='{fighter_filter}'").df()
+    fights = duckdb.sql(f"SELECT BOUT from fr_cleaned where FIGHTER1 = '{fighter2_filter}' or FIGHTER2='{fighter2_filter}'").df()
     fighter_stats = duckdb.sql(f"SELECT * from fs_cleaned where BOUT in (select BOUT from fights) and FIGHTER ='{fighter2_filter}' ")
     cleaned_fighter_stats = duckdb.sql("SELECT sum(sig_str_l::INTEGER) as sig_str, sum(head_str_l::INTEGER) as head_str, sum(td_l::INTEGER) as td_l, round(sum(td_l::INTEGER)/cast(sum(td_a::REAL) as REAL),2)  as td_rate, sum(kd::INTEGER) as kd, from fighter_stats").df()
     opp_stats = duckdb.sql(f"SELECT * from fs_cleaned where BOUT in (select * from fights) and FIGHTER !='{fighter2_filter}' ")
