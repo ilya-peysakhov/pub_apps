@@ -22,7 +22,7 @@ st.set_page_config(page_icon="👊", page_title="UFC Stats Explorer v1.0", layou
 ########start of app
 st.header('UFC Fight Stats explorer')
 
-view = st.sidebar.radio('Select a view',('Fighter One Sheet','Interesting Stats','Aggregate Table','Show all dataset samples','SQL Editor'))
+view = st.sidebar.radio('Select a view',('Fighter One Sheet','Interesting Stats','Aggregate Table','Show all dataset samples','SQL Editor','Tale of the Tape'))
 
 
 ###################### data pull and clean
@@ -82,11 +82,11 @@ cleandata = cleanData()
 fed, fr_cleaned, fs_cleaned, fighters, ed_c = cleandata[0],cleandata[1],cleandata[2],cleandata[3],cleandata[4] 
 
 ########################
-                      
+fighter_list = duckdb.sql("SELECT FIGHTER from fighters  where length(DOB) >3 group by 1 order by 1").df()                      
 #
 if view =='Fighter One Sheet':
     st.text('Display all relevant fighter stats in just 1 click. Choose your fighter below to get started')
-    fighter_list = duckdb.sql("SELECT FIGHTER from fighters  where length(DOB) >3 group by 1 order by 1").df()
+    
     f1, f2  = st.columns(2)
     with f1:
         fighter_filter = st.selectbox('Pick a fighter',options=fighter_list)
@@ -352,6 +352,40 @@ elif view=='SQL Editor':
                 
             except Exception as e:
               st.write(e)
+elif view=='Tale of the Tape':
+  st.write('Compare advanced metrics between 2 fighters')
+  c1, c2 = st.columns(2)
+  with c1:
+    fighter1_filter = st.selectbox('Pick Fighter 1',options=fighter_list)
+    
+    fighter_stats = duckdb.sql(f"SELECT * from fs_cleaned where BOUT in (select BOUT from fights) and FIGHTER ='{fighter1_filter}' ")
+    cleaned_fighter_stats = duckdb.sql("SELECT sum(sig_str_l::INTEGER) as sig_str, sum(head_str_l::INTEGER) as head_str, sum(td_l::INTEGER) as td_l, round(sum(td_l::INTEGER)/cast(sum(td_a::REAL) as REAL),2)  as td_rate, sum(kd::INTEGER) as kd, from fighter_stats").df()
+    opp_stats = duckdb.sql(f"SELECT * from fs_cleaned where BOUT in (select * from fights) and FIGHTER !='{fighter1_filter}' ")
+    cleaned_opp_stats = duckdb.sql("SELECT sum(sig_str_l::INTEGER) as sig_abs ,sum(head_str_l::INTEGER) as head_abs,sum(head_str_a::INTEGER) as head_at,sum(td_l::INTEGER) as td_abs,round(sum(td_l::INTEGER)/cast(sum(td_a::REAL) as REAL),2) as td_abs_rate,sum(kd::INTEGER) as kd_abs from opp_stats").df()
+    
+    st.metric('Significant Strikes Differential',value=round(cleaned_fighter_stats['sig_str']/cleaned_opp_stats['sig_abs'],1))
+    st.metric('Head Strikes Differential',value=round(cleaned_fighter_stats['head_str']/cleaned_opp_stats['head_abs'],1))
+    st.metric('Power Differential (Knockdowns)',value=round(cleaned_fighter_stats['kd']/cleaned_opp_stats['kd_abs'],1))
+    st.metric('Takedown Differential',value=round(cleaned_fighter_stats['td_l']/cleaned_opp_stats['td_abs'],1))
+    st.caption('Success rate at evading head strikes')
+    head_movement = round(1-(cleaned_opp_stats['head_abs']/cleaned_opp_stats['head_at']),2)
+    st.metric('Head Movement',value=head_movement )
+  
+  with c2:
+    fighter2_filter = st.selectbox('Pick Fighter 2',options=fighter_list)
+    fighter_stats = duckdb.sql(f"SELECT * from fs_cleaned where BOUT in (select BOUT from fights) and FIGHTER ='{fighter2_filter}' ")
+    cleaned_fighter_stats = duckdb.sql("SELECT sum(sig_str_l::INTEGER) as sig_str, sum(head_str_l::INTEGER) as head_str, sum(td_l::INTEGER) as td_l, round(sum(td_l::INTEGER)/cast(sum(td_a::REAL) as REAL),2)  as td_rate, sum(kd::INTEGER) as kd, from fighter_stats").df()
+    opp_stats = duckdb.sql(f"SELECT * from fs_cleaned where BOUT in (select * from fights) and FIGHTER !='{fighter2_filter}' ")
+    cleaned_opp_stats = duckdb.sql("SELECT sum(sig_str_l::INTEGER) as sig_abs ,sum(head_str_l::INTEGER) as head_abs,sum(head_str_a::INTEGER) as head_at,sum(td_l::INTEGER) as td_abs,round(sum(td_l::INTEGER)/cast(sum(td_a::REAL) as REAL),2) as td_abs_rate,sum(kd::INTEGER) as kd_abs from opp_stats").df()
+    
+    st.metric('Significant Strikes Differential',value=round(cleaned_fighter_stats['sig_str']/cleaned_opp_stats['sig_abs'],1))
+    st.metric('Head Strikes Differential',value=round(cleaned_fighter_stats['head_str']/cleaned_opp_stats['head_abs'],1))
+    st.metric('Power Differential (Knockdowns)',value=round(cleaned_fighter_stats['kd']/cleaned_opp_stats['kd_abs'],1))
+    st.metric('Takedown Differential',value=round(cleaned_fighter_stats['td_l']/cleaned_opp_stats['td_abs'],1))
+    st.caption('Success rate at evading head strikes')
+    head_movement = round(1-(cleaned_opp_stats['head_abs']/cleaned_opp_stats['head_at']),2)
+    st.metric('Head Movement',value=head_movement )
+  
        
        
 st.divider()
@@ -362,8 +396,8 @@ with col2:
   st.code('This application uses data from Greco1899''s scraper of UFC Fight Stats - "https://github.com/Greco1899/scrape_ufc_stats"')
 with col3:
   st.code('Recent changes - SQL Editor, data retrieval cached via function' )
-st.divider()
-with st.expander("Real UFC fans ONLY 🖱️",expanded=False):
-   audio_file = open('song.mp3', 'rb')
-   audio_bytes = audio_file.read()
-   st.audio(audio_bytes, format='audio/ogg')   
+# st.divider()
+# with st.expander("Real UFC fans ONLY 🖱️",expanded=False):
+#    audio_file = open('song.mp3', 'rb')
+#    audio_bytes = audio_file.read()
+#    st.audio(audio_bytes, format='audio/ogg')   
