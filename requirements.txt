@@ -1,5 +1,5 @@
 pandas
-pyarrow
+pyarrow==15.0.0
 duckdb
 plotly
 streamlit-ace
