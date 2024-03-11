@@ -88,31 +88,31 @@ fed, fr_cleaned, fs_cleaned, fighters, ed_c = cleandata[0],cleandata[1],cleandat
 ########################
 fighter_list = duckdb.sql("SELECT FIGHTER from fighters  where length(DOB) >3 group by 1 order by 1").df()                      
 st.write(fs_cleaned.head(100) )
-#
-# if view =='Fighter One Sheet':
-#     st.text('Display all relevant fighter stats in just 1 click. Choose your fighter below to get started')
+
+if view =='Fighter One Sheet':
+    st.text('Display all relevant fighter stats in just 1 click. Choose your fighter below to get started')
     
-#     f1, f2  = st.columns(2)
-#     with f1:
-#         fighter_filter = st.selectbox('Pick a fighter',options=fighter_list)
+    f1, f2  = st.columns(2)
+    with f1:
+        fighter_filter = st.selectbox('Pick a fighter',options=fighter_list)
     
-#     with f2:
-#         with st.container(border=True):
-#             analysis_lengths = ['Career','Last X fights']
-#             analysis_length = st.radio("Analysis Length",(analysis_lengths),horizontal=True)
-#             if analysis_length==analysis_lengths[1]:
-#                 al = st.number_input('Number of recent fights to analyze',step=1,min_value=1)
-#                 fr_cleaned = duckdb.sql(f"select * from fr_cleaned where FIGHTER1 = '{fighter_filter}' or FIGHTER2='{fighter_filter}' order by date desc limit {al}").df()
+    with f2:
+        with st.container(border=True):
+            analysis_lengths = ['Career','Last X fights']
+            analysis_length = st.radio("Analysis Length",(analysis_lengths),horizontal=True)
+            if analysis_length==analysis_lengths[1]:
+                al = st.number_input('Number of recent fights to analyze',step=1,min_value=1)
+                fr_cleaned = duckdb.sql(f"select * from fr_cleaned where FIGHTER1 = '{fighter_filter}' or FIGHTER2='{fighter_filter}' order by date desc limit {al}").df()
             
     
-#     st.divider()
+    st.divider()
     
-#     fights = duckdb.sql(f"SELECT BOUT from fr_cleaned where FIGHTER1 = '{fighter_filter}' or FIGHTER2='{fighter_filter}'").df()
+    fights = duckdb.sql(f"SELECT BOUT from fr_cleaned where FIGHTER1 = '{fighter_filter}' or FIGHTER2='{fighter_filter}'").df()
 
     
-#     if len(fights)==0:
-#         st.write("No data for this fighter")
-#         st.stop()
+    if len(fights)==0:
+        st.write("No data for this fighter")
+        st.stop()
 
         
 #     winloss = duckdb.sql(f"SELECT case when FIGHTER1 = '{fighter_filter}' then FIGHTER1_OUTCOME else FIGHTER2_OUTCOME end result from fr_cleaned where FIGHTER1 = '{fighter_filter}' or FIGHTER2='{fighter_filter}' ")
