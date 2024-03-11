@@ -102,8 +102,7 @@ if view =='Fighter One Sheet':
     
     st.divider()
     
-    # fights = duckdb.sql(f"SELECT BOUT from fr_cleaned where FIGHTER1 = '{fighter_filter}' or FIGHTER2='{fighter_filter}'").df()
-    fights = fr_cleaned.query(f"FIGHTER1 == '{fighter_filter}' or FIGHTER2 == '{fighter_filter}'")
+    fights = duckdb.sql(f"SELECT BOUT from fr_cleaned where FIGHTER1 = '{fighter_filter}' or FIGHTER2='{fighter_filter}'").df()
 
     
     if len(fights)==0:
@@ -123,16 +122,16 @@ if view =='Fighter One Sheet':
 
 
 # Assuming fr_cleaned is a pandas DataFrame
-winloss = fr_cleaned.apply(lambda row: row['FIGHTER1_OUTCOME'] if row['FIGHTER1'] == fighter_filter else row['FIGHTER2_OUTCOME'], axis=1)
-winloss = winloss.rename('result')
-max_date = fr_cleaned.loc[(fr_cleaned['FIGHTER1'] == fighter_filter) | (fr_cleaned['FIGHTER2'] == fighter_filter), 'date'].max()
-last_fight = pd.DataFrame({'max_date': [max_date.strftime('%Y-%m-%d')],'days_since': [(pd.Timestamp.now() - max_date).days]})
-fighter_stats = fs_cleaned.loc[fs_cleaned['BOUT'].isin(fights['BOUT']) & (fs_cleaned['FIGHTER'] == fighter_filter)]
-cleaned_fighter_stats = fighter_stats.agg({'sig_str_l': 'sum','head_str_l': 'sum','td_l': lambda x: x.sum() / x.sum('td_a'),'kd': 'sum'}).rename(columns={'sig_str_l': 'sig_str','head_str_l': 'head_str','td_l': 'td_rate','kd': 'kd'})
-ko_wins = fr_cleaned.loc[((fr_cleaned['FIGHTER1'] == fighter_filter) & (fr_cleaned['FIGHTER1_OUTCOME'] == 'W')) | ((fr_cleaned['FIGHTER2'] == fighter_filter) & (fr_cleaned['FIGHTER2_OUTCOME'] == 'W')), 'METHOD'].str.strip().eq('KO/TKO').sum()
-opp_stats = fs_cleaned.loc[fs_cleaned['BOUT'].isin(fights['BOUT']) & (fs_cleaned['FIGHTER'] != fighter_filter)]
-cleaned_opp_stats = opp_stats.agg({'sig_str_l': 'sum','head_str_l': 'sum','head_str_a': 'sum','td_l': lambda x: x.sum() / x.sum('td_a'),'kd': 'sum'}).rename(columns={'sig_str_l': 'sig_abs','head_str_l': 'head_abs','head_str_a': 'head_at','td_l': 'td_abs_rate','kd': 'kd_abs'})
-ko_losses = fr_cleaned.loc[((fr_cleaned['FIGHTER1'] == fighter_filter) & (fr_cleaned['FIGHTER1_OUTCOME'] == 'L')) | ((fr_cleaned['FIGHTER2'] == fighter_filter) & (fr_cleaned['FIGHTER2_OUTCOME'] == 'L')), 'METHOD'].str.strip().eq('KO/TKO').sum()
+    winloss = fr_cleaned.apply(lambda row: row['FIGHTER1_OUTCOME'] if row['FIGHTER1'] == fighter_filter else row['FIGHTER2_OUTCOME'], axis=1)
+    winloss = winloss.rename('result')
+    max_date = fr_cleaned.loc[(fr_cleaned['FIGHTER1'] == fighter_filter) | (fr_cleaned['FIGHTER2'] == fighter_filter), 'date'].max()
+    last_fight = pd.DataFrame({'max_date': [max_date.strftime('%Y-%m-%d')],'days_since': [(pd.Timestamp.now() - max_date).days]})
+    fighter_stats = fs_cleaned.loc[fs_cleaned['BOUT'].isin(fights['BOUT']) & (fs_cleaned['FIGHTER'] == fighter_filter)]
+    cleaned_fighter_stats = fighter_stats.agg({'sig_str_l': 'sum','head_str_l': 'sum','td_l': lambda x: x.sum() / x.sum('td_a'),'kd': 'sum'}).rename(columns={'sig_str_l': 'sig_str','head_str_l': 'head_str','td_l': 'td_rate','kd': 'kd'})
+    ko_wins = fr_cleaned.loc[((fr_cleaned['FIGHTER1'] == fighter_filter) & (fr_cleaned['FIGHTER1_OUTCOME'] == 'W')) | ((fr_cleaned['FIGHTER2'] == fighter_filter) & (fr_cleaned['FIGHTER2_OUTCOME'] == 'W')), 'METHOD'].str.strip().eq('KO/TKO').sum()
+    opp_stats = fs_cleaned.loc[fs_cleaned['BOUT'].isin(fights['BOUT']) & (fs_cleaned['FIGHTER'] != fighter_filter)]
+    cleaned_opp_stats = opp_stats.agg({'sig_str_l': 'sum','head_str_l': 'sum','head_str_a': 'sum','td_l': lambda x: x.sum() / x.sum('td_a'),'kd': 'sum'}).rename(columns={'sig_str_l': 'sig_abs','head_str_l': 'head_abs','head_str_a': 'head_at','td_l': 'td_abs_rate','kd': 'kd_abs'})
+    ko_losses = fr_cleaned.loc[((fr_cleaned['FIGHTER1'] == fighter_filter) & (fr_cleaned['FIGHTER1_OUTCOME'] == 'L')) | ((fr_cleaned['FIGHTER2'] == fighter_filter) & (fr_cleaned['FIGHTER2_OUTCOME'] == 'L')), 'METHOD'].str.strip().eq('KO/TKO').sum()
 
     if fighter_filter:
         col1,col2,col3,col4,col5 = st.columns([0.3,0.5,0.3,0.5,0.6])
