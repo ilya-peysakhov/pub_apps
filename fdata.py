@@ -270,8 +270,8 @@ elif view =='Interesting Stats':
         # fig = px.pie(methods,values='FIGHTS', names='METHOD', template='simple_white')
         # st.plotly_chart(fig,use_container_width=True)
         base = alt.Chart(methods).encode(alt.Theta("FIGHTS:Q").stack(True),alt.Color("METHOD:N").legend(None))
-
-pie = base.mark_arc(outerRadius=120)
+        pie = base.mark_arc(outerRadius=120)
+        st.altair_chart(pie)
         
     
     with c2:
