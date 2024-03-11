@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-# pd.options.mode.copy_on_write = True
+pd.options.mode.copy_on_write = True
 import altair as alt
 
 import duckdb
@@ -230,15 +230,24 @@ if view =='Fighter One Sheet':
             st.area_chart(td_dif, x='DATE', y='TD_At_Diff')
 
         st.divider()
-        with st.expander("Career Results",expanded=False):
+        with st.popover("Career Results",expanded=False):
             career_results = duckdb.sql(f"SELECT left(DATE::string,10) AS DATE ,EVENT,case when FIGHTER1='{fighter_filter}' then FIGHTER2 else FIGHTER1 end as OPPONENT,case when FIGHTER1='{fighter_filter}' then FIGHTER1_OUTCOME else FIGHTER2_OUTCOME end as RESULT,METHOD,ROUND, TIME,DETAILS from fr_cleaned where FIGHTER1= '{fighter_filter}' or FIGHTER2='{fighter_filter}' order by DATE desc").df()
             st.dataframe(career_results,hide_index=True)
     
     st.divider()
-    with st.expander("Single Fight Stats",expanded=False):
+    with st.popover("Single Fight Stats",expanded=False):
         bout_filter = st.selectbox('Pick a bout',options=fights.drop_duplicates())
         fight_results = duckdb.sql(f"SELECT * EXCLUDE (BOUT,FIGHTER,EVENT) from fs where replace(trim(BOUT),'  ',' ') ='{bout_filter}'  and trim(FIGHTER)='{fighter_filter}' ").df()
-        
+        fight_results['SIG.STR.'] = fight_results['SIG.STR.'].astype(str)
+        fight_results['TD'] = fight_results['TD'].astype(str)
+        fight_results['TOTAL STR.'] = fight_results['TOTAL STR.'].astype(str)
+        fight_results['HEAD'] = fight_results['HEAD'].astype(str)
+        fight_results['BODY'] = fight_results['BODY'].astype(str)
+        fight_results['LEG'] = fight_results['LEG'].astype(str)
+        fight_results['CLINCH'] = fight_results['CLINCH'].astype(str)
+        fight_results['DISTANCE'] = fight_results['DISTANCE'].astype(str)
+        fight_results['GROUND'] = fight_results['GROUND'].astype(str)
+      
         if bout_filter:
              st.write(fight_results.set_index(fight_results.columns[0]).T)
 
