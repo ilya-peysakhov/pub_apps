@@ -251,215 +251,215 @@ if view =='Fighter One Sheet':
         if bout_filter:
              st.write(fight_results.set_index(fight_results.columns[0]).T)
 
-# elif view =='Show all dataset samples':
-#     st.write('Fighter Details (cleaned)')
-#     st.dataframe(duckdb.sql("select * from fighters limit 5").df(),hide_index=True)
-#     st.write('Events & Fights (cleaned)')
-#     st.dataframe(duckdb.sql("SELECT * from fed limit 5").df(),hide_index=True)
-#     st.write('Fight Results (cleaned)')
-#     st.dataframe(duckdb.sql("SELECT * from fr_cleaned limit 5").df(),hide_index=True)
-#     st.write('Fight Stats')
-#     st.dataframe(duckdb.sql("SELECT * from fs limit 5").df(),hide_index=True)
-#     st.write("Data Check - Events without data")
-#     anomalies = duckdb.sql("select left(DATE::string,10) as DATE,ed_c.EVENT, count(BOUT) as bouts_with_stats from ed_c left join fs on ed_c.EVENT =fs.EVENT group by 1,2 having bouts_with_stats=0 order by 1 desc").df()
-#     st.dataframe(anomalies,hide_index=True)
-# elif view =='Interesting Stats':
-#     st.subheader('Lifetime stats unless otherwise noted (last 2 years)')
-#     c1, c2  = st.columns(2)
-#     with c1:
-#         st.write("Fights by month")
-#         fights_monthly= duckdb.sql("SELECT date_trunc('month',date) as MONTH,count(*) as FIGHTS from fed group by 1 order by 1 asc").df()
-#         # fig = px.area(fights_monthly, x='MONTH',y='FIGHTS', template='simple_white')
-#         # st.plotly_chart(fig,use_container_width=True)
-#         st.area_chart(fights_monthly, x='MONTH',y='FIGHTS')
+elif view =='Show all dataset samples':
+    st.write('Fighter Details (cleaned)')
+    st.dataframe(duckdb.sql("select * from fighters limit 5").df(),hide_index=True)
+    st.write('Events & Fights (cleaned)')
+    st.dataframe(duckdb.sql("SELECT * from fed limit 5").df(),hide_index=True)
+    st.write('Fight Results (cleaned)')
+    st.dataframe(duckdb.sql("SELECT * from fr_cleaned limit 5").df(),hide_index=True)
+    st.write('Fight Stats')
+    st.dataframe(duckdb.sql("SELECT * from fs limit 5").df(),hide_index=True)
+    st.write("Data Check - Events without data")
+    anomalies = duckdb.sql("select left(DATE::string,10) as DATE,ed_c.EVENT, count(BOUT) as bouts_with_stats from ed_c left join fs on ed_c.EVENT =fs.EVENT group by 1,2 having bouts_with_stats=0 order by 1 desc").df()
+    st.dataframe(anomalies,hide_index=True)
+elif view =='Interesting Stats':
+    st.subheader('Lifetime stats unless otherwise noted (last 2 years)')
+    c1, c2  = st.columns(2)
+    with c1:
+        st.write("Fights by month")
+        fights_monthly= duckdb.sql("SELECT date_trunc('month',date) as MONTH,count(*) as FIGHTS from fed group by 1 order by 1 asc").df()
+        # fig = px.area(fights_monthly, x='MONTH',y='FIGHTS', template='simple_white')
+        # st.plotly_chart(fig,use_container_width=True)
+        st.area_chart(fights_monthly, x='MONTH',y='FIGHTS')
         
-#         st.divider()
+        st.divider()
 
-#         st.write('Most experienced referees (2yr)')
-#         refs = duckdb.sql("SELECT REFEREE,count(*) fights from fr_cleaned where date between current_date() -730 and current_date() group by 1 order by 2 desc limit 10").df()
-#         st.dataframe(refs,hide_index=True,use_container_width=False)
-#         # ui.table(data=refs)
-#         st.divider()
-#         st.write("Fights by result method (2yr)")
-#         methods = duckdb.sql("SELECT method, count(*) FIGHTS from fr_cleaned where date between current_date() -730 and current_date() group by 1 ").df()
-#         # fig = px.pie(methods,values='FIGHTS', names='METHOD', template='simple_white')
-#         # st.plotly_chart(fig,use_container_width=True)
-#         base = alt.Chart(methods).encode(alt.Theta("FIGHTS:Q").stack(True),alt.Color("METHOD:N").legend(None))
-#         pie = base.mark_arc(outerRadius=120)
-#         st.altair_chart(pie)
+        st.write('Most experienced referees (2yr)')
+        refs = duckdb.sql("SELECT REFEREE,count(*) fights from fr_cleaned where date between current_date() -730 and current_date() group by 1 order by 2 desc limit 10").df()
+        st.dataframe(refs,hide_index=True,use_container_width=False)
+        # ui.table(data=refs)
+        st.divider()
+        st.write("Fights by result method (2yr)")
+        methods = duckdb.sql("SELECT method, count(*) FIGHTS from fr_cleaned where date between current_date() -730 and current_date() group by 1 ").df()
+        # fig = px.pie(methods,values='FIGHTS', names='METHOD', template='simple_white')
+        # st.plotly_chart(fig,use_container_width=True)
+        base = alt.Chart(methods).encode(alt.Theta("FIGHTS:Q").stack(True),alt.Color("METHOD:N").legend(None))
+        pie = base.mark_arc(outerRadius=120)
+        st.altair_chart(pie)
         
     
-#     with c2:
-#         st.write("Number of Fights per Fighter")
-#         fight_distro = duckdb.sql("select FIGHTS,count(1) FIGHTERS from (select FIGHTER,COUNT(DISTINCT EVENT||BOUT) FIGHTS from fs_cleaned group by 1) group by 1 order by 1").df()
-#         # fig = px.bar(fight_distro, x='FIGHTS',y='FIGHTERS', template='simple_white')
-#         # st.plotly_chart(fig,use_container_width=True)
-#         st.bar_chart(fight_distro, x='FIGHTS',y='FIGHTERS')
-#         st.divider()
+    with c2:
+        st.write("Number of Fights per Fighter")
+        fight_distro = duckdb.sql("select FIGHTS,count(1) FIGHTERS from (select FIGHTER,COUNT(DISTINCT EVENT||BOUT) FIGHTS from fs_cleaned group by 1) group by 1 order by 1").df()
+        # fig = px.bar(fight_distro, x='FIGHTS',y='FIGHTERS', template='simple_white')
+        # st.plotly_chart(fig,use_container_width=True)
+        st.bar_chart(fight_distro, x='FIGHTS',y='FIGHTERS')
+        st.divider()
         
-#         st.write('Most commonly used venues (2yr)')
-#         locations = duckdb.sql("SELECT LOCATION,count(distinct EVENT) EVENTS from fed where date between current_date() -730 and current_date() group by 1 order by 2 desc limit 10").df()
-#         # fig = px.bar(locations.sort_values(by='EVENTS'), x='EVENTS',y='LOCATION', template='simple_white')
-#         # st.plotly_chart(fig,use_container_width=True)
+        st.write('Most commonly used venues (2yr)')
+        locations = duckdb.sql("SELECT LOCATION,count(distinct EVENT) EVENTS from fed where date between current_date() -730 and current_date() group by 1 order by 2 desc limit 10").df()
+        # fig = px.bar(locations.sort_values(by='EVENTS'), x='EVENTS',y='LOCATION', template='simple_white')
+        # st.plotly_chart(fig,use_container_width=True)
        
-#         base = alt.Chart(locations.sort_values(by='EVENTS')).mark_point().encode(x='EVENTS',y='LOCATION')
-#         st.altair_chart(base)
+        base = alt.Chart(locations.sort_values(by='EVENTS')).mark_point().encode(x='EVENTS',y='LOCATION')
+        st.altair_chart(base)
 
-#         st.divider()
-#         st.write('Number of Fighters fought by Weight/Type (2yr)')
-#         fighters_by_class = duckdb.sql("""SELECT weightclass,count(distinct fighter) as fighters from 
-#             (SELECT replace(weightclass,' Bout','') as weightclass,FIGHTER1 fighter from fr_cleaned where date between current_date() -730 and current_date() group by 1,2 
-#             UNION 
-#             SELECT replace(weightclass,' Bout','') as weightclass,FIGHTER2 fighter from fr_cleaned where date between current_date() -730 and current_date() group by 1,2)
-#             group by 1
-#             """).df()
-#         st.dataframe(fighters_by_class,hide_index=True)
+        st.divider()
+        st.write('Number of Fighters fought by Weight/Type (2yr)')
+        fighters_by_class = duckdb.sql("""SELECT weightclass,count(distinct fighter) as fighters from 
+            (SELECT replace(weightclass,' Bout','') as weightclass,FIGHTER1 fighter from fr_cleaned where date between current_date() -730 and current_date() group by 1,2 
+            UNION 
+            SELECT replace(weightclass,' Bout','') as weightclass,FIGHTER2 fighter from fr_cleaned where date between current_date() -730 and current_date() group by 1,2)
+            group by 1
+            """).df()
+        st.dataframe(fighters_by_class,hide_index=True)
 
-#     st.write("Method of winning as a percentage of all methods over time")
-#     frame = st.selectbox('Pick a time dimension',['year','quarter','month','week','day'])
-#     methods_over_time = duckdb.sql(f"SELECT case when METHOD like 'Decision%' then 'Decision' else METHOD end as METHOD, date_trunc('{frame}',date) as MONTH, count(*)/sum(sum(1)) over (partition by MONTH) METHOD_PCT from fr_cleaned  group by 1,2 ").df()
+    st.write("Method of winning as a percentage of all methods over time")
+    frame = st.selectbox('Pick a time dimension',['year','quarter','month','week','day'])
+    methods_over_time = duckdb.sql(f"SELECT case when METHOD like 'Decision%' then 'Decision' else METHOD end as METHOD, date_trunc('{frame}',date) as MONTH, count(*)/sum(sum(1)) over (partition by MONTH) METHOD_PCT from fr_cleaned  group by 1,2 ").df()
 
-#     # fig = px.area(methods_over_time, x='MONTH',y='METHOD_PCT',color='METHOD', template='simple_white')
-#     # st.plotly_chart(fig,use_container_width=True)
-#     st.area_chart(methods_over_time, x='MONTH',y='METHOD_PCT',color='METHOD')
-# elif view =='Aggregate Table':      
-#     min_fights = st.number_input('Minimum Fights',step=1,value=20)
-#     st.write(f"Minimum {min_fights} fights, historical rankings for total career offensive and defensive stats")
+    # fig = px.area(methods_over_time, x='MONTH',y='METHOD_PCT',color='METHOD', template='simple_white')
+    # st.plotly_chart(fig,use_container_width=True)
+    st.area_chart(methods_over_time, x='MONTH',y='METHOD_PCT',color='METHOD')
+elif view =='Aggregate Table':      
+    min_fights = st.number_input('Minimum Fights',step=1,value=20)
+    st.write(f"Minimum {min_fights} fights, historical rankings for total career offensive and defensive stats")
     
-#     fighters = duckdb.sql(f"SELECT fighter FROM fs_cleaned GROUP BY 1 having count(distinct BOUT||EVENT) >={min_fights} ").df()
-#     str_results = pd.DataFrame()
-#     all_time_offense = duckdb.sql(f"SELECT FIGHTER, COUNT(DISTINCT BOUT||EVENT) as FIGHTS, COUNT(*) AS ROUNDS,  ROUND(ROUNDS/CAST(FIGHTS as REAL),1) as ROUNDS_PER_FIGHT ,SUM(head_str_l::INTEGER) AS HEAD_STRIKES_LANDED, SUM(leg_str_l::INTEGER) as LEG_STRIKES_LANDED,sum(sig_str_l::INTEGER) as SIG_STRIKES_LANDED,sum(KD::INTEGER) as KD_LANDED, sum(TD_L::INT) as TD_LANDED from fs_cleaned group by 1 having FIGHTS>={min_fights}")
+    fighters = duckdb.sql(f"SELECT fighter FROM fs_cleaned GROUP BY 1 having count(distinct BOUT||EVENT) >={min_fights} ").df()
+    str_results = pd.DataFrame()
+    all_time_offense = duckdb.sql(f"SELECT FIGHTER, COUNT(DISTINCT BOUT||EVENT) as FIGHTS, COUNT(*) AS ROUNDS,  ROUND(ROUNDS/CAST(FIGHTS as REAL),1) as ROUNDS_PER_FIGHT ,SUM(head_str_l::INTEGER) AS HEAD_STRIKES_LANDED, SUM(leg_str_l::INTEGER) as LEG_STRIKES_LANDED,sum(sig_str_l::INTEGER) as SIG_STRIKES_LANDED,sum(KD::INTEGER) as KD_LANDED, sum(TD_L::INT) as TD_LANDED from fs_cleaned group by 1 having FIGHTS>={min_fights}")
     
-#     @st.cache_data(ttl='6d')
-#     def query_fighter_data(fighter):
-#       query = f"SELECT '{fighter}' AS FIGHTER, SUM(head_str_l::INTEGER) AS HEAD_STRIKES_ABS, SUM(head_str_a::INTEGER) AS HEAD_STRIKES_AT, SUM(sig_str_l::INTEGER) AS SIG_STRIKES_ABS, SUM(leg_str_l::INTEGER) as LEG_STRIKES_ABSORBED, sum(KD::INTEGER) as KD_ABSORED, sum(TD_L::INT) as TD_GIVEN_UP FROM fs_cleaned WHERE BOUT LIKE '%{fighter}%' AND fighter != '{fighter}'"
-#       return duckdb.sql(query).df()
+    @st.cache_data(ttl='6d')
+    def query_fighter_data(fighter):
+      query = f"SELECT '{fighter}' AS FIGHTER, SUM(head_str_l::INTEGER) AS HEAD_STRIKES_ABS, SUM(head_str_a::INTEGER) AS HEAD_STRIKES_AT, SUM(sig_str_l::INTEGER) AS SIG_STRIKES_ABS, SUM(leg_str_l::INTEGER) as LEG_STRIKES_ABSORBED, sum(KD::INTEGER) as KD_ABSORED, sum(TD_L::INT) as TD_GIVEN_UP FROM fs_cleaned WHERE BOUT LIKE '%{fighter}%' AND fighter != '{fighter}'"
+      return duckdb.sql(query).df()
     
-#     str_results = pd.concat(fighters['FIGHTER'].apply(query_fighter_data).tolist(), ignore_index=True)
-#     # dfs_list = [query_fighter_data(fighter) for fighter in fighters['FIGHTER']]
-#     # str_results = pd.concat(dfs_list, ignore_index=True)
+    str_results = pd.concat(fighters['FIGHTER'].apply(query_fighter_data).tolist(), ignore_index=True)
+    # dfs_list = [query_fighter_data(fighter) for fighter in fighters['FIGHTER']]
+    # str_results = pd.concat(dfs_list, ignore_index=True)
 
   
-#     combined_stats = duckdb.sql("SELECT a.*, ROUND(SIG_STRIKES_LANDED/SIG_STRIKES_ABS,1) as SIG_STR_DIFF, ROUND((1-HEAD_STRIKES_ABS/HEAD_STRIKES_AT),2) as HEAD_MOVEMENT, b.* EXCLUDE (FIGHTER) from all_time_offense as a left join str_results as b on a.FIGHTER=b.FIGHTER").df()
-#     st.dataframe(combined_stats.sort_values(by='FIGHTS', ascending=False),hide_index=True)   
-# elif view=='SQL Editor':
-#     st.write("Write custom sql on the data using [🦆duckdb](https://duckdb.org/docs/archive/0.9.2/sql/introduction)")
-#     with st.expander("Example - Win % by age"):
-#       st.code("""select age,  sum(W) as wins, sum(L) as losses, sum(fights) as total_results, sum(W)/(sum(W)+sum(L)) as win_pct from 
-#        (
-#       select date_diff('year',strptime(dob, '%b %d, %Y'),date)  as age, sum (case when fighter1_outcome = 'W' then 1 else 0 end) W, sum (case when fighter1_outcome = 'L' then 1 else 0 end) as L, count(1) fights from fighters inner join fr_cleaned on fighter = fighter1 where (weightclass ilike '%featherweight title%' )
-#       group by 1 
-#       UNION
-#       select date_diff('year',strptime(dob, '%b %d, %Y'),date)  as age, sum (case when fighter2_outcome = 'W' then 1 else 0 end) W, sum (case when fighter2_outcome = 'L' then 1 else 0 end) as L, count(1) fights from fighters inner join fr_cleaned on fighter = fighter2 where (weightclass ilike '%featherweight title%' )
-#       group by 1 
-#        )
-#       group by 1   
-#       """)
-#     col1,col2 = st.columns([3,10])
-#     with col1:
-#         st.write('Tables')
-#         st.write('fs_cleaned = fight stats')
-#         st.write('fr_cleaned = fight results')
-#         st.write('fighters = fighter details')
-#     with col2:
-#         query_text = st_ace()
-#         # query_text = st.text_area('Write SELECT statement here')
-#         st.caption('Will add history of previous queries for reference')
-#         def pullData():
-#             query = duckdb.sql(f"{query_text.strip()}")
-#             return query
+    combined_stats = duckdb.sql("SELECT a.*, ROUND(SIG_STRIKES_LANDED/SIG_STRIKES_ABS,1) as SIG_STR_DIFF, ROUND((1-HEAD_STRIKES_ABS/HEAD_STRIKES_AT),2) as HEAD_MOVEMENT, b.* EXCLUDE (FIGHTER) from all_time_offense as a left join str_results as b on a.FIGHTER=b.FIGHTER").df()
+    st.dataframe(combined_stats.sort_values(by='FIGHTS', ascending=False),hide_index=True)   
+elif view=='SQL Editor':
+    st.write("Write custom sql on the data using [🦆duckdb](https://duckdb.org/docs/archive/0.9.2/sql/introduction)")
+    with st.expander("Example - Win % by age"):
+      st.code("""select age,  sum(W) as wins, sum(L) as losses, sum(fights) as total_results, sum(W)/(sum(W)+sum(L)) as win_pct from 
+       (
+      select date_diff('year',strptime(dob, '%b %d, %Y'),date)  as age, sum (case when fighter1_outcome = 'W' then 1 else 0 end) W, sum (case when fighter1_outcome = 'L' then 1 else 0 end) as L, count(1) fights from fighters inner join fr_cleaned on fighter = fighter1 where (weightclass ilike '%featherweight title%' )
+      group by 1 
+      UNION
+      select date_diff('year',strptime(dob, '%b %d, %Y'),date)  as age, sum (case when fighter2_outcome = 'W' then 1 else 0 end) W, sum (case when fighter2_outcome = 'L' then 1 else 0 end) as L, count(1) fights from fighters inner join fr_cleaned on fighter = fighter2 where (weightclass ilike '%featherweight title%' )
+      group by 1 
+       )
+      group by 1   
+      """)
+    col1,col2 = st.columns([3,10])
+    with col1:
+        st.write('Tables')
+        st.write('fs_cleaned = fight stats')
+        st.write('fr_cleaned = fight results')
+        st.write('fighters = fighter details')
+    with col2:
+        query_text = st_ace()
+        # query_text = st.text_area('Write SELECT statement here')
+        st.caption('Will add history of previous queries for reference')
+        def pullData():
+            query = duckdb.sql(f"{query_text.strip()}")
+            return query
     
-#         if st.button('Pull data') and query_text is not None:
-#             try:
-#               with st.spinner('Running Query'):
-#                 data = pullData()
-#                 data = data.df()
-#                 st.dataframe(data.head(100), hide_index=True)
+        if st.button('Pull data') and query_text is not None:
+            try:
+              with st.spinner('Running Query'):
+                data = pullData()
+                data = data.df()
+                st.dataframe(data.head(100), hide_index=True)
                 
-#             except Exception as e:
-#               st.write(e)
-# elif view=='Tale of the Tape':
-#   st.write('Compare advanced metrics between 2 fighters')
-#   c1, c2 = st.columns(2)
+            except Exception as e:
+              st.write(e)
+elif view=='Tale of the Tape':
+  st.write('Compare advanced metrics between 2 fighters')
+  c1, c2 = st.columns(2)
 
-#   fighter1_filter = c1.selectbox('Pick Fighter 1', options=fighter_list)
-#   fights1 = duckdb.sql(f"SELECT BOUT from fr_cleaned where FIGHTER1 = '{fighter1_filter}' or FIGHTER2='{fighter1_filter}'").df()
-#   fighter_stats1 = duckdb.sql(f"SELECT * from fs_cleaned where BOUT in (select BOUT from fights1) and FIGHTER ='{fighter1_filter}' ")
-#   cleaned_fighter_stats1 = duckdb.sql("SELECT sum(sig_str_l::INTEGER) as sig_str, sum(head_str_l::INTEGER) as head_str, sum(td_l::INTEGER) as td_l, round(sum(td_l::INTEGER)/cast(sum(td_a::REAL) as REAL),2)  as td_rate, sum(kd::INTEGER) as kd, from fighter_stats1").df()
-#   opp_stats1 = duckdb.sql(f"SELECT * from fs_cleaned where BOUT in (select * from fights1) and FIGHTER !='{fighter1_filter}' ")
-#   cleaned_opp_stats1 = duckdb.sql("SELECT sum(sig_str_l::INTEGER) as sig_abs ,sum(head_str_l::INTEGER) as head_abs,sum(head_str_a::INTEGER) as head_at,sum(td_l::INTEGER) as td_abs,round(sum(td_l::INTEGER)/cast(sum(td_a::REAL) as REAL),2) as td_abs_rate,sum(kd::INTEGER) as kd_abs from opp_stats1").df()
+  fighter1_filter = c1.selectbox('Pick Fighter 1', options=fighter_list)
+  fights1 = duckdb.sql(f"SELECT BOUT from fr_cleaned where FIGHTER1 = '{fighter1_filter}' or FIGHTER2='{fighter1_filter}'").df()
+  fighter_stats1 = duckdb.sql(f"SELECT * from fs_cleaned where BOUT in (select BOUT from fights1) and FIGHTER ='{fighter1_filter}' ")
+  cleaned_fighter_stats1 = duckdb.sql("SELECT sum(sig_str_l::INTEGER) as sig_str, sum(head_str_l::INTEGER) as head_str, sum(td_l::INTEGER) as td_l, round(sum(td_l::INTEGER)/cast(sum(td_a::REAL) as REAL),2)  as td_rate, sum(kd::INTEGER) as kd, from fighter_stats1").df()
+  opp_stats1 = duckdb.sql(f"SELECT * from fs_cleaned where BOUT in (select * from fights1) and FIGHTER !='{fighter1_filter}' ")
+  cleaned_opp_stats1 = duckdb.sql("SELECT sum(sig_str_l::INTEGER) as sig_abs ,sum(head_str_l::INTEGER) as head_abs,sum(head_str_a::INTEGER) as head_at,sum(td_l::INTEGER) as td_abs,round(sum(td_l::INTEGER)/cast(sum(td_a::REAL) as REAL),2) as td_abs_rate,sum(kd::INTEGER) as kd_abs from opp_stats1").df()
   
-#   c1.metric('Significant Strikes Differential', value=round(cleaned_fighter_stats1['sig_str']/cleaned_opp_stats1['sig_abs'],1))
-#   c1.metric('Head Strikes Differential', value=round(cleaned_fighter_stats1['head_str']/cleaned_opp_stats1['head_abs'],1))
-#   c1.metric('Power Differential (Knockdowns)', value=round(cleaned_fighter_stats1['kd']/cleaned_opp_stats1['kd_abs'],1))
-#   c1.metric(label='Total Takedowns Landed',value=int(cleaned_fighter_stats1['td_l'].iloc[0]),delta="{0:.0%}".format(round(float(cleaned_fighter_stats1['td_rate'].iloc[0]),2)))
-#   c1.metric(label='Total Takedowns Given Up',value=int(cleaned_opp_stats1['td_abs'].iloc[0]),delta="{0:.0%}".format(round(float(cleaned_opp_stats1['td_abs_rate'].iloc[0]),2)))
-#   c1.metric('Takedown Differential', value=round(cleaned_fighter_stats1['td_l']/cleaned_opp_stats1['td_abs'],1))
-#   c1.caption('Success rate at evading head strikes')
-#   head_movement1 = round(1-(cleaned_opp_stats1['head_abs']/cleaned_opp_stats1['head_at']),2)
-#   c1.metric('Head Movement', value=head_movement1)
+  c1.metric('Significant Strikes Differential', value=round(cleaned_fighter_stats1['sig_str']/cleaned_opp_stats1['sig_abs'],1))
+  c1.metric('Head Strikes Differential', value=round(cleaned_fighter_stats1['head_str']/cleaned_opp_stats1['head_abs'],1))
+  c1.metric('Power Differential (Knockdowns)', value=round(cleaned_fighter_stats1['kd']/cleaned_opp_stats1['kd_abs'],1))
+  c1.metric(label='Total Takedowns Landed',value=int(cleaned_fighter_stats1['td_l'].iloc[0]),delta="{0:.0%}".format(round(float(cleaned_fighter_stats1['td_rate'].iloc[0]),2)))
+  c1.metric(label='Total Takedowns Given Up',value=int(cleaned_opp_stats1['td_abs'].iloc[0]),delta="{0:.0%}".format(round(float(cleaned_opp_stats1['td_abs_rate'].iloc[0]),2)))
+  c1.metric('Takedown Differential', value=round(cleaned_fighter_stats1['td_l']/cleaned_opp_stats1['td_abs'],1))
+  c1.caption('Success rate at evading head strikes')
+  head_movement1 = round(1-(cleaned_opp_stats1['head_abs']/cleaned_opp_stats1['head_at']),2)
+  c1.metric('Head Movement', value=head_movement1)
   
-#   fighter2_filter = c2.selectbox('Pick Fighter 2', options=fighter_list)
-#   fights2 = duckdb.sql(f"SELECT BOUT from fr_cleaned where FIGHTER1 = '{fighter2_filter}' or FIGHTER2='{fighter2_filter}'").df()
-#   fighter_stats2 = duckdb.sql(f"SELECT * from fs_cleaned where BOUT in (select BOUT from fights2) and FIGHTER ='{fighter2_filter}' ")
-#   cleaned_fighter_stats2 = duckdb.sql("SELECT sum(sig_str_l::INTEGER) as sig_str, sum(head_str_l::INTEGER) as head_str, sum(td_l::INTEGER) as td_l, round(sum(td_l::INTEGER)/cast(sum(td_a::REAL) as REAL),2)  as td_rate, sum(kd::INTEGER) as kd, from fighter_stats2").df()
-#   opp_stats2 = duckdb.sql(f"SELECT * from fs_cleaned where BOUT in (select * from fights2) and FIGHTER !='{fighter2_filter}' ")
-#   cleaned_opp_stats2 = duckdb.sql("SELECT sum(sig_str_l::INTEGER) as sig_abs ,sum(head_str_l::INTEGER) as head_abs,sum(head_str_a::INTEGER) as head_at,sum(td_l::INTEGER) as td_abs,round(sum(td_l::INTEGER)/cast(sum(td_a::REAL) as REAL),2) as td_abs_rate,sum(kd::INTEGER) as kd_abs from opp_stats2").df()
+  fighter2_filter = c2.selectbox('Pick Fighter 2', options=fighter_list)
+  fights2 = duckdb.sql(f"SELECT BOUT from fr_cleaned where FIGHTER1 = '{fighter2_filter}' or FIGHTER2='{fighter2_filter}'").df()
+  fighter_stats2 = duckdb.sql(f"SELECT * from fs_cleaned where BOUT in (select BOUT from fights2) and FIGHTER ='{fighter2_filter}' ")
+  cleaned_fighter_stats2 = duckdb.sql("SELECT sum(sig_str_l::INTEGER) as sig_str, sum(head_str_l::INTEGER) as head_str, sum(td_l::INTEGER) as td_l, round(sum(td_l::INTEGER)/cast(sum(td_a::REAL) as REAL),2)  as td_rate, sum(kd::INTEGER) as kd, from fighter_stats2").df()
+  opp_stats2 = duckdb.sql(f"SELECT * from fs_cleaned where BOUT in (select * from fights2) and FIGHTER !='{fighter2_filter}' ")
+  cleaned_opp_stats2 = duckdb.sql("SELECT sum(sig_str_l::INTEGER) as sig_abs ,sum(head_str_l::INTEGER) as head_abs,sum(head_str_a::INTEGER) as head_at,sum(td_l::INTEGER) as td_abs,round(sum(td_l::INTEGER)/cast(sum(td_a::REAL) as REAL),2) as td_abs_rate,sum(kd::INTEGER) as kd_abs from opp_stats2").df()
   
-#   c2.metric('Significant Strikes Differential', value=round(cleaned_fighter_stats2['sig_str']/cleaned_opp_stats2['sig_abs'],1))
-#   c2.metric('Head Strikes Differential', value=round(cleaned_fighter_stats2['head_str']/cleaned_opp_stats2['head_abs'],1))
-#   c2.metric('Power Differential (Knockdowns)', value=round(cleaned_fighter_stats2['kd']/cleaned_opp_stats2['kd_abs'],1))
-#   c2.metric(label='Total Takedowns Landed',value=int(cleaned_fighter_stats2['td_l'].iloc[0]),delta="{0:.0%}".format(round(float(cleaned_fighter_stats2['td_rate'].iloc[0]),2)))
-#   c2.metric(label='Total Takedowns Given Up',value=int(cleaned_opp_stats2['td_abs'].iloc[0]),delta="{0:.0%}".format(round(float(cleaned_opp_stats2['td_abs_rate'].iloc[0]),2)))
-#   c2.metric('Takedown Differential', value=round(cleaned_fighter_stats2['td_l']/cleaned_opp_stats2['td_abs'],1))
-#   c2.caption('Success rate at evading head strikes')
-#   head_movement2 = round(1-(cleaned_opp_stats2['head_abs']/cleaned_opp_stats2['head_at']),2)
-#   c2.metric('Head Movement', value=head_movement2)
-#   # c1, c2 = st.columns(2)
-#   # with c1:
-#   #   fighter1_filter = st.selectbox('Pick Fighter 1',options=fighter_list)
-#   #   fights1 = duckdb.sql(f"SELECT BOUT from fr_cleaned where FIGHTER1 = '{fighter1_filter}' or FIGHTER2='{fighter1_filter}'").df()
-#   #   fighter_stats1 = duckdb.sql(f"SELECT * from fs_cleaned where BOUT in (select BOUT from fights1) and FIGHTER ='{fighter1_filter}' ")
-#   #   cleaned_fighter_stats1 = duckdb.sql("SELECT sum(sig_str_l::INTEGER) as sig_str, sum(head_str_l::INTEGER) as head_str, sum(td_l::INTEGER) as td_l, round(sum(td_l::INTEGER)/cast(sum(td_a::REAL) as REAL),2)  as td_rate, sum(kd::INTEGER) as kd, from fighter_stats1").df()
-#   #   opp_stats1 = duckdb.sql(f"SELECT * from fs_cleaned where BOUT in (select * from fights1) and FIGHTER !='{fighter1_filter}' ")
-#   #   cleaned_opp_stats1 = duckdb.sql("SELECT sum(sig_str_l::INTEGER) as sig_abs ,sum(head_str_l::INTEGER) as head_abs,sum(head_str_a::INTEGER) as head_at,sum(td_l::INTEGER) as td_abs,round(sum(td_l::INTEGER)/cast(sum(td_a::REAL) as REAL),2) as td_abs_rate,sum(kd::INTEGER) as kd_abs from opp_stats1").df()
+  c2.metric('Significant Strikes Differential', value=round(cleaned_fighter_stats2['sig_str']/cleaned_opp_stats2['sig_abs'],1))
+  c2.metric('Head Strikes Differential', value=round(cleaned_fighter_stats2['head_str']/cleaned_opp_stats2['head_abs'],1))
+  c2.metric('Power Differential (Knockdowns)', value=round(cleaned_fighter_stats2['kd']/cleaned_opp_stats2['kd_abs'],1))
+  c2.metric(label='Total Takedowns Landed',value=int(cleaned_fighter_stats2['td_l'].iloc[0]),delta="{0:.0%}".format(round(float(cleaned_fighter_stats2['td_rate'].iloc[0]),2)))
+  c2.metric(label='Total Takedowns Given Up',value=int(cleaned_opp_stats2['td_abs'].iloc[0]),delta="{0:.0%}".format(round(float(cleaned_opp_stats2['td_abs_rate'].iloc[0]),2)))
+  c2.metric('Takedown Differential', value=round(cleaned_fighter_stats2['td_l']/cleaned_opp_stats2['td_abs'],1))
+  c2.caption('Success rate at evading head strikes')
+  head_movement2 = round(1-(cleaned_opp_stats2['head_abs']/cleaned_opp_stats2['head_at']),2)
+  c2.metric('Head Movement', value=head_movement2)
+  # c1, c2 = st.columns(2)
+  # with c1:
+  #   fighter1_filter = st.selectbox('Pick Fighter 1',options=fighter_list)
+  #   fights1 = duckdb.sql(f"SELECT BOUT from fr_cleaned where FIGHTER1 = '{fighter1_filter}' or FIGHTER2='{fighter1_filter}'").df()
+  #   fighter_stats1 = duckdb.sql(f"SELECT * from fs_cleaned where BOUT in (select BOUT from fights1) and FIGHTER ='{fighter1_filter}' ")
+  #   cleaned_fighter_stats1 = duckdb.sql("SELECT sum(sig_str_l::INTEGER) as sig_str, sum(head_str_l::INTEGER) as head_str, sum(td_l::INTEGER) as td_l, round(sum(td_l::INTEGER)/cast(sum(td_a::REAL) as REAL),2)  as td_rate, sum(kd::INTEGER) as kd, from fighter_stats1").df()
+  #   opp_stats1 = duckdb.sql(f"SELECT * from fs_cleaned where BOUT in (select * from fights1) and FIGHTER !='{fighter1_filter}' ")
+  #   cleaned_opp_stats1 = duckdb.sql("SELECT sum(sig_str_l::INTEGER) as sig_abs ,sum(head_str_l::INTEGER) as head_abs,sum(head_str_a::INTEGER) as head_at,sum(td_l::INTEGER) as td_abs,round(sum(td_l::INTEGER)/cast(sum(td_a::REAL) as REAL),2) as td_abs_rate,sum(kd::INTEGER) as kd_abs from opp_stats1").df()
     
-#   #   st.metric('Significant Strikes Differential',value=round(cleaned_fighter_stats1['sig_str']/cleaned_opp_stats1['sig_abs'],1))
-#   #   st.metric('Head Strikes Differential',value=round(cleaned_fighter_stats1['head_str']/cleaned_opp_stats1['head_abs'],1))
-#   #   st.metric('Power Differential (Knockdowns)',value=round(cleaned_fighter_stats1['kd']/cleaned_opp_stats1['kd_abs'],1))
-#   #   st.metric('Takedown Differential',value=round(cleaned_fighter_stats1['td_l']/cleaned_opp_stats1['td_abs'],1))
-#   #   st.caption('Success rate at evading head strikes')
-#   #   head_movement1 = round(1-(cleaned_opp_stats1['head_abs']/cleaned_opp_stats1['head_at']),2)
-#   #   st.metric('Head Movement',value=head_movement1 )
+  #   st.metric('Significant Strikes Differential',value=round(cleaned_fighter_stats1['sig_str']/cleaned_opp_stats1['sig_abs'],1))
+  #   st.metric('Head Strikes Differential',value=round(cleaned_fighter_stats1['head_str']/cleaned_opp_stats1['head_abs'],1))
+  #   st.metric('Power Differential (Knockdowns)',value=round(cleaned_fighter_stats1['kd']/cleaned_opp_stats1['kd_abs'],1))
+  #   st.metric('Takedown Differential',value=round(cleaned_fighter_stats1['td_l']/cleaned_opp_stats1['td_abs'],1))
+  #   st.caption('Success rate at evading head strikes')
+  #   head_movement1 = round(1-(cleaned_opp_stats1['head_abs']/cleaned_opp_stats1['head_at']),2)
+  #   st.metric('Head Movement',value=head_movement1 )
   
-#   # with c2:
-#   #   fighter2_filter = st.selectbox('Pick Fighter 2',options=fighter_list)
-#   #   fights2 = duckdb.sql(f"SELECT BOUT from fr_cleaned where FIGHTER1 = '{fighter2_filter}' or FIGHTER2='{fighter2_filter}'").df()
-#   #   fighter_stats2 = duckdb.sql(f"SELECT * from fs_cleaned where BOUT in (select BOUT from fights2) and FIGHTER ='{fighter2_filter}' ")
-#   #   cleaned_fighter_stats2 = duckdb.sql("SELECT sum(sig_str_l::INTEGER) as sig_str, sum(head_str_l::INTEGER) as head_str, sum(td_l::INTEGER) as td_l, round(sum(td_l::INTEGER)/cast(sum(td_a::REAL) as REAL),2)  as td_rate, sum(kd::INTEGER) as kd, from fighter_stats2").df()
-#   #   opp_stats2 = duckdb.sql(f"SELECT * from fs_cleaned where BOUT in (select * from fights2) and FIGHTER !='{fighter2_filter}' ")
-#   #   cleaned_opp_stats2 = duckdb.sql("SELECT sum(sig_str_l::INTEGER) as sig_abs ,sum(head_str_l::INTEGER) as head_abs,sum(head_str_a::INTEGER) as head_at,sum(td_l::INTEGER) as td_abs,round(sum(td_l::INTEGER)/cast(sum(td_a::REAL) as REAL),2) as td_abs_rate,sum(kd::INTEGER) as kd_abs from opp_stats2").df()
+  # with c2:
+  #   fighter2_filter = st.selectbox('Pick Fighter 2',options=fighter_list)
+  #   fights2 = duckdb.sql(f"SELECT BOUT from fr_cleaned where FIGHTER1 = '{fighter2_filter}' or FIGHTER2='{fighter2_filter}'").df()
+  #   fighter_stats2 = duckdb.sql(f"SELECT * from fs_cleaned where BOUT in (select BOUT from fights2) and FIGHTER ='{fighter2_filter}' ")
+  #   cleaned_fighter_stats2 = duckdb.sql("SELECT sum(sig_str_l::INTEGER) as sig_str, sum(head_str_l::INTEGER) as head_str, sum(td_l::INTEGER) as td_l, round(sum(td_l::INTEGER)/cast(sum(td_a::REAL) as REAL),2)  as td_rate, sum(kd::INTEGER) as kd, from fighter_stats2").df()
+  #   opp_stats2 = duckdb.sql(f"SELECT * from fs_cleaned where BOUT in (select * from fights2) and FIGHTER !='{fighter2_filter}' ")
+  #   cleaned_opp_stats2 = duckdb.sql("SELECT sum(sig_str_l::INTEGER) as sig_abs ,sum(head_str_l::INTEGER) as head_abs,sum(head_str_a::INTEGER) as head_at,sum(td_l::INTEGER) as td_abs,round(sum(td_l::INTEGER)/cast(sum(td_a::REAL) as REAL),2) as td_abs_rate,sum(kd::INTEGER) as kd_abs from opp_stats2").df()
     
-#   #   st.metric('Significant Strikes Differential',value=round(cleaned_fighter_stats2['sig_str']/cleaned_opp_stats2['sig_abs'],1))
-#   #   st.metric('Head Strikes Differential',value=round(cleaned_fighter_stats2['head_str']/cleaned_opp_stats2['head_abs'],1))
-#   #   st.metric('Power Differential (Knockdowns)',value=round(cleaned_fighter_stats2['kd']/cleaned_opp_stats2['kd_abs'],1))
-#   #   st.metric('Takedown Differential',value=round(cleaned_fighter_stats2['td_l']/cleaned_opp_stats2['td_abs'],1))
-#   #   st.caption('Success rate at evading head strikes')
-#   #   head_movement2 = round(1-(cleaned_opp_stats2['head_abs']/cleaned_opp_stats2['head_at']),2)
-#   #   st.metric('Head Movement',value=head_movement2 )
+  #   st.metric('Significant Strikes Differential',value=round(cleaned_fighter_stats2['sig_str']/cleaned_opp_stats2['sig_abs'],1))
+  #   st.metric('Head Strikes Differential',value=round(cleaned_fighter_stats2['head_str']/cleaned_opp_stats2['head_abs'],1))
+  #   st.metric('Power Differential (Knockdowns)',value=round(cleaned_fighter_stats2['kd']/cleaned_opp_stats2['kd_abs'],1))
+  #   st.metric('Takedown Differential',value=round(cleaned_fighter_stats2['td_l']/cleaned_opp_stats2['td_abs'],1))
+  #   st.caption('Success rate at evading head strikes')
+  #   head_movement2 = round(1-(cleaned_opp_stats2['head_abs']/cleaned_opp_stats2['head_at']),2)
+  #   st.metric('Head Movement',value=head_movement2 )
   
        
        
+st.divider()
+col1,col2,col3 = st.columns(3)
+with col1:
+  st.code('Built by Ilya')
+with col2:
+  st.code('This application uses data from Greco1899''s scraper of UFC Fight Stats - "https://github.com/Greco1899/scrape_ufc_stats"')
+with col3:
+  st.code('Recent changes - SQL Editor, data retrieval cached via function' )
 # st.divider()
-# col1,col2,col3 = st.columns(3)
-# with col1:
-#   st.code('Built by Ilya')
-# with col2:
-#   st.code('This application uses data from Greco1899''s scraper of UFC Fight Stats - "https://github.com/Greco1899/scrape_ufc_stats"')
-# with col3:
-#   st.code('Recent changes - SQL Editor, data retrieval cached via function' )
-# # st.divider()
-# # with st.expander("Real UFC fans ONLY 🖱️",expanded=False):
-# #    audio_file = open('song.mp3', 'rb')
-# #    audio_bytes = audio_file.read()
-# #    st.audio(audio_bytes, format='audio/ogg')   
+# with st.expander("Real UFC fans ONLY 🖱️",expanded=False):
+#    audio_file = open('song.mp3', 'rb')
+#    audio_bytes = audio_file.read()
+#    st.audio(audio_bytes, format='audio/ogg')   
