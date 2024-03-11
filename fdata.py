@@ -289,7 +289,7 @@ elif view =='Interesting Stats':
         # fig = px.bar(locations.sort_values(by='EVENTS'), x='EVENTS',y='LOCATION', template='simple_white')
         # st.plotly_chart(fig,use_container_width=True)
        
-        base = alt.Chart(locations.sort_values(by='EVENTS')).encode(x='EVENTS',y='LOCATION')
+        base = alt.Chart(locations.sort_values(by='EVENTS')).mark_point().encode(x='EVENTS',y='LOCATION')
         st.altair_chart(base)
 
         st.divider()
