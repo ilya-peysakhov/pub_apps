@@ -1,5 +1,5 @@
 pandas
 pyarrow==15.0.0
 duckdb
-plotly
+plotly==5.19.0
 streamlit-ace
