@@ -230,12 +230,12 @@ if view =='Fighter One Sheet':
             st.area_chart(td_dif, x='DATE', y='TD_At_Diff')
 
         st.divider()
-        with st.popover("Career Results",expanded=False):
+        with st.popover("Career Results"):
             career_results = duckdb.sql(f"SELECT left(DATE::string,10) AS DATE ,EVENT,case when FIGHTER1='{fighter_filter}' then FIGHTER2 else FIGHTER1 end as OPPONENT,case when FIGHTER1='{fighter_filter}' then FIGHTER1_OUTCOME else FIGHTER2_OUTCOME end as RESULT,METHOD,ROUND, TIME,DETAILS from fr_cleaned where FIGHTER1= '{fighter_filter}' or FIGHTER2='{fighter_filter}' order by DATE desc").df()
             st.dataframe(career_results,hide_index=True)
     
     st.divider()
-    with st.popover("Single Fight Stats",expanded=False):
+    with st.popover("Single Fight Stats"):
         bout_filter = st.selectbox('Pick a bout',options=fights.drop_duplicates())
         fight_results = duckdb.sql(f"SELECT * EXCLUDE (BOUT,FIGHTER,EVENT) from fs where replace(trim(BOUT),'  ',' ') ='{bout_filter}'  and trim(FIGHTER)='{fighter_filter}' ").df()
         fight_results['SIG.STR.'] = fight_results['SIG.STR.'].astype(str)
