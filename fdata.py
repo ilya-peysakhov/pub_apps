@@ -247,7 +247,7 @@ if view =='Fighter One Sheet':
         fight_results['CLINCH'] = fight_results['CLINCH'].astype(str)
         fight_results['DISTANCE'] = fight_results['DISTANCE'].astype(str)
         fight_results['GROUND'] = fight_results['GROUND'].astype(str)
-      
+        st.write(fight_results.dtypes)
         if bout_filter:
              st.write(fight_results.set_index(fight_results.columns[0]).T)
 
