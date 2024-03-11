@@ -22,6 +22,9 @@ st.set_page_config(page_icon="👊", page_title="UFC Stats Explorer v1.0", layou
 ########start of app
 st.header('UFC Fight Stats explorer')
 
+if st.sidebar.button('STOP'):
+  st.stop()
+
 view = st.sidebar.radio('Select a view',('Fighter One Sheet','Interesting Stats','Aggregate Table','Show all dataset samples','SQL Editor','Tale of the Tape'))
 
 
