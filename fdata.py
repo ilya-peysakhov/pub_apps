@@ -203,44 +203,44 @@ if view =='Fighter One Sheet':
             head_movement = round(1-(cleaned_opp_stats['head_abs']/cleaned_opp_stats['head_at']),2)
             st.metric('Head Movement',value=head_movement )
         st.divider()
-#         c1, c2 = st.columns(2)
-#         with c1:
-#             st.write("Strikes Attempted")
+        c1, c2 = st.columns(2)
+        with c1:
+            st.write("Strikes Attempted")
             
-#             str_a = duckdb.sql(f"SELECT DATE, sum(total_str_a::INT) as Total_Strikes_At from fighter_stats group by 1").df()
-#             # fig = px.area(str_a, x='DATE', y='Total_Strikes_At', template='simple_white')
-#             # st.plotly_chart(fig,use_container_width=True)
-#             st.area_chart(str_a, x='DATE', y='Total_Strikes_At')
-#             st.write("Net Sig Strike Landed difference")
-#             str_dif = duckdb.sql(f"SELECT a.DATE, sum(a.sig_str_l::INT)-sum(b.sig_str_l::INT) as Strike_Diff from fighter_stats as a inner join opp_stats as b on a.DATE = b.DATE and a.BOUT=b.BOUT and a.ROUND=b.ROUND group by 1").df()
-#             # fig = px.area(str_dif, x='DATE', y='Strike_Diff', template='simple_white')
-#             # st.plotly_chart(fig,use_container_width=True)
-#             st.area_chart(str_dif, x='DATE', y='Strike_Diff')
+            str_a = duckdb.sql(f"SELECT DATE, sum(total_str_a::INT) as Total_Strikes_At from fighter_stats group by 1").df()
+            # fig = px.area(str_a, x='DATE', y='Total_Strikes_At', template='simple_white')
+            # st.plotly_chart(fig,use_container_width=True)
+            st.area_chart(str_a, x='DATE', y='Total_Strikes_At')
+            st.write("Net Sig Strike Landed difference")
+            str_dif = duckdb.sql(f"SELECT a.DATE, sum(a.sig_str_l::INT)-sum(b.sig_str_l::INT) as Strike_Diff from fighter_stats as a inner join opp_stats as b on a.DATE = b.DATE and a.BOUT=b.BOUT and a.ROUND=b.ROUND group by 1").df()
+            # fig = px.area(str_dif, x='DATE', y='Strike_Diff', template='simple_white')
+            # st.plotly_chart(fig,use_container_width=True)
+            st.area_chart(str_dif, x='DATE', y='Strike_Diff')
               
-#         with c2:
-#             st.write("Takedowns Attempted")
-#             td_a = duckdb.sql(f"SELECT DATE,  sum(td_a::int) TD_At from fighter_stats group by 1").df()
-#             # fig = px.area(td_a, x='DATE', y='TD_At', template='simple_white')
-#             # st.plotly_chart(fig,use_container_width=True)
-#             st.area_chart(td_a, x='DATE', y='TD_At')
-#             st.write("Net Takedown difference")
-#             td_dif = duckdb.sql(f"SELECT a.DATE, sum(a.td_a::INT)-sum(b.td_a::INT) as TD_At_Diff from fighter_stats as a inner join opp_stats as b on a.DATE = b.DATE and a.BOUT=b.BOUT and a.ROUND=b.ROUND group by 1").df()
-#             # fig = px.area(td_dif, x='DATE', y='TD_At_Diff', template='simple_white')
-#             # st.plotly_chart(fig,use_container_width=True)
-#             st.area_chart(td_dif, x='DATE', y='TD_At_Diff')
+        with c2:
+            st.write("Takedowns Attempted")
+            td_a = duckdb.sql(f"SELECT DATE,  sum(td_a::int) TD_At from fighter_stats group by 1").df()
+            # fig = px.area(td_a, x='DATE', y='TD_At', template='simple_white')
+            # st.plotly_chart(fig,use_container_width=True)
+            st.area_chart(td_a, x='DATE', y='TD_At')
+            st.write("Net Takedown difference")
+            td_dif = duckdb.sql(f"SELECT a.DATE, sum(a.td_a::INT)-sum(b.td_a::INT) as TD_At_Diff from fighter_stats as a inner join opp_stats as b on a.DATE = b.DATE and a.BOUT=b.BOUT and a.ROUND=b.ROUND group by 1").df()
+            # fig = px.area(td_dif, x='DATE', y='TD_At_Diff', template='simple_white')
+            # st.plotly_chart(fig,use_container_width=True)
+            st.area_chart(td_dif, x='DATE', y='TD_At_Diff')
 
-#         st.divider()
-#         with st.expander("Career Results",expanded=False):
-#             career_results = duckdb.sql(f"SELECT left(DATE::string,10) AS DATE ,EVENT,case when FIGHTER1='{fighter_filter}' then FIGHTER2 else FIGHTER1 end as OPPONENT,case when FIGHTER1='{fighter_filter}' then FIGHTER1_OUTCOME else FIGHTER2_OUTCOME end as RESULT,METHOD,ROUND, TIME,DETAILS from fr_cleaned where FIGHTER1= '{fighter_filter}' or FIGHTER2='{fighter_filter}' order by DATE desc").df()
-#             st.dataframe(career_results,hide_index=True)
+        st.divider()
+        with st.expander("Career Results",expanded=False):
+            career_results = duckdb.sql(f"SELECT left(DATE::string,10) AS DATE ,EVENT,case when FIGHTER1='{fighter_filter}' then FIGHTER2 else FIGHTER1 end as OPPONENT,case when FIGHTER1='{fighter_filter}' then FIGHTER1_OUTCOME else FIGHTER2_OUTCOME end as RESULT,METHOD,ROUND, TIME,DETAILS from fr_cleaned where FIGHTER1= '{fighter_filter}' or FIGHTER2='{fighter_filter}' order by DATE desc").df()
+            st.dataframe(career_results,hide_index=True)
     
-#     st.divider()
-#     with st.expander("Single Fight Stats",expanded=False):
-#         bout_filter = st.selectbox('Pick a bout',options=fights.drop_duplicates())
-#         fight_results = duckdb.sql(f"SELECT * EXCLUDE (BOUT,FIGHTER,EVENT) from fs where replace(trim(BOUT),'  ',' ') ='{bout_filter}'  and trim(FIGHTER)='{fighter_filter}' ").df()
+    st.divider()
+    with st.expander("Single Fight Stats",expanded=False):
+        bout_filter = st.selectbox('Pick a bout',options=fights.drop_duplicates())
+        fight_results = duckdb.sql(f"SELECT * EXCLUDE (BOUT,FIGHTER,EVENT) from fs where replace(trim(BOUT),'  ',' ') ='{bout_filter}'  and trim(FIGHTER)='{fighter_filter}' ").df()
         
-#         if bout_filter:
-#              st.write(fight_results.set_index(fight_results.columns[0]).T)
+        if bout_filter:
+             st.write(fight_results.set_index(fight_results.columns[0]).T)
 
 # elif view =='Show all dataset samples':
 #     st.write('Fighter Details (cleaned)')
