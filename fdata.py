@@ -125,7 +125,7 @@ if view =='Fighter One Sheet':
       ko_losses = duckdb.sql(f"SELECT count(*) as s from fr_cleaned where ((FIGHTER1='{fighter}' and FIGHTER1_OUTCOME='L') OR (FIGHTER2='{fighter}' and FIGHTER2_OUTCOME='L')) and trim(METHOD)='KO/TKO' ").df()
       return winloss, last_fight, fighter_stats, cleaned_fighter_stats, ko_wins, opp_stats, cleaned_opp_stats, ko_losses
       
-    fighterData = calcFighterStats()
+    fighterData = calcFighterStats(fighter_filter)
     winloss, last_fight, fighter_stats, cleaned_fighter_stats, ko_wins, opp_stats, cleaned_opp_stats, ko_losses = fighterData[0], fighterData[1], fighterData[2], fighterData[3], fighterData[4], fighterData[5], fighterData[6], fighterData[7]
     
     
