@@ -113,7 +113,6 @@ if view =='Fighter One Sheet':
         st.write("No data for this fighter")
         st.stop()
       
-    @st.cache_data(ttl = '7d')
     def calcFighterStats(fighter):
       winloss = duckdb.sql(f"SELECT case when FIGHTER1 = '{fighter}' then FIGHTER1_OUTCOME else FIGHTER2_OUTCOME end result from fr_cleaned where FIGHTER1 = '{fighter}' or FIGHTER2='{fighter}' ")
       last_fight= duckdb.sql(f"SELECT left(max(date)::string,10) max_date, left( (current_date() - max(date))::string,10) days_since from fr_cleaned where FIGHTER1= '{fighter}' or FIGHTER2='{fighter}' ").df()
