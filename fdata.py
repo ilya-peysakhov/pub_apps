@@ -21,7 +21,7 @@ from streamlit_ace import st_ace
 st.set_page_config(page_icon="👊", page_title="UFC Stats Explorer v1.0", layout="wide")
 
 ########start of app
-st.header('UFC Fight Stats explorer')
+
 
 if st.sidebar.button('STOP'):
   st.stop()
@@ -95,11 +95,11 @@ if view=='Welcome':
               To see a high level overview of the UFC over the years, including fights by month, most active referees, fights by division and most common methods of victory, click Interesting Stats
               To view an all time ranking of every UFC fighter with both offensive and defensive stats (such as, which fighter has thrown the most leg kicks ever), go to Aggregate Table.
               If you have your own ideas for the data, head over to SQL Editor, and write your own code. You can get insights such as win % by age and other nerdy metrics. To get familiar with the tables, you can see the existing tables on the Samples page.
-              Lastly, if you are excited about an upcoming fight, go to Tale of the Tape, and compare 2 fighters and their advanced metrics!
+              Lastly, if you are excited about an upcoming fight, go to Tale of the Tape, and compare 2 fighters and their advanced metrics!''')
               
-              Please note that this a free, hosted application with data gathered by a 3rd party and not everything will be perfectly working at all times. However if you are a hardcore MMA fan, please use as you like. If you have questions or suggestions, a suggestion box will be introduced soon. 
+  st.caption('Please note that this a free, hosted application with data gathered by a 3rd party and not everything will be perfectly working at all times. However if you are a hardcore MMA fan, please use as you like. If you have questions or suggestions, a suggestion box will be introduced soon.') 
               
-              Enjoy and JUST BLEED!''')
+  st.header('Enjoy and JUST BLEED!')
   st.image('https://media.tenor.com/8jkYjD4cnqUAAAAM/just-bleed.gif')
   
 
