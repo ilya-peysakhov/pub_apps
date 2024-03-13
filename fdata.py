@@ -8,7 +8,7 @@ import time
 import datetime
 # import streamlit_shadcn_ui as ui
 from streamlit_ace import st_ace
-
+import plotly.express as px
 
 
 #additions
@@ -305,11 +305,11 @@ elif view =='Interesting Stats':
         st.divider()
         st.write("Fights by result method (2yr)")
         methods = duckdb.sql("SELECT method, count(*) FIGHTS from fr_cleaned where date between current_date() -730 and current_date() group by 1 ").df()
-        # fig = px.pie(methods,values='FIGHTS', names='METHOD', template='simple_white')
-        # st.plotly_chart(fig,use_container_width=True)
-        base = alt.Chart(methods).encode(alt.Theta("FIGHTS:Q").stack(True),alt.Color("METHOD:N").legend(None),alt.Tooltip("METHOD:N", title="METHOD"))
-        pie = base.mark_arc(outerRadius=120)
-        st.altair_chart(pie)
+        fig = px.pie(methods,values='FIGHTS', names='METHOD', template='simple_white')
+        st.plotly_chart(fig,use_container_width=True)
+        # base = alt.Chart(methods).encode(alt.Theta("FIGHTS:Q").stack(True),alt.Color("METHOD:N").legend(None),alt.Tooltip("METHOD:N", title="METHOD"))
+        # pie = base.mark_arc(outerRadius=120)
+        # st.altair_chart(pie)
         
     
     with c2:
