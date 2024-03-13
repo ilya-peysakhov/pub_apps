@@ -307,7 +307,7 @@ elif view =='Interesting Stats':
         methods = duckdb.sql("SELECT method, count(*) FIGHTS from fr_cleaned where date between current_date() -730 and current_date() group by 1 ").df()
         # fig = px.pie(methods,values='FIGHTS', names='METHOD', template='simple_white')
         # st.plotly_chart(fig,use_container_width=True)
-        base = alt.Chart(methods).encode(alt.Theta("FIGHTS:Q").stack(True),alt.Color("METHOD:N").legend(None))
+        base = alt.Chart(methods).encode(alt.Theta("FIGHTS:Q").stack(True),alt.Color("METHOD:N").legend(None),alt.Tooltip("METHOD:N", title="Method"))
         pie = base.mark_arc(outerRadius=120)
         st.altair_chart(pie)
         
