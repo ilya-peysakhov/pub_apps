@@ -91,11 +91,11 @@ fighter_list = duckdb.sql("SELECT FIGHTER from fighters  where length(DOB) >3 gr
 if view=='Welcome':
   st.title('Welcome to UFC Stats Explorer!👊')
   st.write('''The purpose of this application is to make it easy to dive into the world of UFC fight stats. The fight data goes back to 1994 and is available at a round by round level, which allows for very granular analysis
-              To view a summary of a single fighter throughout their career, or a few of their recent fights, head over to the Fighter One Sheet page. 
-              To see a high level overview of the UFC over the years, including fights by month, most active referees, fights by division and most common methods of victory, click Interesting Stats
-              To view an all time ranking of every UFC fighter with both offensive and defensive stats (such as, which fighter has thrown the most leg kicks ever), go to Aggregate Table.
-              If you have your own ideas for the data, head over to SQL Editor, and write your own code. You can get insights such as win % by age and other nerdy metrics. To get familiar with the tables, you can see the existing tables on the Samples page.
-              Lastly, if you are excited about an upcoming fight, go to Tale of the Tape, and compare 2 fighters and their advanced metrics!''')
+              - To view a summary of a single fighter throughout their career, or a few of their recent fights, head over to the Fighter One Sheet page. 
+              - To see a high level overview of the UFC over the years, including fights by month, most active referees, fights by division and most common methods of victory, click Interesting Stats
+              - To view an all time ranking of every UFC fighter with both offensive and defensive stats (such as, which fighter has thrown the most leg kicks ever), go to Aggregate Table.
+              - If you have your own ideas for the data, head over to SQL Editor, and write your own code. You can get insights such as win % by age and other nerdy metrics. To get familiar with the tables, you can see the existing tables on the Samples page.
+              - Lastly, if you are excited about an upcoming fight, go to Tale of the Tape, and compare 2 fighters and their advanced metrics!''')
               
   st.caption('Please note that this a free, hosted application with data gathered by a 3rd party and not everything will be perfectly working at all times. However if you are a hardcore MMA fan, please use as you like. If you have questions or suggestions, a suggestion box will be introduced soon.') 
               
