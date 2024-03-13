@@ -231,26 +231,26 @@ elif view =='Fighter One Sheet':
             st.write("Strikes Attempted")
             
             str_a = duckdb.sql(f"SELECT DATE, sum(total_str_a::INT) as Total_Strikes_At from fighter_stats group by 1").df()
-            # fig = px.area(str_a, x='DATE', y='Total_Strikes_At', template='simple_white')
-            # st.plotly_chart(fig,use_container_width=True)
-            st.area_chart(str_a, x='DATE', y='Total_Strikes_At')
+            fig = px.area(str_a, x='DATE', y='Total_Strikes_At', template='simple_white')
+            st.plotly_chart(fig,use_container_width=True)
+            # st.area_chart(str_a, x='DATE', y='Total_Strikes_At')
             st.write("Net Sig Strike Landed difference")
             str_dif = duckdb.sql(f"SELECT a.DATE, sum(a.sig_str_l::INT)-sum(b.sig_str_l::INT) as Strike_Diff from fighter_stats as a inner join opp_stats as b on a.DATE = b.DATE and a.BOUT=b.BOUT and a.ROUND=b.ROUND group by 1").df()
-            # fig = px.area(str_dif, x='DATE', y='Strike_Diff', template='simple_white')
-            # st.plotly_chart(fig,use_container_width=True)
-            st.area_chart(str_dif, x='DATE', y='Strike_Diff')
+            fig = px.area(str_dif, x='DATE', y='Strike_Diff', template='simple_white')
+            st.plotly_chart(fig,use_container_width=True)
+            # st.area_chart(str_dif, x='DATE', y='Strike_Diff')
               
         with c2:
             st.write("Takedowns Attempted")
             td_a = duckdb.sql(f"SELECT DATE,  sum(td_a::int) TD_At from fighter_stats group by 1").df()
-            # fig = px.area(td_a, x='DATE', y='TD_At', template='simple_white')
-            # st.plotly_chart(fig,use_container_width=True)
-            st.area_chart(td_a, x='DATE', y='TD_At')
+            fig = px.area(td_a, x='DATE', y='TD_At', template='simple_white')
+            st.plotly_chart(fig,use_container_width=True)
+            # st.area_chart(td_a, x='DATE', y='TD_At')
             st.write("Net Takedown difference")
             td_dif = duckdb.sql(f"SELECT a.DATE, sum(a.td_a::INT)-sum(b.td_a::INT) as TD_At_Diff from fighter_stats as a inner join opp_stats as b on a.DATE = b.DATE and a.BOUT=b.BOUT and a.ROUND=b.ROUND group by 1").df()
-            # fig = px.area(td_dif, x='DATE', y='TD_At_Diff', template='simple_white')
-            # st.plotly_chart(fig,use_container_width=True)
-            st.area_chart(td_dif, x='DATE', y='TD_At_Diff')
+            fig = px.area(td_dif, x='DATE', y='TD_At_Diff', template='simple_white')
+            st.plotly_chart(fig,use_container_width=True)
+            # st.area_chart(td_dif, x='DATE', y='TD_At_Diff')
 
         st.divider()
         with st.expander("Career Results"):
@@ -292,9 +292,9 @@ elif view =='Interesting Stats':
     with c1:
         st.write("Fights by month")
         fights_monthly= duckdb.sql("SELECT date_trunc('month',date) as MONTH,count(*) as FIGHTS from fed group by 1 order by 1 asc").df()
-        # fig = px.area(fights_monthly, x='MONTH',y='FIGHTS', template='simple_white')
-        # st.plotly_chart(fig,use_container_width=True)
-        st.area_chart(fights_monthly, x='MONTH',y='FIGHTS')
+        fig = px.area(fights_monthly, x='MONTH',y='FIGHTS', template='simple_white')
+        st.plotly_chart(fig,use_container_width=True)
+        # st.area_chart(fights_monthly, x='MONTH',y='FIGHTS')
         
         st.divider()
 
@@ -315,18 +315,18 @@ elif view =='Interesting Stats':
     with c2:
         st.write("Number of Fights per Fighter")
         fight_distro = duckdb.sql("select FIGHTS,count(1) FIGHTERS from (select FIGHTER,COUNT(DISTINCT EVENT||BOUT) FIGHTS from fs_cleaned group by 1) group by 1 order by 1").df()
-        # fig = px.bar(fight_distro, x='FIGHTS',y='FIGHTERS', template='simple_white')
-        # st.plotly_chart(fig,use_container_width=True)
-        st.bar_chart(fight_distro, x='FIGHTS',y='FIGHTERS')
+        fig = px.bar(fight_distro, x='FIGHTS',y='FIGHTERS', template='simple_white')
+        st.plotly_chart(fig,use_container_width=True)
+        # st.bar_chart(fight_distro, x='FIGHTS',y='FIGHTERS')
         st.divider()
         
         st.write('Most commonly used venues (2yr)')
         locations = duckdb.sql("SELECT LOCATION,count(distinct EVENT) EVENTS from fed where date between current_date() -730 and current_date() group by 1 order by 2 desc limit 10").df()
-        # fig = px.bar(locations.sort_values(by='EVENTS'), x='EVENTS',y='LOCATION', template='simple_white')
-        # st.plotly_chart(fig,use_container_width=True)
+        fig = px.bar(locations.sort_values(by='EVENTS'), x='EVENTS',y='LOCATION', template='simple_white')
+        st.plotly_chart(fig,use_container_width=True)
        
-        base = alt.Chart(locations.sort_values(by='EVENTS')).mark_point().encode(x='EVENTS',y='LOCATION')
-        st.altair_chart(base)
+        # base = alt.Chart(locations.sort_values(by='EVENTS')).mark_point().encode(x='EVENTS',y='LOCATION')
+        # st.altair_chart(base)
 
         st.divider()
         st.write('Number of Fighters fought by Weight/Type (2yr)')
@@ -342,9 +342,9 @@ elif view =='Interesting Stats':
     frame = st.selectbox('Pick a time dimension',['year','quarter','month','week','day'])
     methods_over_time = duckdb.sql(f"SELECT case when METHOD like 'Decision%' then 'Decision' else METHOD end as METHOD, date_trunc('{frame}',date) as MONTH, count(*)/sum(sum(1)) over (partition by MONTH) METHOD_PCT from fr_cleaned  group by 1,2 ").df()
 
-    # fig = px.area(methods_over_time, x='MONTH',y='METHOD_PCT',color='METHOD', template='simple_white')
-    # st.plotly_chart(fig,use_container_width=True)
-    st.area_chart(methods_over_time, x='MONTH',y='METHOD_PCT',color='METHOD')
+    fig = px.area(methods_over_time, x='MONTH',y='METHOD_PCT',color='METHOD', template='simple_white')
+    st.plotly_chart(fig,use_container_width=True)
+    # st.area_chart(methods_over_time, x='MONTH',y='METHOD_PCT',color='METHOD')
 elif view =='Aggregate Table':      
     min_fights = st.number_input('Minimum Fights',step=1,value=20)
     st.write(f"Minimum {min_fights} fights, historical rankings for total career offensive and defensive stats")
@@ -438,40 +438,7 @@ elif view=='Tale of the Tape':
   c2.caption('Success rate at evading head strikes')
   head_movement2 = round(1-(cleaned_opp_stats2['head_abs']/cleaned_opp_stats2['head_at']),2)
   c2.metric('Head Movement', value=head_movement2)
-  # c1, c2 = st.columns(2)
-  # with c1:
-  #   fighter1_filter = st.selectbox('Pick Fighter 1',options=fighter_list)
-  #   fights1 = duckdb.sql(f"SELECT BOUT from fr_cleaned where FIGHTER1 = '{fighter1_filter}' or FIGHTER2='{fighter1_filter}'").df()
-  #   fighter_stats1 = duckdb.sql(f"SELECT * from fs_cleaned where BOUT in (select BOUT from fights1) and FIGHTER ='{fighter1_filter}' ")
-  #   cleaned_fighter_stats1 = duckdb.sql("SELECT sum(sig_str_l::INTEGER) as sig_str, sum(head_str_l::INTEGER) as head_str, sum(td_l::INTEGER) as td_l, round(sum(td_l::INTEGER)/cast(sum(td_a::REAL) as REAL),2)  as td_rate, sum(kd::INTEGER) as kd, from fighter_stats1").df()
-  #   opp_stats1 = duckdb.sql(f"SELECT * from fs_cleaned where BOUT in (select * from fights1) and FIGHTER !='{fighter1_filter}' ")
-  #   cleaned_opp_stats1 = duckdb.sql("SELECT sum(sig_str_l::INTEGER) as sig_abs ,sum(head_str_l::INTEGER) as head_abs,sum(head_str_a::INTEGER) as head_at,sum(td_l::INTEGER) as td_abs,round(sum(td_l::INTEGER)/cast(sum(td_a::REAL) as REAL),2) as td_abs_rate,sum(kd::INTEGER) as kd_abs from opp_stats1").df()
-    
-  #   st.metric('Significant Strikes Differential',value=round(cleaned_fighter_stats1['sig_str']/cleaned_opp_stats1['sig_abs'],1))
-  #   st.metric('Head Strikes Differential',value=round(cleaned_fighter_stats1['head_str']/cleaned_opp_stats1['head_abs'],1))
-  #   st.metric('Power Differential (Knockdowns)',value=round(cleaned_fighter_stats1['kd']/cleaned_opp_stats1['kd_abs'],1))
-  #   st.metric('Takedown Differential',value=round(cleaned_fighter_stats1['td_l']/cleaned_opp_stats1['td_abs'],1))
-  #   st.caption('Success rate at evading head strikes')
-  #   head_movement1 = round(1-(cleaned_opp_stats1['head_abs']/cleaned_opp_stats1['head_at']),2)
-  #   st.metric('Head Movement',value=head_movement1 )
   
-  # with c2:
-  #   fighter2_filter = st.selectbox('Pick Fighter 2',options=fighter_list)
-  #   fights2 = duckdb.sql(f"SELECT BOUT from fr_cleaned where FIGHTER1 = '{fighter2_filter}' or FIGHTER2='{fighter2_filter}'").df()
-  #   fighter_stats2 = duckdb.sql(f"SELECT * from fs_cleaned where BOUT in (select BOUT from fights2) and FIGHTER ='{fighter2_filter}' ")
-  #   cleaned_fighter_stats2 = duckdb.sql("SELECT sum(sig_str_l::INTEGER) as sig_str, sum(head_str_l::INTEGER) as head_str, sum(td_l::INTEGER) as td_l, round(sum(td_l::INTEGER)/cast(sum(td_a::REAL) as REAL),2)  as td_rate, sum(kd::INTEGER) as kd, from fighter_stats2").df()
-  #   opp_stats2 = duckdb.sql(f"SELECT * from fs_cleaned where BOUT in (select * from fights2) and FIGHTER !='{fighter2_filter}' ")
-  #   cleaned_opp_stats2 = duckdb.sql("SELECT sum(sig_str_l::INTEGER) as sig_abs ,sum(head_str_l::INTEGER) as head_abs,sum(head_str_a::INTEGER) as head_at,sum(td_l::INTEGER) as td_abs,round(sum(td_l::INTEGER)/cast(sum(td_a::REAL) as REAL),2) as td_abs_rate,sum(kd::INTEGER) as kd_abs from opp_stats2").df()
-    
-  #   st.metric('Significant Strikes Differential',value=round(cleaned_fighter_stats2['sig_str']/cleaned_opp_stats2['sig_abs'],1))
-  #   st.metric('Head Strikes Differential',value=round(cleaned_fighter_stats2['head_str']/cleaned_opp_stats2['head_abs'],1))
-  #   st.metric('Power Differential (Knockdowns)',value=round(cleaned_fighter_stats2['kd']/cleaned_opp_stats2['kd_abs'],1))
-  #   st.metric('Takedown Differential',value=round(cleaned_fighter_stats2['td_l']/cleaned_opp_stats2['td_abs'],1))
-  #   st.caption('Success rate at evading head strikes')
-  #   head_movement2 = round(1-(cleaned_opp_stats2['head_abs']/cleaned_opp_stats2['head_at']),2)
-  #   st.metric('Head Movement',value=head_movement2 )
-  
-       
        
 st.divider()
 col1,col2,col3 = st.columns(3)
