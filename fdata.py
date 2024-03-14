@@ -261,16 +261,7 @@ elif view =='Fighter One Sheet':
     with st.expander("Single Fight Stats"):
         bout_filter = st.selectbox('Pick a bout',options=fights.drop_duplicates())
         fight_results = duckdb.sql(f"SELECT * EXCLUDE (BOUT,FIGHTER,EVENT) from fs where replace(trim(BOUT),'  ',' ') ='{bout_filter}'  and trim(FIGHTER)='{fighter_filter}' ").df()
-        fight_results['SIG.STR.'] = fight_results['SIG.STR.'].astype(str)
-        fight_results['TD'] = fight_results['TD'].astype(str)
-        fight_results['TOTAL STR.'] = fight_results['TOTAL STR.'].astype(str)
-        fight_results['HEAD'] = fight_results['HEAD'].astype(str)
-        fight_results['BODY'] = fight_results['BODY'].astype(str)
-        fight_results['LEG'] = fight_results['LEG'].astype(str)
-        fight_results['CLINCH'] = fight_results['CLINCH'].astype(str)
-        fight_results['DISTANCE'] = fight_results['DISTANCE'].astype(str)
-        fight_results['GROUND'] = fight_results['GROUND'].astype(str)
-        st.write(fight_results.dtypes)
+        
         if bout_filter:
              st.write(fight_results.set_index(fight_results.columns[0]).T)
 
