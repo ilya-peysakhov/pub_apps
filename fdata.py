@@ -308,9 +308,8 @@ elif view =='Interesting Stats':
         fight_distro = duckdb.sql("""select FIGHTS, SUM(FIGHTERS) OVER (ORDER BY FIGHTS desc) FIGHTERS from
                                   (select FIGHTS,count(1) FIGHTERS from  (select FIGHTER,COUNT(DISTINCT EVENT||BOUT) FIGHTS from fs_cleaned group by 1) group by 1)
                               order by 1""").df()
-        st.dataframe(fight_distro, hide_index=True)  
-      # fig = px.bar(fight_distro, x='FIGHTERS',y='FIGHTERS', template='simple_white')
-        # st.plotly_chart(fig,use_container_width=True)
+        fig = px.bar(fight_distro, x='FIGHTS',y='FIGHTERS', template='simple_white')
+        st.plotly_chart(fig,use_container_width=True)
         # st.bar_chart(fight_distro, x='FIGHTS',y='FIGHTERS')
         st.divider()
         
