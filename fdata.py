@@ -310,7 +310,7 @@ elif view =='Interesting Stats':
                                       (select FIGHTER,COUNT(DISTINCT EVENT||BOUT) FIGHTS from fs_cleaned group by 1)
                                       group by 1
                                   )
-                              group by all order by 1""").df()
+                              group by FIGHTS, FIGHTERS order by 1""").df()
         fig = px.bar(fight_distro, x='FIGHTS',y='FIGHTERS', template='simple_white')
         st.plotly_chart(fig,use_container_width=True)
         # st.bar_chart(fight_distro, x='FIGHTS',y='FIGHTERS')
