@@ -305,7 +305,9 @@ elif view =='Interesting Stats':
     
     with c2:
         st.write("Number of Fights per Fighter")
-        fight_distro = duckdb.sql("select FIGHTS, SUM(FIGHTERS) OVER (ORDER BY FIGHTS asc) cumulative_sum from (select FIGHTS,count(1) FIGHTERS from (select FIGHTER,COUNT(DISTINCT EVENT||BOUT) FIGHTS from fs_cleaned group by 1) group by 1 order by 1").df()
+        fight_distro = duckdb.sql("""select FIGHTS, SUM(FIGHTERS) OVER (ORDER BY FIGHTS asc) cumulative_sum from
+                                  (select FIGHTS,count(1) FIGHTERS from (select FIGHTER,COUNT(DISTINCT EVENT||BOUT) FIGHTS from fs_cleaned group by 1) )
+                              group by 1 order by 1""").df()
         fig = px.bar(fight_distro, x='FIGHTS',y='FIGHTERS', template='simple_white')
         st.plotly_chart(fig,use_container_width=True)
         # st.bar_chart(fight_distro, x='FIGHTS',y='FIGHTERS')
