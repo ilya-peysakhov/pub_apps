@@ -106,19 +106,24 @@ if view=='Welcome':
               
   st.caption('Please note that this a free, hosted application with data gathered by a 3rd party and not everything will be perfectly working at all times. However if you are a hardcore MMA fan, please use as you like. If you have questions or suggestions, a suggestion box will be introduced soon.') 
 
-  if 'suggestions' not in locals():
-    suggestions = []
+  inputs = []
+
+# Function to add text area input to the list
+  def add_input():
+      new_input = st.text_area("Enter your suggestion")
+      if new_input:
+          inputs.append(new_input)
+          st.success("suggestion added to the list!")
   
-    
-  def addSuggestion():
-    suggestions.append(suggestion)
-
-  suggestion = st.text_area('Write Suggestion Here')
-  if st.button('Submit suggestion'):
-    addSuggestion()
-
-  with st.expander('Show suggestions'):
-    st.write(suggestions)
+  # Create a button to add text area input
+  if st.button("Add suggestion"):
+      add_input()
+  
+  # Create a DataFrame from the list of inputs
+  df = pd.DataFrame({"suggestion": inputs})
+  
+  # Display the DataFrame
+  st.write("DataFrame:")
   
   st.header('Enjoy and JUST BLEED!')
   st.image('https://media.tenor.com/8jkYjD4cnqUAAAAM/just-bleed.gif')
