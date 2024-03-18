@@ -105,26 +105,6 @@ if view=='Welcome':
   """)
               
   st.caption('Please note that this a free, hosted application with data gathered by a 3rd party and not everything will be perfectly working at all times. However if you are a hardcore MMA fan, please use as you like. If you have questions or suggestions, a suggestion box will be introduced soon.') 
-
-  if "inputs" not in st.session_state:
-    st.session_state.inputs = []
-
-  # Function to add text area input to the list
-  def add_input():
-    new_input = st.text_area("Enter your Suggestion")
-    if new_input:
-        st.session_state.inputs.append(new_input)
-        st.success("Suggestion added to the list!")
-
-  # Create a button to add text area input
-  if st.button("Add Suggestion"):
-      add_input()
-  
-  # Create a DataFrame from the list of inputs
-  df = pd.DataFrame({"Suggestion": st.session_state.inputs})
-  
-  # Display the DataFrame
-  st.write(df)
   
   st.header('Enjoy and JUST BLEED!')
   st.image('https://media.tenor.com/8jkYjD4cnqUAAAAM/just-bleed.gif')
