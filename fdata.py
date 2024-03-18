@@ -116,6 +116,9 @@ if view=='Welcome':
   suggestion = st.text_area('Write Suggestion Here')
   if st.button('Submit suggestion'):
     addSuggestion()
+
+  if st.popover('Show suggestions'):
+    st.write(suggestions)
   
   st.header('Enjoy and JUST BLEED!')
   st.image('https://media.tenor.com/8jkYjD4cnqUAAAAM/just-bleed.gif')
