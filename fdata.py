@@ -112,6 +112,7 @@ if view=='Welcome':
     
   def addSuggestion():
     suggestions.append(suggestion)
+    return None
 
   suggestion = st.text_area('Write Suggestion Here')
   if st.button('Submit suggestion'):
