@@ -106,8 +106,8 @@ if view=='Welcome':
               
   st.caption('Please note that this a free, hosted application with data gathered by a 3rd party and not everything will be perfectly working at all times. However if you are a hardcore MMA fan, please use as you like. If you have questions or suggestions, a suggestion box will be introduced soon.') 
 
-   if "inputs" not in st.session_state:
-      st.session_state.inputs = []
+ if "inputs" not in st.session_state:
+    st.session_state.inputs = []
 
   # Function to add text area input to the list
   def add_input():
