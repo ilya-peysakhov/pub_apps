@@ -123,7 +123,7 @@ if view=='Welcome':
   df = pd.DataFrame({"suggestion": inputs})
   
   # Display the DataFrame
-  st.write("DataFrame:")
+  st.write(df)
   
   st.header('Enjoy and JUST BLEED!')
   st.image('https://media.tenor.com/8jkYjD4cnqUAAAAM/just-bleed.gif')
