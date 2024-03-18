@@ -105,7 +105,18 @@ if view=='Welcome':
   """)
               
   st.caption('Please note that this a free, hosted application with data gathered by a 3rd party and not everything will be perfectly working at all times. However if you are a hardcore MMA fan, please use as you like. If you have questions or suggestions, a suggestion box will be introduced soon.') 
-              
+
+  if 'suggestions' not in globals():
+    suggestions = []
+  else:
+    
+  def addSuggestion():
+    suggestions.append(suggestion)
+
+  suggestion = st.text_area('Write Suggestion Here')
+  if st.button('Submit suggestion'):
+    addSuggestion()
+  
   st.header('Enjoy and JUST BLEED!')
   st.image('https://media.tenor.com/8jkYjD4cnqUAAAAM/just-bleed.gif')
   
