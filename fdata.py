@@ -117,7 +117,7 @@ if view=='Welcome':
   if st.button('Submit suggestion'):
     addSuggestion()
 
-  if st.popover('Show suggestions'):
+  with st.popover('Show suggestions'):
     st.write(suggestions)
   
   st.header('Enjoy and JUST BLEED!')
