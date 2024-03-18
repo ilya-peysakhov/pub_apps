@@ -111,11 +111,11 @@ if view=='Welcome':
 
   # Function to add text area input to the list
   def add_input():
-      new_input = st.text_area("Enter your Suggestion")
-      if new_input:
-          st.session_state.inputs.append(new_input)
-          st.success("Suggestion added to the list!")
-  
+    new_input = st.text_area("Enter your Suggestion")
+    if new_input:
+        st.session_state.inputs.append(new_input)
+        st.success("Suggestion added to the list!")
+
   # Create a button to add text area input
   if st.button("Add Suggestion"):
       add_input()
