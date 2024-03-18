@@ -108,11 +108,10 @@ if view=='Welcome':
 
   if 'suggestions' not in globals():
     suggestions = []
-  else:
+  
     
   def addSuggestion():
     suggestions.append(suggestion)
-    return None
 
   suggestion = st.text_area('Write Suggestion Here')
   if st.button('Submit suggestion'):
