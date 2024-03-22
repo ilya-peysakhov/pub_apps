@@ -38,12 +38,12 @@ def getData():
   fr_greco = pd.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_results.csv",dtype_backend='pyarrow',engine='pyarrow')
   fr_backfill1 = pd.read_csv("https://github.com/ilya-peysakhov/grecoscraper/raw/main/ufcdata/holloway_zombie_results.csv",dtype_backend='pyarrow',engine='pyarrow')
   fr_backfill2 = pd.read_csv("https://github.com/ilya-peysakhov/grecoscraper/raw/main/ufcdata/makhachev_volk2_result.csv",dtype_backend='pyarrow',engine='pyarrow')
-  fr = pd.concat([fr_greco, fr_backfill1, fr_backfill2], axis=0)
+  fr = pd.concat([fr_greco, fr_backfill1, fr_backfill2], ignore_index=True)
   
   fs_greco = pd.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_stats.csv",dtype_backend='pyarrow',engine='pyarrow')
   fs_backfill1 = pd.read_csv("https://github.com/ilya-peysakhov/grecoscraper/raw/main/ufcdata/holloway_zombie_stats.csv",dtype_backend='pyarrow',engine='pyarrow')
   fs_backfill2 = pd.read_csv("https://github.com/ilya-peysakhov/grecoscraper/raw/main/ufcdata/makhachev_volk2_stats.csv",dtype_backend='pyarrow',engine='pyarrow')
-  fs = pd.concat([fs_greco, fs_backfill1, fs_backfill2], axis=0)
+  fs = pd.concat([fs_greco, fs_backfill1, fs_backfill2], ignore_index=True)
   
   frd = pd.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fighter_details.csv",dtype_backend='pyarrow',engine='pyarrow')
   ft = pd.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fighter_tott.csv",dtype_backend='pyarrow',engine='pyarrow')
