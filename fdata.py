@@ -33,16 +33,16 @@ view = st.sidebar.radio('Select a view',('Welcome','Fighter One Sheet','Interest
 @st.cache_data(ttl = '7d')
 def getData():
   ed_greco = pd.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_event_details.csv",dtype_backend='pyarrow',engine='pyarrow')
-  ed_backfill = pd.read_csv("https://github.com/ilya-peysakhov/grecoscraper/raw/main/ufcdata/max_zombie_details.csv",dtype_backend='pyarrow',engine='pyarrow')
+  ed_backfill = pd.read_csv("https://github.com/ilya-peysakhov/grecoscraper/raw/main/ufcdata/details.csv",dtype_backend='pyarrow',engine='pyarrow')
   ed = pd.concat([ed_greco, ed_backfill], ignore_index=True)
   
   fd = pd.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_details.csv",dtype_backend='pyarrow',engine='pyarrow')
   
   fr_greco = pd.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_results.csv",dtype_backend='pyarrow',engine='pyarrow')
-  fr_backfill = pd.read_csv("https://github.com/ilya-peysakhov/grecoscraper/raw/main/ufcdata/holloway_zombie_results.csv",dtype_backend='pyarrow',engine='pyarrow')
+  fr_backfill = pd.read_csv("https://github.com/ilya-peysakhov/grecoscraper/raw/main/ufcdata/results.csv",dtype_backend='pyarrow',engine='pyarrow')
   fr = pd.concat([fr_greco, fr_backfill], ignore_index=True)
   
-  fs_greco = pd.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_stats.csv",dtype_backend='pyarrow',engine='pyarrow')
+  fs_greco = pd.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/stats.csv",dtype_backend='pyarrow',engine='pyarrow')
   fs_backfill = pd.read_csv("https://github.com/ilya-peysakhov/grecoscraper/raw/main/ufcdata/holloway_zombie_stats.csv",dtype_backend='pyarrow',engine='pyarrow')
   fs = pd.concat([fs_greco, fs_backfill], ignore_index=True)
   
