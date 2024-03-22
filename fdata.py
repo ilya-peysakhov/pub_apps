@@ -34,20 +34,17 @@ view = st.sidebar.radio('Select a view',('Welcome','Fighter One Sheet','Interest
 def getData():
   ed_greco = pd.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_event_details.csv",dtype_backend='pyarrow',engine='pyarrow')
   ed_backfill1 = pd.read_csv("https://github.com/ilya-peysakhov/grecoscraper/raw/main/ufcdata/max_zombie_details.csv",dtype_backend='pyarrow',engine='pyarrow')
-  ed_backfill2 = pd.read_csv("https://github.com/ilya-peysakhov/grecoscraper/raw/main/ufcdata/makhachev_volk_details.csv",dtype_backend='pyarrow',engine='pyarrow')
-  ed = pd.concat([ed_greco, ed_backfill1, ed_backfill2], ignore_index=True)
+  ed = pd.concat([ed_greco, ed_backfill1], ignore_index=True)
   
   fd = pd.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_details.csv",dtype_backend='pyarrow',engine='pyarrow')
   
   fr_greco = pd.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_results.csv",dtype_backend='pyarrow',engine='pyarrow')
   fr_backfill1 = pd.read_csv("https://github.com/ilya-peysakhov/grecoscraper/raw/main/ufcdata/holloway_zombie_results.csv",dtype_backend='pyarrow',engine='pyarrow')
-  fr_backfill2 = pd.read_csv("https://github.com/ilya-peysakhov/grecoscraper/raw/main/ufcdata/makhachev_volk2_result.csv",dtype_backend='pyarrow',engine='pyarrow')
-  fr = pd.concat([fr_greco, fr_backfill1, fr_backfill2], ignore_index=True)
+  fr = pd.concat([fr_greco, fr_backfill1], ignore_index=True)
   
   fs_greco = pd.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_stats.csv",dtype_backend='pyarrow',engine='pyarrow')
   fs_backfill1 = pd.read_csv("https://github.com/ilya-peysakhov/grecoscraper/raw/main/ufcdata/holloway_zombie_stats.csv",dtype_backend='pyarrow',engine='pyarrow')
-  fs_backfill2 = pd.read_csv("https://github.com/ilya-peysakhov/grecoscraper/raw/main/ufcdata/makhachev_volk2_stats.csv",dtype_backend='pyarrow',engine='pyarrow')
-  fs = pd.concat([fs_greco, fs_backfill1, fs_backfill2], ignore_index=True)
+  fs = pd.concat([fs_greco, fs_backfill], ignore_index=True)
   
   frd = pd.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fighter_details.csv",dtype_backend='pyarrow',engine='pyarrow')
   ft = pd.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fighter_tott.csv",dtype_backend='pyarrow',engine='pyarrow')
