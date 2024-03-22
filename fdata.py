@@ -410,7 +410,7 @@ elif view=='Tale of the Tape':
   st.write('Compare advanced metrics between 2 fighters')
   c1, c2 = st.columns(2)
 
-  fighter1_filter = c1.selectbox('Pick Fighter 1', options=fighter_list)
+  fighter1_filter = c1.selectbox('Pick Fighter 1', options=fighter_list,'Khabib Nurmagomedov')
   fights1 = duckdb.sql(f"SELECT BOUT from fr_cleaned where FIGHTER1 = '{fighter1_filter}' or FIGHTER2='{fighter1_filter}'").df()
   fighter_stats1 = duckdb.sql(f"SELECT * from fs_cleaned where BOUT in (select BOUT from fights1) and FIGHTER ='{fighter1_filter}' ")
   cleaned_fighter_stats1 = duckdb.sql("SELECT sum(sig_str_l::INTEGER) as sig_str, sum(head_str_l::INTEGER) as head_str, sum(td_l::INTEGER) as td_l, round(sum(td_l::INTEGER)/cast(sum(td_a::REAL) as REAL),2)  as td_rate, sum(kd::INTEGER) as kd, from fighter_stats1").df()
@@ -427,7 +427,7 @@ elif view=='Tale of the Tape':
   head_movement1 = round(1-(cleaned_opp_stats1['head_abs']/cleaned_opp_stats1['head_at']),2)
   c1.metric('Head Movement', value=head_movement1)
   
-  fighter2_filter = c2.selectbox('Pick Fighter 2', options=fighter_list)
+  fighter2_filter = c2.selectbox('Pick Fighter 2', options=fighter_list,'Conor McGregor')
   fights2 = duckdb.sql(f"SELECT BOUT from fr_cleaned where FIGHTER1 = '{fighter2_filter}' or FIGHTER2='{fighter2_filter}'").df()
   fighter_stats2 = duckdb.sql(f"SELECT * from fs_cleaned where BOUT in (select BOUT from fights2) and FIGHTER ='{fighter2_filter}' ")
   cleaned_fighter_stats2 = duckdb.sql("SELECT sum(sig_str_l::INTEGER) as sig_str, sum(head_str_l::INTEGER) as head_str, sum(td_l::INTEGER) as td_l, round(sum(td_l::INTEGER)/cast(sum(td_a::REAL) as REAL),2)  as td_rate, sum(kd::INTEGER) as kd, from fighter_stats2").df()
