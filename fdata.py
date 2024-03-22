@@ -282,8 +282,8 @@ elif view =='Interesting Stats':
     c1, c2  = st.columns(2)
     with c1:
         st.write("Fights by month")
-        fights_monthly= duckdb.sql("SELECT date_trunc('month',date) as MONTH,count(*) as FIGHTS from fed group by 1 order by 1 asc").df()
-        fig = px.area(fights_monthly, x='MONTH',y='FIGHTS', template='simple_white')
+        fights_monthly= duckdb.sql("SELECT date_trunc('month',date) as MONTH,count(*) as FIGHTS, count(distinct EVENT) as EVENTS from fed group by 1 order by 1 asc").df()
+        fig = px.area(fights_monthly, x='MONTH',y=['FIGHTS','EVENTS'], template='simple_white')
         st.plotly_chart(fig,use_container_width=True)
         # st.area_chart(fights_monthly, x='MONTH',y='FIGHTS')
         
