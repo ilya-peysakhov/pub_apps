@@ -32,7 +32,11 @@ view = st.sidebar.radio('Select a view',('Welcome','Fighter One Sheet','Interest
 ###################### data pull and clean
 @st.cache_data(ttl = '7d')
 def getData():
-  ed = pd.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_event_details.csv",dtype_backend='pyarrow',engine='pyarrow')
+  ed_greco = pd.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_event_details.csv",dtype_backend='pyarrow',engine='pyarrow')
+  ed_backfill1 = pd.read_csv("https://github.com/ilya-peysakhov/grecoscraper/raw/main/ufcdata/holloway_zombie_details.csv",dtype_backend='pyarrow',engine='pyarrow')
+  ed_backfill2 = pd.read_csv("https://github.com/ilya-peysakhov/grecoscraper/raw/main/ufcdata/makhachev_volk2_details.csv",dtype_backend='pyarrow',engine='pyarrow')
+  ed = pd.concat([ed_greco, ed_backfill1, ed_backfill2], ignore_index=True)
+  
   fd = pd.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_details.csv",dtype_backend='pyarrow',engine='pyarrow')
   
   fr_greco = pd.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_results.csv",dtype_backend='pyarrow',engine='pyarrow')
