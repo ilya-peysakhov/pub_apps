@@ -43,7 +43,7 @@ def getData():
   fr = pd.concat([fr_greco, fr_backfill], ignore_index=True)
   
   fs_greco = pd.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/stats.csv",dtype_backend='pyarrow',engine='pyarrow')
-  fs_backfill = pd.read_csv("https://github.com/ilya-peysakhov/grecoscraper/raw/main/ufcdata/holloway_zombie_stats.csv",dtype_backend='pyarrow',engine='pyarrow')
+  fs_backfill = pd.read_csv("https://github.com/ilya-peysakhov/grecoscraper/raw/main/ufcdata/stats.csv",dtype_backend='pyarrow',engine='pyarrow')
   fs = pd.concat([fs_greco, fs_backfill], ignore_index=True)
   
   frd = pd.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fighter_details.csv",dtype_backend='pyarrow',engine='pyarrow')
