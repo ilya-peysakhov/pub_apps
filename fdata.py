@@ -54,6 +54,7 @@ alldata = getData()
 
 ed, fd, fr, fs, frd, ft = alldata[0], alldata[1], alldata[2], alldata[3], alldata[4], alldata[5]
 
+st.write(fs.head(4))
 @st.cache_data(ttl = '7d')
 def cleanData():
   ed_c = duckdb.sql("SELECT TRIM(EVENT) as EVENT, strptime(DATE, '%B %d, %Y') as  DATE, URL, LOCATION FROM ed").df()
