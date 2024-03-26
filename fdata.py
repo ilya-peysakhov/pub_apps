@@ -6,7 +6,7 @@ import altair as alt
 import duckdb
 import time
 import datetime
-# import streamlit_shadcn_ui as ui
+import streamlit_shadcn_ui as ui
 from streamlit_ace import st_ace
 import plotly.express as px
 
@@ -169,12 +169,12 @@ elif view =='Fighter One Sheet':
         with col1:
             st.subheader('Bio')
             st.divider()
-            # ui.metric_card(title="Height", content=str(duckdb.sql(f"SELECT HEIGHT FROM fighters WHERE FIGHTER = '{fighter_filter}'").df().iloc[0,0]), key="card1")
-            st.metric(label='Height',value=str(duckdb.sql(f"SELECT HEIGHT FROM fighters WHERE FIGHTER = '{fighter_filter}'").df().iloc[0,0]))
-            # ui.metric_card('Division',content=str(duckdb.sql(f"SELECT WEIGHT FROM fighters WHERE FIGHTER = '{fighter_filter}'").df().iloc[0,0]))
-            st.metric(label='Division',value=str(duckdb.sql(f"SELECT WEIGHT FROM fighters WHERE FIGHTER = '{fighter_filter}'").df().iloc[0,0]))
-            # ui.metric_card('Reach',content=str(duckdb.sql(f"SELECT REACH FROM fighters WHERE FIGHTER = '{fighter_filter}'").df().iloc[0,0]))
-            st.metric(label='Reach', value=str(duckdb.sql(f"SELECT REACH FROM fighters WHERE FIGHTER = '{fighter_filter}'").df().iloc[0,0]))
+            ui.metric_card(title="Height", content=str(duckdb.sql(f"SELECT HEIGHT FROM fighters WHERE FIGHTER = '{fighter_filter}'").df().iloc[0,0]), key="card1")
+            # st.metric(label='Height',value=str(duckdb.sql(f"SELECT HEIGHT FROM fighters WHERE FIGHTER = '{fighter_filter}'").df().iloc[0,0]))
+            ui.metric_card('Division',content=str(duckdb.sql(f"SELECT WEIGHT FROM fighters WHERE FIGHTER = '{fighter_filter}'").df().iloc[0,0]))
+            # st.metric(label='Division',value=str(duckdb.sql(f"SELECT WEIGHT FROM fighters WHERE FIGHTER = '{fighter_filter}'").df().iloc[0,0]))
+            ui.metric_card('Reach',content=str(duckdb.sql(f"SELECT REACH FROM fighters WHERE FIGHTER = '{fighter_filter}'").df().iloc[0,0]))
+            # st.metric(label='Reach', value=str(duckdb.sql(f"SELECT REACH FROM fighters WHERE FIGHTER = '{fighter_filter}'").df().iloc[0,0]))
             dob_str = str(duckdb.sql(f"SELECT DOB FROM fighters WHERE FIGHTER = '{fighter_filter}'").df().iloc[0,0])
             dob = datetime.datetime.strptime(dob_str, '%b %d, %Y')
             age = datetime.datetime.now() - dob
