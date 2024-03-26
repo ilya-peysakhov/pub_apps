@@ -428,8 +428,8 @@ elif view=='Tale of the Tape':
   opp_stats1 = duckdb.sql(f"SELECT * from fs_cleaned where BOUT in (select * from fights1) and FIGHTER !='{fighter1_filter}' ")
   cleaned_opp_stats1 = duckdb.sql("SELECT sum(sig_str_l::INTEGER) as sig_abs ,sum(head_str_l::INTEGER) as head_abs,sum(head_str_a::INTEGER) as head_at,sum(td_l::INTEGER) as td_abs,round(sum(td_l::INTEGER)/cast(sum(td_a::REAL) as REAL),2) as td_abs_rate,sum(kd::INTEGER) as kd_abs from opp_stats1").df()
 
-  c1.ui.metric_card('Significant Strikes Differential',content=round(cleaned_fighter_stats1['sig_str']/cleaned_opp_stats1['sig_abs'],1))
-  # c1.metric('Significant Strikes Differential', value=round(cleaned_fighter_stats1['sig_str']/cleaned_opp_stats1['sig_abs'],1))
+  
+  c1.metric('Significant Strikes Differential', value=round(cleaned_fighter_stats1['sig_str']/cleaned_opp_stats1['sig_abs'],1))
   c1.metric('Head Strikes Differential', value=round(cleaned_fighter_stats1['head_str']/cleaned_opp_stats1['head_abs'],1))
   c1.metric('Power Differential (Knockdowns)', value=round(cleaned_fighter_stats1['kd']/cleaned_opp_stats1['kd_abs'],1))
   c1.metric(label='Total Takedowns Landed',value=int(cleaned_fighter_stats1['td_l'].iloc[0]),delta="{0:.0%}".format(round(float(cleaned_fighter_stats1['td_rate'].iloc[0]),2)))
