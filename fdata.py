@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 pd.options.mode.copy_on_write = True
 import altair as alt
+import psutil
 
 import duckdb
 import time
@@ -22,9 +23,14 @@ st.set_page_config(page_icon="👊", page_title="UFC Stats Explorer v1.0", layou
 
 ########start of app
 
+def get_memory_usage():
+    memory_usage = psutil.virtual_memory().used
+    total_memory = psutil.virtual_memory().total
+    memory_usage_percentage = (memory_usage / total_memory) * 100
+    return memory_usage_percentage
 
-if st.sidebar.button('STOP'):
-  st.stop()
+memory_usage = get_memory_usage()
+st.sidebar.caption(f"Memory Usage: {memory_usage:.1f}% MB")
 
 view = st.sidebar.radio('Select a view',('Welcome','Fighter One Sheet','Interesting Stats','Aggregate Table','Show all dataset samples','SQL Editor','Tale of the Tape'))
 
