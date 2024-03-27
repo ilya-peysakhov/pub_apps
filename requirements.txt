@@ -5,3 +5,4 @@ duckdb
 streamlit-ace
 plotly
 streamlit-shadcn-ui
+psutil
