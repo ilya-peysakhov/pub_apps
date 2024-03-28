@@ -29,8 +29,7 @@ def get_memory_usage():
     memory_usage_percentage = (memory_usage / total_memory) * 100
     return memory_usage_percentage
 
-memory_usage = get_memory_usage()
-st.sidebar.caption(f"Memory Usage: {memory_usage:.1f}% MB")
+
 
 view = st.sidebar.radio('Select a view',('Welcome','Fighter One Sheet','Interesting Stats','Aggregate Table','Show all dataset samples','SQL Editor','Tale of the Tape'))
 
@@ -364,13 +363,7 @@ elif view =='Aggregate Table':
         return fighters
     fighters = getFighters(min_fights)
     str_results = pd.DataFrame()
-    
-    @st.cache_data(ttl='6d')
-    def getOStats(min_fights):
-        all_time_offense = duckdb.sql(f"SELECT FIGHTER, COUNT(DISTINCT BOUT||EVENT) as FIGHTS, COUNT(*) AS ROUNDS,  ROUND(ROUNDS/CAST(FIGHTS as REAL),1) as ROUNDS_PER_FIGHT ,SUM(head_str_l::INTEGER) AS HEAD_STRIKES_LANDED, SUM(leg_str_l::INTEGER) as LEG_STRIKES_LANDED,sum(sig_str_l::INTEGER) as SIG_STRIKES_LANDED,sum(KD::INTEGER) as KD_LANDED, sum(TD_L::INT) as TD_LANDED from fs_cleaned group by 1 having FIGHTS>={min_fights}")
-        return all_time_offense
-    
-    all_time_offense = getOStats(min_fights)
+    all_time_offense = duckdb.sql(f"SELECT FIGHTER, COUNT(DISTINCT BOUT||EVENT) as FIGHTS, COUNT(*) AS ROUNDS,  ROUND(ROUNDS/CAST(FIGHTS as REAL),1) as ROUNDS_PER_FIGHT ,SUM(head_str_l::INTEGER) AS HEAD_STRIKES_LANDED, SUM(leg_str_l::INTEGER) as LEG_STRIKES_LANDED,sum(sig_str_l::INTEGER) as SIG_STRIKES_LANDED,sum(KD::INTEGER) as KD_LANDED, sum(TD_L::INT) as TD_LANDED from fs_cleaned group by 1 having FIGHTS>={min_fights}")
     
     @st.cache_data(ttl='6d')
     def query_fighter_data(fighter):
@@ -481,6 +474,10 @@ with col2:
   st.code('This application uses data from Greco1899''s scraper of UFC Fight Stats - "https://github.com/Greco1899/scrape_ufc_stats"')
 with col3:
   st.code('Recent changes - SQL Editor, data retrieval cached via function' )
+
+memory_usage = get_memory_usage()
+st.sidebar.caption(f"Memory Usage: {memory_usage:.1f}% MB")
+
 # st.divider()
 # with st.expander("Real UFC fans ONLY 🖱️",expanded=False):
 #    audio_file = open('song.mp3', 'rb')
