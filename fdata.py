@@ -370,8 +370,8 @@ elif view =='Aggregate Table':
       return duckdb.sql(query).df()
     
     @st.cache_data(ttl='6d')
-    def oppStats():
-      dfs_list = fighters['FIGHTER'].apply(query_fighter_data).tolist()
+    def oppStats(fighters):
+      dfs_list = {fighters}['FIGHTER'].apply(query_fighter_data).tolist()
       str_results = pd.concat(dfs_list, ignore_index=True)
       return str_results
       
