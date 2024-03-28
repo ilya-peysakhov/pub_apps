@@ -362,7 +362,7 @@ elif view =='Aggregate Table':
     def getFighters(min_fights):
         fighters = duckdb.sql(f"SELECT fighter FROM fs_cleaned GROUP BY 1 having count(distinct BOUT||EVENT) >={min_fights}").df()
         return fighters
-    with st.spinner('Filtering Fighters...):
+    with st.spinner('Filtering Fighters...'):
         fighters = getFighters(min_fights)
     
     str_results = pd.DataFrame()
