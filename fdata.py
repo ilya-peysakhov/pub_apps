@@ -371,7 +371,7 @@ elif view =='Aggregate Table':
     
     @st.cache_data(ttl='6d')
     def oppStats(fighters):
-      dfs_list = {fighters}['FIGHTER'].apply(query_fighter_data).tolist()
+      dfs_list = fighters['FIGHTER'].apply(query_fighter_data).tolist()
       str_results = pd.concat(dfs_list, ignore_index=True)
       return str_results
       
