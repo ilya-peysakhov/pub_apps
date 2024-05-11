@@ -31,7 +31,9 @@ def get_memory_usage():
 
 
 
-view = st.sidebar.radio('Select a view',('Welcome','Fighter One Sheet','Interesting Stats','Aggregate Table','Show all dataset samples','SQL Editor','Tale of the Tape'))
+# view = st.sidebar.radio('Select a view',('Welcome','Fighter One Sheet','Interesting Stats','Aggregate Table','Show all dataset samples','SQL Editor','Tale of the Tape'))
+view = ui.tabs(options=['Welcome','Fighter One Sheet','Interesting Stats','Aggregate Table','Show all dataset samples','SQL Editor','Tale of the Tape'], default_value='Welcome', key="tabs")
+
 
 
 ###################### data pull and clean
