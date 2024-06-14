@@ -11,6 +11,7 @@ import streamlit_shadcn_ui as ui
 from streamlit_ace import st_ace
 import plotly.express as px
 
+from streamlit_extras.metric_cards import style_metric_cards
 
 #additions
 #strikes landed per minute over time with % over time
@@ -471,7 +472,8 @@ elif view=='Tale of the Tape':
   c2.caption('Success rate at evading head strikes')
   head_movement2 = round(1-(cleaned_opp_stats2['head_abs']/cleaned_opp_stats2['head_at']),2)
   c2.metric('Head Movement', value=head_movement2)
-  
+  style_metric_cards(border_radius_px=250)
+
        
 st.divider()
 col1,col2,col3 = st.columns(3)
