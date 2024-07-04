@@ -98,8 +98,7 @@ def cleanData():
   fighters= duckdb.sql("SELECT trim(FIGHTER) as FIGHTER,HEIGHT,WEIGHT,REACH,STANCE,DOB,FIRST,LAST,NICKNAME,frd.URL from ft inner join frd on frd.URL = ft.URL where dob !='--'").df()
   return fed, fr_cleaned, fs_cleaned, fighters, ed_c
 
-cleandata = cleanData()
-fed, fr_cleaned, fs_cleaned, fighters, ed_c = cleandata[0],cleandata[1],cleandata[2],cleandata[3],cleandata[4] 
+fed, fr_cleaned, fs_cleaned, fighters, ed_c = cleanData()
 
 ########################
 fighter_list = duckdb.sql("SELECT FIGHTER from fighters  where length(DOB) >3 group by 1 order by 1").df()                      
