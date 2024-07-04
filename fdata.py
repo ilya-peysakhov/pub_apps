@@ -59,10 +59,7 @@ def getData():
   ft = pd.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fighter_tott.csv",dtype_backend='pyarrow',engine='pyarrow')
   return ed, fd, fr, fs, frd, ft
 
-alldata = getData()
-
-
-ed, fd, fr, fs, frd, ft = alldata[0], alldata[1], alldata[2], alldata[3], alldata[4], alldata[5]
+ed, fd, fr, fs, frd, ft = getData()
 
 @st.cache_data(ttl = '7d')
 def cleanData():
