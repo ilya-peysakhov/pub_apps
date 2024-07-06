@@ -392,7 +392,7 @@ elif view =='Aggregate Table':
         chart_metric1 = c1.selectbox('Choose metric to plot',combined_stats.columns)
         chart_metric2 = c2.selectbox('Choose metric to plot',combined_stats.columns)
         viz_data = duckdb.sql(f"select FIGHTER, {chart_metric1}, {chart_metric2} from combined_stats group by 2 order by 1 asc").df()
-        fig = px.scatter(viz_data, x=chart_metric1,y=chart_metric2,, text='FIGHTER', template='simple_white')
+        fig = px.scatter(viz_data, x=chart_metric1,y=chart_metric2, text='FIGHTER', template='simple_white')
         st.plotly_chart(fig, use_container_width=True)
     
     vizPlot()
