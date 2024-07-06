@@ -386,12 +386,15 @@ elif view =='Aggregate Table':
     
     st.dataframe(combined_stats.sort_values(by='FIGHTS', ascending=False),hide_index=True) 
 
-
-    chart_metric = st.selectbox('Choose metric to plot',combined_stats.columns)
-    viz_data = duckdb.sql(f"select count(distinct fighter) as FIGHTERS, {chart_metric} as METRIC from combined_stats group by 2").df()
-    fig = px.bar(viz_data, x='FIGHTERS',y=METRIC, template='simple_white')
-    st.plotly_chart(fig, use_container_width=True)
-
+    @st.experimental_fragment
+    def vizPlot():
+        chart_metric = st.selectbox('Choose metric to plot',combined_stats.columns)
+        viz_data = duckdb.sql(f"select count(distinct fighter) as FIGHTERS, {chart_metric} as METRIC from combined_stats group by 2").df()
+        fig = px.bar(viz_data, x='FIGHTERS',y=METRIC, template='simple_white')
+        st.plotly_chart(fig, use_container_width=True)
+    
+    vizPlot()
+    
 elif view=='SQL Editor':
     st.write("Write custom sql on the data using [🦆duckdb](https://duckdb.org/docs/archive/0.9.2/sql/introduction)")
     with st.expander("Examples"):
