@@ -384,7 +384,14 @@ elif view =='Aggregate Table':
     with st.spinner('Combining all data...'):
         combined_stats = duckdb.sql("SELECT a.*, ROUND(SIG_STRIKES_LANDED/SIG_STRIKES_ABS,1) as SIG_STR_DIFF, ROUND((1-HEAD_STRIKES_ABS/HEAD_STRIKES_AT),2) as HEAD_MOVEMENT, b.* EXCLUDE (FIGHTER) from all_time_offense as a left join str_results as b on a.FIGHTER=b.FIGHTER").df()
     
-    st.dataframe(combined_stats.sort_values(by='FIGHTS', ascending=False),hide_index=True)   
+    st.dataframe(combined_stats.sort_values(by='FIGHTS', ascending=False),hide_index=True) 
+
+    try:
+        chart_metric = st.selectbox('Choose metric to plot',combined_stats.columns)
+        fig = px.bar(combined_stats, x='FIGHTER',y=chart_metric, template='simple_white')
+        st.plotly_chart(fig, use_container_width=True)
+    except Exception as e:
+        st.error(e)
 elif view=='SQL Editor':
     st.write("Write custom sql on the data using [🦆duckdb](https://duckdb.org/docs/archive/0.9.2/sql/introduction)")
     with st.expander("Examples"):
