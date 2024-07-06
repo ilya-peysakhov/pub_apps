@@ -389,8 +389,8 @@ elif view =='Aggregate Table':
     @st.experimental_fragment
     def vizPlot():
         chart_metric = st.selectbox('Choose metric to plot',combined_stats.columns)
-        viz_data = duckdb.sql(f"select count(distinct fighter) as FIGHTERS, {chart_metric} as METRIC from combined_stats group by 2").df()
-        fig = px.bar(viz_data, x='FIGHTERS',y=METRIC, template='simple_white')
+        viz_data = duckdb.sql(f"select count(distinct fighter) as FIGHTERS, {chart_metric} as METRIC from combined_stats group by 2 order by 1 asc").df()
+        fig = px.bar(viz_data, x='FIGHTERS',y='METRIC', template='simple_white')
         st.plotly_chart(fig, use_container_width=True)
     
     vizPlot()
