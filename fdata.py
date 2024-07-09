@@ -54,18 +54,18 @@ def getData():
   # ft = pd.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fighter_tott.csv",dtype_backend='pyarrow',engine='pyarrow')
 
   
-  ed = duckdb.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_event_details.csv")
-  fd_greco = duckdb.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_details.csv")
-  fd_backfill = duckdb.read_csv("https://github.com/ilya-peysakhov/grecoscraper/raw/main/ufcdata/details.csv")
-  fd = duckdb.sql("select * from fd_greco UNION select* from fd_backfill")
-  fr_greco = duckdb.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_results.csv")
-  fr_backfill = duckdb.read_csv("https://github.com/ilya-peysakhov/grecoscraper/raw/main/ufcdata/results.csv")
-  fr = duckdb.sql("select * from fr_greco UNION select* from fr_backfill")
-  fs_greco = duckdb.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_stats.csv")
-  fs_backfill = duckdb.read_csv("https://github.com/ilya-peysakhov/grecoscraper/raw/main/ufcdata/stats.csv")
-  fs = duckdb.sql("select * from fs_greco UNION select * from fs_backfill")
-  frd = duckdb.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fighter_details.csv")
-  ft = duckdb.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fighter_tott.csv")
+  ed = duckdb.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_event_details.csv").df()
+  fd_greco = duckdb.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_details.csv").df()
+  fd_backfill = duckdb.read_csv("https://github.com/ilya-peysakhov/grecoscraper/raw/main/ufcdata/details.csv").df()
+  fd = duckdb.sql("select * from fd_greco UNION select* from fd_backfill").df()
+  fr_greco = duckdb.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_results.csv").df()
+  fr_backfill = duckdb.read_csv("https://github.com/ilya-peysakhov/grecoscraper/raw/main/ufcdata/results.csv").df()
+  fr = duckdb.sql("select * from fr_greco UNION select* from fr_backfill").df()
+  fs_greco = duckdb.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_stats.csv").df()
+  fs_backfill = duckdb.read_csv("https://github.com/ilya-peysakhov/grecoscraper/raw/main/ufcdata/stats.csv").df()
+  fs = duckdb.sql("select * from fs_greco UNION select * from fs_backfill").df()
+  frd = duckdb.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fighter_details.csv").df()
+  ft = duckdb.read_csv("https://github.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fighter_tott.csv").df()
     
   return ed, fd, fr, fs, frd, ft
 
