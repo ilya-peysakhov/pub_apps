@@ -7,4 +7,3 @@ plotly
 streamlit-shadcn-ui
 psutil
 streamlit-extras
-polars
