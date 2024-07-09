@@ -20,7 +20,7 @@ from streamlit_extras.metric_cards import style_metric_cards
 ###################################
 
 
-st.set_page_config(page_icon="👊", page_title="UFC Stats Explorer v1.0", layout="wide")
+st.set_page_config(page_icon="👊", page_title="UFC Stats Explorer v1.0", layout="wide",initial_sidebar_state='collapsed')
 
 ########start of app
 
