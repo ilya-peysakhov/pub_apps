@@ -39,18 +39,18 @@ view = ui.tabs(options=['Welcome','Fighter One Sheet','Interesting Stats','Aggre
 ###################### data pull and clean
 @st.cache_data(ttl = '7d')
 def getData():
-  ed = duckdb.read_csv("https://raw.githubusercontent.comGreco1899/scrape_ufc_stats/raw/main/ufc_event_details.csv").df()
-  fd_greco = duckdb.read_csv("https://raw.githubusercontent.comGreco1899/scrape_ufc_stats/raw/main/ufc_fight_details.csv").df()
+  ed = duckdb.read_csv("https://raw.githubusercontent.com/Greco1899/scrape_ufc_stats/raw/main/ufc_event_details.csv").df()
+  fd_greco = duckdb.read_csv("https://raw.githubusercontent.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_details.csv").df()
   fd_backfill = duckdb.read_csv("https://raw.githubusercontent.comilya-peysakhov/grecoscraper/raw/main/ufcdata/details.csv").df()
   fd = duckdb.sql("select * from fd_greco UNION select* from fd_backfill").df()
-  fr_greco = duckdb.read_csv("https://raw.githubusercontent.comGreco1899/scrape_ufc_stats/raw/main/ufc_fight_results.csv").df()
+  fr_greco = duckdb.read_csv("https://raw.githubusercontent.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_results.csv").df()
   fr_backfill = duckdb.read_csv("https://raw.githubusercontent.comilya-peysakhov/grecoscraper/raw/main/ufcdata/results.csv").df()
   fr = duckdb.sql("select * from fr_greco UNION select* from fr_backfill").df()
-  fs_greco = duckdb.read_csv("https://raw.githubusercontent.comGreco1899/scrape_ufc_stats/raw/main/ufc_fight_stats.csv").df()
+  fs_greco = duckdb.read_csv("https://raw.githubusercontent.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fight_stats.csv").df()
   fs_backfill = duckdb.read_csv("https://raw.githubusercontent.comilya-peysakhov/grecoscraper/raw/main/ufcdata/stats.csv").df()
   fs = duckdb.sql("select * from fs_greco UNION select * from fs_backfill").df()
-  frd = duckdb.read_csv("https://raw.githubusercontent.comGreco1899/scrape_ufc_stats/raw/main/ufc_fighter_details.csv").df()
-  ft = duckdb.read_csv("https://raw.githubusercontent.comGreco1899/scrape_ufc_stats/raw/main/ufc_fighter_tott.csv").df()
+  frd = duckdb.read_csv("https://raw.githubusercontent.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fighter_details.csv").df()
+  ft = duckdb.read_csv("https://raw.githubusercontent.com/Greco1899/scrape_ufc_stats/raw/main/ufc_fighter_tott.csv").df()
     
   return ed, fd, fr, fs, frd, ft
 
@@ -483,7 +483,7 @@ col1,col2,col3 = st.columns(3)
 with col1:
   st.code('Built by Ilya')
 with col2:
-  st.code('This application uses data from Greco1899''s scraper of UFC Fight Stats - "https://raw.githubusercontent.comGreco1899/scrape_ufc_stats"')
+  st.code('This application uses data from Greco1899''s scraper of UFC Fight Stats - "https://raw.githubusercontent.com/Greco1899/scrape_ufc_stats"')
 with col3:
   st.code('Recent changes - SQL Editor, data retrieval cached via function' )
 
