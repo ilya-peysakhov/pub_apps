@@ -383,7 +383,7 @@ elif view =='Aggregate Table':
     
     st.dataframe(combined_stats.sort_values(by='FIGHTS', ascending=False),hide_index=True) 
 
-    @st.experimental_fragment
+    @st.fragment
     def vizPlot():
         c1, c2 = st.columns(2)
         chart_metric1 = c1.selectbox('Choose a metric to plot',combined_stats.columns)
