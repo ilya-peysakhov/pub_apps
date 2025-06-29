@@ -267,7 +267,8 @@ elif view =='Fighter One Sheet':
             # st.area_chart(td_dif, x='DATE', y='TD_At_Diff')
 
         st.divider()
-        st.write('chart will go here')    
+        cumulative_head_trauma = duckdb.sql(f"SELECT date, sum(head_str) head_str from fs_cleaned where BOUT in (select * from fights) and FIGHTER !='{fighter}' ").df()
+        st.write(cumulative_head_trauma)
         st.divider()
         with st.expander("Career Results"):
             career_results = duckdb.sql(f"SELECT left(DATE::string,10) AS DATE ,EVENT,case when FIGHTER1='{fighter_filter}' then FIGHTER2 else FIGHTER1 end as OPPONENT,case when FIGHTER1='{fighter_filter}' then FIGHTER1_OUTCOME else FIGHTER2_OUTCOME end as RESULT,METHOD,ROUND, TIME,DETAILS from fr_cleaned where FIGHTER1= '{fighter_filter}' or FIGHTER2='{fighter_filter}' order by DATE desc").df()
