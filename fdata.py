@@ -443,7 +443,7 @@ elif view=='SQL Editor':
               st.write(e)
 elif view=='Tale of the Tape':
   st.write('Compare advanced metrics between 2 fighters')
-  c1, c2 = st.columns(2,vertical_alignment ='center')
+  c1, c2, c3 = st.columns(3)
 
   fighter1_filter = c1.selectbox('Pick Fighter 1', options=fighter_list)
   fights1 = duckdb.sql(f"SELECT BOUT from fr_cleaned where FIGHTER1 = '{fighter1_filter}' or FIGHTER2='{fighter1_filter}'").df()
@@ -453,12 +453,18 @@ elif view=='Tale of the Tape':
   cleaned_opp_stats1 = duckdb.sql("SELECT sum(sig_str_l::INTEGER) as sig_abs ,sum(head_str_l::INTEGER) as head_abs,sum(head_str_a::INTEGER) as head_at,sum(td_l::INTEGER) as td_abs,round(sum(td_l::INTEGER)/cast(sum(td_a::REAL) as REAL),2) as td_abs_rate,sum(kd::INTEGER) as kd_abs from opp_stats1").df()
 
   metric_width = 300
-  c1.metric('Significant Strikes Differential',width=metric_width, value=round(cleaned_fighter_stats1['sig_str']/cleaned_opp_stats1['sig_abs'],1))
-  c1.metric('Head Strikes Differential',width=metric_width, value=round(cleaned_fighter_stats1['head_str']/cleaned_opp_stats1['head_abs'],1))
-  c1.metric('Power Differential (Knockdowns)',width=metric_width, value=round(cleaned_fighter_stats1['kd']/cleaned_opp_stats1['kd_abs'],1))
-  c1.metric(label='Total Takedowns Landed',width=metric_width,value=int(cleaned_fighter_stats1['td_l'].iloc[0]),delta="{0:.0%}".format(round(float(cleaned_fighter_stats1['td_rate'].iloc[0]),2)))
-  c1.metric(label='Total Takedowns Given Up',width=metric_width,value=int(cleaned_opp_stats1['td_abs'].iloc[0]),delta="{0:.0%}".format(round(float(cleaned_opp_stats1['td_abs_rate'].iloc[0]),2)))
-  c1.metric('Takedown Differential',width=metric_width, value=round(cleaned_fighter_stats1['td_l']/cleaned_opp_stats1['td_abs'],1))
+	sig_strike_diff = round(cleaned_fighter_stats1['sig_str']/cleaned_opp_stats1['sig_abs'],1)
+  c1.metric('Significant Strikes Differential',width=metric_width, value=sig_strike_diff)
+	head_strike_diff = round(cleaned_fighter_stats1['head_str']/cleaned_opp_stats1['head_abs'],1)
+  c1.metric('Head Strikes Differential',width=metric_width, value=head_strike_diff)
+	power_diff = round(cleaned_fighter_stats1['kd']/cleaned_opp_stats1['kd_abs'],1)
+  c1.metric('Power Differential (Knockdowns)',width=metric_width, value=power_diff)
+	td_landed = int(cleaned_fighter_stats1['td_l'].iloc[0])
+  c1.metric(label='Total Takedowns Landed',width=metric_width,value=td_landed,delta="{0:.0%}".format(round(float(cleaned_fighter_stats1['td_rate'].iloc[0]),2)))
+  td_given = int(cleaned_opp_stats1['td_abs'].iloc[0])
+	c1.metric(label='Total Takedowns Given Up',width=metric_width,value=,delta="{0:.0%}".format(round(float(cleaned_opp_stats1['td_abs_rate'].iloc[0]),2)))
+	td_diff = round(cleaned_fighter_stats1['td_l']/cleaned_opp_stats1['td_abs'],1)
+	c1.metric('Takedown Differential',width=metric_width, value=td_diff)
   c1.caption('Success rate at evading head strikes')
   head_movement1 = round(1-(cleaned_opp_stats1['head_abs']/cleaned_opp_stats1['head_at']),2)
   c1.metric('Head Movement',width=metric_width, value=head_movement1)
@@ -480,7 +486,7 @@ elif view=='Tale of the Tape':
   head_movement2 = round(1-(cleaned_opp_stats2['head_abs']/cleaned_opp_stats2['head_at']),2)
   c2.metric('Head Movement',width=metric_width, value=head_movement2)
   # style_metric_cards(border_radius_px=250,background_color='#00000')
-
+  if c
        
 st.divider()
 col1,col2,col3 = st.columns(3)
