@@ -505,12 +505,30 @@ elif view=='Tale of the Tape':
           fighter1_advantage_counter =+ 1
       else:
           fighter2_advantage_counter =+ 1
-
-      if fighter1_advantage_counter>fighter2_advantage_counter:
-          st.write(f'{fighter1_filter} has more advantages to win the fight')
+          
+      if power_diff.iloc[0] >power_diff2.iloc[0]:
+          fighter1_advantage_counter =+ 1
       else:
-          st.write(f'{fighter2_filter} has more advantages to win the fight')
+          fighter2_advantage_counter =+ 1
+          
+      if td_landed.iloc[0] >td_landed_2.iloc[0]:
+          fighter1_advantage_counter =+ 1
+      else:
+          fighter2_advantage_counter =+ 1    
+   
+      if head_movement.iloc[0] >head_movement2.iloc[0]:
+          fighter1_advantage_counter =+ 1
+      else:
+          fighter2_advantage_counter =+ 1    
+      
+      if fighter1_advantage_counter>fighter2_advantage_counter:
+          advantage_diff = fighter1_advantage_counter -fighter2_advantage_counter
+          st.write(f'{fighter1_filter} has {advantage_diff} advantages to win the fight')
+      else:
+          advantage_diff = fighter2_advantage_counter -fighter1_advantage_counter
+          st.write(f'{fighter2_filter} has {advantage_diff} advantages to win the fight')
     
+          
           
 st.divider()
 col1,col2,col3 = st.columns(3)
