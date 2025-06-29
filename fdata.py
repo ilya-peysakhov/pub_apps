@@ -493,13 +493,25 @@ elif view=='Tale of the Tape':
   c2.metric('Head Movement',width=metric_width, value=head_movement2)
   # style_metric_cards(border_radius_px=250,background_color='#00000')
   with c3:
+      fighter1_advantage_counter = 0
+      fighter2_advantage_counter = 0
+      
       if sig_strike_diff.iloc[0] >sig_strike_diff2.iloc[0]:
-          st.write(fighter1_filter)
+          fighter1_advantage_counter =+ 1
       else:
-          st.write(fighter2_filter)
+          fighter2_advantage_counter =+ 1
+      
+      if head_strike_diff.iloc[0] >head_strike_diff.iloc[0]:
+          fighter1_advantage_counter =+ 1
+      else:
+          fighter2_advantage_counter =+ 1
 
-        
-       
+      if fighter1_advantage_counter>fighter2_advantage_counter:
+          st.write(f'{fighter1_filter} has more advantages to win the fight')
+      else:
+          st.write(f'{fighter2_filter} has more advantages to win the fight')
+    
+          
 st.divider()
 col1,col2,col3 = st.columns(3)
 with col1:
