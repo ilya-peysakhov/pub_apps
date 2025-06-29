@@ -267,7 +267,7 @@ elif view =='Fighter One Sheet':
             # st.area_chart(td_dif, x='DATE', y='TD_At_Diff')
 
         st.divider()
-        cumulative_head_trauma = duckdb.sql(f"SELECT date, sum(head_str_l::int) over (order by date asc) head_str_l from fs_cleaned where BOUT in (select * from fights) and FIGHTER !='{fighter_filter}'  ").df()
+        cumulative_head_trauma = duckdb.sql(f"SELECT date, sum(sum(head_str_l::int)) over (order by date asc) head_str_l from fs_cleaned where BOUT in (select * from fights) and FIGHTER !='{fighter_filter}'  group by 1").df()
         st.write(cumulative_head_trauma)
         st.divider()
         with st.expander("Career Results"):
