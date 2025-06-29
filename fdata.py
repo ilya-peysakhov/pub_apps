@@ -443,7 +443,7 @@ elif view=='SQL Editor':
               st.write(e)
 elif view=='Tale of the Tape':
   st.write('Compare advanced metrics between 2 fighters')
-  c1, c2 = st.columns(2)
+  c1, c2 = st.columns(2,vertical_alignment ='center')
 
   fighter1_filter = c1.selectbox('Pick Fighter 1', options=fighter_list)
   fights1 = duckdb.sql(f"SELECT BOUT from fr_cleaned where FIGHTER1 = '{fighter1_filter}' or FIGHTER2='{fighter1_filter}'").df()
