@@ -268,7 +268,8 @@ elif view =='Fighter One Sheet':
 
         st.divider()
         cumulative_head_trauma = duckdb.sql(f"SELECT date, sum(sum(head_str_l::int)) over (order by date asc) head_str_l from fs_cleaned where BOUT in (select * from fights) and FIGHTER !='{fighter_filter}'  group by 1").df()
-        st.write(cumulative_head_trauma)
+        fig = px.area(cumulative-head_trauma, template='Simple White')
+        st.plotly_chart(fig,use_container_width=True)
         st.divider()
         with st.expander("Career Results"):
             career_results = duckdb.sql(f"SELECT left(DATE::string,10) AS DATE ,EVENT,case when FIGHTER1='{fighter_filter}' then FIGHTER2 else FIGHTER1 end as OPPONENT,case when FIGHTER1='{fighter_filter}' then FIGHTER1_OUTCOME else FIGHTER2_OUTCOME end as RESULT,METHOD,ROUND, TIME,DETAILS from fr_cleaned where FIGHTER1= '{fighter_filter}' or FIGHTER2='{fighter_filter}' order by DATE desc").df()
