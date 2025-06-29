@@ -495,6 +495,9 @@ elif view=='Tale of the Tape':
   with c3:
       if sig_strike_diff>sig_strike_diff2:
           st.write(fighter1_filter)
+      else:
+          st.write(fighter2_filter)
+
         
        
 st.divider()
