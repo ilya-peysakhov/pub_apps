@@ -182,11 +182,11 @@ elif view =='Fighter One Sheet':
             dob = datetime.datetime.strptime(dob_str, '%b %d, %Y')
             age = datetime.datetime.now() - dob
             age_years = age.days // 365
-            ui.metric_card('Age',content=age_years, description=dob_str)
-            # st.metric(label='Age',value=age_years,delta=dob_str)
+            # ui.metric_card('Age',content=age_years, description=dob_str)
+            st.metric(label='Age',value=age_years,delta=dob_str)
             if len(fights) >0:
-                ui.metric_card('Last fought', description=str(last_fight['max_date'].values[0]),content=str(last_fight['days_since'].values[0]))
-                # st.metric(label='Last Fought', value=str(last_fight['days_since'].values[0]), delta=str(last_fight['max_date'].values[0]))
+                # ui.metric_card('Last fought', description=str(last_fight['max_date'].values[0]),content=str(last_fight['days_since'].values[0]))
+                st.metric(label='Last Fought', value=str(last_fight['days_since'].values[0]), delta=str(last_fight['max_date'].values[0]))
 
         with col2:
             st.subheader('Highlights')
