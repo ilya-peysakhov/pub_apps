@@ -268,7 +268,7 @@ elif view =='Fighter One Sheet':
 
         st.divider()
         cumulative_head_trauma = duckdb.sql(f"SELECT date, sum(sum(head_str_l::int)) over (order by date asc) head_str_l from fs_cleaned where BOUT in (select * from fights) and FIGHTER !='{fighter_filter}'  group by 1").df()
-        fig = px.area(cumulative_head_trauma, x='DATE',y='head_str_l',text='head_str_l',title='Cumulative Head Trauma)
+        fig = px.area(cumulative_head_trauma, x='DATE',y='head_str_l',text='head_str_l',title='Cumulative Head Trauma')
         st.plotly_chart(fig,use_container_width=True)
         
         st.divider()
