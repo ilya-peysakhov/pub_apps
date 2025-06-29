@@ -21,6 +21,8 @@ from streamlit_extras.metric_cards import style_metric_cards
 
 
 st.set_page_config(page_icon="👊", page_title="UFC Stats Explorer v1.0", layout="wide",initial_sidebar_state='collapsed')
+with open("style.css") as f:
+    st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
 ########start of app
 
