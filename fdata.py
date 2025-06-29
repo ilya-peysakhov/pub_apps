@@ -497,36 +497,36 @@ elif view=='Tale of the Tape':
       fighter2_advantage_counter = 0
       
       if sig_strike_diff.iloc[0] >sig_strike_diff2.iloc[0]:
-          fighter1_advantage_counter =+ 1
+          fighter1_advantage_counter += 1
       else:
-          fighter2_advantage_counter =+ 1
+          fighter2_advantage_counter += 1
       
       if head_strike_diff.iloc[0] >head_strike_diff.iloc[0]:
-          fighter1_advantage_counter =+ 1
+          fighter1_advantage_counter += 1
       else:
-          fighter2_advantage_counter =+ 1
+          fighter2_advantage_counter += 1
           
       if power_diff.iloc[0] >power_diff2.iloc[0]:
-          fighter1_advantage_counter =+ 1
+          fighter1_advantage_counter += 1
       else:
-          fighter2_advantage_counter =+ 1
+          fighter2_advantage_counter += 1
           
       if td_landed >td_landed_2:
-          fighter1_advantage_counter =+ 1
+          fighter1_advantage_counter += 1
       else:
-          fighter2_advantage_counter =+ 1    
+          fighter2_advantage_counter += 1    
    
       if head_movement1.iloc[0] >head_movement2.iloc[0]:
-          fighter1_advantage_counter =+ 1
+          fighter1_advantage_counter += 1
       else:
-          fighter2_advantage_counter =+ 1    
+          fighter2_advantage_counter += 1    
       
       if fighter1_advantage_counter>fighter2_advantage_counter:
           advantage_diff = fighter1_advantage_counter -fighter2_advantage_counter
-          st.write(f'{fighter1_filter} has {advantage_diff} advantages to win the fight')
+          st.write(f'{fighter1_filter} has {advantage_diff} more advantages to win the fight')
       else:
           advantage_diff = fighter2_advantage_counter -fighter1_advantage_counter
-          st.write(f'{fighter2_filter} has {advantage_diff} advantages to win the fight')
+          st.write(f'{fighter2_filter} has {advantage_diff} more advantages to win the fight')
     
           
           
