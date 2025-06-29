@@ -462,7 +462,7 @@ elif view=='Tale of the Tape':
   td_landed = int(cleaned_fighter_stats1['td_l'].iloc[0])
   c1.metric(label='Total Takedowns Landed',width=metric_width,value=td_landed,delta="{0:.0%}".format(round(float(cleaned_fighter_stats1['td_rate'].iloc[0]),2)))
   td_given = int(cleaned_opp_stats1['td_abs'].iloc[0])
-  c1.metric(label='Total Takedowns Given Up',width=metric_width,value=,delta="{0:.0%}".format(round(float(cleaned_opp_stats1['td_abs_rate'].iloc[0]),2)))
+  c1.metric(label='Total Takedowns Given Up',width=metric_width,value=td_given,delta="{0:.0%}".format(round(float(cleaned_opp_stats1['td_abs_rate'].iloc[0]),2)))
   td_diff = round(cleaned_fighter_stats1['td_l']/cleaned_opp_stats1['td_abs'],1)
   c1.metric('Takedown Differential',width=metric_width, value=td_diff)
   c1.caption('Success rate at evading head strikes')
