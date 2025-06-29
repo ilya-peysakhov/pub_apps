@@ -493,7 +493,7 @@ elif view=='Tale of the Tape':
   c2.metric('Head Movement',width=metric_width, value=head_movement2)
   # style_metric_cards(border_radius_px=250,background_color='#00000')
   with c3:
-      st.write(sig_strike_diff)
+      st.write(sig_strike_diff.iloc[0])
 
         
        
