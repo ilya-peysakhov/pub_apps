@@ -479,7 +479,7 @@ elif view=='Tale of the Tape':
   c2.caption('Success rate at evading head strikes')
   head_movement2 = round(1-(cleaned_opp_stats2['head_abs']/cleaned_opp_stats2['head_at']),2)
   c2.metric('Head Movement',width=metric_width, value=head_movement2)
-  style_metric_cards(border_radius_px=250,background_color='#00000')
+  # style_metric_cards(border_radius_px=250,background_color='#00000')
 
        
 st.divider()
