@@ -453,15 +453,15 @@ elif view=='Tale of the Tape':
   cleaned_opp_stats1 = duckdb.sql("SELECT sum(sig_str_l::INTEGER) as sig_abs ,sum(head_str_l::INTEGER) as head_abs,sum(head_str_a::INTEGER) as head_at,sum(td_l::INTEGER) as td_abs,round(sum(td_l::INTEGER)/cast(sum(td_a::REAL) as REAL),2) as td_abs_rate,sum(kd::INTEGER) as kd_abs from opp_stats1").df()
 
   
-  c1.metric('Significant Strikes Differential', value=round(cleaned_fighter_stats1['sig_str']/cleaned_opp_stats1['sig_abs'],1))
-  c1.metric('Head Strikes Differential', value=round(cleaned_fighter_stats1['head_str']/cleaned_opp_stats1['head_abs'],1))
-  c1.metric('Power Differential (Knockdowns)', value=round(cleaned_fighter_stats1['kd']/cleaned_opp_stats1['kd_abs'],1))
-  c1.metric(label='Total Takedowns Landed',value=int(cleaned_fighter_stats1['td_l'].iloc[0]),delta="{0:.0%}".format(round(float(cleaned_fighter_stats1['td_rate'].iloc[0]),2)))
-  c1.metric(label='Total Takedowns Given Up',value=int(cleaned_opp_stats1['td_abs'].iloc[0]),delta="{0:.0%}".format(round(float(cleaned_opp_stats1['td_abs_rate'].iloc[0]),2)))
-  c1.metric('Takedown Differential', value=round(cleaned_fighter_stats1['td_l']/cleaned_opp_stats1['td_abs'],1))
+  c1.metric('Significant Strikes Differential',width='content', value=round(cleaned_fighter_stats1['sig_str']/cleaned_opp_stats1['sig_abs'],1))
+  c1.metric('Head Strikes Differential',width='content', value=round(cleaned_fighter_stats1['head_str']/cleaned_opp_stats1['head_abs'],1))
+  c1.metric('Power Differential (Knockdowns)',width='content', value=round(cleaned_fighter_stats1['kd']/cleaned_opp_stats1['kd_abs'],1))
+  c1.metric(label='Total Takedowns Landed',width='content',value=int(cleaned_fighter_stats1['td_l'].iloc[0]),delta="{0:.0%}".format(round(float(cleaned_fighter_stats1['td_rate'].iloc[0]),2)))
+  c1.metric(label='Total Takedowns Given Up',width='content',value=int(cleaned_opp_stats1['td_abs'].iloc[0]),delta="{0:.0%}".format(round(float(cleaned_opp_stats1['td_abs_rate'].iloc[0]),2)))
+  c1.metric('Takedown Differential',width='content', value=round(cleaned_fighter_stats1['td_l']/cleaned_opp_stats1['td_abs'],1))
   c1.caption('Success rate at evading head strikes')
   head_movement1 = round(1-(cleaned_opp_stats1['head_abs']/cleaned_opp_stats1['head_at']),2)
-  c1.metric('Head Movement', value=head_movement1)
+  c1.metric('Head Movement',width='content', value=head_movement1)
   
   fighter2_filter = c2.selectbox('Pick Fighter 2', options=fighter_list)
   fights2 = duckdb.sql(f"SELECT BOUT from fr_cleaned where FIGHTER1 = '{fighter2_filter}' or FIGHTER2='{fighter2_filter}'").df()
