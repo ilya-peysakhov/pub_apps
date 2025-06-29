@@ -516,7 +516,7 @@ elif view=='Tale of the Tape':
       else:
           fighter2_advantage_counter =+ 1    
    
-      if head_movement.iloc[0] >head_movement2.iloc[0]:
+      if head_movement >head_movement2:
           fighter1_advantage_counter =+ 1
       else:
           fighter2_advantage_counter =+ 1    
