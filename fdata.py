@@ -284,18 +284,20 @@ elif view =='Fighter One Sheet':
         
         # Convert date to datetime and numeric offset
         cumulative_head_trauma['DATE'] = pd.to_datetime(cumulative_head_trauma['DATE'])
-        cumulative_head_trauma['time_numeric'] = (cumulative_head_trauma['DATE'] - cumulative_head_trauma['DATE'].min()).dt.days
+
+        # Create fight number (1, 2, 3, ...)
+        cumulative_head_trauma['fight_number'] = range(1, len(cumulative_head_trauma) + 1)
         
-        # Compute slope and intercept
-        slope, intercept = np.polyfit(cumulative_head_trauma['time_numeric'], cumulative_head_trauma['head_str_l'], 1)
+        # Compute slope and intercept using fight number instead of days
+        slope, intercept = np.polyfit(cumulative_head_trauma['fight_number'], cumulative_head_trauma['head_str_l'], 1)
         
-        # Add trendline values
-        cumulative_head_trauma['trend'] = slope * cumulative_head_trauma['time_numeric'] + intercept
+        # Add trendline (still plotted over time, but based on fight #)
+        cumulative_head_trauma['trend'] = slope * cumulative_head_trauma['fight_number'] + intercept
         
-        # Plot original area chart and slope line
+        # Plot area chart
         fig = go.Figure()
         
-        # Original cumulative area chart
+        # Original cumulative line
         fig.add_trace(go.Scatter(
             x=cumulative_head_trauma['DATE'],
             y=cumulative_head_trauma['head_str_l'],
@@ -304,13 +306,13 @@ elif view =='Fighter One Sheet':
             name='Cumulative Head Trauma'
         ))
         
-        # Slope line
+        # Trendline (based on fight progression)
         fig.add_trace(go.Scatter(
             x=cumulative_head_trauma['DATE'],
             y=cumulative_head_trauma['trend'],
             mode='lines',
             line=dict(dash='dash', color='red'),
-            name=f'Trendline (slope = {slope:.2f})'
+            name=f'Trendline (slope = {slope:.2f} per fight)'
         ))
         
         fig.update_layout(
@@ -321,6 +323,7 @@ elif view =='Fighter One Sheet':
         )
         
         st.plotly_chart(fig, use_container_width=True)
+        
         st.divider()
         with st.expander("Career Results"):
             career_results = duckdb.sql(f"SELECT left(DATE::string,10) AS DATE ,EVENT,case when FIGHTER1='{fighter_filter}' then FIGHTER2 else FIGHTER1 end as OPPONENT,case when FIGHTER1='{fighter_filter}' then FIGHTER1_OUTCOME else FIGHTER2_OUTCOME end as RESULT,METHOD,ROUND, TIME,DETAILS from fr_cleaned where FIGHTER1= '{fighter_filter}' or FIGHTER2='{fighter_filter}' order by DATE desc").df()
