@@ -438,7 +438,7 @@ elif view =='Aggregate Table':
       str_results = oppStats()      
     
     with st.spinner('Combining all data...'):
-        combined_stats = duckdb.sql("SELECT a.*, ROUND(SIG_STRIKES_LANDED/SIG_STRIKES_ABS,1) as SIG_STR_DIFF, ROUND((1-HEAD_STRIKES_ABS/HEAD_STRIKES_AT),2) as HEAD_MOVEMENT, b.* EXCLUDE (FIGHTER) from all_time_offense as a left join str_results as b on a.FIGHTER=b.FIGHTER").df()
+        combined_stats = duckdb.sql("SELECT a.*, ROUND(SIG_STRIKES_LANDED/SIG_STRIKES_ABS,1) as SIG_STR_DIFF, ROUND((1-HEAD_STRIKES_ABS/HEAD_STRIKES_AT),2) as HEAD_MOVEMENT, ROUND(HEAD_STRIKES_ABS/ROUNDS,1) as HEAD_STRIKES_ABS_PER_ROUND, b.* EXCLUDE (FIGHTER) from all_time_offense as a left join str_results as b on a.FIGHTER=b.FIGHTER").df()
     
     st.dataframe(combined_stats.sort_values(by='FIGHTS', ascending=False),hide_index=True) 
 
