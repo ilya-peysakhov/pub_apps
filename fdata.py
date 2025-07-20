@@ -448,7 +448,32 @@ elif view =='Aggregate Table':
         chart_metric1 = c1.selectbox('Choose a metric to plot',combined_stats.columns)
         chart_metric2 = c2.selectbox('Choose a second metric to plot',combined_stats.columns)
         viz_data = duckdb.sql(f"select FIGHTER, {chart_metric1}, {chart_metric2} from combined_stats ").df()
-        fig = px.scatter(viz_data, x=chart_metric1,y=chart_metric2, text='FIGHTER', template='simple_white')
+        # fig = px.scatter(viz_data, x=chart_metric1,y=chart_metric2, text='FIGHTER', template='simple_white')
+        # st.plotly_chart(fig, use_container_width=True)
+        x = viz_data[chart_metric1]
+        y = viz_data[chart_metric2]
+        slope, intercept = np.polyfit(x, y, 1)
+        trendline_y = slope * x + intercept
+        
+        # Create base scatter plot
+        fig = px.scatter(
+            viz_data, 
+            x=chart_metric1, 
+            y=chart_metric2, 
+            text='FIGHTER', 
+            template='simple_white'
+        )
+        
+        # Add line of best fit
+        fig.add_trace(go.Scatter(
+            x=x,
+            y=trendline_y,
+            mode='lines',
+            name=f'Best Fit Line (slope = {slope:.2f})',
+            line=dict(color='red', dash='dash')
+        ))
+        
+        # Plot
         st.plotly_chart(fig, use_container_width=True)
     
     vizPlot()
