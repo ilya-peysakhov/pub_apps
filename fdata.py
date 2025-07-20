@@ -10,6 +10,8 @@ import datetime
 import streamlit_shadcn_ui as ui
 from streamlit_ace import st_ace
 import plotly.express as px
+import numpy as np
+import plotly.graph_objects as go
 
 from streamlit_extras.metric_cards import style_metric_cards
 
@@ -267,10 +269,57 @@ elif view =='Fighter One Sheet':
             # st.area_chart(td_dif, x='DATE', y='TD_At_Diff')
 
         st.divider()
-        cumulative_head_trauma = duckdb.sql(f"SELECT date, sum(sum(head_str_l::int)) over (order by date asc) head_str_l from fs_cleaned where BOUT in (select * from fights) and FIGHTER !='{fighter_filter}'  group by 1").df()
-        fig = px.area(cumulative_head_trauma, x='DATE',y='head_str_l',text='head_str_l',title='Cumulative Head Trauma')
-        st.plotly_chart(fig,use_container_width=True)
+        # cumulative_head_trauma = duckdb.sql(f"SELECT date, sum(sum(head_str_l::int)) over (order by date asc) head_str_l from fs_cleaned where BOUT in (select * from fights) and FIGHTER !='{fighter_filter}'  group by 1").df()
+        # fig = px.area(cumulative_head_trauma, x='DATE',y='head_str_l',text='head_str_l',title='Cumulative Head Trauma')
+        # st.plotly_chart(fig,use_container_width=True)
+        cumulative_head_trauma = duckdb.sql(f"""
+            SELECT 
+                date, 
+                SUM(SUM(head_str_l::int)) OVER (ORDER BY date ASC) AS head_str_l 
+            FROM fs_cleaned 
+            WHERE BOUT IN (SELECT * FROM fights) 
+              AND FIGHTER != '{fighter_filter}'  
+            GROUP BY 1
+        """).df()
         
+        # Convert date to datetime and numeric offset
+        cumulative_head_trauma['DATE'] = pd.to_datetime(cumulative_head_trauma['DATE'])
+        cumulative_head_trauma['time_numeric'] = (cumulative_head_trauma['DATE'] - cumulative_head_trauma['DATE'].min()).dt.days
+        
+        # Compute slope and intercept
+        slope, intercept = np.polyfit(cumulative_head_trauma['time_numeric'], cumulative_head_trauma['head_str_l'], 1)
+        
+        # Add trendline values
+        cumulative_head_trauma['trend'] = slope * cumulative_head_trauma['time_numeric'] + intercept
+        
+        # Plot original area chart and slope line
+        fig = go.Figure()
+        
+        # Original cumulative area chart
+        fig.add_trace(go.Scatter(
+            x=cumulative_head_trauma['DATE'],
+            y=cumulative_head_trauma['head_str_l'],
+            mode='lines',
+            fill='tozeroy',
+            name='Cumulative Head Trauma'
+        ))
+        
+        # Slope line
+        fig.add_trace(go.Scatter(
+            x=cumulative_head_trauma['DATE'],
+            y=cumulative_head_trauma['trend'],
+            mode='lines',
+            line=dict(dash='dash', color='red'),
+            name=f'Trendline (slope = {slope:.2f})'
+        ))
+        
+        fig.update_layout(
+            title='Cumulative Head Trauma with Trendline',
+            xaxis_title='Date',
+            yaxis_title='Cumulative Head Trauma',
+        )
+        
+        st.plotly_chart(fig, use_container_width=True)
         st.divider()
         with st.expander("Career Results"):
             career_results = duckdb.sql(f"SELECT left(DATE::string,10) AS DATE ,EVENT,case when FIGHTER1='{fighter_filter}' then FIGHTER2 else FIGHTER1 end as OPPONENT,case when FIGHTER1='{fighter_filter}' then FIGHTER1_OUTCOME else FIGHTER2_OUTCOME end as RESULT,METHOD,ROUND, TIME,DETAILS from fr_cleaned where FIGHTER1= '{fighter_filter}' or FIGHTER2='{fighter_filter}' order by DATE desc").df()
