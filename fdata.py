@@ -317,6 +317,7 @@ elif view =='Fighter One Sheet':
             title='Cumulative Head Trauma with Trendline',
             xaxis_title='Date',
             yaxis_title='Cumulative Head Trauma',
+            yaxis=dict(range=[0, 2000])
         )
         
         st.plotly_chart(fig, use_container_width=True)
