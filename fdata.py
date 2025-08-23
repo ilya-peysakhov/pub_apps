@@ -241,13 +241,14 @@ elif view =='Fighter One Sheet':
             head_movement = round(1-(cleaned_opp_stats['head_abs']/cleaned_opp_stats['head_at']),2)
             st.metric('Head Movement',value=head_movement ,border=True)
         st.divider()
-        flex = st.container(horizontal=True,horizontal_alignment='center')
+        flex = st.container(horizontal=True,horizontal_alignment='center',width='stretch')
         with st.container(width=500):
             st.write("Strikes Attempted")
             str_a = duckdb.sql(f"SELECT DATE, sum(total_str_a::INT) as Total_Strikes_At from fighter_stats group by 1").df()
             fig = px.area(str_a, x='DATE', y='Total_Strikes_At', template='simple_white')
             st.plotly_chart(fig,use_container_width=True,theme=None)
             # st.area_chart(str_a, x='DATE', y='Total_Strikes_At')
+        with st.container(width=500):
             st.write("Net Sig Strike Landed difference")
             str_dif = duckdb.sql(f"SELECT a.DATE, sum(a.sig_str_l::INT)-sum(b.sig_str_l::INT) as Strike_Diff from fighter_stats as a inner join opp_stats as b on a.DATE = b.DATE and a.BOUT=b.BOUT and a.ROUND=b.ROUND group by 1").df()
             fig = px.area(str_dif, x='DATE', y='Strike_Diff', template='simple_white')
@@ -259,6 +260,7 @@ elif view =='Fighter One Sheet':
             fig = px.area(td_a, x='DATE', y='TD_At', template='simple_white')
             st.plotly_chart(fig,use_container_width=True,theme=None)
             # st.area_chart(td_a, x='DATE', y='TD_At')
+        with st.container(width=500):
             st.write("Net Takedown difference")
             td_dif = duckdb.sql(f"SELECT a.DATE, sum(a.td_a::INT)-sum(b.td_a::INT) as TD_At_Diff from fighter_stats as a inner join opp_stats as b on a.DATE = b.DATE and a.BOUT=b.BOUT and a.ROUND=b.ROUND group by 1").df()
             fig = px.area(td_dif, x='DATE', y='TD_At_Diff', template='simple_white')
@@ -629,6 +631,7 @@ st.sidebar.caption(f"Memory Usage: {memory_usage:.1f}% MB")
 #    audio_file = open('song.mp3', 'rb')
 #    audio_bytes = audio_file.read()
 #    st.audio(audio_bytes, format='audio/ogg')   
+
 
 
 
