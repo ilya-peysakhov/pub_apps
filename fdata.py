@@ -247,24 +247,24 @@ elif view =='Fighter One Sheet':
             
             str_a = duckdb.sql(f"SELECT DATE, sum(total_str_a::INT) as Total_Strikes_At from fighter_stats group by 1").df()
             fig = px.area(str_a, x='DATE', y='Total_Strikes_At', template='simple_white')
-            st.plotly_chart(fig,use_container_width=True)
+            st.plotly_chart(fig,use_container_width=True,theme=None)
             # st.area_chart(str_a, x='DATE', y='Total_Strikes_At')
             st.write("Net Sig Strike Landed difference")
             str_dif = duckdb.sql(f"SELECT a.DATE, sum(a.sig_str_l::INT)-sum(b.sig_str_l::INT) as Strike_Diff from fighter_stats as a inner join opp_stats as b on a.DATE = b.DATE and a.BOUT=b.BOUT and a.ROUND=b.ROUND group by 1").df()
             fig = px.area(str_dif, x='DATE', y='Strike_Diff', template='simple_white')
-            st.plotly_chart(fig,use_container_width=True)
+            st.plotly_chart(fig,use_container_width=True,theme=None)
             # st.area_chart(str_dif, x='DATE', y='Strike_Diff')
               
         with c2:
             st.write("Takedowns Attempted")
             td_a = duckdb.sql(f"SELECT DATE,  sum(td_a::int) TD_At from fighter_stats group by 1").df()
             fig = px.area(td_a, x='DATE', y='TD_At', template='simple_white')
-            st.plotly_chart(fig,use_container_width=True)
+            st.plotly_chart(fig,use_container_width=True,theme=None)
             # st.area_chart(td_a, x='DATE', y='TD_At')
             st.write("Net Takedown difference")
             td_dif = duckdb.sql(f"SELECT a.DATE, sum(a.td_a::INT)-sum(b.td_a::INT) as TD_At_Diff from fighter_stats as a inner join opp_stats as b on a.DATE = b.DATE and a.BOUT=b.BOUT and a.ROUND=b.ROUND group by 1").df()
             fig = px.area(td_dif, x='DATE', y='TD_At_Diff', template='simple_white')
-            st.plotly_chart(fig,use_container_width=True)
+            st.plotly_chart(fig,use_container_width=True,theme=None)
             # st.area_chart(td_dif, x='DATE', y='TD_At_Diff')
 
         st.divider()
@@ -321,7 +321,7 @@ elif view =='Fighter One Sheet':
             yaxis=dict(range=[0, 2000])
         )
         
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, use_container_width=True,theme=None)
         
         st.divider()
         with st.expander("Career Results"):
@@ -357,7 +357,7 @@ elif view =='Interesting Stats':
         st.write("Fights by month")
         fights_monthly= duckdb.sql("SELECT date_trunc('month',date) as MONTH,count(*) as FIGHTS, count(distinct EVENT) as EVENTS from fed group by 1 order by 1 asc").df()
         fig = px.area(fights_monthly, x='MONTH',y=['FIGHTS','EVENTS'], template='simple_white')
-        st.plotly_chart(fig,use_container_width=True)
+        st.plotly_chart(fig,use_container_width=True,theme=None)
         # st.area_chart(fights_monthly, x='MONTH',y='FIGHTS')
         
         st.divider()
@@ -370,7 +370,7 @@ elif view =='Interesting Stats':
         st.write("Fights by result method (2yr)")
         methods = duckdb.sql("SELECT method, count(*) FIGHTS from fr_cleaned where date between current_date() -730 and current_date() group by 1 ").df()
         fig = px.pie(methods,values='FIGHTS', names='METHOD', template='simple_white')
-        st.plotly_chart(fig,use_container_width=True)
+        st.plotly_chart(fig,use_container_width=True,theme=None)
         # base = alt.Chart(methods).encode(alt.Theta("FIGHTS:Q").stack(True),alt.Color("METHOD:N").legend(None),alt.Tooltip("METHOD:N", title="METHOD"))
         # pie = base.mark_arc(outerRadius=120)
         # st.altair_chart(pie)
@@ -382,14 +382,14 @@ elif view =='Interesting Stats':
                                   (select FIGHTS,count(1) FIGHTERS from  (select FIGHTER,COUNT(DISTINCT EVENT||BOUT) FIGHTS from fs_cleaned group by 1) group by 1)
                               order by 1""").df()
         fig = px.bar(fight_distro, x='FIGHTS',y='FIGHTERS', template='simple_white')
-        st.plotly_chart(fig,use_container_width=True)
+        st.plotly_chart(fig,use_container_width=True,theme=None)
         # st.bar_chart(fight_distro, x='FIGHTS',y='FIGHTERS')
         st.divider()
         
         st.write('Most commonly used venues (2yr)')
         locations = duckdb.sql("SELECT LOCATION,count(distinct EVENT) EVENTS from fed where date between current_date() -730 and current_date() group by 1 order by 2 desc limit 10").df()
         fig = px.bar(locations.sort_values(by='EVENTS'), x='EVENTS',y='LOCATION', template='simple_white')
-        st.plotly_chart(fig,use_container_width=True)
+        st.plotly_chart(fig,use_container_width=True,theme=None)
        
         # base = alt.Chart(locations.sort_values(by='EVENTS')).mark_point().encode(x='EVENTS',y='LOCATION')
         # st.altair_chart(base)
@@ -409,7 +409,7 @@ elif view =='Interesting Stats':
     methods_over_time = duckdb.sql(f"SELECT case when METHOD like 'Decision%' then 'Decision' else METHOD end as METHOD, date_trunc('{frame}',date) as MONTH, count(*)/sum(sum(1)) over (partition by MONTH) METHOD_PCT from fr_cleaned  group by 1,2 ").df()
 
     fig = px.area(methods_over_time, x='MONTH',y='METHOD_PCT',color='METHOD', template='simple_white')
-    st.plotly_chart(fig,use_container_width=True)
+    st.plotly_chart(fig,use_container_width=True,theme=None)
     # st.area_chart(methods_over_time, x='MONTH',y='METHOD_PCT',color='METHOD')
 elif view =='Aggregate Table':      
     min_fights = st.number_input('Minimum Fights',step=1,value=20)
@@ -476,7 +476,7 @@ elif view =='Aggregate Table':
         ))
         
         # Plot
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, use_container_width=True,theme=None)
     
     vizPlot()
     
@@ -631,6 +631,7 @@ st.sidebar.caption(f"Memory Usage: {memory_usage:.1f}% MB")
 #    audio_file = open('song.mp3', 'rb')
 #    audio_bytes = audio_file.read()
 #    st.audio(audio_bytes, format='audio/ogg')   
+
 
 
 
