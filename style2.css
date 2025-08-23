@@ -3,21 +3,25 @@
 /* Import Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
-/* CSS Variables for Theme Colors */
+/* CSS Variables for Theme Colors - Business Optimized */
 :root {
-    --primary-gradient: linear-gradient(135deg, rgba(99, 102, 241, 0.8) 0%, rgba(168, 85, 247, 0.8) 100%);
-    --secondary-gradient: linear-gradient(135deg, rgba(59, 130, 246, 0.6) 0%, rgba(147, 51, 234, 0.6) 100%);
-    --glass-bg: rgba(255, 255, 255, 0.1);
-    --glass-border: rgba(255, 255, 255, 0.2);
-    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    --glass-backdrop: blur(20px);
-    --text-primary: rgba(255, 255, 255, 0.95);
-    --text-secondary: rgba(255, 255, 255, 0.7);
-    --accent-blue: rgba(0, 122, 255, 0.8);
-    --accent-purple: rgba(175, 82, 222, 0.8);
-    --success-green: rgba(52, 199, 89, 0.8);
-    --warning-orange: rgba(255, 149, 0, 0.8);
-    --danger-red: rgba(255, 59, 48, 0.8);
+    --primary-gradient: linear-gradient(135deg, rgba(59, 130, 246, 0.9) 0%, rgba(37, 99, 235, 0.9) 100%);
+    --secondary-gradient: linear-gradient(135deg, rgba(99, 102, 241, 0.8) 0%, rgba(79, 70, 229, 0.8) 100%);
+    --glass-bg: rgba(255, 255, 255, 0.85);
+    --glass-bg-dark: rgba(248, 250, 252, 0.95);
+    --glass-border: rgba(148, 163, 184, 0.3);
+    --glass-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+    --glass-backdrop: blur(12px);
+    --text-primary: rgba(15, 23, 42, 0.95);
+    --text-secondary: rgba(51, 65, 85, 0.85);
+    --text-muted: rgba(100, 116, 139, 0.9);
+    --accent-blue: rgba(59, 130, 246, 1);
+    --accent-purple: rgba(99, 102, 241, 1);
+    --success-green: rgba(34, 197, 94, 1);
+    --warning-orange: rgba(245, 158, 11, 1);
+    --danger-red: rgba(239, 68, 68, 1);
+    --chart-bg: rgba(255, 255, 255, 0.95);
+    --metric-bg: rgba(255, 255, 255, 0.9);
 }
 
 /* Global Styles */
@@ -25,21 +29,21 @@
     box-sizing: border-box;
 }
 
-/* Main App Background */
+/* Main App Background - Light & Professional */
 .stApp {
     background: linear-gradient(135deg, 
-        rgba(15, 23, 42, 1) 0%,
-        rgba(30, 41, 59, 1) 25%,
-        rgba(51, 65, 85, 1) 50%,
-        rgba(30, 41, 59, 1) 75%,
-        rgba(15, 23, 42, 1) 100%);
+        rgba(248, 250, 252, 1) 0%,
+        rgba(241, 245, 249, 1) 25%,
+        rgba(248, 250, 252, 1) 50%,
+        rgba(241, 245, 249, 1) 75%,
+        rgba(248, 250, 252, 1) 100%);
     background-attachment: fixed;
     color: var(--text-primary);
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     min-height: 100vh;
 }
 
-/* Add animated background particles */
+/* Subtle background texture for depth */
 .stApp::before {
     content: '';
     position: fixed;
@@ -48,10 +52,10 @@
     width: 100%;
     height: 100%;
     background-image: 
-        radial-gradient(circle at 20% 50%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(168, 85, 247, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 40% 80%, rgba(59, 130, 246, 0.1) 0%, transparent 50%);
-    animation: float 20s ease-in-out infinite;
+        radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.03) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(99, 102, 241, 0.02) 0%, transparent 50%),
+        radial-gradient(circle at 40% 80%, rgba(37, 99, 235, 0.03) 0%, transparent 50%);
+    animation: float 30s ease-in-out infinite;
     pointer-events: none;
     z-index: -1;
 }
@@ -76,27 +80,37 @@
     max-width: 1200px;
 }
 
-/* Headers */
+/* Headers - Professional & Readable */
 h1, h2, h3, h4, h5, h6 {
     color: var(--text-primary) !important;
     font-weight: 600;
-    background: var(--primary-gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
     margin-bottom: 1rem;
+    letter-spacing: -0.025em;
 }
 
 h1 {
-    font-size: 2.5rem;
+    font-size: 2.25rem;
     font-weight: 700;
-    text-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+    color: rgba(15, 23, 42, 1) !important;
+    margin-bottom: 1.5rem;
 }
 
-/* Text Elements */
+h2 {
+    font-size: 1.875rem;
+    color: rgba(30, 41, 59, 1) !important;
+    margin-bottom: 1.25rem;
+}
+
+h3 {
+    font-size: 1.5rem;
+    color: rgba(51, 65, 85, 1) !important;
+}
+
+/* Text Elements - High Contrast for Readability */
 p, .stMarkdown, .stText {
     color: var(--text-secondary) !important;
     line-height: 1.6;
+    font-size: 1rem;
 }
 
 /* Buttons */
@@ -259,14 +273,34 @@ p, .stMarkdown, .stText {
     box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3) !important;
 }
 
-/* Metrics */
+/* Metrics - Enhanced for Business KPIs */
 .metric-container {
-    background: var(--glass-bg) !important;
-    border: 1px solid var(--glass-border) !important;
-    border-radius: 16px !important;
+    background: var(--metric-bg) !important;
+    border: 1px solid rgba(148, 163, 184, 0.2) !important;
+    border-radius: 12px !important;
     backdrop-filter: var(--glass-backdrop) !important;
-    box-shadow: var(--glass-shadow) !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
     padding: 1.5rem !important;
+    transition: all 0.2s ease !important;
+}
+
+.metric-container:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08) !important;
+    transform: translateY(-1px) !important;
+}
+
+/* Metric values should be highly visible */
+.metric-container [data-testid="metric-container"] > div {
+    color: var(--text-primary) !important;
+}
+
+/* Metric labels */
+.metric-container [data-testid="metric-container"] label {
+    color: var(--text-muted) !important;
+    font-weight: 500 !important;
+    font-size: 0.875rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
 }
 
 /* Data Editor */
@@ -276,21 +310,47 @@ p, .stMarkdown, .stText {
     overflow: hidden !important;
 }
 
-/* Charts Container */
-.stPlotlyChart, .stPyplot, .stAltair, .stVega {
-    background: var(--glass-bg) !important;
+/* Expander - Clean & Professional */
+.streamlit-expanderHeader {
+    background: var(--glass-bg-dark) !important;
     border: 1px solid var(--glass-border) !important;
-    border-radius: 16px !important;
+    border-radius: 8px !important;
     backdrop-filter: var(--glass-backdrop) !important;
-    box-shadow: var(--glass-shadow) !important;
-    padding: 1rem !important;
-    margin: 1rem 0 !important;
+    color: var(--text-primary) !important;
+    font-weight: 500 !important;
 }
 
-/* Plotly Chart Specific Styling */
-.js-plotly-plot {
-    border-radius: 12px !important;
-    overflow: hidden !important;
+.streamlit-expanderContent {
+    background: rgba(255, 255, 255, 0.95) !important;
+    border: 1px solid var(--glass-border) !important;
+    border-top: none !important;
+    border-radius: 0 0 8px 8px !important;
+    backdrop-filter: var(--glass-backdrop) !important;
+}
+
+/* Tabs - Professional Styling */
+.stTabs [data-baseweb="tab-list"] {
+    background: rgba(241, 245, 249, 0.8) !important;
+    border-radius: 8px !important;
+    padding: 0.25rem !important;
+    backdrop-filter: var(--glass-backdrop) !important;
+    border: 1px solid var(--glass-border) !important;
+}
+
+.stTabs [data-baseweb="tab"] {
+    background: transparent !important;
+    border-radius: 6px !important;
+    color: var(--text-muted) !important;
+    font-weight: 500 !important;
+    padding: 0.5rem 1rem !important;
+    transition: all 0.2s ease !important;
+}
+
+.stTabs [aria-selected="true"] {
+    background: rgba(255, 255, 255, 0.9) !important;
+    color: var(--accent-blue) !important;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05) !important;
+    font-weight: 600 !important;
 }
 
 /* Alerts */
