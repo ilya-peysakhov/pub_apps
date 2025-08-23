@@ -541,7 +541,7 @@ p, .stMarkdown, .stText {
 } */
 
 /* Chart glass reflection */
-.stPlotlyChart::after, .stPyplot::after, .stAltair::after, .stVega::after {
+/* .stPlotlyChart::after, .stPyplot::after, .stAltair::after, .stVega::after {
     content: '';
     position: absolute;
     top: 0;
@@ -552,7 +552,7 @@ p, .stMarkdown, .stText {
         rgba(255, 255, 255, 0.1) 0%, 
         transparent 100%);
     pointer-events: none;
-}
+} */
 
 /* Data Tables - White Text on Glass */
 .stDataEditor, .stDataFrame {
