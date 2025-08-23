@@ -538,20 +538,20 @@ elif view=='Tale of the Tape':
 
   metric_width = 300
   sig_strike_diff = round(cleaned_fighter_stats1['sig_str']/cleaned_opp_stats1['sig_abs'],1)
-  c1.metric('Significant Strikes Differential',width=metric_width, value=sig_strike_diff)
+  c1.metric('Significant Strikes Differential',width=metric_width, value=sig_strike_diff,border=True)
   head_strike_diff = round(cleaned_fighter_stats1['head_str']/cleaned_opp_stats1['head_abs'],1)
-  c1.metric('Head Strikes Differential',width=metric_width, value=head_strike_diff)
+  c1.metric('Head Strikes Differential',width=metric_width, value=head_strike_diff,border=True)
   power_diff = round(cleaned_fighter_stats1['kd']/cleaned_opp_stats1['kd_abs'],1)
-  c1.metric('Power Differential (Knockdowns)',width=metric_width, value=power_diff)
+  c1.metric('Power Differential (Knockdowns)',width=metric_width, value=power_diff,border=True)
   td_landed = int(cleaned_fighter_stats1['td_l'].iloc[0])
-  c1.metric(label='Total Takedowns Landed',width=metric_width,value=td_landed,delta="{0:.0%}".format(round(float(cleaned_fighter_stats1['td_rate'].iloc[0]),2)))
+  c1.metric(label='Total Takedowns Landed',width=metric_width,value=td_landed,delta="{0:.0%}".format(round(float(cleaned_fighter_stats1['td_rate'].iloc[0]),2)),border=True)
   td_given = int(cleaned_opp_stats1['td_abs'].iloc[0])
-  c1.metric(label='Total Takedowns Given Up',width=metric_width,value=td_given,delta="{0:.0%}".format(round(float(cleaned_opp_stats1['td_abs_rate'].iloc[0]),2)))
+  c1.metric(label='Total Takedowns Given Up',width=metric_width,value=td_given,delta="{0:.0%}".format(round(float(cleaned_opp_stats1['td_abs_rate'].iloc[0]),2)),border=True)
   td_diff = round(cleaned_fighter_stats1['td_l']/cleaned_opp_stats1['td_abs'],1)
-  c1.metric('Takedown Differential',width=metric_width, value=td_diff)
+  c1.metric('Takedown Differential',width=metric_width, value=td_diff,border=True)
   c1.caption('Success rate at evading head strikes')
   head_movement1 = round(1-(cleaned_opp_stats1['head_abs']/cleaned_opp_stats1['head_at']),2)
-  c1.metric('Head Movement',width=metric_width, value=head_movement1)
+  c1.metric('Head Movement',width=metric_width, value=head_movement1,border=True)
   
   fighter2_filter = c2.selectbox('Pick Fighter 2', options=fighter_list)
   fights2 = duckdb.sql(f"SELECT BOUT from fr_cleaned where FIGHTER1 = '{fighter2_filter}' or FIGHTER2='{fighter2_filter}'").df()
@@ -561,20 +561,20 @@ elif view=='Tale of the Tape':
   cleaned_opp_stats2 = duckdb.sql("SELECT sum(sig_str_l::INTEGER) as sig_abs ,sum(head_str_l::INTEGER) as head_abs,sum(head_str_a::INTEGER) as head_at,sum(td_l::INTEGER) as td_abs,round(sum(td_l::INTEGER)/cast(sum(td_a::REAL) as REAL),2) as td_abs_rate,sum(kd::INTEGER) as kd_abs from opp_stats2").df()
 
   sig_strike_diff2 = round(cleaned_fighter_stats2['sig_str']/cleaned_opp_stats2['sig_abs'],1)
-  c2.metric('Significant Strikes Differential',width=metric_width, value=sig_strike_diff2)
+  c2.metric('Significant Strikes Differential',width=metric_width, value=sig_strike_diff2,border=True)
   head_strike_diff2 = round(cleaned_fighter_stats2['head_str']/cleaned_opp_stats2['head_abs'],1)
-  c2.metric('Head Strikes Differential',width=metric_width, value=head_strike_diff2)
+  c2.metric('Head Strikes Differential',width=metric_width, value=head_strike_diff2,border=True)
   power_diff2 = round(cleaned_fighter_stats2['kd']/cleaned_opp_stats2['kd_abs'],1)
-  c2.metric('Power Differential (Knockdowns)',width=metric_width, value=power_diff2)
+  c2.metric('Power Differential (Knockdowns)',width=metric_width, value=power_diff2,border=True)
   td_landed_2 = int(cleaned_fighter_stats2['td_l'].iloc[0])
-  c2.metric(label='Total Takedowns Landed',width=metric_width,value=td_landed_2,delta="{0:.0%}".format(round(float(cleaned_fighter_stats2['td_rate'].iloc[0]),2)))
+  c2.metric(label='Total Takedowns Landed',width=metric_width,value=td_landed_2,delta="{0:.0%}".format(round(float(cleaned_fighter_stats2['td_rate'].iloc[0]),2)),border=True)
   td_given_2 = int(cleaned_opp_stats2['td_abs'].iloc[0])
-  c2.metric(label='Total Takedowns Given Up',width=metric_width,value=td_given_2,delta="{0:.0%}".format(round(float(cleaned_opp_stats2['td_abs_rate'].iloc[0]),2)))
+  c2.metric(label='Total Takedowns Given Up',width=metric_width,value=td_given_2,delta="{0:.0%}".format(round(float(cleaned_opp_stats2['td_abs_rate'].iloc[0]),2)),border=True)
   td_diff = round(cleaned_fighter_stats2['td_l']/cleaned_opp_stats2['td_abs'],1)
-  c2.metric('Takedown Differential',width=metric_width, value=td_diff)
+  c2.metric('Takedown Differential',width=metric_width, value=td_diff,border=True)
   c2.caption('Success rate at evading head strikes')
   head_movement2 = round(1-(cleaned_opp_stats2['head_abs']/cleaned_opp_stats2['head_at']),2)
-  c2.metric('Head Movement',width=metric_width, value=head_movement2)
+  c2.metric('Head Movement',width=metric_width, value=head_movement2,border=True)
   # style_metric_cards(border_radius_px=250,background_color='#00000')
   with c3:
       fighter1_advantage_counter = 0
@@ -631,6 +631,7 @@ st.sidebar.caption(f"Memory Usage: {memory_usage:.1f}% MB")
 #    audio_file = open('song.mp3', 'rb')
 #    audio_bytes = audio_file.read()
 #    st.audio(audio_bytes, format='audio/ogg')   
+
 
 
 
