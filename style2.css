@@ -1,39 +1,39 @@
-/* Headers - Elegant Glass Typography */
+/* Headers - Crisp White Text with Strong Contrast */
 h1, h2, h3, h4, h5, h6 {
     color: var(--text-primary) !important;
     font-weight: 600;
     margin-bottom: 1rem;
     letter-spacing: -0.025em;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
 }
 
 h1 {
     font-size: 2.5rem;
     font-weight: 700;
     margin-bottom: 1.5rem;
-    background: linear-gradient(135deg, 
-        rgba(255, 255, 255, 1) 0%, 
-        rgba(255, 255, 255, 0.8) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: rgba(255, 255, 255, 1) !important;
+    text-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
 }
 
 h2 {
     font-size: 1.875rem;
     margin-bottom: 1.25rem;
+    color: rgba(255, 255, 255, 0.95) !important;
+    text-shadow: 0 3px 10px rgba(0, 0, 0, 0.35) !important;
 }
 
 h3 {
     font-size: 1.5rem;
+    color: rgba(255, 255, 255, 0.9) !important;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
 }
 
-/* Text Elements - Glass Readable */
+/* Text Elements - High Contrast White Text */
 p, .stMarkdown, .stText {
     color: var(--text-secondary) !important;
     line-height: 1.6;
     font-size: 1rem;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.2) !important;
 }
 
 /* Sidebar - Frosted Glass Panel */
@@ -102,28 +102,28 @@ p, .stMarkdown, .stText {
 /* Import Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
-/* CSS Variables for Liquid Glass Theme */
+/* CSS Variables for Liquid Glass Theme - High Contrast */
 :root {
-    --primary-gradient: linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.1) 100%);
-    --secondary-gradient: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.05) 100%);
-    --glass-bg: rgba(255, 255, 255, 0.15);
-    --glass-bg-strong: rgba(255, 255, 255, 0.25);
-    --glass-bg-subtle: rgba(255, 255, 255, 0.08);
-    --glass-border: rgba(255, 255, 255, 0.2);
-    --glass-border-strong: rgba(255, 255, 255, 0.3);
-    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
-    --glass-shadow-strong: 0 16px 48px rgba(0, 0, 0, 0.2);
+    --primary-gradient: linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.15) 100%);
+    --secondary-gradient: linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.1) 100%);
+    --glass-bg: rgba(255, 255, 255, 0.2);
+    --glass-bg-strong: rgba(255, 255, 255, 0.3);
+    --glass-bg-subtle: rgba(255, 255, 255, 0.12);
+    --glass-border: rgba(255, 255, 255, 0.25);
+    --glass-border-strong: rgba(255, 255, 255, 0.4);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    --glass-shadow-strong: 0 16px 48px rgba(0, 0, 0, 0.3);
     --glass-backdrop: blur(20px);
-    --text-primary: rgba(255, 255, 255, 0.95);
-    --text-secondary: rgba(255, 255, 255, 0.75);
-    --text-muted: rgba(255, 255, 255, 0.6);
-    --accent-silver: rgba(200, 200, 200, 0.8);
-    --accent-blue: rgba(100, 150, 255, 0.7);
-    --success-green: rgba(120, 220, 150, 0.8);
-    --warning-orange: rgba(255, 180, 100, 0.8);
-    --danger-red: rgba(255, 120, 120, 0.8);
-    --chart-bg: rgba(255, 255, 255, 0.12);
-    --metric-bg: rgba(255, 255, 255, 0.18);
+    --text-primary: rgba(255, 255, 255, 0.98);
+    --text-secondary: rgba(255, 255, 255, 0.85);
+    --text-muted: rgba(255, 255, 255, 0.7);
+    --accent-silver: rgba(255, 255, 255, 0.9);
+    --accent-blue: rgba(147, 197, 253, 1);
+    --success-green: rgba(134, 239, 172, 1);
+    --warning-orange: rgba(251, 191, 36, 1);
+    --danger-red: rgba(252, 165, 165, 1);
+    --chart-bg: rgba(255, 255, 255, 0.15);
+    --metric-bg: rgba(255, 255, 255, 0.22);
 }
 
 /* Global Styles */
@@ -131,14 +131,14 @@ p, .stMarkdown, .stText {
     box-sizing: border-box;
 }
 
-/* Main App Background - Liquid Glass Inspired */
+/* Main App Background - Teal Gradient for White Text Contrast */
 .stApp {
     background: linear-gradient(135deg, 
-        rgba(180, 190, 210, 1) 0%,
-        rgba(200, 210, 230, 1) 25%,
-        rgba(190, 200, 220, 1) 50%,
-        rgba(170, 180, 200, 1) 75%,
-        rgba(160, 170, 190, 1) 100%);
+        rgba(34, 139, 139, 1) 0%,     /* Dark teal */
+        rgba(20, 184, 166, 1) 25%,    /* Teal */
+        rgba(6, 182, 212, 1) 50%,     /* Cyan */
+        rgba(14, 165, 233, 1) 75%,    /* Blue */
+        rgba(37, 99, 235, 1) 100%);   /* Deep blue */
     background-attachment: fixed;
     color: var(--text-primary);
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -146,7 +146,7 @@ p, .stMarkdown, .stText {
     position: relative;
 }
 
-/* Liquid glass texture overlay */
+/* Enhanced liquid glass texture overlay */
 .stApp::before {
     content: '';
     position: fixed;
@@ -155,9 +155,10 @@ p, .stMarkdown, .stText {
     width: 100%;
     height: 100%;
     background-image: 
-        radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 75% 75%, rgba(255, 255, 255, 0.08) 0%, transparent 50%),
-        radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.05) 0%, transparent 70%);
+        radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.08) 0%, transparent 70%),
+        radial-gradient(circle at 30% 80%, rgba(34, 197, 94, 0.1) 0%, transparent 60%);
     animation: float 40s ease-in-out infinite;
     pointer-events: none;
     z-index: -1;
@@ -213,33 +214,60 @@ p, .stMarkdown, .stText {
     border-radius: 50% !important;
 }
 
-/* Alerts - Frosted Glass Notifications */
+/* Alerts - Enhanced Glass Notifications */
 .stAlert {
     border-radius: 16px !important;
     backdrop-filter: var(--glass-backdrop) !important;
     border: 1px solid var(--glass-border) !important;
     box-shadow: var(--glass-shadow) !important;
     background: var(--glass-bg) !important;
+    color: var(--text-primary) !important;
 }
 
 .stSuccess {
-    background: rgba(120, 220, 150, 0.15) !important;
-    border-color: rgba(120, 220, 150, 0.3) !important;
+    background: rgba(134, 239, 172, 0.25) !important;
+    border-color: rgba(134, 239, 172, 0.4) !important;
+    color: rgba(255, 255, 255, 0.95) !important;
 }
 
 .stInfo {
-    background: rgba(100, 150, 255, 0.15) !important;
-    border-color: rgba(100, 150, 255, 0.3) !important;
+    background: rgba(147, 197, 253, 0.25) !important;
+    border-color: rgba(147, 197, 253, 0.4) !important;
+    color: rgba(255, 255, 255, 0.95) !important;
 }
 
 .stWarning {
-    background: rgba(255, 180, 100, 0.15) !important;
-    border-color: rgba(255, 180, 100, 0.3) !important;
+    background: rgba(251, 191, 36, 0.25) !important;
+    border-color: rgba(251, 191, 36, 0.4) !important;
+    color: rgba(255, 255, 255, 0.95) !important;
 }
 
 .stError {
-    background: rgba(255, 120, 120, 0.15) !important;
-    border-color: rgba(255, 120, 120, 0.3) !important;
+    background: rgba(252, 165, 165, 0.25) !important;
+    border-color: rgba(252, 165, 165, 0.4) !important;
+    color: rgba(255, 255, 255, 0.95) !important;
+}
+
+/* Checkbox and Radio - White Text Labels */
+.stCheckbox > label, .stRadio > label {
+    color: var(--text-primary) !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Metric labels - Enhanced for white text */
+.metric-container [data-testid="metric-container"] label {
+    color: var(--text-secondary) !important;
+    font-weight: 500 !important;
+    font-size: 0.875rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Metric values - Crisp white */
+.metric-container [data-testid="metric-container"] > div {
+    color: var(--text-primary) !important;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.3) !important;
 }
 
 /* Expander - Glass Accordion */
@@ -526,7 +554,7 @@ p, .stMarkdown, .stText {
     pointer-events: none;
 }
 
-/* Data Tables - Frosted Glass */
+/* Data Tables - White Text on Glass */
 .stDataEditor, .stDataFrame {
     background: var(--glass-bg) !important;
     border: 1px solid var(--glass-border) !important;
@@ -541,42 +569,37 @@ p, .stMarkdown, .stText {
     color: var(--text-primary) !important;
     font-weight: 600 !important;
     border-bottom: 1px solid var(--glass-border-strong) !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) !important;
 }
 
 .stDataFrame td {
     color: var(--text-secondary) !important;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15) !important;
 }
 
 .stDataFrame tr:hover {
-    background: rgba(255, 255, 255, 0.1) !important;
+    background: rgba(255, 255, 255, 0.15) !important;
 }
 
-/* Tabs - iOS Widget Style */
-.stTabs [data-baseweb="tab-list"] {
-    background: var(--glass-bg) !important;
-    border: 1px solid var(--glass-border) !important;
-    border-radius: 16px !important;
-    padding: 0.25rem !important;
-    backdrop-filter: var(--glass-backdrop) !important;
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1) !important;
-}
-
+/* Tabs - Enhanced contrast for white text */
 .stTabs [data-baseweb="tab"] {
     background: transparent !important;
     border-radius: 12px !important;
-    color: var(--text-secondary) !important;
+    color: var(--text-muted) !important;
     font-weight: 500 !important;
     padding: 0.6rem 1.2rem !important;
     transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) !important;
 }
 
 .stTabs [aria-selected="true"] {
     background: var(--glass-bg-strong) !important;
     color: var(--text-primary) !important;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
     font-weight: 600 !important;
     transform: scale(1.02) !important;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.3) !important;
 }
 
 /* Alerts */
