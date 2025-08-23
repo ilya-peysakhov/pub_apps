@@ -528,7 +528,7 @@ p, .stMarkdown, .stText {
 }
 
 /* Charts - Translucent Glass Containers */
-/* .stPlotlyChart, .stPyplot, .stAltair, .stVega {
+.stPlotlyChart, .stPyplot, .stAltair, .stVega {
     background: var(--chart-bg) !important;
     border: 1px solid var(--glass-border) !important;
     border-radius: 20px !important;
@@ -538,10 +538,10 @@ p, .stMarkdown, .stText {
     margin: 1.5rem 0 !important;
     position: relative !important;
     overflow: hidden !important;
-} */
+}
 
 /* Chart glass reflection */
-.stPlotlyChart::after, .stPyplot::after, .stAltair::after, .stVega::after {
+/* .stPlotlyChart::after, .stPyplot::after, .stAltair::after, .stVega::after {
     content: '';
     position: absolute;
     top: 0;
@@ -553,7 +553,7 @@ p, .stMarkdown, .stText {
         transparent 100%);
     pointer-events: none;
 }
-
+ */
 /* Data Tables - White Text on Glass */
 .stDataEditor, .stDataFrame {
     background: var(--glass-bg) !important;
