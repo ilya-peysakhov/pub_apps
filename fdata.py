@@ -250,7 +250,7 @@ elif view =='Fighter One Sheet':
             # st.area_chart(str_a, x='DATE', y='Total_Strikes_At')
             st.write("Net Sig Strike Landed difference")
             str_dif = duckdb.sql(f"SELECT a.DATE, sum(a.sig_str_l::INT)-sum(b.sig_str_l::INT) as Strike_Diff from fighter_stats as a inner join opp_stats as b on a.DATE = b.DATE and a.BOUT=b.BOUT and a.ROUND=b.ROUND group by 1").df()
-            fig = px.area(str_dif, x='DATE', y='Strike_Diff', template='simple_white')
+            fig = px.area(str_dif, x='DATE', y='Strike_Diff', template='simple_white',with=600)
             st.plotly_chart(fig,use_container_width=False,theme=None)
             # st.area_chart(str_dif, x='DATE', y='Strike_Diff')              
         with st.container():
@@ -261,7 +261,7 @@ elif view =='Fighter One Sheet':
             # st.area_chart(td_a, x='DATE', y='TD_At')
             st.write("Net Takedown difference")
             td_dif = duckdb.sql(f"SELECT a.DATE, sum(a.td_a::INT)-sum(b.td_a::INT) as TD_At_Diff from fighter_stats as a inner join opp_stats as b on a.DATE = b.DATE and a.BOUT=b.BOUT and a.ROUND=b.ROUND group by 1").df()
-            fig = px.area(td_dif, x='DATE', y='TD_At_Diff', template='simple_white')
+            fig = px.area(td_dif, x='DATE', y='TD_At_Diff', template='simple_white',width=600)
             st.plotly_chart(fig,use_container_width=False,theme=None)
             # st.area_chart(td_dif, x='DATE', y='TD_At_Diff')
 
@@ -629,6 +629,7 @@ st.sidebar.caption(f"Memory Usage: {memory_usage:.1f}% MB")
 #    audio_file = open('song.mp3', 'rb')
 #    audio_bytes = audio_file.read()
 #    st.audio(audio_bytes, format='audio/ogg')   
+
 
 
 
