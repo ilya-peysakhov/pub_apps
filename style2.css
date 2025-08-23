@@ -1,27 +1,129 @@
-/* Liquid Glass iOS 26 Theme for Streamlit */
+/* Headers - Elegant Glass Typography */
+h1, h2, h3, h4, h5, h6 {
+    color: var(--text-primary) !important;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    letter-spacing: -0.025em;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
+h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 1) 0%, 
+        rgba(255, 255, 255, 0.8) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+h2 {
+    font-size: 1.875rem;
+    margin-bottom: 1.25rem;
+}
+
+h3 {
+    font-size: 1.5rem;
+}
+
+/* Text Elements - Glass Readable */
+p, .stMarkdown, .stText {
+    color: var(--text-secondary) !important;
+    line-height: 1.6;
+    font-size: 1rem;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Sidebar - Frosted Glass Panel */
+.css-1d391kg, .css-1cypcdb {
+    background: var(--glass-bg) !important;
+    backdrop-filter: var(--glass-backdrop) !important;
+    border-right: 1px solid var(--glass-border) !important;
+    box-shadow: var(--glass-shadow) !important;
+}
+
+/* Progress Bar - Glass Style */
+.stProgress > div > div > div {
+    background: linear-gradient(90deg, var(--glass-bg-strong), var(--accent-silver)) !important;
+    border-radius: 10px !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
+.stProgress > div > div {
+    background: var(--glass-bg-subtle) !important;
+    border-radius: 10px !important;
+    backdrop-filter: var(--glass-backdrop) !important;
+    border: 1px solid var(--glass-border) !important;
+}
+
+/* Spinner - Glass Loading */
+.stSpinner > div {
+    border-color: var(--glass-border) !important;
+    border-top-color: var(--glass-bg-strong) !important;
+}
+
+/* Date/Time Inputs - Glass Form Elements */
+.stDateInput > div > div > input,
+.stTimeInput > div > div > input {
+    background: var(--glass-bg) !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 16px !important;
+    color: var(--text-primary) !important;
+    backdrop-filter: var(--glass-backdrop) !important;
+}
+
+/* Color Picker - Glass Style */
+.stColorPicker > div > div > input {
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 12px !important;
+    backdrop-filter: var(--glass-backdrop) !important;
+}
+
+/* JSON Display - Glass Code Block */
+.stJson {
+    background: var(--glass-bg-subtle) !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 16px !important;
+    backdrop-filter: var(--glass-backdrop) !important;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Code Block - Translucent Terminal */
+.stCodeBlock {
+    background: rgba(0, 0, 0, 0.2) !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 16px !important;
+    backdrop-filter: var(--glass-backdrop) !important;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}/* Liquid Glass iOS 26 Theme for Streamlit */
 
 /* Import Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
-/* CSS Variables for Theme Colors - Business Optimized */
+/* CSS Variables for Liquid Glass Theme */
 :root {
-    --primary-gradient: linear-gradient(135deg, rgba(59, 130, 246, 0.9) 0%, rgba(37, 99, 235, 0.9) 100%);
-    --secondary-gradient: linear-gradient(135deg, rgba(99, 102, 241, 0.8) 0%, rgba(79, 70, 229, 0.8) 100%);
-    --glass-bg: rgba(255, 255, 255, 0.85);
-    --glass-bg-dark: rgba(248, 250, 252, 0.95);
-    --glass-border: rgba(148, 163, 184, 0.3);
-    --glass-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
-    --glass-backdrop: blur(12px);
-    --text-primary: rgba(15, 23, 42, 0.95);
-    --text-secondary: rgba(51, 65, 85, 0.85);
-    --text-muted: rgba(100, 116, 139, 0.9);
-    --accent-blue: rgba(59, 130, 246, 1);
-    --accent-purple: rgba(99, 102, 241, 1);
-    --success-green: rgba(34, 197, 94, 1);
-    --warning-orange: rgba(245, 158, 11, 1);
-    --danger-red: rgba(239, 68, 68, 1);
-    --chart-bg: rgba(255, 255, 255, 0.95);
-    --metric-bg: rgba(255, 255, 255, 0.9);
+    --primary-gradient: linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.1) 100%);
+    --secondary-gradient: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.05) 100%);
+    --glass-bg: rgba(255, 255, 255, 0.15);
+    --glass-bg-strong: rgba(255, 255, 255, 0.25);
+    --glass-bg-subtle: rgba(255, 255, 255, 0.08);
+    --glass-border: rgba(255, 255, 255, 0.2);
+    --glass-border-strong: rgba(255, 255, 255, 0.3);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+    --glass-shadow-strong: 0 16px 48px rgba(0, 0, 0, 0.2);
+    --glass-backdrop: blur(20px);
+    --text-primary: rgba(255, 255, 255, 0.95);
+    --text-secondary: rgba(255, 255, 255, 0.75);
+    --text-muted: rgba(255, 255, 255, 0.6);
+    --accent-silver: rgba(200, 200, 200, 0.8);
+    --accent-blue: rgba(100, 150, 255, 0.7);
+    --success-green: rgba(120, 220, 150, 0.8);
+    --warning-orange: rgba(255, 180, 100, 0.8);
+    --danger-red: rgba(255, 120, 120, 0.8);
+    --chart-bg: rgba(255, 255, 255, 0.12);
+    --metric-bg: rgba(255, 255, 255, 0.18);
 }
 
 /* Global Styles */
@@ -29,21 +131,22 @@
     box-sizing: border-box;
 }
 
-/* Main App Background - Light & Professional */
+/* Main App Background - Liquid Glass Inspired */
 .stApp {
     background: linear-gradient(135deg, 
-        rgba(248, 250, 252, 1) 0%,
-        rgba(241, 245, 249, 1) 25%,
-        rgba(248, 250, 252, 1) 50%,
-        rgba(241, 245, 249, 1) 75%,
-        rgba(248, 250, 252, 1) 100%);
+        rgba(180, 190, 210, 1) 0%,
+        rgba(200, 210, 230, 1) 25%,
+        rgba(190, 200, 220, 1) 50%,
+        rgba(170, 180, 200, 1) 75%,
+        rgba(160, 170, 190, 1) 100%);
     background-attachment: fixed;
     color: var(--text-primary);
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     min-height: 100vh;
+    position: relative;
 }
 
-/* Subtle background texture for depth */
+/* Liquid glass texture overlay */
 .stApp::before {
     content: '';
     position: fixed;
@@ -52,12 +155,28 @@
     width: 100%;
     height: 100%;
     background-image: 
-        radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.03) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(99, 102, 241, 0.02) 0%, transparent 50%),
-        radial-gradient(circle at 40% 80%, rgba(37, 99, 235, 0.03) 0%, transparent 50%);
-    animation: float 30s ease-in-out infinite;
+        radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 75% 75%, rgba(255, 255, 255, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.05) 0%, transparent 70%);
+    animation: float 40s ease-in-out infinite;
     pointer-events: none;
     z-index: -1;
+}
+
+/* Subtle liquid movement */
+@keyframes float {
+    0%, 100% { 
+        transform: translateY(0px) translateX(0px) scale(1); 
+        opacity: 0.8;
+    }
+    33% { 
+        transform: translateY(-10px) translateX(5px) scale(1.02); 
+        opacity: 0.9;
+    }
+    66% { 
+        transform: translateY(5px) translateX(-3px) scale(0.98); 
+        opacity: 0.85;
+    }
 }
 
 @keyframes float {
@@ -80,62 +199,132 @@
     max-width: 1200px;
 }
 
-/* Headers - Professional & Readable */
-h1, h2, h3, h4, h5, h6 {
-    color: var(--text-primary) !important;
-    font-weight: 600;
-    margin-bottom: 1rem;
-    letter-spacing: -0.025em;
+/* Sliders - Glass Style */
+.stSlider > div > div > div > div {
+    background: linear-gradient(90deg, var(--glass-bg-strong), var(--glass-bg)) !important;
+    border-radius: 10px !important;
+    backdrop-filter: var(--glass-backdrop) !important;
 }
 
-h1 {
-    font-size: 2.25rem;
-    font-weight: 700;
-    color: rgba(15, 23, 42, 1) !important;
-    margin-bottom: 1.5rem;
+.stSlider > div > div > div > div > div {
+    background: var(--glass-bg-strong) !important;
+    box-shadow: var(--glass-shadow) !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 50% !important;
 }
 
-h2 {
-    font-size: 1.875rem;
-    color: rgba(30, 41, 59, 1) !important;
-    margin-bottom: 1.25rem;
+/* Alerts - Frosted Glass Notifications */
+.stAlert {
+    border-radius: 16px !important;
+    backdrop-filter: var(--glass-backdrop) !important;
+    border: 1px solid var(--glass-border) !important;
+    box-shadow: var(--glass-shadow) !important;
+    background: var(--glass-bg) !important;
 }
 
-h3 {
-    font-size: 1.5rem;
-    color: rgba(51, 65, 85, 1) !important;
+.stSuccess {
+    background: rgba(120, 220, 150, 0.15) !important;
+    border-color: rgba(120, 220, 150, 0.3) !important;
 }
 
-/* Text Elements - High Contrast for Readability */
-p, .stMarkdown, .stText {
-    color: var(--text-secondary) !important;
-    line-height: 1.6;
-    font-size: 1rem;
+.stInfo {
+    background: rgba(100, 150, 255, 0.15) !important;
+    border-color: rgba(100, 150, 255, 0.3) !important;
 }
 
-/* Buttons */
-.stButton button {
-    background: var(--primary-gradient) !important;
+.stWarning {
+    background: rgba(255, 180, 100, 0.15) !important;
+    border-color: rgba(255, 180, 100, 0.3) !important;
+}
+
+.stError {
+    background: rgba(255, 120, 120, 0.15) !important;
+    border-color: rgba(255, 120, 120, 0.3) !important;
+}
+
+/* Expander - Glass Accordion */
+.streamlit-expanderHeader {
+    background: var(--glass-bg) !important;
     border: 1px solid var(--glass-border) !important;
     border-radius: 16px !important;
-    color: white !important;
+    backdrop-filter: var(--glass-backdrop) !important;
+    color: var(--text-primary) !important;
+    font-weight: 500 !important;
+    box-shadow: var(--glass-shadow) !important;
+    transition: all 0.3s ease !important;
+}
+
+.streamlit-expanderHeader:hover {
+    background: var(--glass-bg-strong) !important;
+    transform: translateY(-1px) !important;
+}
+
+.streamlit-expanderContent {
+    background: var(--glass-bg-subtle) !important;
+    border: 1px solid var(--glass-border) !important;
+    border-top: none !important;
+    border-radius: 0 0 16px 16px !important;
+    backdrop-filter: var(--glass-backdrop) !important;
+    box-shadow: var(--glass-shadow) !important;
+}
+
+/* File Uploader - Glass Drop Zone */
+.stFileUploader > div {
+    background: var(--glass-bg-subtle) !important;
+    border: 2px dashed var(--glass-border) !important;
+    border-radius: 20px !important;
+    backdrop-filter: var(--glass-backdrop) !important;
+    transition: all 0.3s ease !important;
+}
+
+.stFileUploader > div:hover {
+    border-color: var(--glass-border-strong) !important;
+    background: var(--glass-bg) !important;
+    transform: scale(1.01) !important;
+}
+
+/* Buttons - True Liquid Glass Style */
+.stButton button {
+    background: var(--glass-bg) !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 20px !important;
+    color: var(--text-primary) !important;
     font-weight: 500 !important;
     padding: 0.75rem 1.5rem !important;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
     backdrop-filter: var(--glass-backdrop) !important;
-    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.2) !important;
+    box-shadow: var(--glass-shadow) !important;
     font-family: 'Inter', sans-serif !important;
+    position: relative !important;
+    overflow: hidden !important;
+}
+
+/* Glass reflection effect */
+.stButton button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.6s;
+}
+
+.stButton button:hover::before {
+    left: 100%;
 }
 
 .stButton button:hover {
-    transform: translateY(-2px) !important;
-    box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4) !important;
-    border-color: rgba(255, 255, 255, 0.3) !important;
+    transform: translateY(-3px) scale(1.02) !important;
+    box-shadow: var(--glass-shadow-strong) !important;
+    background: var(--glass-bg-strong) !important;
+    border-color: var(--glass-border-strong) !important;
 }
 
 .stButton button:active {
-    transform: translateY(0px) !important;
-    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3) !important;
+    transform: translateY(-1px) scale(0.98) !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15) !important;
 }
 
 /* Download Button */
@@ -310,47 +499,84 @@ p, .stMarkdown, .stText {
     overflow: hidden !important;
 }
 
-/* Expander - Clean & Professional */
-.streamlit-expanderHeader {
-    background: var(--glass-bg-dark) !important;
+/* Charts - Translucent Glass Containers */
+.stPlotlyChart, .stPyplot, .stAltair, .stVega {
+    background: var(--chart-bg) !important;
     border: 1px solid var(--glass-border) !important;
-    border-radius: 8px !important;
+    border-radius: 20px !important;
     backdrop-filter: var(--glass-backdrop) !important;
+    box-shadow: var(--glass-shadow) !important;
+    padding: 1.5rem !important;
+    margin: 1.5rem 0 !important;
+    position: relative !important;
+    overflow: hidden !important;
+}
+
+/* Chart glass reflection */
+.stPlotlyChart::after, .stPyplot::after, .stAltair::after, .stVega::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 40%;
+    background: linear-gradient(180deg, 
+        rgba(255, 255, 255, 0.1) 0%, 
+        transparent 100%);
+    pointer-events: none;
+}
+
+/* Data Tables - Frosted Glass */
+.stDataEditor, .stDataFrame {
+    background: var(--glass-bg) !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 16px !important;
+    backdrop-filter: var(--glass-backdrop) !important;
+    box-shadow: var(--glass-shadow) !important;
+    overflow: hidden !important;
+}
+
+.stDataFrame th {
+    background: var(--glass-bg-strong) !important;
     color: var(--text-primary) !important;
-    font-weight: 500 !important;
+    font-weight: 600 !important;
+    border-bottom: 1px solid var(--glass-border-strong) !important;
 }
 
-.streamlit-expanderContent {
-    background: rgba(255, 255, 255, 0.95) !important;
-    border: 1px solid var(--glass-border) !important;
-    border-top: none !important;
-    border-radius: 0 0 8px 8px !important;
-    backdrop-filter: var(--glass-backdrop) !important;
+.stDataFrame td {
+    color: var(--text-secondary) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
 
-/* Tabs - Professional Styling */
+.stDataFrame tr:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Tabs - iOS Widget Style */
 .stTabs [data-baseweb="tab-list"] {
-    background: rgba(241, 245, 249, 0.8) !important;
-    border-radius: 8px !important;
+    background: var(--glass-bg) !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 16px !important;
     padding: 0.25rem !important;
     backdrop-filter: var(--glass-backdrop) !important;
-    border: 1px solid var(--glass-border) !important;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1) !important;
 }
 
 .stTabs [data-baseweb="tab"] {
     background: transparent !important;
-    border-radius: 6px !important;
-    color: var(--text-muted) !important;
+    border-radius: 12px !important;
+    color: var(--text-secondary) !important;
     font-weight: 500 !important;
-    padding: 0.5rem 1rem !important;
-    transition: all 0.2s ease !important;
+    padding: 0.6rem 1.2rem !important;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
 }
 
 .stTabs [aria-selected="true"] {
-    background: rgba(255, 255, 255, 0.9) !important;
-    color: var(--accent-blue) !important;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05) !important;
+    background: var(--glass-bg-strong) !important;
+    color: var(--text-primary) !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
     font-weight: 600 !important;
+    transform: scale(1.02) !important;
 }
 
 /* Alerts */
