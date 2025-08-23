@@ -242,7 +242,7 @@ elif view =='Fighter One Sheet':
             st.metric('Head Movement',value=head_movement ,border=True)
         st.divider()
         flex = st.container(horizontal=True,horizontal_alignment='center')
-        with st.container(width=600):
+        with st.container(width=500):
             st.write("Strikes Attempted")
             str_a = duckdb.sql(f"SELECT DATE, sum(total_str_a::INT) as Total_Strikes_At from fighter_stats group by 1").df()
             fig = px.area(str_a, x='DATE', y='Total_Strikes_At', template='simple_white')
@@ -253,7 +253,7 @@ elif view =='Fighter One Sheet':
             fig = px.area(str_dif, x='DATE', y='Strike_Diff', template='simple_white')
             st.plotly_chart(fig,use_container_width=True,theme=None)
             # st.area_chart(str_dif, x='DATE', y='Strike_Diff')              
-        with st.container(width=600):
+        with st.container(width=500):
             st.write("Takedowns Attempted")
             td_a = duckdb.sql(f"SELECT DATE,  sum(td_a::int) TD_At from fighter_stats group by 1").df()
             fig = px.area(td_a, x='DATE', y='TD_At', template='simple_white')
@@ -629,6 +629,7 @@ st.sidebar.caption(f"Memory Usage: {memory_usage:.1f}% MB")
 #    audio_file = open('song.mp3', 'rb')
 #    audio_bytes = audio_file.read()
 #    st.audio(audio_bytes, format='audio/ogg')   
+
 
 
 
