@@ -1,4 +1,4 @@
-/* 🌊 Neo-Glassmorphism Theme for Streamlit (Final Segmented Control Fix) 🚀 */
+/* 🌊 Neo-Glassmorphism Theme for Streamlit (Metric Card Fix) 🚀 */
 
 /* Import Google Fonts for a modern, clean look */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
@@ -12,16 +12,15 @@
 
     /* Neo-Glass Variables */
     --glass-bg: rgba(255, 255, 255, 0.15);
+    --glass-bg-metric: rgba(255, 255, 255, 0.2); /* Slightly higher opacity for metrics */
     --glass-bg-hover: rgba(255, 255, 255, 0.25);
-    --glass-border: rgba(255, 255, 255, 0.3);
-    --glass-shadow: 0 4px 12px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.1);
-    --glass-shadow-hover: 0 10px 20px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.2);
+    --glass-border: rgba(255, 255, 255, 0.5); /* STRONGER BORDER for metrics */
+    --glass-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.15); /* Stronger shadow */
+    --glass-shadow-hover: 0 10px 20px rgba(0, 0, 0, 0.4), 0 0 0 2px rgba(255, 255, 255, 0.4);
     --glass-backdrop: blur(15px);
     
-    /* Subtle Background Gradient for the app */
     --app-bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
     
-    /* Animation Speeds */
     --transition-speed: 0.3s;
 }
 
@@ -64,11 +63,41 @@ p, .stMarkdown, .stText, label {
     text-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
-/* --- Segmented Control (Tabs) FIXES --- */
+/* --- Metric Card FIX: Visible Border and Stronger Glass --- */
 
-/* 1. Set the background for the entire control wrapper (st.tabs or st.segmented_control) */
+/* Target the container wrapping the st.metric, usually a column or block-container */
+[data-testid="stVerticalBlock"] > div > [data-testid="stHorizontalBlock"] .st-emotion-cache-1r6slb0,
+[data-testid="stMetric"] { 
+    /* This targets the metric container directly or the column it's in */
+    background: var(--glass-bg-metric) !important; 
+    border: 2px solid var(--glass-border) !important; /* Thicker, more visible border */
+    border-radius: 16px !important; /* Slightly more rounded */
+    backdrop-filter: var(--glass-backdrop);
+    box-shadow: var(--glass-shadow) !important;
+    padding: 1.5rem !important;
+    margin: 0.75rem 0 !important;
+    transition: all var(--transition-speed) ease-in-out;
+}
+
+[data-testid="stMetric"]:hover {
+    transform: scale(1.02) translateY(-2px);
+    box-shadow: var(--glass-shadow-hover) !important;
+    border-color: var(--text-primary) !important; /* Border turns solid white on hover */
+}
+
+/* Metric label */
+[data-testid="stMetricLabel"] {
+    color: var(--text-muted) !important;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+}
+
+
+/* --- Segmented Control (Tabs) --- */
+
 .stTabs [data-baseweb="tab-list"],
-.st-emotion-cache-12fm30q { /* Target the Streamlit wrapper class for st.selectbox/st.tabs */
+.st-emotion-cache-12fm30q {
     background: var(--glass-bg);
     border-radius: 12px;
     padding: 0.25rem;
@@ -76,10 +105,8 @@ p, .stMarkdown, .stText, label {
     border: 1px solid var(--glass-border);
 }
 
-/* 2. FIX: Style for INACTIVE segmented control button background and text */
-[data-testid="stBaseButton-segmented_control"], /* DOM element target */
-.st-emotion-cache-yv9qm1 { /* Specific class target from your DOM */
-    /* Set a dark, transparent background for inactive buttons */
+[data-testid="stBaseButton-segmented_control"],
+.st-emotion-cache-yv9qm1 {
     background: rgba(0, 0, 0, 0.1) !important; 
     border: none !important;
     border-radius: 8px !important;
@@ -90,17 +117,15 @@ p, .stMarkdown, .stText, label {
     background: rgba(0, 0, 0, 0.2) !important;
 }
 
-/* 3. Ensure text inside ALL segmented control buttons is white */
 [data-testid="stBaseButton-segmented_control"] p,
 [data-testid="stBaseButton-segmented_controlActive"] p {
     color: var(--text-primary) !important; 
     font-weight: 600;
 }
 
-/* 4. Active tab styling (st.tabs or st.segmented_controlActive) */
 [data-testid="stBaseButton-segmented_controlActive"],
 .stTabs [aria-selected="true"] {
-    background: var(--primary-color) !important; /* Active background is the primary color */
+    background: var(--primary-color) !important;
     box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
     font-weight: 600;
 }
@@ -119,10 +144,6 @@ p, .stMarkdown, .stText, label {
     backdrop-filter: var(--glass-backdrop);
 }
 
-.stSelectbox > div > div > div {
-    color: var(--text-primary) !important;
-}
-
 .stButton button {
     background: linear-gradient(45deg, var(--primary-color), #4F46E5); 
     border: none;
@@ -131,4 +152,16 @@ p, .stMarkdown, .stText, label {
     font-weight: 600;
     padding: 0.8rem 2rem;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* --- Other Elements (Ensuring they use the base glass style) --- */
+.stContainer, .css-1r6slb0, .css-1r6slb0 > div:first-child > div:first-child { 
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    backdrop-filter: var(--glass-backdrop);
+    box-shadow: var(--glass-shadow);
+    padding: 2rem;
+    margin: 1.5rem 0;
+    overflow: hidden;
 }
