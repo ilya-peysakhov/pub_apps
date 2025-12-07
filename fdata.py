@@ -7,19 +7,12 @@ import psutil
 import duckdb
 import time
 import datetime
-import streamlit_shadcn_ui as ui
 from streamlit_ace import st_ace
 import plotly.express as px
 import numpy as np
 import plotly.graph_objects as go
 
-from streamlit_extras.metric_cards import style_metric_cards
-
-#additions
-#strikes landed per minute over time with % over time
-#strikes absored per fight
-
-###################################
+##################################
 
 
 st.set_page_config(page_icon="👊", page_title="UFC Stats Explorer v1.0", layout="wide",initial_sidebar_state='collapsed')
@@ -173,20 +166,15 @@ elif view =='Fighter One Sheet':
         with col1:
             st.subheader('Bio')
             st.divider()
-            # ui.metric_card(title="Height", content=str(duckdb.sql(f"SELECT HEIGHT FROM fighters WHERE FIGHTER = '{fighter_filter}'").df().iloc[0,0]), key="card1")
             st.metric(label='Height',value=str(duckdb.sql(f"SELECT HEIGHT FROM fighters WHERE FIGHTER = '{fighter_filter}'").df().iloc[0,0]),border=True)
-            # ui.metric_card('Division',content=str(duckdb.sql(f"SELECT WEIGHT FROM fighters WHERE FIGHTER = '{fighter_filter}'").df().iloc[0,0]))
             st.metric(label='Division',value=str(duckdb.sql(f"SELECT WEIGHT FROM fighters WHERE FIGHTER = '{fighter_filter}'").df().iloc[0,0]),border=True)
-            # ui.metric_card('Reach',content=str(duckdb.sql(f"SELECT REACH FROM fighters WHERE FIGHTER = '{fighter_filter}'").df().iloc[0,0]))
             st.metric(label='Reach', value=str(duckdb.sql(f"SELECT REACH FROM fighters WHERE FIGHTER = '{fighter_filter}'").df().iloc[0,0]),border=True)
             dob_str = str(duckdb.sql(f"SELECT DOB FROM fighters WHERE FIGHTER = '{fighter_filter}'").df().iloc[0,0])
             dob = datetime.datetime.strptime(dob_str, '%b %d, %Y')
             age = datetime.datetime.now() - dob
             age_years = age.days // 365
-            # ui.metric_card('Age',content=age_years, description=dob_str)
             st.metric(label='Age',value=age_years,delta=dob_str)
             if len(fights) >0:
-                # ui.metric_card('Last fought', description=str(last_fight['max_date'].values[0]),content=str(last_fight['days_since'].values[0]))
                 st.metric(label='Last Fought', value=str(last_fight['days_since'].values[0]), delta=str(last_fight['max_date'].values[0]))
 
         with col2:
@@ -194,41 +182,27 @@ elif view =='Fighter One Sheet':
             st.divider()
             w1,w2 = st.columns(2)
             with w1:
-                # ui.metric_card('UFC Fights',content=len(fights) )
                 st.metric(label='UFC Fights',value=len(fights),border=True)
-                # ui.metric_card('Rounds',content=fighter_stats.shape[0] )
                 st.metric(label='Rounds',value=fighter_stats.shape[0],border=True)
             with w2:
-                # ui.metric_card('Wins',content=len(duckdb.sql("SELECT * from winloss where result='W'").df()) )
                 st.metric(label='Wins',value=len(duckdb.sql("SELECT * from winloss where result='W'").df()) ,border=True)
-                # ui.metric_card('Losses',content=len(duckdb.sql("SELECT * from winloss where result='L'").df()) )
                 st.metric(label='Losses',value=len(duckdb.sql("SELECT * from winloss where result='L'").df()),border=True)
             
-            # ui.metric_card('KO/TKO Wins', content = int(ko_wins['s'].iloc[0]) )
             st.metric(label='KO/TKO Wins',value=int(ko_wins['s'].iloc[0]),border=True)
-            # ui.metric_card('KO/TKO Losses', content = int(ko_losses['s'].iloc[0]))
             st.metric(label='KO/TKO Losses',value=int(ko_losses['s'].iloc[0]),border=True)
         with col3:
             st.subheader('Striking')
             st.divider()
-            # ui.metric_card('Significant Strikes Absored',content=int(cleaned_opp_stats['sig_abs'].iloc[0]))
             st.metric(label='Significant Strikes Absored',value=int(cleaned_opp_stats['sig_abs'].iloc[0]),border=True)
-            # ui.metric_card('Head Strikes Absored',content=int(cleaned_opp_stats['head_abs'].iloc[0]))
             st.metric(label='Head Strikes Absored',value=int(cleaned_opp_stats['head_abs'].iloc[0]),border=True)
-            # ui.metric_card('Significant Strikes Landed',content=int(cleaned_fighter_stats['sig_str'].iloc[0]))
             st.metric(label='Significant Strikes Landed',value=int(cleaned_fighter_stats['sig_str'].iloc[0]),border=True)
-            # ui.metric_card('Head Strikes Landed',content=int(cleaned_fighter_stats['head_str'].iloc[0]))
             st.metric(label='Head Strikes Landed',value=int(cleaned_fighter_stats['head_str'].iloc[0]),border=True)
-            # ui.metric_card('Knockdowns Landed',content=int(cleaned_fighter_stats['kd'].iloc[0]))
             st.metric(label='Knockdowns Landed',value=int(cleaned_fighter_stats['kd'].iloc[0]),border=True)
-            # ui.metric_card('Knockdowns Absored',content=int(cleaned_opp_stats['kd_abs'].iloc[0]))
             st.metric(label='Knockdowns Absored',value=int(cleaned_opp_stats['kd_abs'].iloc[0]),border=True)
         with col4:
             st.subheader('Wrestling')
             st.divider()
-            # ui.metric_card('Total Takedowns Landed',content=int(cleaned_fighter_stats['td_l'].iloc[0]),description="{0:.0%}".format(round(float(cleaned_fighter_stats['td_rate'].iloc[0]),2)))
             st.metric(label='Total Takedowns Landed',value=int(cleaned_fighter_stats['td_l'].iloc[0]),delta="{0:.0%}".format(round(float(cleaned_fighter_stats['td_rate'].iloc[0]),2)),border=True)
-            # ui.metric_card('Total Takedowns Given Up',content=int(cleaned_opp_stats['td_abs'].iloc[0]),description="{0:.0%}".format(round(float(cleaned_opp_stats['td_abs_rate'].iloc[0]),2)))
             st.metric(label='Total Takedowns Given Up',value=int(cleaned_opp_stats['td_abs'].iloc[0]),delta="{0:.0%}".format(round(float(cleaned_opp_stats['td_abs_rate'].iloc[0]),2)),border=True)
         with col5:
             st.subheader('Adv. Stats')
@@ -362,7 +336,6 @@ elif view =='Interesting Stats':
         st.write('Most experienced referees (2yr)')
         refs = duckdb.sql("SELECT REFEREE,count(*) fights from fr_cleaned where date between current_date() -730 and current_date() group by 1 order by 2 desc limit 10").df()
         st.dataframe(refs,hide_index=True,use_container_width=False)
-        # ui.table(data=refs)
         st.divider()
         st.write("Fights by result method (2yr)")
         methods = duckdb.sql("SELECT method, count(*) FIGHTS from fr_cleaned where date between current_date() -730 and current_date() group by 1 ").df()
@@ -572,7 +545,6 @@ elif view=='Tale of the Tape':
   c2.caption('Success rate at evading head strikes')
   head_movement2 = round(1-(cleaned_opp_stats2['head_abs']/cleaned_opp_stats2['head_at']),2)
   c2.metric('Head Movement',width=metric_width, value=head_movement2,border=True)
-  # style_metric_cards(border_radius_px=250,background_color='#00000')
   with c3:
       fighter1_advantage_counter = 0
       fighter2_advantage_counter = 0
@@ -628,6 +600,7 @@ st.sidebar.caption(f"Memory Usage: {memory_usage:.1f}% MB")
 #    audio_file = open('song.mp3', 'rb')
 #    audio_bytes = audio_file.read()
 #    st.audio(audio_bytes, format='audio/ogg')   
+
 
 
 
