@@ -1,12 +1,11 @@
-/* 🌊 Neo-Glassmorphism Theme for Streamlit (Final Revision for Visibility) 🚀 */
+/* 🌊 Neo-Glassmorphism Theme for Streamlit (Final Segmented Control Fix) 🚀 */
 
 /* Import Google Fonts for a modern, clean look */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
 /* --- CSS Variables for Neo-Glass Theme --- */
 :root {
-    /* Base Colors for Streamlit Theme (Adjust for light/dark mode if needed) */
-    --primary-color: #6366F1; /* Indigo */
+    --primary-color: #6366F1;
     --text-primary: #FFFFFF;
     --text-secondary: rgba(255, 255, 255, 0.9);
     --text-muted: rgba(255, 255, 255, 0.7);
@@ -35,7 +34,7 @@
     min-height: 100vh;
 }
 
-/* 1. FIX: Hide the white Streamlit header */
+/* FIX: Hide the white Streamlit header */
 header {
     visibility: hidden;
     height: 0px !important;
@@ -44,45 +43,32 @@ header {
     top: 0;
 }
 
-/* Global Transitions for smooth interaction */
-* {
-    transition: background-color var(--transition-speed), 
-                box-shadow var(--transition-speed), 
-                transform var(--transition-speed);
-}
-
-/* Main Content Container */
-.main .block-container {
-    padding: 3rem 4rem; 
-    max-width: 1400px;
-}
-
 /* --- Typography (Ensure all text is visible) --- */
 
 h1, h2, h3, h4, h5, h6 {
-    color: var(--text-primary) !important; /* Force all headers to be white */
+    color: var(--text-primary) !important;
     font-weight: 700;
-    margin-bottom: 1.5rem;
-    letter-spacing: -0.04em;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 p, .stMarkdown, .stText, label {
-    color: var(--text-secondary) !important; /* Force all regular text/labels to be white */
+    color: var(--text-secondary) !important;
     line-height: 1.7;
     font-size: 1.05rem;
     font-weight: 400;
 }
 
-/* 2. FIX: Target stMetricValue (Dark Text DOM) */
 [data-testid="stMetricValue"], [data-testid="stMetricValue"] > div {
-    color: var(--text-primary) !important; /* Force the metric value text to be white */
+    color: var(--text-primary) !important;
     font-weight: 700 !important;
     text-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
-/* --- Segmented Control (Tabs) FIX: Ensure text is visible and styled --- */
-.stTabs [data-baseweb="tab-list"] {
+/* --- Segmented Control (Tabs) FIXES --- */
+
+/* 1. Set the background for the entire control wrapper (st.tabs or st.segmented_control) */
+.stTabs [data-baseweb="tab-list"],
+.st-emotion-cache-12fm30q { /* Target the Streamlit wrapper class for st.selectbox/st.tabs */
     background: var(--glass-bg);
     border-radius: 12px;
     padding: 0.25rem;
@@ -90,30 +76,36 @@ p, .stMarkdown, .stText, label {
     border: 1px solid var(--glass-border);
 }
 
-.stTabs [data-baseweb="tab"] {
-    /* Targets inactive tab wrapper */
-    color: var(--text-muted) !important; 
-    font-weight: 500;
-    border-radius: 8px;
-    padding: 0.5rem 1rem;
-    transition: all var(--transition-speed);
+/* 2. FIX: Style for INACTIVE segmented control button background and text */
+[data-testid="stBaseButton-segmented_control"], /* DOM element target */
+.st-emotion-cache-yv9qm1 { /* Specific class target from your DOM */
+    /* Set a dark, transparent background for inactive buttons */
+    background: rgba(0, 0, 0, 0.1) !important; 
+    border: none !important;
+    border-radius: 8px !important;
+    transition: background-color 0.3s;
 }
 
-/* 3. FIX: Ensure text *inside* the button div is white for all tabs */
-[data-testid="stBaseButton-segmented_controlActive"] p,
-[data-testid="stBaseButton-segmented_controlInactive"] p {
+[data-testid="stBaseButton-segmented_control"]:hover {
+    background: rgba(0, 0, 0, 0.2) !important;
+}
+
+/* 3. Ensure text inside ALL segmented control buttons is white */
+[data-testid="stBaseButton-segmented_control"] p,
+[data-testid="stBaseButton-segmented_controlActive"] p {
     color: var(--text-primary) !important; 
     font-weight: 600;
 }
 
+/* 4. Active tab styling (st.tabs or st.segmented_controlActive) */
+[data-testid="stBaseButton-segmented_controlActive"],
 .stTabs [aria-selected="true"] {
-    /* Active tab style */
-    background: var(--primary-color) !important;
+    background: var(--primary-color) !important; /* Active background is the primary color */
     box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
     font-weight: 600;
 }
 
-/* --- Input Fields & Buttons (Ensuring all elements are high-contrast) --- */
+/* --- Input Fields & Buttons --- */
 .stTextInput > div > div > input,
 .stTextArea > div > div > textarea,
 .stNumberInput > div > div > input,
@@ -127,7 +119,6 @@ p, .stMarkdown, .stText, label {
     backdrop-filter: var(--glass-backdrop);
 }
 
-/* Ensure the text *within* the Selectbox input is white */
 .stSelectbox > div > div > div {
     color: var(--text-primary) !important;
 }
