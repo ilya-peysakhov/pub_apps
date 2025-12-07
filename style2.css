@@ -1,4 +1,4 @@
-/* 🌊 Neo-Glassmorphism Theme for Streamlit 🚀 */
+/* 🌊 Neo-Glassmorphism Theme for Streamlit (Revised for Visibility) 🚀 */
 
 /* Import Google Fonts for a modern, clean look */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
@@ -33,7 +33,15 @@
     color: var(--text-primary);
     font-family: 'Inter', sans-serif;
     min-height: 100vh;
-    padding-top: 0 !important; /* Remove Streamlit's default top padding */
+}
+
+/* 1. FIX: Hide the white Streamlit header (top-right hamburger menu container) */
+header {
+    visibility: hidden;
+    height: 0px !important;
+    max-height: 0px !important;
+    position: fixed;
+    top: 0;
 }
 
 /* Global Transitions for smooth interaction */
@@ -45,17 +53,17 @@
 
 /* Main Content Container */
 .main .block-container {
-    padding: 3rem 4rem; /* Increased padding for better breathing room */
+    padding: 3rem 4rem; 
     max-width: 1400px;
 }
 
-/* --- Typography --- */
+/* --- Typography (Ensure all text is visible) --- */
 
 h1, h2, h3, h4, h5, h6 {
-    color: var(--text-primary);
+    color: var(--text-primary) !important; /* Force all headers to be white */
     font-weight: 700;
     margin-bottom: 1.5rem;
-    letter-spacing: -0.04em; /* Tighter for a modern look */
+    letter-spacing: -0.04em;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
@@ -66,22 +74,48 @@ h1 {
     padding-bottom: 0.5rem;
 }
 
-p, .stMarkdown, .stText {
-    color: var(--text-secondary);
+p, .stMarkdown, .stText, label {
+    color: var(--text-secondary) !important; /* Force all regular text/labels to be white */
     line-height: 1.7;
     font-size: 1.05rem;
     font-weight: 400;
 }
 
+/* --- Segmented Control (Tabs) FIX: Ensure text is visible and styled --- */
+.stTabs [data-baseweb="tab-list"] {
+    background: var(--glass-bg);
+    border-radius: 12px;
+    padding: 0.25rem;
+    backdrop-filter: var(--glass-backdrop);
+    border: 1px solid var(--glass-border);
+}
+
+.stTabs [data-baseweb="tab"] {
+    /* Set default text color for inactive tabs */
+    color: var(--text-muted) !important; 
+    font-weight: 500;
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    transition: all var(--transition-speed);
+}
+
+.stTabs [aria-selected="true"] {
+    /* Active tab style */
+    background: var(--primary-color) !important;
+    color: var(--text-primary) !important; /* **FIX: Ensure active text is white** */
+    box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+    font-weight: 600;
+}
+
+
 /* --- Glassmorphic Containers and Components --- */
 
 /* Sidebar - Frosted Glass Panel */
-.css-1d391kg, .css-1cypcdb { /* Targets the sidebar container */
+.css-1d391kg, .css-1cypcdb {
     background: var(--glass-bg);
     backdrop-filter: var(--glass-backdrop);
     border-right: 1px solid var(--glass-border);
     box-shadow: var(--glass-shadow);
-    /* Remove redundant !important for cleaner code where possible */
 }
 
 /* Main Content Containers (e.g., st.container, st.columns) */
@@ -96,40 +130,42 @@ p, .stMarkdown, .stText {
     overflow: hidden;
 }
 
-/* Add an uplifting hover effect to containers */
 .stContainer:hover, .css-1r6slb0:hover {
     transform: translateY(-2px);
     box-shadow: var(--glass-shadow-hover);
 }
 
-/* Text/Input Fields (Text Input, Text Area, Number Input, Date Input) */
+/* Input Fields (Text Input, Text Area, Number Input, Date Input) */
 .stTextInput > div > div > input,
 .stTextArea > div > div > textarea,
 .stNumberInput > div > div > input,
 .stDateInput > div > div > input,
-.stTimeInput > div > div > input {
-    background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    border-radius: 12px;
-    color: var(--text-primary);
+.stTimeInput > div > div > input,
+/* Selectbox / Dropdown input area */
+.stSelectbox > div > div { 
+    background: var(--glass-bg) !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 12px !important;
+    color: var(--text-primary) !important;
     backdrop-filter: var(--glass-backdrop);
-    padding: 0.75rem 1rem;
-    font-size: 1rem;
+    padding: 0.75rem 1rem !important;
 }
 
-.stTextInput > div > div > input:focus,
-.stTextArea > div > div > textarea:focus {
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+/* Ensure the text *within* the Selectbox input is white */
+.stSelectbox > div > div > div {
+    color: var(--text-primary) !important;
+}
+
+/* Radio buttons - Ensure label and text are visible */
+.stRadio label, .stCheckbox label {
+    color: var(--text-secondary) !important; 
 }
 
 /* --- Buttons --- */
-
 .stButton button {
-    /* Apply primary color gradient to button background for depth */
     background: linear-gradient(45deg, var(--primary-color), #4F46E5); 
-    border: none; /* No border for a softer look */
-    border-radius: 30px; /* Fully rounded pill shape */
+    border: none;
+    border-radius: 30px;
     color: var(--text-primary);
     font-weight: 600;
     padding: 0.8rem 2rem;
@@ -143,34 +179,14 @@ p, .stMarkdown, .stText {
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
 }
 
-.stButton button:active {
-    transform: translateY(0);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-/* Download Button - Differentiated Style */
-.stDownloadButton button {
-    background: var(--glass-bg-hover);
-    border: 1px solid var(--glass-border);
-    color: var(--text-primary);
-}
-
-.stDownloadButton button:hover {
-    background: var(--glass-bg-strong);
-    transform: none;
-    box-shadow: var(--glass-shadow);
-}
-
 /* --- Data and Code Display --- */
-
-/* Code Block - Translucent Terminal Look */
 .stCodeBlock {
-    background: rgba(0, 0, 0, 0.4); /* Darker background for code */
+    background: rgba(0, 0, 0, 0.4);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 10px;
-    backdrop-filter: none; /* Less blur on code */
+    backdrop-filter: none;
     box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
-    color: #F7FAFC; /* Light color for code */
+    color: #F7FAFC;
 }
 
 /* Dataframe/Table */
@@ -183,31 +199,9 @@ p, .stMarkdown, .stText {
     overflow: hidden;
 }
 
-.stDataFrame th {
-    background: var(--glass-bg-hover);
-    color: var(--text-primary);
-    font-weight: 600;
+.stDataFrame td {
+    color: var(--text-secondary) !important; /* Ensure table cell text is visible */
 }
-
-.stDataFrame tr:hover {
-    background: rgba(255, 255, 255, 0.1);
-}
-
-/* --- Status and Alerts --- */
-
-/* Alerts - Rounded, subtle backgrounds */
-.stAlert {
-    border-radius: 12px;
-    backdrop-filter: var(--glass-backdrop);
-    border: none;
-    color: var(--text-primary); /* Ensure icon and text are visible */
-}
-
-/* Custom Alert Backgrounds (using less aggressive transparency) */
-.stSuccess { background: rgba(16, 185, 129, 0.2); border-left: 5px solid #10B981; } /* Green */
-.stInfo { background: rgba(99, 102, 241, 0.2); border-left: 5px solid #6366F1; } /* Indigo */
-.stWarning { background: rgba(245, 158, 11, 0.2); border-left: 5px solid #F59E0B; } /* Amber */
-.stError { background: rgba(239, 68, 68, 0.2); border-left: 5px solid #EF4444; } /* Red */
 
 /* --- Custom Scrollbar (Subtle Dark) --- */
 ::-webkit-scrollbar {
@@ -215,4 +209,11 @@ p, .stMarkdown, .stText {
     height: 6px;
 }
 
-::-
+::-webkit-scrollbar-track {
+    background: #0f172a;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: 3px;
+}
