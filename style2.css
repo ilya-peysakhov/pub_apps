@@ -1,4 +1,4 @@
-/* 🌊 Neo-Glassmorphism Theme for Streamlit (Metric Card Fix) 🚀 */
+/* 🌊 Neo-Glassmorphism Theme for Streamlit (Text Size/Weight Fix) 🚀 */
 
 /* Import Google Fonts for a modern, clean look */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
@@ -12,10 +12,10 @@
 
     /* Neo-Glass Variables */
     --glass-bg: rgba(255, 255, 255, 0.15);
-    --glass-bg-metric: rgba(255, 255, 255, 0.2); /* Slightly higher opacity for metrics */
+    --glass-bg-metric: rgba(255, 255, 255, 0.2);
     --glass-bg-hover: rgba(255, 255, 255, 0.25);
-    --glass-border: rgba(255, 255, 255, 0.5); /* STRONGER BORDER for metrics */
-    --glass-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.15); /* Stronger shadow */
+    --glass-border: rgba(255, 255, 255, 0.5); /* Stronger Metric Border */
+    --glass-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.15);
     --glass-shadow-hover: 0 10px 20px rgba(0, 0, 0, 0.4), 0 0 0 2px rgba(255, 255, 255, 0.4);
     --glass-backdrop: blur(15px);
     
@@ -42,36 +42,38 @@ header {
     top: 0;
 }
 
-/* --- Typography (Ensure all text is visible) --- */
+/* --- Typography (Removed specific font-size and font-weight) --- */
 
 h1, h2, h3, h4, h5, h6 {
     color: var(--text-primary) !important;
+    /* Keeping font-weight here as it defines header boldness */
     font-weight: 700;
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.04em;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 p, .stMarkdown, .stText, label {
     color: var(--text-secondary) !important;
     line-height: 1.7;
-    font-size: 1.05rem;
-    font-weight: 400;
+    /* REMOVED: font-size: 1.05rem; */
+    /* REMOVED: font-weight: 400; */
 }
 
+/* Metric Value retains its size/weight for prominence */
 [data-testid="stMetricValue"], [data-testid="stMetricValue"] > div {
     color: var(--text-primary) !important;
-    /* font-weight: 700 !important;
-    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.3); */
+    font-weight: 700 !important;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
 /* --- Metric Card FIX: Visible Border and Stronger Glass --- */
 
-/* Target the container wrapping the st.metric, usually a column or block-container */
 [data-testid="stVerticalBlock"] > div > [data-testid="stHorizontalBlock"] .st-emotion-cache-1r6slb0,
 [data-testid="stMetric"] { 
-    /* This targets the metric container directly or the column it's in */
     background: var(--glass-bg-metric) !important; 
-    border: 2px solid var(--glass-border) !important; /* Thicker, more visible border */
-    border-radius: 16px !important; /* Slightly more rounded */
+    border: 2px solid var(--glass-border) !important; 
+    border-radius: 16px !important;
     backdrop-filter: var(--glass-backdrop);
     box-shadow: var(--glass-shadow) !important;
     padding: 1.5rem !important;
@@ -82,10 +84,9 @@ p, .stMarkdown, .stText, label {
 [data-testid="stMetric"]:hover {
     transform: scale(1.02) translateY(-2px);
     box-shadow: var(--glass-shadow-hover) !important;
-    border-color: var(--text-primary) !important; /* Border turns solid white on hover */
+    border-color: var(--text-primary) !important;
 }
 
-/* Metric label */
 [data-testid="stMetricLabel"] {
     color: var(--text-muted) !important;
     text-transform: uppercase;
