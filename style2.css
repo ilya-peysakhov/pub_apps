@@ -1,783 +1,218 @@
-/* Headers - Crisp White Text with Strong Contrast */
-h1, h2, h3, h4, h5, h6 {
-    color: var(--text-primary) !important;
-    font-weight: 600;
-    margin-bottom: 1rem;
-    letter-spacing: -0.025em;
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
-}
+/* 🌊 Neo-Glassmorphism Theme for Streamlit 🚀 */
 
-h1 {
-    font-size: 2.5rem;
-    font-weight: 700;
-    margin-bottom: 1.5rem;
-    color: rgba(255, 255, 255, 1) !important;
-    text-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
-}
+/* Import Google Fonts for a modern, clean look */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
-h2 {
-    font-size: 1.875rem;
-    margin-bottom: 1.25rem;
-    color: rgba(255, 255, 255, 0.95) !important;
-    text-shadow: 0 3px 10px rgba(0, 0, 0, 0.35) !important;
-}
-
-h3 {
-    font-size: 1.5rem;
-    color: rgba(255, 255, 255, 0.9) !important;
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
-}
-
-/* Text Elements - High Contrast White Text */
-p, .stMarkdown, .stText {
-    color: var(--text-secondary) !important;
-    line-height: 1.6;
-    font-size: 1rem;
-    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.2) !important;
-}
-
-/* Sidebar - Frosted Glass Panel */
-.css-1d391kg, .css-1cypcdb {
-    background: var(--glass-bg) !important;
-    backdrop-filter: var(--glass-backdrop) !important;
-    border-right: 1px solid var(--glass-border) !important;
-    box-shadow: var(--glass-shadow) !important;
-}
-
-/* Progress Bar - Glass Style */
-.stProgress > div > div > div {
-    background: linear-gradient(90deg, var(--glass-bg-strong), var(--accent-silver)) !important;
-    border-radius: 10px !important;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
-}
-
-.stProgress > div > div {
-    background: var(--glass-bg-subtle) !important;
-    border-radius: 10px !important;
-    backdrop-filter: var(--glass-backdrop) !important;
-    border: 1px solid var(--glass-border) !important;
-}
-
-/* Spinner - Glass Loading */
-.stSpinner > div {
-    border-color: var(--glass-border) !important;
-    border-top-color: var(--glass-bg-strong) !important;
-}
-
-/* Date/Time Inputs - Glass Form Elements */
-.stDateInput > div > div > input,
-.stTimeInput > div > div > input {
-    background: var(--glass-bg) !important;
-    border: 1px solid var(--glass-border) !important;
-    border-radius: 16px !important;
-    color: var(--text-primary) !important;
-    backdrop-filter: var(--glass-backdrop) !important;
-}
-
-/* Color Picker - Glass Style */
-.stColorPicker > div > div > input {
-    border: 1px solid var(--glass-border) !important;
-    border-radius: 12px !important;
-    backdrop-filter: var(--glass-backdrop) !important;
-}
-
-/* JSON Display - Glass Code Block */
-.stJson {
-    background: var(--glass-bg-subtle) !important;
-    border: 1px solid var(--glass-border) !important;
-    border-radius: 16px !important;
-    backdrop-filter: var(--glass-backdrop) !important;
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05) !important;
-}
-
-/* Code Block - Translucent Terminal */
-.stCodeBlock {
-    background: rgba(0, 0, 0, 0.2) !important;
-    border: 1px solid var(--glass-border) !important;
-    border-radius: 16px !important;
-    backdrop-filter: var(--glass-backdrop) !important;
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1) !important;
-}/* Liquid Glass iOS 26 Theme for Streamlit */
-
-/* Import Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-
-/* CSS Variables for Liquid Glass Theme - High Contrast */
+/* --- CSS Variables for Neo-Glass Theme --- */
 :root {
-    --primary-gradient: linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.15) 100%);
-    --secondary-gradient: linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.1) 100%);
-    --glass-bg: rgba(255, 255, 255, 0.2);
-    --glass-bg-strong: rgba(255, 255, 255, 0.3);
-    --glass-bg-subtle: rgba(255, 255, 255, 0.12);
-    --glass-border: rgba(255, 255, 255, 0.25);
-    --glass-border-strong: rgba(255, 255, 255, 0.4);
-    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-    --glass-shadow-strong: 0 16px 48px rgba(0, 0, 0, 0.3);
-    --glass-backdrop: blur(20px);
-    --text-primary: rgba(255, 255, 255, 0.98);
-    --text-secondary: rgba(255, 255, 255, 0.85);
+    /* Base Colors for Streamlit Theme (Adjust for light/dark mode if needed) */
+    --primary-color: #6366F1; /* Indigo */
+    --text-primary: #FFFFFF;
+    --text-secondary: rgba(255, 255, 255, 0.9);
     --text-muted: rgba(255, 255, 255, 0.7);
-    --accent-silver: rgba(255, 255, 255, 0.9);
-    --accent-blue: rgba(147, 197, 253, 1);
-    --success-green: rgba(134, 239, 172, 1);
-    --warning-orange: rgba(251, 191, 36, 1);
-    --danger-red: rgba(252, 165, 165, 1);
-    --chart-bg: rgba(255, 255, 255, 0.15);
-    --metric-bg: rgba(255, 255, 255, 0.22);
+
+    /* Neo-Glass Variables */
+    --glass-bg: rgba(255, 255, 255, 0.15); /* Slightly less opaque */
+    --glass-bg-hover: rgba(255, 255, 255, 0.25);
+    --glass-border: rgba(255, 255, 255, 0.3);
+    --glass-shadow: 0 4px 12px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.1);
+    --glass-shadow-hover: 0 10px 20px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.2);
+    --glass-backdrop: blur(15px); /* Softer blur */
+    
+    /* Subtle Background Gradient for the app */
+    --app-bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+    
+    /* Animation Speeds */
+    --transition-speed: 0.3s;
 }
 
-/* Global Styles */
-* {
-    box-sizing: border-box;
-}
-
-/* Main App Background - Teal Gradient for White Text Contrast */
+/* --- Global Styles and App Background --- */
 .stApp {
-    background: linear-gradient(135deg, 
-        rgba(34, 139, 139, 1) 0%,     /* Dark teal */
-        rgba(20, 184, 166, 1) 25%,    /* Teal */
-        rgba(6, 182, 212, 1) 50%,     /* Cyan */
-        rgba(14, 165, 233, 1) 75%,    /* Blue */
-        rgba(37, 99, 235, 1) 100%);   /* Deep blue */
+    background: var(--app-bg-gradient);
     background-attachment: fixed;
     color: var(--text-primary);
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family: 'Inter', sans-serif;
     min-height: 100vh;
-    position: relative;
+    padding-top: 0 !important; /* Remove Streamlit's default top padding */
 }
 
-/* Enhanced liquid glass texture overlay */
-.stApp::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: 
-        radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.15) 0%, transparent 50%),
-        radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.08) 0%, transparent 70%),
-        radial-gradient(circle at 30% 80%, rgba(34, 197, 94, 0.1) 0%, transparent 60%);
-    animation: float 40s ease-in-out infinite;
-    pointer-events: none;
-    z-index: -1;
-}
-
-/* Subtle liquid movement */
-@keyframes float {
-    0%, 100% { 
-        transform: translateY(0px) translateX(0px) scale(1); 
-        opacity: 0.8;
-    }
-    33% { 
-        transform: translateY(-10px) translateX(5px) scale(1.02); 
-        opacity: 0.9;
-    }
-    66% { 
-        transform: translateY(5px) translateX(-3px) scale(0.98); 
-        opacity: 0.85;
-    }
-}
-
-@keyframes float {
-    0%, 100% { transform: translateY(0px) rotate(0deg); }
-    33% { transform: translateY(-20px) rotate(1deg); }
-    66% { transform: translateY(10px) rotate(-1deg); }
-}
-
-/* Sidebar */
-.css-1d391kg, .css-1cypcdb {
-    background: var(--glass-bg) !important;
-    backdrop-filter: var(--glass-backdrop);
-    border-right: 1px solid var(--glass-border);
-    box-shadow: var(--glass-shadow);
+/* Global Transitions for smooth interaction */
+* {
+    transition: background-color var(--transition-speed), 
+                box-shadow var(--transition-speed), 
+                transform var(--transition-speed);
 }
 
 /* Main Content Container */
 .main .block-container {
-    padding: 2rem 1rem;
-    max-width: 1200px;
+    padding: 3rem 4rem; /* Increased padding for better breathing room */
+    max-width: 1400px;
 }
 
-/* Sliders - Glass Style */
-.stSlider > div > div > div > div {
-    background: linear-gradient(90deg, var(--glass-bg-strong), var(--glass-bg)) !important;
-    border-radius: 10px !important;
-    backdrop-filter: var(--glass-backdrop) !important;
+/* --- Typography --- */
+
+h1, h2, h3, h4, h5, h6 {
+    color: var(--text-primary);
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.04em; /* Tighter for a modern look */
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-.stSlider > div > div > div > div > div {
-    background: var(--glass-bg-strong) !important;
-    box-shadow: var(--glass-shadow) !important;
-    border: 1px solid var(--glass-border) !important;
-    border-radius: 50% !important;
+h1 {
+    font-size: 3rem;
+    font-weight: 800;
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 0.5rem;
 }
 
-/* Alerts - Enhanced Glass Notifications */
-.stAlert {
-    border-radius: 16px !important;
-    backdrop-filter: var(--glass-backdrop) !important;
-    border: 1px solid var(--glass-border) !important;
-    box-shadow: var(--glass-shadow) !important;
-    background: var(--glass-bg) !important;
-    color: var(--text-primary) !important;
+p, .stMarkdown, .stText {
+    color: var(--text-secondary);
+    line-height: 1.7;
+    font-size: 1.05rem;
+    font-weight: 400;
 }
 
-.stSuccess {
-    background: rgba(134, 239, 172, 0.25) !important;
-    border-color: rgba(134, 239, 172, 0.4) !important;
-    color: rgba(255, 255, 255, 0.95) !important;
+/* --- Glassmorphic Containers and Components --- */
+
+/* Sidebar - Frosted Glass Panel */
+.css-1d391kg, .css-1cypcdb { /* Targets the sidebar container */
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-backdrop);
+    border-right: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    /* Remove redundant !important for cleaner code where possible */
 }
 
-.stInfo {
-    background: rgba(147, 197, 253, 0.25) !important;
-    border-color: rgba(147, 197, 253, 0.4) !important;
-    color: rgba(255, 255, 255, 0.95) !important;
+/* Main Content Containers (e.g., st.container, st.columns) */
+.stContainer, .css-1r6slb0, .css-1r6slb0 > div:first-child > div:first-child { 
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    backdrop-filter: var(--glass-backdrop);
+    box-shadow: var(--glass-shadow);
+    padding: 2rem;
+    margin: 1.5rem 0;
+    overflow: hidden;
 }
 
-.stWarning {
-    background: rgba(251, 191, 36, 0.25) !important;
-    border-color: rgba(251, 191, 36, 0.4) !important;
-    color: rgba(255, 255, 255, 0.95) !important;
+/* Add an uplifting hover effect to containers */
+.stContainer:hover, .css-1r6slb0:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--glass-shadow-hover);
 }
 
-.stError {
-    background: rgba(252, 165, 165, 0.25) !important;
-    border-color: rgba(252, 165, 165, 0.4) !important;
-    color: rgba(255, 255, 255, 0.95) !important;
+/* Text/Input Fields (Text Input, Text Area, Number Input, Date Input) */
+.stTextInput > div > div > input,
+.stTextArea > div > div > textarea,
+.stNumberInput > div > div > input,
+.stDateInput > div > div > input,
+.stTimeInput > div > div > input {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    color: var(--text-primary);
+    backdrop-filter: var(--glass-backdrop);
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
 }
 
-/* Checkbox and Radio - White Text Labels */
-.stCheckbox > label, .stRadio > label {
-    color: var(--text-primary) !important;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) !important;
+.stTextInput > div > div > input:focus,
+.stTextArea > div > div > textarea:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
 }
 
-/* Metric labels - Enhanced for white text */
-.metric-container [data-testid="metric-container"] label {
-    color: var(--text-secondary) !important;
-    font-weight: 500 !important;
-    font-size: 0.875rem !important;
-    text-transform: uppercase !important;
-    letter-spacing: 0.05em !important;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) !important;
-}
+/* --- Buttons --- */
 
-/* Metric values - Crisp white */
-.metric-container [data-testid="metric-container"] > div {
-    color: var(--text-primary) !important;
-    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.3) !important;
-}
-
-/* Expander - Glass Accordion */
-.streamlit-expanderHeader {
-    background: var(--glass-bg) !important;
-    border: 1px solid var(--glass-border) !important;
-    border-radius: 16px !important;
-    backdrop-filter: var(--glass-backdrop) !important;
-    color: var(--text-primary) !important;
-    font-weight: 500 !important;
-    box-shadow: var(--glass-shadow) !important;
-    transition: all 0.3s ease !important;
-}
-
-.streamlit-expanderHeader:hover {
-    background: var(--glass-bg-strong) !important;
-    transform: translateY(-1px) !important;
-}
-
-.streamlit-expanderContent {
-    background: var(--glass-bg-subtle) !important;
-    border: 1px solid var(--glass-border) !important;
-    border-top: none !important;
-    border-radius: 0 0 16px 16px !important;
-    backdrop-filter: var(--glass-backdrop) !important;
-    box-shadow: var(--glass-shadow) !important;
-}
-
-/* File Uploader - Glass Drop Zone */
-.stFileUploader > div {
-    background: var(--glass-bg-subtle) !important;
-    border: 2px dashed var(--glass-border) !important;
-    border-radius: 20px !important;
-    backdrop-filter: var(--glass-backdrop) !important;
-    transition: all 0.3s ease !important;
-}
-
-.stFileUploader > div:hover {
-    border-color: var(--glass-border-strong) !important;
-    background: var(--glass-bg) !important;
-    transform: scale(1.01) !important;
-}
-
-/* Buttons - True Liquid Glass Style */
 .stButton button {
-    background: var(--glass-bg) !important;
-    border: 1px solid var(--glass-border) !important;
-    border-radius: 20px !important;
-    color: var(--text-primary) !important;
-    font-weight: 500 !important;
-    padding: 0.75rem 1.5rem !important;
-    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
-    backdrop-filter: var(--glass-backdrop) !important;
-    box-shadow: var(--glass-shadow) !important;
-    font-family: 'Inter', sans-serif !important;
-    position: relative !important;
-    overflow: hidden !important;
-}
-
-/* Glass reflection effect */
-.stButton button::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-    transition: left 0.6s;
-}
-
-.stButton button:hover::before {
-    left: 100%;
+    /* Apply primary color gradient to button background for depth */
+    background: linear-gradient(45deg, var(--primary-color), #4F46E5); 
+    border: none; /* No border for a softer look */
+    border-radius: 30px; /* Fully rounded pill shape */
+    color: var(--text-primary);
+    font-weight: 600;
+    padding: 0.8rem 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transition: all var(--transition-speed) ease-in-out;
 }
 
 .stButton button:hover {
-    transform: translateY(-3px) scale(1.02) !important;
-    box-shadow: var(--glass-shadow-strong) !important;
-    background: var(--glass-bg-strong) !important;
-    border-color: var(--glass-border-strong) !important;
+    transform: translateY(-2px);
+    background: linear-gradient(45deg, #4F46E5, #3730A3);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
 }
 
 .stButton button:active {
-    transform: translateY(-1px) scale(0.98) !important;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15) !important;
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-/* Download Button */
+/* Download Button - Differentiated Style */
 .stDownloadButton button {
-    background: var(--secondary-gradient) !important;
-    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.2) !important;
+    background: var(--glass-bg-hover);
+    border: 1px solid var(--glass-border);
+    color: var(--text-primary);
 }
 
 .stDownloadButton button:hover {
-    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4) !important;
+    background: var(--glass-bg-strong);
+    transform: none;
+    box-shadow: var(--glass-shadow);
 }
 
-/* Select Boxes */
-.stSelectbox > div > div {
-    background: var(--glass-bg) !important;
-    border: 1px solid var(--glass-border) !important;
-    border-radius: 12px !important;
-    backdrop-filter: var(--glass-backdrop) !important;
-    color: var(--text-primary) !important;
+/* --- Data and Code Display --- */
+
+/* Code Block - Translucent Terminal Look */
+.stCodeBlock {
+    background: rgba(0, 0, 0, 0.4); /* Darker background for code */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    backdrop-filter: none; /* Less blur on code */
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+    color: #F7FAFC; /* Light color for code */
 }
 
-.stSelectbox > div > div > div {
-    color: var(--text-primary) !important;
-}
-
-/* Multi-select */
-.stMultiSelect > div > div {
-    background: var(--glass-bg) !important;
-    border: 1px solid var(--glass-border) !important;
-    border-radius: 12px !important;
-    backdrop-filter: var(--glass-backdrop) !important;
-}
-
-/* Text Input */
-.stTextInput > div > div > input {
-    background: var(--glass-bg) !important;
-    border: 1px solid var(--glass-border) !important;
-    border-radius: 12px !important;
-    color: var(--text-primary) !important;
-    backdrop-filter: var(--glass-backdrop) !important;
-    padding: 0.75rem 1rem !important;
-    transition: all 0.3s ease !important;
-}
-
-.stTextInput > div > div > input:focus {
-    border-color: rgba(99, 102, 241, 0.8) !important;
-    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1) !important;
-}
-
-/* Text Area */
-.stTextArea > div > div > textarea {
-    background: var(--glass-bg) !important;
-    border: 1px solid var(--glass-border) !important;
-    border-radius: 12px !important;
-    color: var(--text-primary) !important;
-    backdrop-filter: var(--glass-backdrop) !important;
-}
-
-/* Number Input */
-.stNumberInput > div > div > input {
-    background: var(--glass-bg) !important;
-    border: 1px solid var(--glass-border) !important;
-    border-radius: 12px !important;
-    color: var(--text-primary) !important;
-    backdrop-filter: var(--glass-backdrop) !important;
-}
-
-/* Sliders */
-.stSlider > div > div > div > div {
-    background: var(--primary-gradient) !important;
-}
-
-.stSlider > div > div > div > div > div {
-    background: white !important;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
-}
-
-/* Checkbox */
-.stCheckbox > label {
-    color: var(--text-primary) !important;
-}
-
-/* Radio */
-.stRadio > label {
-    color: var(--text-primary) !important;
-}
-
-/* Containers and Columns */
-.stContainer, .css-1r6slb0 {
-    background: var(--glass-bg) !important;
-    border: 1px solid var(--glass-border) !important;
-    border-radius: 16px !important;
-    backdrop-filter: var(--glass-backdrop) !important;
-    box-shadow: var(--glass-shadow) !important;
-    padding: 1.5rem !important;
-    margin: 1rem 0 !important;
-}
-
-/* Expander */
-.streamlit-expanderHeader {
-    background: var(--glass-bg) !important;
-    border: 1px solid var(--glass-border) !important;
-    border-radius: 12px !important;
-    backdrop-filter: var(--glass-backdrop) !important;
-    color: var(--text-primary) !important;
-}
-
-.streamlit-expanderContent {
-    background: var(--glass-bg) !important;
-    border: 1px solid var(--glass-border) !important;
-    border-radius: 0 0 12px 12px !important;
-    backdrop-filter: var(--glass-backdrop) !important;
-}
-
-/* Tabs */
-.stTabs [data-baseweb="tab-list"] {
-    background: var(--glass-bg) !important;
-    border-radius: 12px !important;
-    padding: 0.25rem !important;
-    backdrop-filter: var(--glass-backdrop) !important;
-}
-
-.stTabs [data-baseweb="tab"] {
-    background: transparent !important;
-    border-radius: 8px !important;
-    color: var(--text-secondary) !important;
-    font-weight: 500 !important;
-    padding: 0.5rem 1rem !important;
-    transition: all 0.3s ease !important;
-}
-
-.stTabs [aria-selected="true"] {
-    background: var(--primary-gradient) !important;
-    color: white !important;
-    box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3) !important;
-}
-
-/* Metrics - Enhanced for Business KPIs */
-.metric-container {
-    background: var(--metric-bg) !important;
-    border: 1px solid rgba(148, 163, 184, 0.2) !important;
-    border-radius: 12px !important;
-    backdrop-filter: var(--glass-backdrop) !important;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
-    padding: 1.5rem !important;
-    transition: all 0.2s ease !important;
-}
-
-.metric-container:hover {
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08) !important;
-    transform: translateY(-1px) !important;
-}
-
-/* Metric values should be highly visible */
-.metric-container [data-testid="metric-container"] > div {
-    color: var(--text-primary) !important;
-}
-
-/* Metric labels */
-.metric-container [data-testid="metric-container"] label {
-    color: var(--text-muted) !important;
-    font-weight: 500 !important;
-    font-size: 0.875rem !important;
-    text-transform: uppercase !important;
-    letter-spacing: 0.05em !important;
-}
-
-/* Data Editor */
-.stDataEditor {
-    background: var(--glass-bg) !important;
-    border-radius: 12px !important;
-    overflow: hidden !important;
-}
-
-/* Charts - Translucent Glass Containers */
-/* .stPlotlyChart, .stPyplot, .stAltair, .stVega {
-    background: var(--chart-bg) !important;
-    border: 1px solid var(--glass-border) !important;
-    border-radius: 20px !important;
-    backdrop-filter: var(--glass-backdrop) !important;
-    box-shadow: var(--glass-shadow) !important;
-    padding: 1.5rem !important;
-    margin: 1.5rem 0 !important;
-    position: relative !important;
-    overflow: hidden !important;
-} */
-
-/* Chart glass reflection */
-/* .stPlotlyChart::after, .stPyplot::after, .stAltair::after, .stVega::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 40%;
-    background: linear-gradient(180deg, 
-        rgba(255, 255, 255, 0.1) 0%, 
-        transparent 100%);
-    pointer-events: none;
-}
- */
-/* Data Tables - White Text on Glass */
+/* Dataframe/Table */
 .stDataEditor, .stDataFrame {
-    background: var(--glass-bg) !important;
-    border: 1px solid var(--glass-border) !important;
-    border-radius: 16px !important;
-    backdrop-filter: var(--glass-backdrop) !important;
-    box-shadow: var(--glass-shadow) !important;
-    overflow: hidden !important;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    backdrop-filter: var(--glass-backdrop);
+    box-shadow: var(--glass-shadow);
+    overflow: hidden;
 }
 
 .stDataFrame th {
-    background: var(--glass-bg-strong) !important;
-    color: var(--text-primary) !important;
-    font-weight: 600 !important;
-    border-bottom: 1px solid var(--glass-border-strong) !important;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) !important;
-}
-
-.stDataFrame td {
-    color: var(--text-secondary) !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15) !important;
+    background: var(--glass-bg-hover);
+    color: var(--text-primary);
+    font-weight: 600;
 }
 
 .stDataFrame tr:hover {
-    background: rgba(255, 255, 255, 0.15) !important;
-}
-
-/* Tabs - Enhanced contrast for white text */
-.stTabs [data-baseweb="tab"] {
-    background: transparent !important;
-    border-radius: 12px !important;
-    color: var(--text-muted) !important;
-    font-weight: 500 !important;
-    padding: 0.6rem 1.2rem !important;
-    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) !important;
-}
-
-.stTabs [aria-selected="true"] {
-    background: var(--glass-bg-strong) !important;
-    color: var(--text-primary) !important;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
-    font-weight: 600 !important;
-    transform: scale(1.02) !important;
-    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.3) !important;
-}
-
-/* Alerts */
-.stAlert {
-    border-radius: 12px !important;
-    backdrop-filter: var(--glass-backdrop) !important;
-    border: 1px solid var(--glass-border) !important;
-}
-
-.stAlert[data-baseweb="notification"] {
-    background: var(--glass-bg) !important;
-}
-
-/* Success Alert */
-.stSuccess {
-    background: rgba(52, 199, 89, 0.1) !important;
-    border-color: rgba(52, 199, 89, 0.3) !important;
-}
-
-/* Info Alert */
-.stInfo {
-    background: rgba(0, 122, 255, 0.1) !important;
-    border-color: rgba(0, 122, 255, 0.3) !important;
-}
-
-/* Warning Alert */
-.stWarning {
-    background: rgba(255, 149, 0, 0.1) !important;
-    border-color: rgba(255, 149, 0, 0.3) !important;
-}
-
-/* Error Alert */
-.stError {
-    background: rgba(255, 59, 48, 0.1) !important;
-    border-color: rgba(255, 59, 48, 0.3) !important;
-}
-
-/* Progress Bar */
-.stProgress > div > div > div {
-    background: var(--primary-gradient) !important;
-    border-radius: 8px !important;
-}
-
-.stProgress > div > div {
-    background: var(--glass-bg) !important;
-    border-radius: 8px !important;
-    backdrop-filter: var(--glass-backdrop) !important;
-}
-
-/* Spinner */
-.stSpinner > div {
-    border-color: rgba(99, 102, 241, 0.3) !important;
-    border-top-color: rgb(99, 102, 241) !important;
-}
-
-/* File Uploader */
-.stFileUploader > div {
-    background: var(--glass-bg) !important;
-    border: 2px dashed var(--glass-border) !important;
-    border-radius: 16px !important;
-    backdrop-filter: var(--glass-backdrop) !important;
-}
-
-/* Date Input */
-.stDateInput > div > div > input {
-    background: var(--glass-bg) !important;
-    border: 1px solid var(--glass-border) !important;
-    border-radius: 12px !important;
-    color: var(--text-primary) !important;
-    backdrop-filter: var(--glass-backdrop) !important;
-}
-
-/* Time Input */
-.stTimeInput > div > div > input {
-    background: var(--glass-bg) !important;
-    border: 1px solid var(--glass-border) !important;
-    border-radius: 12px !important;
-    color: var(--text-primary) !important;
-    backdrop-filter: var(--glass-backdrop) !important;
-}
-
-/* Color Picker */
-.stColorPicker > div > div > input {
-    border: 1px solid var(--glass-border) !important;
-    border-radius: 8px !important;
-}
-
-/* Dataframe */
-.stDataFrame {
-    border: 1px solid var(--glass-border) !important;
-    border-radius: 12px !important;
-    overflow: hidden !important;
-}
-
-/* JSON */
-.stJson {
-    background: var(--glass-bg) !important;
-    border: 1px solid var(--glass-border) !important;
-    border-radius: 12px !important;
-    backdrop-filter: var(--glass-backdrop) !important;
-}
-
-/* Code Block */
-.stCodeBlock {
-    background: rgba(0, 0, 0, 0.3) !important;
-    border: 1px solid var(--glass-border) !important;
-    border-radius: 12px !important;
-    backdrop-filter: var(--glass-backdrop) !important;
-}
-
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-}
-
-::-webkit-scrollbar-track {
     background: rgba(255, 255, 255, 0.1);
-    border-radius: 4px;
 }
 
-::-webkit-scrollbar-thumb {
-    background: var(--primary-gradient);
-    border-radius: 4px;
+/* --- Status and Alerts --- */
+
+/* Alerts - Rounded, subtle backgrounds */
+.stAlert {
+    border-radius: 12px;
+    backdrop-filter: var(--glass-backdrop);
+    border: none;
+    color: var(--text-primary); /* Ensure icon and text are visible */
 }
 
-::-webkit-scrollbar-thumb:hover {
-    background: var(--secondary-gradient);
+/* Custom Alert Backgrounds (using less aggressive transparency) */
+.stSuccess { background: rgba(16, 185, 129, 0.2); border-left: 5px solid #10B981; } /* Green */
+.stInfo { background: rgba(99, 102, 241, 0.2); border-left: 5px solid #6366F1; } /* Indigo */
+.stWarning { background: rgba(245, 158, 11, 0.2); border-left: 5px solid #F59E0B; } /* Amber */
+.stError { background: rgba(239, 68, 68, 0.2); border-left: 5px solid #EF4444; } /* Red */
+
+/* --- Custom Scrollbar (Subtle Dark) --- */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-    .main .block-container {
-        padding: 1rem 0.5rem;
-    }
-    
-    h1 {
-        font-size: 2rem;
-    }
-    
-    .stContainer, .css-1r6slb0 {
-        margin: 0.5rem 0 !important;
-        padding: 1rem !important;
-    }
-}
-
-/* Loading Animation */
-@keyframes shimmer {
-    0% { background-position: -1000px 0; }
-    100% { background-position: 1000px 0; }
-}
-
-.loading-shimmer {
-    animation: shimmer 2s infinite;
-    background: linear-gradient(
-        90deg,
-        transparent 0%,
-        rgba(255, 255, 255, 0.1) 50%,
-        transparent 100%
-    );
-    background-size: 1000px 100%;
-}
-
-/* Hover Effects for Interactive Elements */
-.stSelectbox:hover > div > div,
-.stTextInput:hover > div > div > input,
-.stTextArea:hover > div > div > textarea,
-.stNumberInput:hover > div > div > input {
-    border-color: rgba(99, 102, 241, 0.5) !important;
-    box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.2) !important;
-}
-
-/* Glassmorphism enhancement for containers */
-.element-container {
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.element-container:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15) !important;
-}
+::-
