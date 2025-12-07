@@ -1,4 +1,4 @@
-/* 🌊 Neo-Glassmorphism Theme for Streamlit (Revised for Visibility) 🚀 */
+/* 🌊 Neo-Glassmorphism Theme for Streamlit (Final Revision for Visibility) 🚀 */
 
 /* Import Google Fonts for a modern, clean look */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
@@ -12,12 +12,12 @@
     --text-muted: rgba(255, 255, 255, 0.7);
 
     /* Neo-Glass Variables */
-    --glass-bg: rgba(255, 255, 255, 0.15); /* Slightly less opaque */
+    --glass-bg: rgba(255, 255, 255, 0.15);
     --glass-bg-hover: rgba(255, 255, 255, 0.25);
     --glass-border: rgba(255, 255, 255, 0.3);
     --glass-shadow: 0 4px 12px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.1);
     --glass-shadow-hover: 0 10px 20px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.2);
-    --glass-backdrop: blur(15px); /* Softer blur */
+    --glass-backdrop: blur(15px);
     
     /* Subtle Background Gradient for the app */
     --app-bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
@@ -35,7 +35,7 @@
     min-height: 100vh;
 }
 
-/* 1. FIX: Hide the white Streamlit header (top-right hamburger menu container) */
+/* 1. FIX: Hide the white Streamlit header */
 header {
     visibility: hidden;
     height: 0px !important;
@@ -67,18 +67,18 @@ h1, h2, h3, h4, h5, h6 {
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-h1 {
-    font-size: 3rem;
-    font-weight: 800;
-    border-bottom: 2px solid var(--primary-color);
-    padding-bottom: 0.5rem;
-}
-
 p, .stMarkdown, .stText, label {
     color: var(--text-secondary) !important; /* Force all regular text/labels to be white */
     line-height: 1.7;
     font-size: 1.05rem;
     font-weight: 400;
+}
+
+/* 2. FIX: Target stMetricValue (Dark Text DOM) */
+[data-testid="stMetricValue"], [data-testid="stMetricValue"] > div {
+    color: var(--text-primary) !important; /* Force the metric value text to be white */
+    font-weight: 700 !important;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
 /* --- Segmented Control (Tabs) FIX: Ensure text is visible and styled --- */
@@ -91,7 +91,7 @@ p, .stMarkdown, .stText, label {
 }
 
 .stTabs [data-baseweb="tab"] {
-    /* Set default text color for inactive tabs */
+    /* Targets inactive tab wrapper */
     color: var(--text-muted) !important; 
     font-weight: 500;
     border-radius: 8px;
@@ -99,56 +99,32 @@ p, .stMarkdown, .stText, label {
     transition: all var(--transition-speed);
 }
 
+/* 3. FIX: Ensure text *inside* the button div is white for all tabs */
+[data-testid="stBaseButton-segmented_controlActive"] p,
+[data-testid="stBaseButton-segmented_controlInactive"] p {
+    color: var(--text-primary) !important; 
+    font-weight: 600;
+}
+
 .stTabs [aria-selected="true"] {
     /* Active tab style */
     background: var(--primary-color) !important;
-    color: var(--text-primary) !important; /* **FIX: Ensure active text is white** */
     box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
     font-weight: 600;
 }
 
-
-/* --- Glassmorphic Containers and Components --- */
-
-/* Sidebar - Frosted Glass Panel */
-.css-1d391kg, .css-1cypcdb {
-    background: var(--glass-bg);
-    backdrop-filter: var(--glass-backdrop);
-    border-right: 1px solid var(--glass-border);
-    box-shadow: var(--glass-shadow);
-}
-
-/* Main Content Containers (e.g., st.container, st.columns) */
-.stContainer, .css-1r6slb0, .css-1r6slb0 > div:first-child > div:first-child { 
-    background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    border-radius: 20px;
-    backdrop-filter: var(--glass-backdrop);
-    box-shadow: var(--glass-shadow);
-    padding: 2rem;
-    margin: 1.5rem 0;
-    overflow: hidden;
-}
-
-.stContainer:hover, .css-1r6slb0:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--glass-shadow-hover);
-}
-
-/* Input Fields (Text Input, Text Area, Number Input, Date Input) */
+/* --- Input Fields & Buttons (Ensuring all elements are high-contrast) --- */
 .stTextInput > div > div > input,
 .stTextArea > div > div > textarea,
 .stNumberInput > div > div > input,
 .stDateInput > div > div > input,
 .stTimeInput > div > div > input,
-/* Selectbox / Dropdown input area */
 .stSelectbox > div > div { 
     background: var(--glass-bg) !important;
     border: 1px solid var(--glass-border) !important;
     border-radius: 12px !important;
     color: var(--text-primary) !important;
     backdrop-filter: var(--glass-backdrop);
-    padding: 0.75rem 1rem !important;
 }
 
 /* Ensure the text *within* the Selectbox input is white */
@@ -156,12 +132,6 @@ p, .stMarkdown, .stText, label {
     color: var(--text-primary) !important;
 }
 
-/* Radio buttons - Ensure label and text are visible */
-.stRadio label, .stCheckbox label {
-    color: var(--text-secondary) !important; 
-}
-
-/* --- Buttons --- */
 .stButton button {
     background: linear-gradient(45deg, var(--primary-color), #4F46E5); 
     border: none;
@@ -170,50 +140,4 @@ p, .stMarkdown, .stText, label {
     font-weight: 600;
     padding: 0.8rem 2rem;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    transition: all var(--transition-speed) ease-in-out;
-}
-
-.stButton button:hover {
-    transform: translateY(-2px);
-    background: linear-gradient(45deg, #4F46E5, #3730A3);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
-}
-
-/* --- Data and Code Display --- */
-.stCodeBlock {
-    background: rgba(0, 0, 0, 0.4);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
-    backdrop-filter: none;
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
-    color: #F7FAFC;
-}
-
-/* Dataframe/Table */
-.stDataEditor, .stDataFrame {
-    background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    border-radius: 12px;
-    backdrop-filter: var(--glass-backdrop);
-    box-shadow: var(--glass-shadow);
-    overflow: hidden;
-}
-
-.stDataFrame td {
-    color: var(--text-secondary) !important; /* Ensure table cell text is visible */
-}
-
-/* --- Custom Scrollbar (Subtle Dark) --- */
-::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-}
-
-::-webkit-scrollbar-track {
-    background: #0f172a;
-}
-
-::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.4);
-    border-radius: 3px;
 }
