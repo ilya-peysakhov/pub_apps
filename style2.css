@@ -61,11 +61,11 @@ p, .stMarkdown, .stText, label {
 }
 
 /* Metric Value retains its size/weight for prominence */
-/* [data-testid="stMetricValue"], [data-testid="stMetricValue"] > div {
+[data-testid="stMetricValue"], [data-testid="stMetricValue"] > div {
     color: var(--text-primary) !important;
     font-weight: 700 !important;
     text-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-} */
+}
 
 /* --- Metric Card FIX: Visible Border and Stronger Glass --- */
 
@@ -87,12 +87,12 @@ p, .stMarkdown, .stText, label {
     border-color: var(--text-primary) !important;
 }
 
-/* [data-testid="stMetricLabel"] {
+[data-testid="stMetricLabel"] {
     color: var(--text-muted) !important;
     text-transform: uppercase;
     font-weight: 600;
     letter-spacing: 0.05em;
-} */
+}
 
 
 /* --- Segmented Control (Tabs) --- */
