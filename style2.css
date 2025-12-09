@@ -87,12 +87,12 @@ p, .stMarkdown, .stText, label {
     border-color: var(--text-primary) !important;
 }
 
-[data-testid="stMetricLabel"] {
+/* [data-testid="stMetricLabel"] {
     color: var(--text-muted) !important;
     text-transform: uppercase;
     font-weight: 600;
     letter-spacing: 0.05em;
-}
+} */
 
 
 /* --- Segmented Control (Tabs) --- */
