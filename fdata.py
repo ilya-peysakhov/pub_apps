@@ -16,7 +16,14 @@ import plotly.graph_objects as go
 
 
 st.set_page_config(page_icon="👊", page_title="UFC Stats Explorer v1.0", layout="wide",initial_sidebar_state='collapsed')
-st.html('style2.css')
+
+if 'style_setting' not in st.session_state:
+    st.session_state.style_setting = False
+
+if st.session_state.style_setting = False:
+    style_toggle = st.toggle('Set Style')
+    if style_toggle:
+        st.html('style2.css')
 
 ########start of app
 
@@ -600,6 +607,7 @@ st.sidebar.caption(f"Memory Usage: {memory_usage:.1f}% MB")
 #    audio_file = open('song.mp3', 'rb')
 #    audio_bytes = audio_file.read()
 #    st.audio(audio_bytes, format='audio/ogg')   
+
 
 
 
