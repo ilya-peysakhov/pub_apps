@@ -61,11 +61,11 @@ p, .stMarkdown, .stText, label {
 }
 
 /* Metric Value retains its size/weight for prominence */
-[data-testid="stMetricValue"], [data-testid="stMetricValue"] > div {
+/* [data-testid="stMetricValue"], [data-testid="stMetricValue"] > div {
     color: var(--text-primary) !important;
     font-weight: 700 !important;
     text-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-}
+} */
 
 /* --- Metric Card FIX: Visible Border and Stronger Glass --- */
 
