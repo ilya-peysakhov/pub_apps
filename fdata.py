@@ -479,7 +479,21 @@ elif view=='SQL Editor':
               order by 4 desc  
               limit 20
               """)
-      
+      st.write('Womens bouts with the most combined strikes')
+      st.code("""select event, bout, sum(sig_str_l) as total_sig_strikes, avg(rounds) as rounds, 
+         round(sum(sig_str_l)/avg(rounds)) as sig_per_round
+        from 
+        (
+        select event, bout, fighter,sum(sig_str_l::int) sig_str_l,
+        count(distinct round) as rounds, sum(sig_str_l::int)/count(distinct round) as sig_per_rd
+        from fs_cleaned
+            where bout in (
+            select distinct bout from fr_cleaned 
+            where weightclass ilike '%women%' )
+        group by all)
+        group by all
+        order by 3 desc 
+        """
     col1,col2 = st.columns([3,10])
     with col1:
         st.write('Tables')
@@ -609,6 +623,7 @@ st.sidebar.caption(f"Memory Usage: {memory_usage:.1f}% MB")
 #    audio_file = open('song.mp3', 'rb')
 #    audio_bytes = audio_file.read()
 #    st.audio(audio_bytes, format='audio/ogg')   
+
 
 
 
