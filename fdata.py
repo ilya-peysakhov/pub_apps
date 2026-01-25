@@ -493,7 +493,7 @@ elif view=='SQL Editor':
         group by all)
         group by all
         order by 3 desc 
-        """
+        """)
     col1,col2 = st.columns([3,10])
     with col1:
         st.write('Tables')
@@ -623,6 +623,7 @@ st.sidebar.caption(f"Memory Usage: {memory_usage:.1f}% MB")
 #    audio_file = open('song.mp3', 'rb')
 #    audio_bytes = audio_file.read()
 #    st.audio(audio_bytes, format='audio/ogg')   
+
 
 
 
