@@ -499,7 +499,8 @@ elif view=='SQL Editor':
               with st.spinner('Running Query'):
                 data = pullData()
                 data = data.df()
-                st.dataframe(data.head(100), hide_index=True)
+                st.caption('Displaying 1,000 rows')
+                st.dataframe(data.head(1000), hide_index=True)
                 
             except Exception as e:
               st.write(e)
@@ -608,6 +609,7 @@ st.sidebar.caption(f"Memory Usage: {memory_usage:.1f}% MB")
 #    audio_file = open('song.mp3', 'rb')
 #    audio_bytes = audio_file.read()
 #    st.audio(audio_bytes, format='audio/ogg')   
+
 
 
 
