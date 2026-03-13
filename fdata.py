@@ -1,6 +1,5 @@
 import streamlit as st
 import pandas as pd
-pd.options.mode.copy_on_write = True
 import altair as alt
 import psutil
 import duckdb
