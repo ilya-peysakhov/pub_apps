@@ -33,9 +33,7 @@ def get_memory_usage():
     memory_usage_percentage = (memory_usage / total_memory) * 100
     return memory_usage_percentage
 
-# view = st.sidebar.radio('Select a view',('Welcome','Fighter One Sheet','Interesting Stats','Aggregate Table','Show all dataset samples','SQL Editor','Tale of the Tape'))
 view = st.tabs(['Welcome','Fighter One Sheet','Interesting Stats','Aggregate Table','Show all dataset samples','SQL Editor','Tale of the Tape'], on_change='rerun')
-
 
 ###################### data pull and clean
 @st.cache_data(ttl = '7d')
@@ -390,8 +388,8 @@ if view[2].open:
         st.plotly_chart(fig,use_container_width=True,theme=None)
         # st.area_chart(methods_over_time, x='MONTH',y='METHOD_PCT',color='METHOD')
 
-if view[4]:
-    with view[4]:
+if view[3]:
+    with view[3]:
         min_fights = st.number_input('Minimum Fights',step=1,value=20)
         st.write(f"Minimum {min_fights} fights, historical rankings for total career offensive and defensive stats")
         
