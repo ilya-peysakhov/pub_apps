@@ -16,14 +16,14 @@ import plotly.graph_objects as go
 
 st.set_page_config(page_icon="👊", page_title="UFC Stats Explorer v1.0", layout="wide",initial_sidebar_state='collapsed')
 
-if 'style_setting' not in st.session_state:
-    st.session_state.style_setting = False
+# if 'style_setting' not in st.session_state:
+#     st.session_state.style_setting = False
 
-if st.session_state.style_setting == False:
-    style_toggle = st.toggle('Set Style')
-    if style_toggle:
-        st.html('style2.css')
-        st.session_state.style_setting = True
+# if st.session_state.style_setting == False:
+#     style_toggle = st.toggle('Set Style')
+#     if style_toggle:
+#         st.html('style2.css')
+#         st.session_state.style_setting = True
 
 ########start of app
 
