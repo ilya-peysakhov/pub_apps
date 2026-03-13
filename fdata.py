@@ -3,7 +3,6 @@ import pandas as pd
 pd.options.mode.copy_on_write = True
 import altair as alt
 import psutil
-
 import duckdb
 import time
 import datetime
@@ -33,8 +32,6 @@ def get_memory_usage():
     total_memory = psutil.virtual_memory().total
     memory_usage_percentage = (memory_usage / total_memory) * 100
     return memory_usage_percentage
-
-
 
 # view = st.sidebar.radio('Select a view',('Welcome','Fighter One Sheet','Interesting Stats','Aggregate Table','Show all dataset samples','SQL Editor','Tale of the Tape'))
 view = st.tabs(['Welcome','Fighter One Sheet','Interesting Stats','Aggregate Table','Show all dataset samples','SQL Editor','Tale of the Tape'], on_change='rerun')
