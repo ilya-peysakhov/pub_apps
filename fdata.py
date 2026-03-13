@@ -103,7 +103,7 @@ fed, fr_cleaned, fs_cleaned, fighters, ed_c = cleanData()
 ########################
 fighter_list = duckdb.sql("SELECT FIGHTER from fighters  where length(DOB) >3 group by 1 order by 1").df()                      
 
-if view[0].open"
+if view[0].open:
     with view[0]:
       st.title('Welcome to UFC Stats Explorer!👊')
       st.write("""
