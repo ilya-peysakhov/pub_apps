@@ -381,9 +381,16 @@ if view[2].open:
     
         st.write("Method of winning as a percentage of all methods over time")
         frame = st.selectbox('Pick a time dimension',['year','quarter','month','week','day'])
-        duckdb.register('fr_cleaned', fr_cleaned)
-        methods_over_time = duckdb.sql(f"SELECT case when METHOD like 'Decision%' then 'Decision' else METHOD end as METHOD, date_trunc('{frame}',date) as MONTH, count(*)/sum(sum(1)) over (partition by MONTH) METHOD_PCT from fr_cleaned  group by 1,2 ").df()
-    
+        fr_cleaned_duck = fr_cleaned.copy()
+
+        methods_over_time = duckdb.sql(f"""
+        SELECT 
+            CASE WHEN METHOD LIKE 'Decision%' THEN 'Decision' ELSE METHOD END AS METHOD,
+            date_trunc('{frame}', date) AS MONTH,
+            count(*) / sum(sum(1)) OVER (PARTITION BY date_trunc('{frame}', date)) AS METHOD_PCT
+        FROM fr_cleaned_duck
+        GROUP BY 1, 2
+        """).df()
         fig = px.area(methods_over_time, x='MONTH',y='METHOD_PCT',color='METHOD', template='simple_white')
         st.plotly_chart(fig,use_container_width=True,theme=None)
         # st.area_chart(methods_over_time, x='MONTH',y='METHOD_PCT',color='METHOD')
