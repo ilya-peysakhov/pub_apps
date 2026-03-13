@@ -317,8 +317,8 @@ if view[1].open:
             if bout_filter:
                  st.write(fight_results.set_index(fight_results.columns[0]).T)
 
-if view[2].open:
-    with view[2]:
+if view[4].open:
+    with view[4]:
         st.write('Fighter Details (cleaned)')
         st.dataframe(duckdb.sql("select * from fighters limit 5").df(),hide_index=True)
         st.write('Events & Fights (cleaned)')
@@ -331,8 +331,8 @@ if view[2].open:
         anomalies = duckdb.sql("select left(DATE::string,10) as DATE,ed_c.EVENT, count(BOUT) as bouts_with_stats from ed_c left join fs on ed_c.EVENT =fs.EVENT group by 1,2 having bouts_with_stats=0 order by 1 desc").df()
         st.dataframe(anomalies,hide_index=True)
         
-if view[3].open:
-    with view[3]:
+if view[2].open:
+    with view[2]:
         st.subheader('Lifetime stats unless otherwise noted (last 2 years)')
         c1, c2  = st.columns(2)
         with c1:
