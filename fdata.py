@@ -317,9 +317,9 @@ if view[2].open:
         # GROUP BY 1, 2
         # """).df()     
         frame_map = {
-            'month': 'ME',
-            'quarter': 'QE', 
-            'year': 'YE',
+            'month': 'M',
+            'quarter': 'Q', 
+            'year': 'Y',
             'week': 'W',
             'day': 'D'
         }
