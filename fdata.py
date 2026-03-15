@@ -339,62 +339,62 @@ if view[2].open:
         st.plotly_chart(fig,width='stretch',theme=None)
         # st.area_chart(methods_over_time, x='MONTH',y='METHOD_PCT',color='METHOD')
 
-# if view[3]:
-#     with view[3]:
-#         min_fights = st.number_input('Minimum Fights',step=1,value=20)
-#         st.write(f"Minimum {min_fights} fights, historical rankings for total career offensive and defensive stats")
+if view[3]:
+    with view[3]:
+        min_fights = st.number_input('Minimum Fights',step=1,value=20)
+        st.write(f"Minimum {min_fights} fights, historical rankings for total career offensive and defensive stats")
     
-#         with st.spinner('Filtering Fighters...'):
-#             fighters = getFighters(min_fights)
+        with st.spinner('Filtering Fighters...'):
+            fighters = getFighters(min_fights)
         
-#         str_results = pd.DataFrame()
+        str_results = pd.DataFrame()
         
-#         with st.spinner('Gathering Offense...'):
-#             all_time_offense = duckdb.sql(f"SELECT FIGHTER, COUNT(DISTINCT BOUT||EVENT) as FIGHTS, COUNT(*) AS ROUNDS,  ROUND(ROUNDS/CAST(FIGHTS as REAL),1) as ROUNDS_PER_FIGHT ,SUM(head_str_l::INTEGER) AS HEAD_STRIKES_LANDED, SUM(leg_str_l::INTEGER) as LEG_STRIKES_LANDED,sum(sig_str_l::INTEGER) as SIG_STRIKES_LANDED,sum(KD::INTEGER) as KD_LANDED, sum(TD_L::INT) as TD_LANDED from fs_cleaned group by 1 having FIGHTS>={min_fights}")
+        with st.spinner('Gathering Offense...'):
+            all_time_offense = duckdb.sql(f"SELECT FIGHTER, COUNT(DISTINCT BOUT||EVENT) as FIGHTS, COUNT(*) AS ROUNDS,  ROUND(ROUNDS/CAST(FIGHTS as REAL),1) as ROUNDS_PER_FIGHT ,SUM(head_str_l::INTEGER) AS HEAD_STRIKES_LANDED, SUM(leg_str_l::INTEGER) as LEG_STRIKES_LANDED,sum(sig_str_l::INTEGER) as SIG_STRIKES_LANDED,sum(KD::INTEGER) as KD_LANDED, sum(TD_L::INT) as TD_LANDED from fs_cleaned group by 1 having FIGHTS>={min_fights}")
           
-#         with st.spinner('Gathering Defense...'):
-#           str_results = oppStats()      
+        with st.spinner('Gathering Defense...'):
+          str_results = oppStats()      
         
-#         with st.spinner('Combining all data...'):
-#             combined_stats = duckdb.sql("SELECT a.*, ROUND(SIG_STRIKES_LANDED/SIG_STRIKES_ABS,1) as SIG_STR_DIFF, ROUND((1-HEAD_STRIKES_ABS/HEAD_STRIKES_AT),2) as HEAD_MOVEMENT, ROUND(HEAD_STRIKES_ABS/ROUNDS,1) as HEAD_STRIKES_ABS_PER_ROUND, b.* EXCLUDE (FIGHTER) from all_time_offense as a left join str_results as b on a.FIGHTER=b.FIGHTER").df()
+        with st.spinner('Combining all data...'):
+            combined_stats = duckdb.sql("SELECT a.*, ROUND(SIG_STRIKES_LANDED/SIG_STRIKES_ABS,1) as SIG_STR_DIFF, ROUND((1-HEAD_STRIKES_ABS/HEAD_STRIKES_AT),2) as HEAD_MOVEMENT, ROUND(HEAD_STRIKES_ABS/ROUNDS,1) as HEAD_STRIKES_ABS_PER_ROUND, b.* EXCLUDE (FIGHTER) from all_time_offense as a left join str_results as b on a.FIGHTER=b.FIGHTER").df()
         
-#         st.dataframe(combined_stats.sort_values(by='FIGHTS', ascending=False),hide_index=True) 
+        st.dataframe(combined_stats.sort_values(by='FIGHTS', ascending=False),hide_index=True) 
     
-#         @st.fragment
-#         def vizPlot():
-#             c1, c2 = st.columns(2)
-#             chart_metric1 = c1.selectbox('Choose a metric to plot',combined_stats.columns)
-#             chart_metric2 = c2.selectbox('Choose a second metric to plot',combined_stats.columns)
-#             viz_data = duckdb.sql(f"select FIGHTER, {chart_metric1}, {chart_metric2} from combined_stats ").df()
-#             # fig = px.scatter(viz_data, x=chart_metric1,y=chart_metric2, text='FIGHTER', template='simple_white')
-#             # st.plotly_chart(fig, width='content')
-#             x = viz_data[chart_metric1]
-#             y = viz_data[chart_metric2]
-#             slope, intercept = np.polyfit(x, y, 1)
-#             trendline_y = slope * x + intercept
+        @st.fragment
+        def vizPlot():
+            c1, c2 = st.columns(2)
+            chart_metric1 = c1.selectbox('Choose a metric to plot',combined_stats.columns)
+            chart_metric2 = c2.selectbox('Choose a second metric to plot',combined_stats.columns)
+            viz_data = duckdb.sql(f"select FIGHTER, {chart_metric1}, {chart_metric2} from combined_stats ").df()
+            # fig = px.scatter(viz_data, x=chart_metric1,y=chart_metric2, text='FIGHTER', template='simple_white')
+            # st.plotly_chart(fig, width='content')
+            x = viz_data[chart_metric1]
+            y = viz_data[chart_metric2]
+            slope, intercept = np.polyfit(x, y, 1)
+            trendline_y = slope * x + intercept
             
-#             # Create base scatter plot
-#             fig = px.scatter(
-#                 viz_data, 
-#                 x=chart_metric1, 
-#                 y=chart_metric2, 
-#                 text='FIGHTER', 
-#                 template='simple_white'
-#             )
+            # Create base scatter plot
+            fig = px.scatter(
+                viz_data, 
+                x=chart_metric1, 
+                y=chart_metric2, 
+                text='FIGHTER', 
+                template='simple_white'
+            )
             
-#             # Add line of best fit
-#             fig.add_trace(go.Scatter(
-#                 x=x,
-#                 y=trendline_y,
-#                 mode='lines',
-#                 name=f'Best Fit Line (slope = {slope:.2f})',
-#                 line=dict(color='red', dash='dash')
-#             ))
+            # Add line of best fit
+            fig.add_trace(go.Scatter(
+                x=x,
+                y=trendline_y,
+                mode='lines',
+                name=f'Best Fit Line (slope = {slope:.2f})',
+                line=dict(color='red', dash='dash')
+            ))
             
-#             # Plot
-#             st.plotly_chart(fig, width='content',theme=None)
+            # Plot
+            st.plotly_chart(fig, width='content',theme=None)
         
-#         vizPlot()
+        vizPlot()
 
 if view[4].open:
     with view[4]:
