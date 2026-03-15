@@ -93,7 +93,7 @@ def oppStats():
   return str_results
 
 def opp_stats():
-     return duckdb.sql("""SELECT FIGHTER , SUM(head_str_l::INTEGER) AS HEAD_STRIKES_ABS, SUM(head_str_a::INTEGER) AS HEAD_STRIKES_AT, SUM(sig_str_l::INTEGER) AS SIG_STRIKES_ABS, SUM(leg_str_l::INTEGER) as LEG_STRIKES_ABSORBED, sum(KD::INTEGER) as KD_ABSORED, sum(TD_L::INT) as TD_GIVEN_UP 
+     return duckdb.sql("""SELECT a.FIGHTER , SUM(head_str_l::INTEGER) AS HEAD_STRIKES_ABS, SUM(head_str_a::INTEGER) AS HEAD_STRIKES_AT, SUM(sig_str_l::INTEGER) AS SIG_STRIKES_ABS, SUM(leg_str_l::INTEGER) as LEG_STRIKES_ABSORBED, sum(KD::INTEGER) as KD_ABSORED, sum(TD_L::INT) as TD_GIVEN_UP 
      FROM  (select fighter from fs_cleaned group by 1) a 
      inner join fs_cleaned b on a.fighter!=b.fighter and a.fighter ilike '%' || b.BOUT || '%'
      group by 1""").df()
