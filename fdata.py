@@ -411,64 +411,64 @@ elif view[4].open:
         anomalies = duckdb.sql("select left(DATE::string,10) as DATE,ed_c.EVENT, count(BOUT) as bouts_with_stats from ed_c left join fs on ed_c.EVENT =fs.EVENT group by 1,2 having bouts_with_stats=0 order by 1 desc").df()
         st.dataframe(anomalies,hide_index=True, width='content')
         
-# if view[5].open:
-#     with view[5]:
-#         st.write("Write custom sql on the data using [🦆duckdb](https://duckdb.org/docs/archive/0.9.2/sql/introduction)")
-#         with st.expander("Examples"):
-#           st.write('Win % by age')
-#           st.code("""select age,  sum(W) as wins, sum(L) as losses, sum(fights) as total_results, sum(W)/(sum(W)+sum(L)) as win_pct from 
-#            (
-#           select date_diff('year',strptime(dob, '%b %d, %Y'),date)  as age, sum (case when fighter1_outcome = 'W' then 1 else 0 end) W, sum (case when fighter1_outcome = 'L' then 1 else 0 end) as L, count(1) fights from fighters inner join fr_cleaned on fighter = fighter1 where (weightclass ilike '%featherweight title%' )
-#           group by 1 
-#           UNION
-#           select date_diff('year',strptime(dob, '%b %d, %Y'),date)  as age, sum (case when fighter2_outcome = 'W' then 1 else 0 end) W, sum (case when fighter2_outcome = 'L' then 1 else 0 end) as L, count(1) fights from fighters inner join fr_cleaned on fighter = fighter2 where (weightclass ilike '%featherweight title%' )
-#           group by 1 
-#            )
-#           group by 1   
-#           """)
-#           st.write('Most significant strikes landed')
-#           st.code("""select event, bout, fighter, sum(sig_Str_l::int)  
-#                   from fs_cleaned 
-#                   group by 1,2,3 
-#                   order by 4 desc  
-#                   limit 20
-#                   """)
-#           st.write('Womens bouts with the most combined strikes')
-#           st.code("""select event, bout, sum(sig_str_l) as total_sig_strikes, avg(rounds) as rounds, 
-#              round(sum(sig_str_l)/avg(rounds)) as sig_per_round
-#             from 
-#             (
-#             select event, bout, fighter,sum(sig_str_l::int) sig_str_l,
-#             count(distinct round) as rounds, sum(sig_str_l::int)/count(distinct round) as sig_per_rd
-#             from fs_cleaned
-#                 where bout in (
-#                 select distinct bout from fr_cleaned 
-#                 where weightclass ilike '%women%' )
-#             group by all)
-#             group by all
-#             order by 3 desc 
-#             """)
-#         col1,col2 = st.columns([3,10])
-#         with col1:
-#             st.write('Tables')
-#             st.write('fs_cleaned = fight stats')
-#             st.write('fr_cleaned = fight results')
-#             st.write('fighters = fighter details')
-#         with col2:
-#             query_text = st_ace()
-#             # query_text = st.text_area('Write SELECT statement here')
-#             st.caption('Will add history of previous queries for reference')
+elif view[5].open:
+    with view[5]:
+        st.write("Write custom sql on the data using [🦆duckdb](https://duckdb.org/docs/archive/0.9.2/sql/introduction)")
+        with st.expander("Examples"):
+          st.write('Win % by age')
+          st.code("""select age,  sum(W) as wins, sum(L) as losses, sum(fights) as total_results, sum(W)/(sum(W)+sum(L)) as win_pct from 
+           (
+          select date_diff('year',strptime(dob, '%b %d, %Y'),date)  as age, sum (case when fighter1_outcome = 'W' then 1 else 0 end) W, sum (case when fighter1_outcome = 'L' then 1 else 0 end) as L, count(1) fights from fighters inner join fr_cleaned on fighter = fighter1 where (weightclass ilike '%featherweight title%' )
+          group by 1 
+          UNION
+          select date_diff('year',strptime(dob, '%b %d, %Y'),date)  as age, sum (case when fighter2_outcome = 'W' then 1 else 0 end) W, sum (case when fighter2_outcome = 'L' then 1 else 0 end) as L, count(1) fights from fighters inner join fr_cleaned on fighter = fighter2 where (weightclass ilike '%featherweight title%' )
+          group by 1 
+           )
+          group by 1   
+          """)
+          st.write('Most significant strikes landed')
+          st.code("""select event, bout, fighter, sum(sig_Str_l::int)  
+                  from fs_cleaned 
+                  group by 1,2,3 
+                  order by 4 desc  
+                  limit 20
+                  """)
+          st.write('Womens bouts with the most combined strikes')
+          st.code("""select event, bout, sum(sig_str_l) as total_sig_strikes, avg(rounds) as rounds, 
+             round(sum(sig_str_l)/avg(rounds)) as sig_per_round
+            from 
+            (
+            select event, bout, fighter,sum(sig_str_l::int) sig_str_l,
+            count(distinct round) as rounds, sum(sig_str_l::int)/count(distinct round) as sig_per_rd
+            from fs_cleaned
+                where bout in (
+                select distinct bout from fr_cleaned 
+                where weightclass ilike '%women%' )
+            group by all)
+            group by all
+            order by 3 desc 
+            """)
+        col1,col2 = st.columns([3,10])
+        with col1:
+            st.write('Tables')
+            st.write('fs_cleaned = fight stats')
+            st.write('fr_cleaned = fight results')
+            st.write('fighters = fighter details')
+        with col2:
+            query_text = st_ace()
+            # query_text = st.text_area('Write SELECT statement here')
+            st.caption('Will add history of previous queries for reference')
     
-#             if query_text:
-#                 try:
-#                   with st.spinner('Running Query'):
-#                     data = pullData()
-#                     data = data.df()
-#                     st.caption('Displaying 1,000 rows')
-#                     st.dataframe(data.head(1000), hide_index=True)
+            if query_text:
+                try:
+                  with st.spinner('Running Query'):
+                    data = pullData()
+                    data = data.df()
+                    st.caption('Displaying 1,000 rows')
+                    st.dataframe(data.head(1000), hide_index=True)
                     
-#                 except Exception as e:
-#                   st.write(e)
+                except Exception as e:
+                  st.write(e)
 # if view[6].open:
 #     with view[6]:
 #       st.write('Compare advanced metrics between 2 fighters')
