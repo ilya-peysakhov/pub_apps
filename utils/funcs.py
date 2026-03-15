@@ -27,7 +27,7 @@ def getData():
   # fs_backfill = duckdb.read_csv("https://raw.githubusercontent.com/ilya-peysakhov/grecoscraper/main/ufcdata/stats.csv").df()
   # fs = duckdb.sql("select * from fs_greco UNION select * from fs_backfill").df()
   fs = pd.read_csv("https://raw.githubusercontent.com/Greco1899/scrape_ufc_stats/main/ufc_fight_stats.csv",engine='pyarrow',dtype_backend='pyarrow')
-  fs['HEAD'] = fs['HEAD'].astype(str)
+  fs[['HEAD','BODY','LEG','DISTANCE','CLINCH','GROUND']] = fs[['HEAD','BODY','LEG','DISTANCE','CLINCH','GROUND']].astype(str)
   
   frd = duckdb.read_csv("https://raw.githubusercontent.com/Greco1899/scrape_ufc_stats/main/ufc_fighter_details.csv").df()
   ft = duckdb.read_csv("https://raw.githubusercontent.com/Greco1899/scrape_ufc_stats/main/ufc_fighter_tott.csv").df()
