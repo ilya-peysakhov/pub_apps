@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 import altair as alt
-import psutil
 import duckdb
 import time
 import datetime
@@ -10,9 +9,25 @@ import plotly.express as px
 import numpy as np
 import plotly.graph_objects as go
 
+from utils.funcs import get_memory_usage, getData, cleanData, pullData, getFighters, query_fighter_data, oppStats
 ##################################
 
+def refreshData():
+    getData.clear()
+    st.rerun()
+    st.toast("Data Refreshed!")
 
+def calcFighterStats(fighter):
+    winloss = duckdb.sql(f"SELECT case when FIGHTER1 = '{fighter}' then FIGHTER1_OUTCOME else FIGHTER2_OUTCOME end result from fr_cleaned where FIGHTER1 = '{fighter}' or FIGHTER2='{fighter}' ")
+    last_fight= duckdb.sql(f"SELECT left(max(date)::string,10) max_date, left( (current_date() - max(date))::string,10) days_since from fr_cleaned where FIGHTER1= '{fighter}' or FIGHTER2='{fighter}' ").df()
+    fighter_stats = duckdb.sql(f"SELECT * from fs_cleaned where BOUT in (select BOUT from fights) and FIGHTER ='{fighter}' ")
+    cleaned_fighter_stats = duckdb.sql("SELECT sum(sig_str_l::INTEGER) as sig_str, sum(head_str_l::INTEGER) as head_str, sum(td_l::INTEGER) as td_l, round(sum(td_l::INTEGER)/cast(sum(td_a::REAL) as REAL),2)  as td_rate, sum(kd::INTEGER) as kd, from fighter_stats").df()
+    ko_wins = duckdb.sql(f"SELECT count(*) as s from fr_cleaned where ((FIGHTER1='{fighter}' and FIGHTER1_OUTCOME='W') OR (FIGHTER2='{fighter}' and FIGHTER2_OUTCOME='W')) and trim(METHOD)='KO/TKO' ").df()
+    opp_stats = duckdb.sql(f"SELECT * from fs_cleaned where BOUT in (select * from fights) and FIGHTER !='{fighter}' ")
+    cleaned_opp_stats = duckdb.sql("SELECT sum(sig_str_l::INTEGER) as sig_abs ,sum(head_str_l::INTEGER) as head_abs,sum(head_str_a::INTEGER) as head_at,sum(td_l::INTEGER) as td_abs,round(sum(td_l::INTEGER)/cast(sum(td_a::REAL) as REAL),2) as td_abs_rate,sum(kd::INTEGER) as kd_abs from opp_stats").df()
+    ko_losses = duckdb.sql(f"SELECT count(*) as s from fr_cleaned where ((FIGHTER1='{fighter}' and FIGHTER1_OUTCOME='L') OR (FIGHTER2='{fighter}' and FIGHTER2_OUTCOME='L')) and trim(METHOD)='KO/TKO' ").df()
+    return winloss, last_fight, fighter_stats, cleaned_fighter_stats, ko_wins, opp_stats, cleaned_opp_stats, ko_losses
+    
 st.set_page_config(page_icon="👊", page_title="UFC Stats Explorer v1.0", layout="wide",initial_sidebar_state='collapsed')
 
 # if 'style_setting' not in st.session_state:
@@ -26,72 +41,11 @@ st.set_page_config(page_icon="👊", page_title="UFC Stats Explorer v1.0", layou
 
 ########start of app
 
-def get_memory_usage():
-    memory_usage = psutil.virtual_memory().used
-    total_memory = psutil.virtual_memory().total
-    memory_usage_percentage = (memory_usage / total_memory) * 100
-    return memory_usage_percentage
 
 view = st.tabs(['Welcome','Fighter One Sheet','Interesting Stats','Aggregate Table','Show all dataset samples','SQL Editor','Tale of the Tape'], on_change='rerun')
 
 ###################### data pull and clean
-@st.cache_data(ttl = '7d')
-def getData():
-  ed = duckdb.read_csv("https://raw.githubusercontent.com/Greco1899/scrape_ufc_stats/main/ufc_event_details.csv").df()
-  fd_greco = duckdb.read_csv("https://raw.githubusercontent.com/Greco1899/scrape_ufc_stats/main/ufc_fight_details.csv").df()
-  fd_backfill = duckdb.read_csv("https://raw.githubusercontent.com/ilya-peysakhov/grecoscraper/main/ufcdata/details.csv").df()
-  fd = duckdb.sql("select * from fd_greco UNION select* from fd_backfill").df()
-  fr_greco = duckdb.read_csv("https://raw.githubusercontent.com/Greco1899/scrape_ufc_stats/main/ufc_fight_results.csv").df()
-  fr_backfill = duckdb.read_csv("https://raw.githubusercontent.com/ilya-peysakhov/grecoscraper/main/ufcdata/results.csv").df()
-  fr = duckdb.sql("select * from fr_greco UNION select* from fr_backfill").df()
-  # fs_greco = duckdb.read_csv("https://raw.githubusercontent.com/Greco1899/scrape_ufc_stats/main/ufc_fight_stats.csv").df()
-  fs_greco = pd.read_csv("https://raw.githubusercontent.com/Greco1899/scrape_ufc_stats/main/ufc_fight_stats.csv",engine='pyarrow',dtype_backend='pyarrow')
-  fs_backfill = duckdb.read_csv("https://raw.githubusercontent.com/ilya-peysakhov/grecoscraper/main/ufcdata/stats.csv").df()
-  fs = duckdb.sql("select * from fs_greco UNION select * from fs_backfill").df()
-  frd = duckdb.read_csv("https://raw.githubusercontent.com/Greco1899/scrape_ufc_stats/main/ufc_fighter_details.csv").df()
-  ft = duckdb.read_csv("https://raw.githubusercontent.com/Greco1899/scrape_ufc_stats/main/ufc_fighter_tott.csv").df()
-    
-  return ed, fd, fr, fs, frd, ft
-
 ed, fd, fr, fs, frd, ft = getData()
-
-@st.cache_data(ttl = '7d')
-def cleanData():
-  ed_c = duckdb.sql("SELECT TRIM(EVENT) as EVENT, strptime(DATE, '%B %d, %Y') as  DATE, URL, LOCATION FROM ed").df()
-  fed = duckdb.sql("SELECT TRIM(fd.EVENT) as EVENT, TRIM(fd.BOUT) as BOUT, fd.URL, DATE,LOCATION from ed_c inner join fd on ed_c.EVENT=fd.EVENT ").df()
-  fr["EVENT"] = fr["EVENT"].str.replace("'", "")  # Replace single quotes in EVENT column
-  fr["BOUT"] = fr["BOUT"].str.replace("'", "")  # Replace single quotes in BOUT column
-  fr_cleaned = duckdb.sql("""SELECT trim(fr.EVENT) as EVENT, 
-                               replace(trim(fr.BOUT),'  ',' ') as BOUT, 
-                              trim(split_part(fr.BOUT, ' vs. ' ,1)) as FIGHTER1,
-                              trim(split_part(fr.BOUT, ' vs. ', 2)) as FIGHTER2,
-                              split_part(OUTCOME, '/' ,1) as FIGHTER1_OUTCOME,
-                              split_part(OUTCOME, '/', 2) as FIGHTER2_OUTCOME,
-                              WEIGHTCLASS,METHOD,ROUND,TIME,left("TIME FORMAT",1) as TIME_FORMAT,REFEREE,DETAILS,fr.URL,date 
-                          from fr
-                          left join fed on fed.URL = fr.URL""").df()
-  fs["FIGHTER"] = fs["FIGHTER"].str.replace("'", "")  # Replace single quotes in EVENT column
-  fs["BOUT"] = fs["BOUT"].str.replace("'", "")  # Replace single quotes in BOUT column
-  fs_cleaned = duckdb.sql("""SELECT fs.EVENT,replace(trim(BOUT),'  ',' ') as BOUT,ROUND, trim(FIGHTER) as FIGHTER,KD,
-                                split_part("SIG.STR."::string,' of ',1) sig_str_l,
-                                split_part("SIG.STR."::string,' of ',2) sig_str_a,
-                                split_part("TOTAL STR."::string,' of ',1) total_str_l,
-                                split_part("TOTAL STR."::string,' of ',2) total_str_a,
-                                split_part(TD,' of ',1) td_l,
-                                split_part(TD,' of ',2) td_a,
-                                "SUB.ATT","REV.",CTRL,
-                                split_part(HEAD,' of ',1) head_str_l,
-                                split_part(HEAD,' of ',2) head_str_a,
-                                split_part(LEG,' of ',1) leg_str_l,
-                                split_part(LEG,' of ',2) leg_str_a,
-                                DATE
-                                from fs 
-                                left join ed_c on ed_c.EVENT = fs.EVENT
-                                WHERE FIGHTER IS NOT NULL """).df()
-  ft["FIGHTER"] = ft["FIGHTER"].str.replace("'", "")  # Replace single quotes in BOUT column
-  fighters= duckdb.sql("SELECT trim(FIGHTER) as FIGHTER,HEIGHT,WEIGHT,REACH,STANCE,DOB,FIRST,LAST,NICKNAME,frd.URL from ft inner join frd on frd.URL = ft.URL where dob !='--'").df()
-  return fed, fr_cleaned, fs_cleaned, fighters, ed_c
-
 fed, fr_cleaned, fs_cleaned, fighters, ed_c = cleanData()
 
 ########################
@@ -115,10 +69,7 @@ if view[0].open:
       """)
                   
       st.caption('Please note that this a free, hosted application with data gathered by a 3rd party and not everything will be perfectly working at all times. However if you are a hardcore MMA fan, please use as you like. If you have questions or suggestions, a suggestion box will be introduced soon.') 
-      def refreshData():
-          getData.clear()
-          st.rerun()
-          st.toast("Data Refreshed!")
+      
       if st.button('Refresh Data'):
           refreshData()
       st.header('Enjoy and JUST BLEED!')
@@ -149,17 +100,6 @@ if view[1].open:
         if len(fights)==0:
             st.write("No data for this fighter")
             st.stop()
-          
-        def calcFighterStats(fighter):
-          winloss = duckdb.sql(f"SELECT case when FIGHTER1 = '{fighter}' then FIGHTER1_OUTCOME else FIGHTER2_OUTCOME end result from fr_cleaned where FIGHTER1 = '{fighter}' or FIGHTER2='{fighter}' ")
-          last_fight= duckdb.sql(f"SELECT left(max(date)::string,10) max_date, left( (current_date() - max(date))::string,10) days_since from fr_cleaned where FIGHTER1= '{fighter}' or FIGHTER2='{fighter}' ").df()
-          fighter_stats = duckdb.sql(f"SELECT * from fs_cleaned where BOUT in (select BOUT from fights) and FIGHTER ='{fighter}' ")
-          cleaned_fighter_stats = duckdb.sql("SELECT sum(sig_str_l::INTEGER) as sig_str, sum(head_str_l::INTEGER) as head_str, sum(td_l::INTEGER) as td_l, round(sum(td_l::INTEGER)/cast(sum(td_a::REAL) as REAL),2)  as td_rate, sum(kd::INTEGER) as kd, from fighter_stats").df()
-          ko_wins = duckdb.sql(f"SELECT count(*) as s from fr_cleaned where ((FIGHTER1='{fighter}' and FIGHTER1_OUTCOME='W') OR (FIGHTER2='{fighter}' and FIGHTER2_OUTCOME='W')) and trim(METHOD)='KO/TKO' ").df()
-          opp_stats = duckdb.sql(f"SELECT * from fs_cleaned where BOUT in (select * from fights) and FIGHTER !='{fighter}' ")
-          cleaned_opp_stats = duckdb.sql("SELECT sum(sig_str_l::INTEGER) as sig_abs ,sum(head_str_l::INTEGER) as head_abs,sum(head_str_a::INTEGER) as head_at,sum(td_l::INTEGER) as td_abs,round(sum(td_l::INTEGER)/cast(sum(td_a::REAL) as REAL),2) as td_abs_rate,sum(kd::INTEGER) as kd_abs from opp_stats").df()
-          ko_losses = duckdb.sql(f"SELECT count(*) as s from fr_cleaned where ((FIGHTER1='{fighter}' and FIGHTER1_OUTCOME='L') OR (FIGHTER2='{fighter}' and FIGHTER2_OUTCOME='L')) and trim(METHOD)='KO/TKO' ").df()
-          return winloss, last_fight, fighter_stats, cleaned_fighter_stats, ko_wins, opp_stats, cleaned_opp_stats, ko_losses
           
         winloss, last_fight, fighter_stats, cleaned_fighter_stats, ko_wins, opp_stats, cleaned_opp_stats, ko_losses =  calcFighterStats(fighter_filter)
         
@@ -399,11 +339,7 @@ if view[3]:
     with view[3]:
         min_fights = st.number_input('Minimum Fights',step=1,value=20)
         st.write(f"Minimum {min_fights} fights, historical rankings for total career offensive and defensive stats")
-        
-        
-        def getFighters(min_fights):
-            fighters = duckdb.sql(f"SELECT fighter FROM fs_cleaned GROUP BY 1 having count(distinct BOUT||EVENT) >={min_fights}").df()
-            return fighters
+    
         with st.spinner('Filtering Fighters...'):
             fighters = getFighters(min_fights)
         
@@ -411,15 +347,6 @@ if view[3]:
         
         with st.spinner('Gathering Offense...'):
             all_time_offense = duckdb.sql(f"SELECT FIGHTER, COUNT(DISTINCT BOUT||EVENT) as FIGHTS, COUNT(*) AS ROUNDS,  ROUND(ROUNDS/CAST(FIGHTS as REAL),1) as ROUNDS_PER_FIGHT ,SUM(head_str_l::INTEGER) AS HEAD_STRIKES_LANDED, SUM(leg_str_l::INTEGER) as LEG_STRIKES_LANDED,sum(sig_str_l::INTEGER) as SIG_STRIKES_LANDED,sum(KD::INTEGER) as KD_LANDED, sum(TD_L::INT) as TD_LANDED from fs_cleaned group by 1 having FIGHTS>={min_fights}")
-        
-        def query_fighter_data(fighter):
-          query = f"SELECT '{fighter}' AS FIGHTER, SUM(head_str_l::INTEGER) AS HEAD_STRIKES_ABS, SUM(head_str_a::INTEGER) AS HEAD_STRIKES_AT, SUM(sig_str_l::INTEGER) AS SIG_STRIKES_ABS, SUM(leg_str_l::INTEGER) as LEG_STRIKES_ABSORBED, sum(KD::INTEGER) as KD_ABSORED, sum(TD_L::INT) as TD_GIVEN_UP FROM fs_cleaned WHERE BOUT LIKE '%{fighter}%' AND fighter != '{fighter}'"
-          return duckdb.sql(query).df()
-            
-        def oppStats():
-            dfs_list = fighters['FIGHTER'].apply(query_fighter_data).tolist()
-            str_results = pd.concat(dfs_list, ignore_index=True)
-            return str_results
           
         with st.spinner('Gathering Defense...'):
           str_results = oppStats()      
@@ -512,10 +439,7 @@ if view[5].open:
             query_text = st_ace()
             # query_text = st.text_area('Write SELECT statement here')
             st.caption('Will add history of previous queries for reference')
-            def pullData():
-                query = duckdb.sql(f"{query_text.strip()}")
-                return query
-        
+    
             if query_text:
                 try:
                   with st.spinner('Running Query'):
@@ -613,9 +537,7 @@ if view[6].open:
               advantage_diff = fighter2_advantage_counter -fighter1_advantage_counter
               st.write(f'{fighter2_filter} has {advantage_diff} more advantages to win the fight')
         
-
-
-          
+###################END OF APP########################################  
 st.divider()
 col1,col2,col3 = st.columns(3)
 with col1:
