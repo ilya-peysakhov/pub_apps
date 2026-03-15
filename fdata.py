@@ -9,7 +9,7 @@ import plotly.express as px
 import numpy as np
 import plotly.graph_objects as go
 
-from utils.funcs import get_memory_usage, getData, cleanData, pullData, getFighters, query_fighter_data, oppStats, opp_stats\
+from utils.funcs import get_memory_usage, getData, cleanData, pullData, getFighters, query_fighter_data, oppStats, opp_stats,\
     fs,fed, fr_cleaned, fs_cleaned, fighters, ed_c, fed, fr_cleaned, fs_cleaned, fighters, ed_c
 ##################################
 
