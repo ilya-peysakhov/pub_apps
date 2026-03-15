@@ -312,7 +312,7 @@ if view[2].open:
         CASE WHEN METHOD LIKE 'Decision%' THEN 'Decision' ELSE METHOD END AS METHOD,
         date_trunc('{frame}', date) AS MONTH,
         count(*) as bouts, 
-           count(1) OVER (PARTITION BY date_trunc('{frame}', date) as total_bouts_in_frame
+           count(1) OVER (PARTITION BY date_trunc('{frame}', date) ) as total_bouts_in_frame
         from fr_cleaned_duck
         group by 1,2
          """)
