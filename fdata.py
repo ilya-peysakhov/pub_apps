@@ -306,7 +306,8 @@ if view[2].open:
     
         st.write("Method of winning as a percentage of all methods over time")
         frame = st.selectbox('Pick a time dimension',['year','quarter','month','week','day'])
-        
+        duckdb.register('fr_cleaned', fr_cleaned)
+
         methods_one = duckdb.sql(f"""select
         CASE WHEN METHOD LIKE 'Decision%' THEN 'Decision' ELSE METHOD END AS METHOD,
         date_trunc('{frame}', date) AS MONTH,
