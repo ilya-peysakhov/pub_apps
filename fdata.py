@@ -306,11 +306,9 @@ if view[2].open:
     
         st.write("Method of winning as a percentage of all methods over time")
         frame = st.selectbox('Pick a time dimension',['year','quarter','month','week','day'])
-        
-        methods_over_time = methods_one.copy()
-        
+            
         # Simplify Decision methods
-        methods_over_time['METHOD'] = methods_over_time['METHOD'].apply(
+        methods_over_time['METHOD'] = fr_cleaned['METHOD'].apply(
             lambda x: 'Decision' if str(x).startswith('Decision') else x
         )
         
