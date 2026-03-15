@@ -68,7 +68,7 @@ if view[0].open:
       st.header('Enjoy and JUST BLEED!')
       st.image('https://media.tenor.com/8jkYjD4cnqUAAAAM/just-bleed.gif')
       
-if view[1].open:
+elif view[1].open:
     with view[1]:
         st.text('Display all relevant fighter stats in just 1 click. Choose your fighter below to get started')
         
@@ -250,7 +250,7 @@ if view[1].open:
                 st.caption('There may be duplicate fights in the data which are causing an issue since they are labeled the same')
                 st.error(e)
         
-if view[2].open:
+elif view[2].open:
     with view[2]:
         st.subheader('Lifetime stats unless otherwise noted (last 2 years)')
         c1, c2  = st.columns(2)
@@ -339,7 +339,7 @@ if view[2].open:
         st.plotly_chart(fig,width='stretch',theme=None)
         # st.area_chart(methods_over_time, x='MONTH',y='METHOD_PCT',color='METHOD')
 
-if view[3]:
+elif view[3]:
     with view[3]:
         min_fights = st.number_input('Minimum Fights',step=1,value=20)
         st.write(f"Minimum {min_fights} fights, historical rankings for total career offensive and defensive stats")
@@ -396,7 +396,7 @@ if view[3]:
         
         vizPlot()
 
-if view[4].open:
+elif view[4].open:
     with view[4]:
         st.write('Fighter Details (cleaned)')
         st.dataframe(duckdb.sql("select * from fighters limit 5").df(),hide_index=True, width='content')
@@ -565,8 +565,8 @@ with col2:
 with col3:
   st.code('Recent changes - SQL Editor, data retrieval cached via function' )
 
-memory_usage = get_memory_usage()
-st.sidebar.caption(f"Memory Usage: {memory_usage:.1f}% MB")
+# memory_usage = get_memory_usage()
+# st.sidebar.caption(f"Memory Usage: {memory_usage:.1f}% MB")
 
 # st.divider()
 # with st.expander("Real UFC fans ONLY 🖱️",expanded=False):
