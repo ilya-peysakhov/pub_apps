@@ -36,7 +36,7 @@ st.set_page_config(page_icon="👊", page_title="UFC Stats Explorer v1.0", layou
 ########start of app
 
 
-view = st.tabs(['Welcome','Fighter One Sheet','Interesting Stats','Aggregate Table','Show all dataset samples','SQL Editor','Tale of the Tape'], on_change='rerun')
+view = st.tabs(['Welcome','Fighter One Sheet','Interesting Stats','Aggregate Table','Show all dataset samples','SQL Editor','Tale of the Tape'], on_change='ignore')
 
 ###################### data pull and clean
 fed, fr_cleaned, fs_cleaned, fighters, ed_c = cleanData()
