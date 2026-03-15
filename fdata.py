@@ -316,8 +316,9 @@ if view[2].open:
         # FROM fr_cleaned_duck
         # GROUP BY 1, 2
         # """).df()     
+        
         methods_over_time = (
-            fr_cleaned_duck
+        fr_cleaned_duck
             .assign(METHOD=lambda x: x['METHOD'].str.replace(r'^Decision.*', 'Decision', regex=True),
                     MONTH=lambda x: x['date'].dt.to_period(frame).dt.to_timestamp())
             .groupby(['METHOD', 'MONTH'])
@@ -326,6 +327,7 @@ if view[2].open:
             .assign(METHOD_PCT=lambda x: x['cnt'] / x.groupby('MONTH')['cnt'].transform('sum'))
             .drop(columns='cnt')
         )
+        
         fig = px.area(methods_over_time, x='MONTH',y='METHOD_PCT',color='METHOD', template='simple_white')
         st.plotly_chart(fig,width='content',theme=None)
         # st.area_chart(methods_over_time, x='MONTH',y='METHOD_PCT',color='METHOD')
