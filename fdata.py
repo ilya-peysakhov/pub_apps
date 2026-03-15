@@ -250,75 +250,75 @@ if view[1].open:
                 st.caption('There may be duplicate fights in the data which are causing an issue since they are labeled the same')
                 st.error(e)
         
-# if view[2].open:
-#     with view[2]:
-#         st.subheader('Lifetime stats unless otherwise noted (last 2 years)')
-#         c1, c2  = st.columns(2)
-#         with c1:
-#             st.write("Fights by month")
-#             fights_monthly= duckdb.sql("SELECT date_trunc('month',date) as MONTH,count(*) as FIGHTS, count(distinct EVENT) as EVENTS from fed group by 1 order by 1 asc").df()
-#             fig = px.area(fights_monthly, x='MONTH',y=['FIGHTS','EVENTS'], template='simple_white')
-#             st.plotly_chart(fig,width='content',theme=None)
-#             # st.area_chart(fights_monthly, x='MONTH',y='FIGHTS')
+if view[2].open:
+    with view[2]:
+        st.subheader('Lifetime stats unless otherwise noted (last 2 years)')
+        c1, c2  = st.columns(2)
+        with c1:
+            st.write("Fights by month")
+            fights_monthly= duckdb.sql("SELECT date_trunc('month',date) as MONTH,count(*) as FIGHTS, count(distinct EVENT) as EVENTS from fed group by 1 order by 1 asc").df()
+            fig = px.area(fights_monthly, x='MONTH',y=['FIGHTS','EVENTS'], template='simple_white')
+            st.plotly_chart(fig,width='content',theme=None)
+            # st.area_chart(fights_monthly, x='MONTH',y='FIGHTS')
             
-#             st.divider()
+            st.divider()
     
-#             st.write('Most experienced referees (2yr)')
-#             refs = duckdb.sql("SELECT REFEREE,count(*) fights from fr_cleaned where date between current_date() -730 and current_date() group by 1 order by 2 desc limit 10").df()
-#             st.dataframe(refs,hide_index=True,use_container_width=False)
-#             st.divider()
-#             st.write("Fights by result method (2yr)")
-#             methods = duckdb.sql("SELECT method, count(*) FIGHTS from fr_cleaned where date between current_date() -730 and current_date() group by 1 ").df()
-#             fig = px.pie(methods,values='FIGHTS', names='METHOD', template='simple_white')
-#             st.plotly_chart(fig,width='content',theme=None)
-#             # base = alt.Chart(methods).encode(alt.Theta("FIGHTS:Q").stack(True),alt.Color("METHOD:N").legend(None),alt.Tooltip("METHOD:N", title="METHOD"))
-#             # pie = base.mark_arc(outerRadius=120)
-#             # st.altair_chart(pie)
+            st.write('Most experienced referees (2yr)')
+            refs = duckdb.sql("SELECT REFEREE,count(*) fights from fr_cleaned where date between current_date() -730 and current_date() group by 1 order by 2 desc limit 10").df()
+            st.dataframe(refs,hide_index=True,use_container_width=False)
+            st.divider()
+            st.write("Fights by result method (2yr)")
+            methods = duckdb.sql("SELECT method, count(*) FIGHTS from fr_cleaned where date between current_date() -730 and current_date() group by 1 ").df()
+            fig = px.pie(methods,values='FIGHTS', names='METHOD', template='simple_white')
+            st.plotly_chart(fig,width='content',theme=None)
+            # base = alt.Chart(methods).encode(alt.Theta("FIGHTS:Q").stack(True),alt.Color("METHOD:N").legend(None),alt.Tooltip("METHOD:N", title="METHOD"))
+            # pie = base.mark_arc(outerRadius=120)
+            # st.altair_chart(pie)
             
         
-#         with c2:
-#             st.write("Number of Fights per Fighter")
-#             fight_distro = duckdb.sql("""select FIGHTS, SUM(FIGHTERS) OVER (ORDER BY FIGHTS desc) FIGHTERS from
-#                                       (select FIGHTS,count(1) FIGHTERS from  (select FIGHTER,COUNT(DISTINCT EVENT||BOUT) FIGHTS from fs_cleaned group by 1) group by 1)
-#                                   order by 1""").df()
-#             fig = px.bar(fight_distro, x='FIGHTS',y='FIGHTERS', template='simple_white')
-#             st.plotly_chart(fig,width='content',theme=None)
-#             # st.bar_chart(fight_distro, x='FIGHTS',y='FIGHTERS')
-#             st.divider()
+        with c2:
+            st.write("Number of Fights per Fighter")
+            fight_distro = duckdb.sql("""select FIGHTS, SUM(FIGHTERS) OVER (ORDER BY FIGHTS desc) FIGHTERS from
+                                      (select FIGHTS,count(1) FIGHTERS from  (select FIGHTER,COUNT(DISTINCT EVENT||BOUT) FIGHTS from fs_cleaned group by 1) group by 1)
+                                  order by 1""").df()
+            fig = px.bar(fight_distro, x='FIGHTS',y='FIGHTERS', template='simple_white')
+            st.plotly_chart(fig,width='content',theme=None)
+            # st.bar_chart(fight_distro, x='FIGHTS',y='FIGHTERS')
+            st.divider()
             
-#             st.write('Most commonly used venues (2yr)')
-#             locations = duckdb.sql("SELECT LOCATION,count(distinct EVENT) EVENTS from fed where date between current_date() -730 and current_date() group by 1 order by 2 desc limit 10").df()
-#             fig = px.bar(locations.sort_values(by='EVENTS'), x='EVENTS',y='LOCATION', template='simple_white')
-#             st.plotly_chart(fig,width='content',theme=None)
+            st.write('Most commonly used venues (2yr)')
+            locations = duckdb.sql("SELECT LOCATION,count(distinct EVENT) EVENTS from fed where date between current_date() -730 and current_date() group by 1 order by 2 desc limit 10").df()
+            fig = px.bar(locations.sort_values(by='EVENTS'), x='EVENTS',y='LOCATION', template='simple_white')
+            st.plotly_chart(fig,width='content',theme=None)
            
-#             # base = alt.Chart(locations.sort_values(by='EVENTS')).mark_point().encode(x='EVENTS',y='LOCATION')
-#             # st.altair_chart(base)
+            # base = alt.Chart(locations.sort_values(by='EVENTS')).mark_point().encode(x='EVENTS',y='LOCATION')
+            # st.altair_chart(base)
     
-#             st.divider()
-#             st.write('Number of Fighters fought by Weight/Type (2yr)')
-#             fighters_by_class = duckdb.sql("""SELECT weightclass,count(distinct fighter) as fighters from 
-#                 (SELECT replace(weightclass,' Bout','') as weightclass,FIGHTER1 fighter from fr_cleaned where date between current_date() -730 and current_date() group by 1,2 
-#                 UNION 
-#                 SELECT replace(weightclass,' Bout','') as weightclass,FIGHTER2 fighter from fr_cleaned where date between current_date() -730 and current_date() group by 1,2)
-#                 group by 1
-#                 """).df()
-#             st.dataframe(fighters_by_class,hide_index=True)
+            st.divider()
+            st.write('Number of Fighters fought by Weight/Type (2yr)')
+            fighters_by_class = duckdb.sql("""SELECT weightclass,count(distinct fighter) as fighters from 
+                (SELECT replace(weightclass,' Bout','') as weightclass,FIGHTER1 fighter from fr_cleaned where date between current_date() -730 and current_date() group by 1,2 
+                UNION 
+                SELECT replace(weightclass,' Bout','') as weightclass,FIGHTER2 fighter from fr_cleaned where date between current_date() -730 and current_date() group by 1,2)
+                group by 1
+                """).df()
+            st.dataframe(fighters_by_class,hide_index=True)
     
-#         st.write("Method of winning as a percentage of all methods over time")
-#         frame = st.selectbox('Pick a time dimension',['year','quarter','month','week','day'])
-#         fr_cleaned_duck = fr_cleaned.copy()
+        st.write("Method of winning as a percentage of all methods over time")
+        frame = st.selectbox('Pick a time dimension',['year','quarter','month','week','day'])
+        fr_cleaned_duck = fr_cleaned.copy()
 
-#         methods_over_time = duckdb.sql(f"""
-#         SELECT 
-#             CASE WHEN METHOD LIKE 'Decision%' THEN 'Decision' ELSE METHOD END AS METHOD,
-#             date_trunc('{frame}', date) AS MONTH,
-#             count(*) / sum(sum(1)) OVER (PARTITION BY date_trunc('{frame}', date)) AS METHOD_PCT
-#         FROM fr_cleaned_duck
-#         GROUP BY 1, 2
-#         """).df()
-#         fig = px.area(methods_over_time, x='MONTH',y='METHOD_PCT',color='METHOD', template='simple_white')
-#         st.plotly_chart(fig,width='content',theme=None)
-#         # st.area_chart(methods_over_time, x='MONTH',y='METHOD_PCT',color='METHOD')
+        methods_over_time = duckdb.sql(f"""
+        SELECT 
+            CASE WHEN METHOD LIKE 'Decision%' THEN 'Decision' ELSE METHOD END AS METHOD,
+            date_trunc('{frame}', date) AS MONTH,
+            count(*) / sum(sum(1)) OVER (PARTITION BY date_trunc('{frame}', date)) AS METHOD_PCT
+        FROM fr_cleaned_duck
+        GROUP BY 1, 2
+        """).df()
+        fig = px.area(methods_over_time, x='MONTH',y='METHOD_PCT',color='METHOD', template='simple_white')
+        st.plotly_chart(fig,width='content',theme=None)
+        # st.area_chart(methods_over_time, x='MONTH',y='METHOD_PCT',color='METHOD')
 
 # if view[3]:
 #     with view[3]:
