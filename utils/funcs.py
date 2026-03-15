@@ -2,6 +2,7 @@ import psutil
 import streamlit as st
 import duckdb
 import pandas as pd
+import polars as pl 
 
 def get_memory_usage():
   memory_usage = psutil.virtual_memory().used
@@ -26,8 +27,8 @@ def getData():
   # fs_greco = pd.read_csv("https://raw.githubusercontent.com/Greco1899/scrape_ufc_stats/main/ufc_fight_stats.csv",engine='pyarrow',dtype_backend='pyarrow')
   # fs_backfill = duckdb.read_csv("https://raw.githubusercontent.com/ilya-peysakhov/grecoscraper/main/ufcdata/stats.csv").df()
   # fs = duckdb.sql("select * from fs_greco UNION select * from fs_backfill").df()
-  fs = pd.read_csv("https://raw.githubusercontent.com/Greco1899/scrape_ufc_stats/main/ufc_fight_stats.csv",engine='pyarrow',dtype_backend='pyarrow')
-  fs[['HEAD','BODY','LEG','DISTANCE','CLINCH','GROUND']] = fs[['HEAD','BODY','LEG','DISTANCE','CLINCH','GROUND']].astype(str)
+  fs = pl.read_csv("https://raw.githubusercontent.com/Greco1899/scrape_ufc_stats/main/ufc_fight_stats.csv").to_pandas()
+  # fs[['HEAD','BODY','LEG','DISTANCE','CLINCH','GROUND']] = fs[['HEAD','BODY','LEG','DISTANCE','CLINCH','GROUND']].astype(str)
   
   frd = duckdb.read_csv("https://raw.githubusercontent.com/Greco1899/scrape_ufc_stats/main/ufc_fighter_details.csv").df()
   ft = duckdb.read_csv("https://raw.githubusercontent.com/Greco1899/scrape_ufc_stats/main/ufc_fighter_tott.csv").df()
