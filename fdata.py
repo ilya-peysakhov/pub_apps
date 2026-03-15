@@ -380,16 +380,16 @@ if view[1].open:
 if view[4].open:
     with view[4]:
         st.write('Fighter Details (cleaned)')
-        st.dataframe(duckdb.sql("select * from fighters limit 5").df(),hide_index=True)
+        st.dataframe(duckdb.sql("select * from fighters limit 5").df(),hide_index=True, width='content')
         st.write('Events & Fights (cleaned)')
-        st.dataframe(duckdb.sql("SELECT * from fed limit 5").df(),hide_index=True)
+        st.dataframe(duckdb.sql("SELECT * from fed limit 5").df(),hide_index=True, width='content')
         st.write('Fight Results (cleaned)')
-        st.dataframe(duckdb.sql("SELECT * from fr_cleaned limit 5").df(),hide_index=True)
+        st.dataframe(duckdb.sql("SELECT * from fr_cleaned limit 5").df(),hide_index=True, width='content')
         st.write('Fight Stats')
-        st.dataframe(duckdb.sql("SELECT * from fs limit 5").df(),hide_index=True)
+        st.dataframe(duckdb.sql("SELECT * from fs limit 5").df(),hide_index=True, width='content')
         st.write("Data Check - Events without data")
         anomalies = duckdb.sql("select left(DATE::string,10) as DATE,ed_c.EVENT, count(BOUT) as bouts_with_stats from ed_c left join fs on ed_c.EVENT =fs.EVENT group by 1,2 having bouts_with_stats=0 order by 1 desc").df()
-        st.dataframe(anomalies,hide_index=True)
+        st.dataframe(anomalies,hide_index=True, width='content')
         
 # if view[5].open:
 #     with view[5]:
