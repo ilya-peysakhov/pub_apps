@@ -9,8 +9,8 @@ import plotly.express as px
 import numpy as np
 import plotly.graph_objects as go
 
-from utils.funcs import get_memory_usage, getData, cleanData, pullData, getFighters, query_fighter_data, \
-    oppStats, fed, fr_cleaned, fs_cleaned, fighters, ed_c, fed, fr_cleaned, fs_cleaned, fighters, ed_c
+from utils.funcs import get_memory_usage, getData, cleanData, pullData, getFighters, query_fighter_data,oppStats,\
+    fs,fed, fr_cleaned, fs_cleaned, fighters, ed_c, fed, fr_cleaned, fs_cleaned, fighters, ed_c
 ##################################
 
 def refreshData():
