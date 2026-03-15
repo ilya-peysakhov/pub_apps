@@ -316,11 +316,18 @@ if view[2].open:
         # FROM fr_cleaned_duck
         # GROUP BY 1, 2
         # """).df()     
-        
+        frame_map = {
+            'month': 'ME',
+            'quarter': 'QE', 
+            'year': 'YE',
+            'week': 'W',
+            'day': 'D'
+        }
+        freq = frame_map.get(frame, frame)
         methods_over_time = (
         fr_cleaned_duck
             .assign(METHOD=lambda x: x['METHOD'].str.replace(r'^Decision.*', 'Decision', regex=True),
-                    MONTH=lambda x: x['DATE'].dt.to_period(frame).dt.to_timestamp())
+                    MONTH=lambda x: x['DATE'].dt.to_period(freq).dt.to_timestamp())
             .groupby(['METHOD', 'MONTH'])
             .size()
             .reset_index(name='cnt')
