@@ -306,14 +306,13 @@ if view[2].open:
     
         st.write("Method of winning as a percentage of all methods over time")
         frame = st.selectbox('Pick a time dimension',['year','quarter','month','week','day'])
-        fr_cleaned_duck = fr_cleaned.copy()
         
         methods_one = duckdb.sql(f"""select
         CASE WHEN METHOD LIKE 'Decision%' THEN 'Decision' ELSE METHOD END AS METHOD,
         date_trunc('{frame}', date) AS MONTH,
         count(*) as bouts, 
            count(1) OVER (PARTITION BY date_trunc('{frame}', date) ) as total_bouts_in_frame
-        from fr_cleaned_duck
+        from fr_cleaned
         group by 1,2
          """).df()
         st.write(methods_one)
