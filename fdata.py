@@ -73,7 +73,7 @@ if view[1].open:
         
         f1, f2  = st.columns(2)
         with f1:
-            fighter_filter = st.selectbox('Pick a fighter',options=fighter_list)
+            fighter_filter = st.selectbox('Pick a fighter',options=fighter_list, width=400)
         
         with f2:
             with st.container(border=True):
