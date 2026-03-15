@@ -231,16 +231,24 @@ if view[1].open:
             
             st.divider()
             with st.expander("Career Results"):
-                career_results = duckdb.sql(f"SELECT left(DATE::string,10) AS DATE ,EVENT,case when FIGHTER1='{fighter_filter}' then FIGHTER2 else FIGHTER1 end as OPPONENT,case when FIGHTER1='{fighter_filter}' then FIGHTER1_OUTCOME else FIGHTER2_OUTCOME end as RESULT,METHOD,ROUND, TIME,DETAILS from fr_cleaned where FIGHTER1= '{fighter_filter}' or FIGHTER2='{fighter_filter}' order by DATE desc").df()
-                st.dataframe(career_results,hide_index=True)
+                try:
+                    career_results = duckdb.sql(f"SELECT left(DATE::string,10) AS DATE ,EVENT,case when FIGHTER1='{fighter_filter}' then FIGHTER2 else FIGHTER1 end as OPPONENT,case when FIGHTER1='{fighter_filter}' then FIGHTER1_OUTCOME else FIGHTER2_OUTCOME end as RESULT,METHOD,ROUND, TIME,DETAILS from fr_cleaned where FIGHTER1= '{fighter_filter}' or FIGHTER2='{fighter_filter}' order by DATE desc").df()
+                    st.dataframe(career_results,hide_index=True)
+                except Exception as e:
+                    st.caption('There may be duplicate fights in the data which are causing an issue since they are labeled the same')
+                    st.error(e)
     
         st.divider()
         with st.expander("Single Fight Stats"):
-            bout_filter = st.selectbox('Pick a bout',options=fights.drop_duplicates())
-            fight_results = duckdb.sql(f"SELECT * EXCLUDE (BOUT,FIGHTER,EVENT) from fs where replace(trim(BOUT),'  ',' ') ='{bout_filter}'  and trim(FIGHTER)='{fighter_filter}' ").df()
-            
-            if bout_filter:
-                 st.write(fight_results.set_index(fight_results.columns[0]).T)
+            try:
+                bout_filter = st.selectbox('Pick a bout',options=fights.drop_duplicates())
+                fight_results = duckdb.sql(f"SELECT * EXCLUDE (BOUT,FIGHTER,EVENT) from fs where replace(trim(BOUT),'  ',' ') ='{bout_filter}'  and trim(FIGHTER)='{fighter_filter}' ").df()
+                
+                if bout_filter:
+                     st.write(fight_results.set_index(fight_results.columns[0]).T)
+            except Exception as e:
+                st.caption('There may be duplicate fights in the data which are causing an issue since they are labeled the same')
+                st.error(e)
 
 # if view[4].open:
 #     with view[4]:
