@@ -306,23 +306,29 @@ if view[2].open:
     
         st.write("Method of winning as a percentage of all methods over time")
         frame = st.selectbox('Pick a time dimension',['year','quarter','month','week','day'])
-        con = duckdb.connect()
-        con.register('fr_cleaned', fr_cleaned)
-
-        methods_one = duckdb.sql(f"""select
-        CASE WHEN METHOD LIKE 'Decision%' THEN 'Decision' ELSE METHOD END AS METHOD,
-        date_trunc('{frame}', date) AS MONTH,
-        count(*) as bouts, 
-           count(1) OVER (PARTITION BY date_trunc('{frame}', date) ) as total_bouts_in_frame
-        from fr_cleaned
-        group by 1,2
-         """).df()
-        st.write(methods_one)
         
-        methods_over_time = duckdb.sql(f"""
-        SELECT METHOD, MONTH, bouts, bouts/total_bouts_in_frame AS METHOD_PCT
-        FROM methods_one
-        """).df()
+        methods_over_time = methods_one.copy()
+        
+        # Simplify Decision methods
+        methods_over_time['METHOD'] = methods_over_time['METHOD'].apply(
+            lambda x: 'Decision' if str(x).startswith('Decision') else x
+        )
+        
+        # Truncate date to the chosen frame
+        methods_over_time['MONTH'] = methods_over_time['date'].dt.to_period(
+            {'year': 'Y', 'month': 'M', 'week': 'W', 'quarter': 'Q'}.get(frame, 'M')
+        ).dt.to_timestamp()
+        
+        # Count bouts per METHOD + MONTH
+        methods_over_time = (
+            methods_over_time
+            .groupby(['METHOD', 'MONTH'], as_index=False)
+            .agg(bouts=('METHOD', 'count'))
+        )
+        
+        # Total bouts per MONTH (the window partition)
+        methods_over_time['METHOD_PCT'] = methods_over_time.groupby('MONTH')['bouts'].transform('sum')
+        
         fig = px.area(methods_over_time, x='MONTH',y='METHOD_PCT',color='METHOD', template='simple_white')
         st.plotly_chart(fig,width='content',theme=None)
         # st.area_chart(methods_over_time, x='MONTH',y='METHOD_PCT',color='METHOD')
