@@ -306,28 +306,26 @@ if view[2].open:
     
         st.write("Method of winning as a percentage of all methods over time")
         frame = st.selectbox('Pick a time dimension',['year','quarter','month','week','day'])
-            
-        # Simplify Decision methods
-        methods_over_time = fr_cleaned.copy()
-        methods_over_time['METHOD'] = fr_cleaned['METHOD'].apply(
-            lambda x: 'Decision' if str(x).startswith('Decision') else x
-        )
-        
-        # Truncate date to the chosen frame
-        methods_over_time['MONTH'] = methods_over_time['date'].dt.to_period(
-            {'year': 'Y', 'month': 'M', 'week': 'W', 'quarter': 'Q'}.get(frame, 'M')
-        ).dt.to_timestamp()
-        
-        # Count bouts per METHOD + MONTH
+        fr_cleaned_duck = fr_cleaned.copy()
+
+        # methods_over_time = duckdb.sql(f"""
+        # SELECT 
+        #     CASE WHEN METHOD LIKE 'Decision%' THEN 'Decision' ELSE METHOD END AS METHOD,
+        #     date_trunc('{frame}', date) AS MONTH,
+        #     count(*) / sum(sum(1)) OVER (PARTITION BY date_trunc('{frame}', date)) AS METHOD_PCT
+        # FROM fr_cleaned_duck
+        # GROUP BY 1, 2
+        # """).df()     
         methods_over_time = (
-            methods_over_time
-            .groupby(['METHOD', 'MONTH'], as_index=False)
-            .agg(bouts=('METHOD', 'count'))
+            fr_cleaned_duck
+            .assign(METHOD=lambda x: x['METHOD'].str.replace(r'^Decision.*', 'Decision', regex=True),
+                    MONTH=lambda x: x['date'].dt.to_period(frame).dt.to_timestamp())
+            .groupby(['METHOD', 'MONTH'])
+            .size()
+            .reset_index(name='cnt')
+            .assign(METHOD_PCT=lambda x: x['cnt'] / x.groupby('MONTH')['cnt'].transform('sum'))
+            .drop(columns='cnt')
         )
-        
-        # Total bouts per MONTH (the window partition)
-        methods_over_time['METHOD_PCT'] = methods_over_time.groupby('MONTH')['bouts'].transform('sum')
-        
         fig = px.area(methods_over_time, x='MONTH',y='METHOD_PCT',color='METHOD', template='simple_white')
         st.plotly_chart(fig,width='content',theme=None)
         # st.area_chart(methods_over_time, x='MONTH',y='METHOD_PCT',color='METHOD')
