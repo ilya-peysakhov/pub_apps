@@ -315,7 +315,8 @@ if view[2].open:
            count(1) OVER (PARTITION BY date_trunc('{frame}', date) ) as total_bouts_in_frame
         from fr_cleaned_duck
         group by 1,2
-         """)
+         """).df()
+        st.write(methods_one)
         
         methods_over_time = duckdb.sql(f"""
         SELECT METHOD, MONTH, bouts, bouts/total_bouts_in_frame AS METHOD_PCT
