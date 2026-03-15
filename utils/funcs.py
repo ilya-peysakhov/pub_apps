@@ -64,7 +64,8 @@ def cleanData():
   ft["FIGHTER"] = ft["FIGHTER"].str.replace("'", "")  # Replace single quotes in BOUT column
   fighters= duckdb.sql("SELECT trim(FIGHTER) as FIGHTER,HEIGHT,WEIGHT,REACH,STANCE,DOB,FIRST,LAST,NICKNAME,frd.URL from ft inner join frd on frd.URL = ft.URL where dob !='--'").df()
   return fed, fr_cleaned, fs_cleaned, fighters, ed_c
-
+  
+fed, fr_cleaned, fs_cleaned, fighters, ed_c = cleanData()
 def pullData():
   query = duckdb.sql(f"{query_text.strip()}")
   return query
