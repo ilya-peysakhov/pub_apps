@@ -395,7 +395,7 @@ elif view[3]:
             # Plot
             st.plotly_chart(fig, width='content',theme=None)
         
-        vizPlot()
+        # vizPlot()
 
 elif view[4].open:
     with view[4]:
