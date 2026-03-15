@@ -320,7 +320,7 @@ if view[2].open:
         methods_over_time = (
         fr_cleaned_duck
             .assign(METHOD=lambda x: x['METHOD'].str.replace(r'^Decision.*', 'Decision', regex=True),
-                    MONTH=lambda x: x['date'].dt.to_period(frame).dt.to_timestamp())
+                    MONTH=lambda x: x['DATE'].dt.to_period(frame).dt.to_timestamp())
             .groupby(['METHOD', 'MONTH'])
             .size()
             .reset_index(name='cnt')
