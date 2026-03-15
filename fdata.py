@@ -161,28 +161,28 @@ if view[1].open:
             
             str_a = duckdb.sql(f"SELECT DATE, sum(total_str_a::INT) as Total_Strikes_At from fighter_stats group by 1").df()
             fig = px.area(str_a, x='DATE', y='Total_Strikes_At', template='simple_white',title="Strikes Attempted")
-            flex.plotly_chart(fig,use_container_width=True,theme=None)
+            flex.plotly_chart(fig,width='content',theme=None)
             # st.area_chart(str_a, x='DATE', y='Total_Strikes_At')
            
             str_dif = duckdb.sql(f"SELECT a.DATE, sum(a.sig_str_l::INT)-sum(b.sig_str_l::INT) as Strike_Diff from fighter_stats as a inner join opp_stats as b on a.DATE = b.DATE and a.BOUT=b.BOUT and a.ROUND=b.ROUND group by 1").df()
             fig = px.area(str_dif, x='DATE', y='Strike_Diff', template='simple_white',title="Net Sig Strike Landed difference")
-            flex.plotly_chart(fig,use_container_width=True,theme=None)
+            flex.plotly_chart(fig,width='content',theme=None)
             # st.area_chart(str_dif, x='DATE', y='Strike_Diff')              
             
             td_a = duckdb.sql(f"SELECT DATE,  sum(td_a::int) TD_At from fighter_stats group by 1").df()
             fig = px.area(td_a, x='DATE', y='TD_At', template='simple_white',title="Takedowns Attempted")
-            flex2.plotly_chart(fig,use_container_width=True,theme=None)
+            flex2.plotly_chart(fig,width='content',theme=None)
             # st.area_chart(td_a, x='DATE', y='TD_At')
             
             td_dif = duckdb.sql(f"SELECT a.DATE, sum(a.td_a::INT)-sum(b.td_a::INT) as TD_At_Diff from fighter_stats as a inner join opp_stats as b on a.DATE = b.DATE and a.BOUT=b.BOUT and a.ROUND=b.ROUND group by 1").df()
             fig = px.area(td_dif, x='DATE', y='TD_At_Diff', template='simple_white',title="Net Takedown difference")
-            flex2.plotly_chart(fig,use_container_width=True,theme=None)
+            flex2.plotly_chart(fig,width='content',theme=None)
             # st.area_chart(td_dif, x='DATE', y='TD_At_Diff')
     
             st.divider()
             # cumulative_head_trauma = duckdb.sql(f"SELECT date, sum(sum(head_str_l::int)) over (order by date asc) head_str_l from fs_cleaned where BOUT in (select * from fights) and FIGHTER !='{fighter_filter}'  group by 1").df()
             # fig = px.area(cumulative_head_trauma, x='DATE',y='head_str_l',text='head_str_l',title='Cumulative Head Trauma')
-            # st.plotly_chart(fig,use_container_width=True)
+            # st.plotly_chart(fig,width='content')
             cumulative_head_trauma = duckdb.sql(f"""
                 SELECT 
                     date, 
@@ -233,7 +233,7 @@ if view[1].open:
                 yaxis=dict(range=[0, 2000])
             )
             
-            st.plotly_chart(fig, use_container_width=True,theme=None)
+            st.plotly_chart(fig, width='content',theme=None)
             
             st.divider()
             with st.expander("Career Results"):
@@ -272,7 +272,7 @@ if view[2].open:
             st.write("Fights by month")
             fights_monthly= duckdb.sql("SELECT date_trunc('month',date) as MONTH,count(*) as FIGHTS, count(distinct EVENT) as EVENTS from fed group by 1 order by 1 asc").df()
             fig = px.area(fights_monthly, x='MONTH',y=['FIGHTS','EVENTS'], template='simple_white')
-            st.plotly_chart(fig,use_container_width=True,theme=None)
+            st.plotly_chart(fig,width='content',theme=None)
             # st.area_chart(fights_monthly, x='MONTH',y='FIGHTS')
             
             st.divider()
@@ -284,7 +284,7 @@ if view[2].open:
             st.write("Fights by result method (2yr)")
             methods = duckdb.sql("SELECT method, count(*) FIGHTS from fr_cleaned where date between current_date() -730 and current_date() group by 1 ").df()
             fig = px.pie(methods,values='FIGHTS', names='METHOD', template='simple_white')
-            st.plotly_chart(fig,use_container_width=True,theme=None)
+            st.plotly_chart(fig,width='content',theme=None)
             # base = alt.Chart(methods).encode(alt.Theta("FIGHTS:Q").stack(True),alt.Color("METHOD:N").legend(None),alt.Tooltip("METHOD:N", title="METHOD"))
             # pie = base.mark_arc(outerRadius=120)
             # st.altair_chart(pie)
@@ -296,14 +296,14 @@ if view[2].open:
                                       (select FIGHTS,count(1) FIGHTERS from  (select FIGHTER,COUNT(DISTINCT EVENT||BOUT) FIGHTS from fs_cleaned group by 1) group by 1)
                                   order by 1""").df()
             fig = px.bar(fight_distro, x='FIGHTS',y='FIGHTERS', template='simple_white')
-            st.plotly_chart(fig,use_container_width=True,theme=None)
+            st.plotly_chart(fig,width='content',theme=None)
             # st.bar_chart(fight_distro, x='FIGHTS',y='FIGHTERS')
             st.divider()
             
             st.write('Most commonly used venues (2yr)')
             locations = duckdb.sql("SELECT LOCATION,count(distinct EVENT) EVENTS from fed where date between current_date() -730 and current_date() group by 1 order by 2 desc limit 10").df()
             fig = px.bar(locations.sort_values(by='EVENTS'), x='EVENTS',y='LOCATION', template='simple_white')
-            st.plotly_chart(fig,use_container_width=True,theme=None)
+            st.plotly_chart(fig,width='content',theme=None)
            
             # base = alt.Chart(locations.sort_values(by='EVENTS')).mark_point().encode(x='EVENTS',y='LOCATION')
             # st.altair_chart(base)
@@ -331,7 +331,7 @@ if view[2].open:
         GROUP BY 1, 2
         """).df()
         fig = px.area(methods_over_time, x='MONTH',y='METHOD_PCT',color='METHOD', template='simple_white')
-        st.plotly_chart(fig,use_container_width=True,theme=None)
+        st.plotly_chart(fig,width='content',theme=None)
         # st.area_chart(methods_over_time, x='MONTH',y='METHOD_PCT',color='METHOD')
 
 if view[3]:
@@ -362,7 +362,7 @@ if view[3]:
             chart_metric2 = c2.selectbox('Choose a second metric to plot',combined_stats.columns)
             viz_data = duckdb.sql(f"select FIGHTER, {chart_metric1}, {chart_metric2} from combined_stats ").df()
             # fig = px.scatter(viz_data, x=chart_metric1,y=chart_metric2, text='FIGHTER', template='simple_white')
-            # st.plotly_chart(fig, use_container_width=True)
+            # st.plotly_chart(fig, width='content')
             x = viz_data[chart_metric1]
             y = viz_data[chart_metric2]
             slope, intercept = np.polyfit(x, y, 1)
@@ -387,7 +387,7 @@ if view[3]:
             ))
             
             # Plot
-            st.plotly_chart(fig, use_container_width=True,theme=None)
+            st.plotly_chart(fig, width='content',theme=None)
         
         vizPlot()
     
