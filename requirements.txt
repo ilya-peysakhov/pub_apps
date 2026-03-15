@@ -1,6 +1,6 @@
 streamlit
 pandas
-pyarrow
+polars
 duckdb
 streamlit-ace
 plotly
