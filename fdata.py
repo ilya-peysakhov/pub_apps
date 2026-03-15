@@ -308,6 +308,7 @@ if view[2].open:
         frame = st.selectbox('Pick a time dimension',['year','quarter','month','week','day'])
             
         # Simplify Decision methods
+        methods_over_time = fr_cleaned.copy()
         methods_over_time['METHOD'] = fr_cleaned['METHOD'].apply(
             lambda x: 'Decision' if str(x).startswith('Decision') else x
         )
