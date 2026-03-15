@@ -336,7 +336,7 @@ if view[2].open:
         )
         
         fig = px.area(methods_over_time, x='MONTH',y='METHOD_PCT',color='METHOD', template='simple_white')
-        st.plotly_chart(fig,width='content',theme=None)
+        st.plotly_chart(fig,width='stretch',theme=None)
         # st.area_chart(methods_over_time, x='MONTH',y='METHOD_PCT',color='METHOD')
 
 # if view[3]:
