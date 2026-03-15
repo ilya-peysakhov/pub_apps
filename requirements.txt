@@ -6,3 +6,4 @@ streamlit-ace
 plotly
 psutil
 streamlit-extras
+streamlit[starlette]
