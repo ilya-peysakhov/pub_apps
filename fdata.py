@@ -45,7 +45,6 @@ st.set_page_config(page_icon="👊", page_title="UFC Stats Explorer v1.0", layou
 view = st.tabs(['Welcome','Fighter One Sheet','Interesting Stats','Aggregate Table','Show all dataset samples','SQL Editor','Tale of the Tape'], on_change='rerun')
 
 ###################### data pull and clean
-ed, fd, fr, fs, frd, ft = getData()
 fed, fr_cleaned, fs_cleaned, fighters, ed_c = cleanData()
 
 ########################
