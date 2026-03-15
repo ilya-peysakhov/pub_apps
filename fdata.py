@@ -249,20 +249,6 @@ if view[1].open:
             except Exception as e:
                 st.caption('There may be duplicate fights in the data which are causing an issue since they are labeled the same')
                 st.error(e)
-
-if view[4].open:
-    with view[4]:
-        st.write('Fighter Details (cleaned)')
-        st.dataframe(duckdb.sql("select * from fighters limit 5").df(),hide_index=True)
-        st.write('Events & Fights (cleaned)')
-        st.dataframe(duckdb.sql("SELECT * from fed limit 5").df(),hide_index=True)
-        st.write('Fight Results (cleaned)')
-        st.dataframe(duckdb.sql("SELECT * from fr_cleaned limit 5").df(),hide_index=True)
-        st.write('Fight Stats')
-        st.dataframe(duckdb.sql("SELECT * from fs limit 5").df(),hide_index=True)
-        st.write("Data Check - Events without data")
-        anomalies = duckdb.sql("select left(DATE::string,10) as DATE,ed_c.EVENT, count(BOUT) as bouts_with_stats from ed_c left join fs on ed_c.EVENT =fs.EVENT group by 1,2 having bouts_with_stats=0 order by 1 desc").df()
-        st.dataframe(anomalies,hide_index=True)
         
 # if view[2].open:
 #     with view[2]:
@@ -390,7 +376,21 @@ if view[4].open:
 #             st.plotly_chart(fig, width='content',theme=None)
         
 #         vizPlot()
-    
+
+if view[4].open:
+    with view[4]:
+        st.write('Fighter Details (cleaned)')
+        st.dataframe(duckdb.sql("select * from fighters limit 5").df(),hide_index=True)
+        st.write('Events & Fights (cleaned)')
+        st.dataframe(duckdb.sql("SELECT * from fed limit 5").df(),hide_index=True)
+        st.write('Fight Results (cleaned)')
+        st.dataframe(duckdb.sql("SELECT * from fr_cleaned limit 5").df(),hide_index=True)
+        st.write('Fight Stats')
+        st.dataframe(duckdb.sql("SELECT * from fs limit 5").df(),hide_index=True)
+        st.write("Data Check - Events without data")
+        anomalies = duckdb.sql("select left(DATE::string,10) as DATE,ed_c.EVENT, count(BOUT) as bouts_with_stats from ed_c left join fs on ed_c.EVENT =fs.EVENT group by 1,2 having bouts_with_stats=0 order by 1 desc").df()
+        st.dataframe(anomalies,hide_index=True)
+        
 # if view[5].open:
 #     with view[5]:
 #         st.write("Write custom sql on the data using [🦆duckdb](https://duckdb.org/docs/archive/0.9.2/sql/introduction)")
