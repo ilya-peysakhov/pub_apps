@@ -341,19 +341,13 @@ elif view[2].open:
 
 elif view[3].open:
     with view[3]:
-        min_fights = st.number_input('Minimum Fights',step=1,value=20)
+        min_fights = st.number_input('Minimum Fights',step=1,value=10,width=100)
         st.write(f"Minimum {min_fights} fights, historical rankings for total career offensive and defensive stats")
-    
-        with st.spinner('Filtering Fighters...'):
-            fighters = getFighters(min_fights)
-        
-        str_results = pd.DataFrame()
-        
+            
         with st.spinner('Gathering Offense...'):
             all_time_offense = duckdb.sql(f"SELECT FIGHTER, COUNT(DISTINCT BOUT||EVENT) as FIGHTS, COUNT(*) AS ROUNDS,  ROUND(ROUNDS/CAST(FIGHTS as REAL),1) as ROUNDS_PER_FIGHT ,SUM(head_str_l::INTEGER) AS HEAD_STRIKES_LANDED, SUM(leg_str_l::INTEGER) as LEG_STRIKES_LANDED,sum(sig_str_l::INTEGER) as SIG_STRIKES_LANDED,sum(KD::INTEGER) as KD_LANDED, sum(TD_L::INT) as TD_LANDED from fs_cleaned group by 1 having FIGHTS>={min_fights}")
           
         with st.spinner('Gathering Defense...'):
-          # str_results = oppStats()
             str_results= opp_stats()
         
         with st.spinner('Combining all data...'):
