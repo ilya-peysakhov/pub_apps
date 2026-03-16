@@ -339,7 +339,7 @@ elif view[2].open:
         st.plotly_chart(fig,width='stretch',theme=None)
         # st.area_chart(methods_over_time, x='MONTH',y='METHOD_PCT',color='METHOD')
 
-elif view[3]:
+elif view[3].open:
     with view[3]:
         min_fights = st.number_input('Minimum Fights',step=1,value=20)
         st.write(f"Minimum {min_fights} fights, historical rankings for total career offensive and defensive stats")
