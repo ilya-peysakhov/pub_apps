@@ -463,92 +463,92 @@ elif view[5].open:
                     
                 except Exception as e:
                   st.write(e)
-# if view[6].open:
-#     with view[6]:
-#       st.write('Compare advanced metrics between 2 fighters')
-#       c1, c2, c3 = st.columns(3)
+if view[6].open:
+    with view[6]:
+      st.write('Compare advanced metrics between 2 fighters')
+      c1, c2, c3 = st.columns(3)
     
-#       fighter1_filter = c1.selectbox('Pick Fighter 1', options=fighter_list)
-#       fights1 = duckdb.sql(f"SELECT BOUT from fr_cleaned where FIGHTER1 = '{fighter1_filter}' or FIGHTER2='{fighter1_filter}'").df()
-#       fighter_stats1 = duckdb.sql(f"SELECT * from fs_cleaned where BOUT in (select BOUT from fights1) and FIGHTER ='{fighter1_filter}' ")
-#       cleaned_fighter_stats1 = duckdb.sql("SELECT sum(sig_str_l::INTEGER) as sig_str, sum(head_str_l::INTEGER) as head_str, sum(td_l::INTEGER) as td_l, round(sum(td_l::INTEGER)/cast(sum(td_a::REAL) as REAL),2)  as td_rate, sum(kd::INTEGER) as kd, from fighter_stats1").df()
-#       opp_stats1 = duckdb.sql(f"SELECT * from fs_cleaned where BOUT in (select * from fights1) and FIGHTER !='{fighter1_filter}' ")
-#       cleaned_opp_stats1 = duckdb.sql("SELECT sum(sig_str_l::INTEGER) as sig_abs ,sum(head_str_l::INTEGER) as head_abs,sum(head_str_a::INTEGER) as head_at,sum(td_l::INTEGER) as td_abs,round(sum(td_l::INTEGER)/cast(sum(td_a::REAL) as REAL),2) as td_abs_rate,sum(kd::INTEGER) as kd_abs from opp_stats1").df()
+      fighter1_filter = c1.selectbox('Pick Fighter 1', options=fighter_list)
+      fights1 = duckdb.sql(f"SELECT BOUT from fr_cleaned where FIGHTER1 = '{fighter1_filter}' or FIGHTER2='{fighter1_filter}'").df()
+      fighter_stats1 = duckdb.sql(f"SELECT * from fs_cleaned where BOUT in (select BOUT from fights1) and FIGHTER ='{fighter1_filter}' ")
+      cleaned_fighter_stats1 = duckdb.sql("SELECT sum(sig_str_l::INTEGER) as sig_str, sum(head_str_l::INTEGER) as head_str, sum(td_l::INTEGER) as td_l, round(sum(td_l::INTEGER)/cast(sum(td_a::REAL) as REAL),2)  as td_rate, sum(kd::INTEGER) as kd, from fighter_stats1").df()
+      opp_stats1 = duckdb.sql(f"SELECT * from fs_cleaned where BOUT in (select * from fights1) and FIGHTER !='{fighter1_filter}' ")
+      cleaned_opp_stats1 = duckdb.sql("SELECT sum(sig_str_l::INTEGER) as sig_abs ,sum(head_str_l::INTEGER) as head_abs,sum(head_str_a::INTEGER) as head_at,sum(td_l::INTEGER) as td_abs,round(sum(td_l::INTEGER)/cast(sum(td_a::REAL) as REAL),2) as td_abs_rate,sum(kd::INTEGER) as kd_abs from opp_stats1").df()
     
-#       metric_width = 'content'
-#       sig_strike_diff = round(cleaned_fighter_stats1['sig_str']/cleaned_opp_stats1['sig_abs'],1)
-#       c1.metric('Significant Strikes Differential',width=metric_width, value=sig_strike_diff,border=True)
-#       head_strike_diff = round(cleaned_fighter_stats1['head_str']/cleaned_opp_stats1['head_abs'],1)
-#       c1.metric('Head Strikes Differential',width=metric_width, value=head_strike_diff,border=True)
-#       power_diff = round(cleaned_fighter_stats1['kd']/cleaned_opp_stats1['kd_abs'],1)
-#       c1.metric('Power Differential (Knockdowns)',width=metric_width, value=power_diff,border=True)
-#       td_landed = int(cleaned_fighter_stats1['td_l'].iloc[0])
-#       c1.metric(label='Total Takedowns Landed',width=metric_width,value=td_landed,delta="{0:.0%}".format(round(float(cleaned_fighter_stats1['td_rate'].iloc[0]),2)),border=True)
-#       td_given = int(cleaned_opp_stats1['td_abs'].iloc[0])
-#       c1.metric(label='Total Takedowns Given Up',width=metric_width,value=td_given,delta="{0:.0%}".format(round(float(cleaned_opp_stats1['td_abs_rate'].iloc[0]),2)),border=True)
-#       td_diff = round(cleaned_fighter_stats1['td_l']/cleaned_opp_stats1['td_abs'],1)
-#       c1.metric('Takedown Differential',width=metric_width, value=td_diff,border=True)
-#       c1.caption('Success rate at evading head strikes')
-#       head_movement1 = round(1-(cleaned_opp_stats1['head_abs']/cleaned_opp_stats1['head_at']),2)
-#       c1.metric('Head Movement',width=metric_width, value=head_movement1,border=True)
+      metric_width = 'content'
+      sig_strike_diff = round(cleaned_fighter_stats1['sig_str']/cleaned_opp_stats1['sig_abs'],1)
+      c1.metric('Significant Strikes Differential',width=metric_width, value=sig_strike_diff,border=True)
+      head_strike_diff = round(cleaned_fighter_stats1['head_str']/cleaned_opp_stats1['head_abs'],1)
+      c1.metric('Head Strikes Differential',width=metric_width, value=head_strike_diff,border=True)
+      power_diff = round(cleaned_fighter_stats1['kd']/cleaned_opp_stats1['kd_abs'],1)
+      c1.metric('Power Differential (Knockdowns)',width=metric_width, value=power_diff,border=True)
+      td_landed = int(cleaned_fighter_stats1['td_l'].iloc[0])
+      c1.metric(label='Total Takedowns Landed',width=metric_width,value=td_landed,delta="{0:.0%}".format(round(float(cleaned_fighter_stats1['td_rate'].iloc[0]),2)),border=True)
+      td_given = int(cleaned_opp_stats1['td_abs'].iloc[0])
+      c1.metric(label='Total Takedowns Given Up',width=metric_width,value=td_given,delta="{0:.0%}".format(round(float(cleaned_opp_stats1['td_abs_rate'].iloc[0]),2)),border=True)
+      td_diff = round(cleaned_fighter_stats1['td_l']/cleaned_opp_stats1['td_abs'],1)
+      c1.metric('Takedown Differential',width=metric_width, value=td_diff,border=True)
+      c1.caption('Success rate at evading head strikes')
+      head_movement1 = round(1-(cleaned_opp_stats1['head_abs']/cleaned_opp_stats1['head_at']),2)
+      c1.metric('Head Movement',width=metric_width, value=head_movement1,border=True)
       
-#       fighter2_filter = c2.selectbox('Pick Fighter 2', options=fighter_list)
-#       fights2 = duckdb.sql(f"SELECT BOUT from fr_cleaned where FIGHTER1 = '{fighter2_filter}' or FIGHTER2='{fighter2_filter}'").df()
-#       fighter_stats2 = duckdb.sql(f"SELECT * from fs_cleaned where BOUT in (select BOUT from fights2) and FIGHTER ='{fighter2_filter}' ")
-#       cleaned_fighter_stats2 = duckdb.sql("SELECT sum(sig_str_l::INTEGER) as sig_str, sum(head_str_l::INTEGER) as head_str, sum(td_l::INTEGER) as td_l, round(sum(td_l::INTEGER)/cast(sum(td_a::REAL) as REAL),2)  as td_rate, sum(kd::INTEGER) as kd, from fighter_stats2").df()
-#       opp_stats2 = duckdb.sql(f"SELECT * from fs_cleaned where BOUT in (select * from fights2) and FIGHTER !='{fighter2_filter}' ")
-#       cleaned_opp_stats2 = duckdb.sql("SELECT sum(sig_str_l::INTEGER) as sig_abs ,sum(head_str_l::INTEGER) as head_abs,sum(head_str_a::INTEGER) as head_at,sum(td_l::INTEGER) as td_abs,round(sum(td_l::INTEGER)/cast(sum(td_a::REAL) as REAL),2) as td_abs_rate,sum(kd::INTEGER) as kd_abs from opp_stats2").df()
+      fighter2_filter = c2.selectbox('Pick Fighter 2', options=fighter_list)
+      fights2 = duckdb.sql(f"SELECT BOUT from fr_cleaned where FIGHTER1 = '{fighter2_filter}' or FIGHTER2='{fighter2_filter}'").df()
+      fighter_stats2 = duckdb.sql(f"SELECT * from fs_cleaned where BOUT in (select BOUT from fights2) and FIGHTER ='{fighter2_filter}' ")
+      cleaned_fighter_stats2 = duckdb.sql("SELECT sum(sig_str_l::INTEGER) as sig_str, sum(head_str_l::INTEGER) as head_str, sum(td_l::INTEGER) as td_l, round(sum(td_l::INTEGER)/cast(sum(td_a::REAL) as REAL),2)  as td_rate, sum(kd::INTEGER) as kd, from fighter_stats2").df()
+      opp_stats2 = duckdb.sql(f"SELECT * from fs_cleaned where BOUT in (select * from fights2) and FIGHTER !='{fighter2_filter}' ")
+      cleaned_opp_stats2 = duckdb.sql("SELECT sum(sig_str_l::INTEGER) as sig_abs ,sum(head_str_l::INTEGER) as head_abs,sum(head_str_a::INTEGER) as head_at,sum(td_l::INTEGER) as td_abs,round(sum(td_l::INTEGER)/cast(sum(td_a::REAL) as REAL),2) as td_abs_rate,sum(kd::INTEGER) as kd_abs from opp_stats2").df()
     
-#       sig_strike_diff2 = round(cleaned_fighter_stats2['sig_str']/cleaned_opp_stats2['sig_abs'],1)
-#       c2.metric('Significant Strikes Differential',width=metric_width, value=sig_strike_diff2,border=True)
-#       head_strike_diff2 = round(cleaned_fighter_stats2['head_str']/cleaned_opp_stats2['head_abs'],1)
-#       c2.metric('Head Strikes Differential',width=metric_width, value=head_strike_diff2,border=True)
-#       power_diff2 = round(cleaned_fighter_stats2['kd']/cleaned_opp_stats2['kd_abs'],1)
-#       c2.metric('Power Differential (Knockdowns)',width=metric_width, value=power_diff2,border=True)
-#       td_landed_2 = int(cleaned_fighter_stats2['td_l'].iloc[0])
-#       c2.metric(label='Total Takedowns Landed',width=metric_width,value=td_landed_2,delta="{0:.0%}".format(round(float(cleaned_fighter_stats2['td_rate'].iloc[0]),2)),border=True)
-#       td_given_2 = int(cleaned_opp_stats2['td_abs'].iloc[0])
-#       c2.metric(label='Total Takedowns Given Up',width=metric_width,value=td_given_2,delta="{0:.0%}".format(round(float(cleaned_opp_stats2['td_abs_rate'].iloc[0]),2)),border=True)
-#       td_diff = round(cleaned_fighter_stats2['td_l']/cleaned_opp_stats2['td_abs'],1)
-#       c2.metric('Takedown Differential',width=metric_width, value=td_diff,border=True)
-#       c2.caption('Success rate at evading head strikes')
-#       head_movement2 = round(1-(cleaned_opp_stats2['head_abs']/cleaned_opp_stats2['head_at']),2)
-#       c2.metric('Head Movement',width=metric_width, value=head_movement2,border=True)
-#       with c3:
-#           fighter1_advantage_counter = 0
-#           fighter2_advantage_counter = 0
+      sig_strike_diff2 = round(cleaned_fighter_stats2['sig_str']/cleaned_opp_stats2['sig_abs'],1)
+      c2.metric('Significant Strikes Differential',width=metric_width, value=sig_strike_diff2,border=True)
+      head_strike_diff2 = round(cleaned_fighter_stats2['head_str']/cleaned_opp_stats2['head_abs'],1)
+      c2.metric('Head Strikes Differential',width=metric_width, value=head_strike_diff2,border=True)
+      power_diff2 = round(cleaned_fighter_stats2['kd']/cleaned_opp_stats2['kd_abs'],1)
+      c2.metric('Power Differential (Knockdowns)',width=metric_width, value=power_diff2,border=True)
+      td_landed_2 = int(cleaned_fighter_stats2['td_l'].iloc[0])
+      c2.metric(label='Total Takedowns Landed',width=metric_width,value=td_landed_2,delta="{0:.0%}".format(round(float(cleaned_fighter_stats2['td_rate'].iloc[0]),2)),border=True)
+      td_given_2 = int(cleaned_opp_stats2['td_abs'].iloc[0])
+      c2.metric(label='Total Takedowns Given Up',width=metric_width,value=td_given_2,delta="{0:.0%}".format(round(float(cleaned_opp_stats2['td_abs_rate'].iloc[0]),2)),border=True)
+      td_diff = round(cleaned_fighter_stats2['td_l']/cleaned_opp_stats2['td_abs'],1)
+      c2.metric('Takedown Differential',width=metric_width, value=td_diff,border=True)
+      c2.caption('Success rate at evading head strikes')
+      head_movement2 = round(1-(cleaned_opp_stats2['head_abs']/cleaned_opp_stats2['head_at']),2)
+      c2.metric('Head Movement',width=metric_width, value=head_movement2,border=True)
+      with c3:
+          fighter1_advantage_counter = 0
+          fighter2_advantage_counter = 0
           
-#           if sig_strike_diff.iloc[0] >sig_strike_diff2.iloc[0]:
-#               fighter1_advantage_counter += 1
-#           else:
-#               fighter2_advantage_counter += 1
+          if sig_strike_diff.iloc[0] >sig_strike_diff2.iloc[0]:
+              fighter1_advantage_counter += 1
+          else:
+              fighter2_advantage_counter += 1
           
-#           if head_strike_diff.iloc[0] >head_strike_diff.iloc[0]:
-#               fighter1_advantage_counter += 1
-#           else:
-#               fighter2_advantage_counter += 1
+          if head_strike_diff.iloc[0] >head_strike_diff.iloc[0]:
+              fighter1_advantage_counter += 1
+          else:
+              fighter2_advantage_counter += 1
               
-#           if power_diff.iloc[0] >power_diff2.iloc[0]:
-#               fighter1_advantage_counter += 1
-#           else:
-#               fighter2_advantage_counter += 1
+          if power_diff.iloc[0] >power_diff2.iloc[0]:
+              fighter1_advantage_counter += 1
+          else:
+              fighter2_advantage_counter += 1
               
-#           if td_landed >td_landed_2:
-#               fighter1_advantage_counter += 1
-#           else:
-#               fighter2_advantage_counter += 1    
+          if td_landed >td_landed_2:
+              fighter1_advantage_counter += 1
+          else:
+              fighter2_advantage_counter += 1    
        
-#           if head_movement1.iloc[0] >head_movement2.iloc[0]:
-#               fighter1_advantage_counter += 1
-#           else:
-#               fighter2_advantage_counter += 1    
+          if head_movement1.iloc[0] >head_movement2.iloc[0]:
+              fighter1_advantage_counter += 1
+          else:
+              fighter2_advantage_counter += 1    
           
-#           if fighter1_advantage_counter>fighter2_advantage_counter:
-#               advantage_diff = fighter1_advantage_counter -fighter2_advantage_counter
-#               st.write(f'{fighter1_filter} has {advantage_diff} more advantages to win the fight')
-#           else:
-#               advantage_diff = fighter2_advantage_counter -fighter1_advantage_counter
-#               st.write(f'{fighter2_filter} has {advantage_diff} more advantages to win the fight')
+          if fighter1_advantage_counter>fighter2_advantage_counter:
+              advantage_diff = fighter1_advantage_counter -fighter2_advantage_counter
+              st.write(f'{fighter1_filter} has {advantage_diff} more advantages to win the fight')
+          else:
+              advantage_diff = fighter2_advantage_counter -fighter1_advantage_counter
+              st.write(f'{fighter2_filter} has {advantage_diff} more advantages to win the fight')
         
 ###################END OF APP########################################  
 st.divider()
