@@ -462,7 +462,7 @@ elif view[5].open:
             if query_text:
                 try:
                   with st.spinner('Running Query'):
-                    data = pullData()
+                    data = pullData(query_text)
                     data = data.df()
                     st.caption('Displaying 1,000 rows')
                     st.dataframe(data.head(1000), hide_index=True)
