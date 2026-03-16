@@ -75,7 +75,7 @@ def cleanData():
   
 fed, fr_cleaned, fs_cleaned, fighters, ed_c = cleanData()
 
-def pullData():
+def pullData(query_text):
   query = duckdb.sql(f"{query_text.strip()}")
   return query
 
