@@ -29,10 +29,190 @@ def calcFighterStats(fighter):
     cleaned_opp_stats = duckdb.sql("SELECT sum(sig_str_l::INTEGER) as sig_abs ,sum(head_str_l::INTEGER) as head_abs,sum(head_str_a::INTEGER) as head_at,sum(td_l::INTEGER) as td_abs,round(sum(td_l::INTEGER)/cast(sum(td_a::REAL) as REAL),2) as td_abs_rate,sum(kd::INTEGER) as kd_abs from opp_stats").df()
     ko_losses = duckdb.sql(f"SELECT count(*) as s from fr_cleaned where ((FIGHTER1='{fighter}' and FIGHTER1_OUTCOME='L') OR (FIGHTER2='{fighter}' and FIGHTER2_OUTCOME='L')) and trim(METHOD)='KO/TKO' ").df()
     return winloss, last_fight, fighter_stats, cleaned_fighter_stats, ko_wins, opp_stats, cleaned_opp_stats, ko_losses
-    
+
 st.set_page_config(page_icon="👊", page_title="UFC Stats Explorer v1.0", layout="wide",initial_sidebar_state='collapsed')
 
+@st.fragment
+def render_one_sheet():
+    st.text('Display all relevant fighter stats in just 1 click. Choose your fighter below to get started')
+        
+    f1, f2  = st.columns(2)
+    with f1:
+        fighter_filter = st.selectbox('Pick a fighter',options=fighter_list, width=400)
+    
+    with f2:
+        with st.container(border=True):
+            analysis_lengths = ['Career','Last X fights']
+            analysis_length = st.radio("Analysis Length",(analysis_lengths),horizontal=True)
+            if analysis_length==analysis_lengths[1]:
+                al = st.number_input('Number of recent fights to analyze',step=1,min_value=1)
+                fr_cleaned = duckdb.sql(f"select * from fr_cleaned where FIGHTER1 = '{fighter_filter}' or FIGHTER2='{fighter_filter}' order by date desc limit {al}").df()
+                
+    st.divider()
+    fights = duckdb.sql(f"SELECT BOUT from fr_cleaned where FIGHTER1 = '{fighter_filter}' or FIGHTER2='{fighter_filter}'").df() 
+    if len(fights)==0:
+        st.write("No data for this fighter")
+    else:
+      winloss, last_fight, fighter_stats, cleaned_fighter_stats, ko_wins, opp_stats, cleaned_opp_stats, ko_losses =  calcFighterStats(fighter_filter)
+    
+    if fighter_filter:
+        col1,col2,col3,col4,col5 = st.columns([0.3,0.5,0.3,0.5,0.6])
+        with col1:
+            st.subheader('Bio')
+            st.divider()
+            st.metric(label='Height',value=str(duckdb.sql(f"SELECT HEIGHT FROM fighters WHERE FIGHTER = '{fighter_filter}'").df().iloc[0,0]),border=True)
+            st.metric(label='Division',value=str(duckdb.sql(f"SELECT WEIGHT FROM fighters WHERE FIGHTER = '{fighter_filter}'").df().iloc[0,0]),border=True)
+            st.metric(label='Reach', value=str(duckdb.sql(f"SELECT REACH FROM fighters WHERE FIGHTER = '{fighter_filter}'").df().iloc[0,0]),border=True)
+            
+            dob_str = str(duckdb.sql(f"SELECT DOB FROM fighters WHERE FIGHTER = '{fighter_filter}'").df().iloc[0,0])
+            dob = datetime.datetime.strptime(dob_str, '%b %d, %Y')
+            age = datetime.datetime.now() - dob
+            age_years = age.days // 365
+            st.metric(label='Age',value=age_years,delta=dob_str)
+            if len(fights) >0:
+                st.metric(label='Last Fought', value=str(last_fight['days_since'].values[0]), delta=str(last_fight['max_date'].values[0]))
 
+        with col2:
+            st.subheader('Highlights')
+            st.divider()
+            w1,w2 = st.columns(2)
+            with w1:
+                st.metric(label='UFC Fights',value=len(fights),border=True)
+                st.metric(label='Rounds',value=fighter_stats.shape[0],border=True)
+            with w2:
+                st.metric(label='Wins',value=len(duckdb.sql("SELECT * from winloss where result='W'").df()) ,border=True)
+                st.metric(label='Losses',value=len(duckdb.sql("SELECT * from winloss where result='L'").df()),border=True)
+            
+            st.metric(label='KO/TKO Wins',value=int(ko_wins['s'].iloc[0]),border=True)
+            st.metric(label='KO/TKO Losses',value=int(ko_losses['s'].iloc[0]),border=True)
+            
+        with col3:
+            st.subheader('Striking')
+            st.divider()
+            st.metric(label='Significant Strikes Absored',value=int(cleaned_opp_stats['sig_abs'].iloc[0]),border=True)
+            st.metric(label='Head Strikes Absored',value=int(cleaned_opp_stats['head_abs'].iloc[0]),border=True)
+            st.metric(label='Significant Strikes Landed',value=int(cleaned_fighter_stats['sig_str'].iloc[0]),border=True)
+            st.metric(label='Head Strikes Landed',value=int(cleaned_fighter_stats['head_str'].iloc[0]),border=True)
+            st.metric(label='Knockdowns Landed',value=int(cleaned_fighter_stats['kd'].iloc[0]),border=True)
+            st.metric(label='Knockdowns Absored',value=int(cleaned_opp_stats['kd_abs'].iloc[0]),border=True)
+            
+        with col4:
+            st.subheader('Wrestling')
+            st.divider()
+            st.metric(label='Total Takedowns Landed',value=int(cleaned_fighter_stats['td_l'].iloc[0]),delta="{0:.0%}".format(round(float(cleaned_fighter_stats['td_rate'].iloc[0]),2)),border=True)
+            st.metric(label='Total Takedowns Given Up',value=int(cleaned_opp_stats['td_abs'].iloc[0]),delta="{0:.0%}".format(round(float(cleaned_opp_stats['td_abs_rate'].iloc[0]),2)),border=True)
+            
+        with col5:
+            st.subheader('Adv. Stats')
+            st.divider()
+            st.metric('Significant Strikes Differential',value=round(cleaned_fighter_stats['sig_str']/cleaned_opp_stats['sig_abs'],1),border=True)
+            st.metric('Head Strikes Differential',value=round(cleaned_fighter_stats['head_str']/cleaned_opp_stats['head_abs'],1),border=True)
+            st.metric('Power Differential (Knockdowns)',value=round(cleaned_fighter_stats['kd']/cleaned_opp_stats['kd_abs'],1),border=True)
+            st.metric('Takedown Differential',value=round(cleaned_fighter_stats['td_l']/cleaned_opp_stats['td_abs'],1),border=True)
+            st.caption('Success rate at evading head strikes')
+            head_movement = round(1-(cleaned_opp_stats['head_abs']/cleaned_opp_stats['head_at']),2)
+            st.metric('Head Movement',value=head_movement ,border=True)
+        st.divider()
+        
+        flex = st.container(horizontal=True,horizontal_alignment='center',width='stretch')
+        flex2 = st.container(horizontal=True,horizontal_alignment='center',width='stretch')
+        
+        str_a = duckdb.sql(f"SELECT DATE, sum(total_str_a::INT) as Total_Strikes_At from fighter_stats group by 1").df()
+        fig = px.area(str_a, x='DATE', y='Total_Strikes_At', template='simple_white',title="Strikes Attempted")
+        flex.plotly_chart(fig,width='content',theme=None)
+        # st.area_chart(str_a, x='DATE', y='Total_Strikes_At')
+       
+        str_dif = duckdb.sql(f"SELECT a.DATE, sum(a.sig_str_l::INT)-sum(b.sig_str_l::INT) as Strike_Diff from fighter_stats as a inner join opp_stats as b on a.DATE = b.DATE and a.BOUT=b.BOUT and a.ROUND=b.ROUND group by 1").df()
+        fig = px.area(str_dif, x='DATE', y='Strike_Diff', template='simple_white',title="Net Sig Strike Landed difference")
+        flex.plotly_chart(fig,width='content',theme=None)
+        # st.area_chart(str_dif, x='DATE', y='Strike_Diff')              
+        
+        td_a = duckdb.sql(f"SELECT DATE,  sum(td_a::int) TD_At from fighter_stats group by 1").df()
+        fig = px.area(td_a, x='DATE', y='TD_At', template='simple_white',title="Takedowns Attempted")
+        flex2.plotly_chart(fig,width='content',theme=None)
+        # st.area_chart(td_a, x='DATE', y='TD_At')
+        
+        td_dif = duckdb.sql(f"SELECT a.DATE, sum(a.td_a::INT)-sum(b.td_a::INT) as TD_At_Diff from fighter_stats as a inner join opp_stats as b on a.DATE = b.DATE and a.BOUT=b.BOUT and a.ROUND=b.ROUND group by 1").df()
+        fig = px.area(td_dif, x='DATE', y='TD_At_Diff', template='simple_white',title="Net Takedown difference")
+        flex2.plotly_chart(fig,width='content',theme=None)
+        # st.area_chart(td_dif, x='DATE', y='TD_At_Diff')
+
+        st.divider()
+        # cumulative_head_trauma = duckdb.sql(f"SELECT date, sum(sum(head_str_l::int)) over (order by date asc) head_str_l from fs_cleaned where BOUT in (select * from fights) and FIGHTER !='{fighter_filter}'  group by 1").df()
+        # fig = px.area(cumulative_head_trauma, x='DATE',y='head_str_l',text='head_str_l',title='Cumulative Head Trauma')
+        # st.plotly_chart(fig,width='content')
+        cumulative_head_trauma = duckdb.sql(f"""
+            SELECT 
+                date, 
+                SUM(SUM(head_str_l::int)) OVER (ORDER BY date ASC) AS head_str_l 
+            FROM fs_cleaned 
+            WHERE BOUT IN (SELECT * FROM fights) 
+              AND FIGHTER != '{fighter_filter}'  
+            GROUP BY 1
+        """).df()
+        
+        # Convert date to datetime and numeric offset
+        cumulative_head_trauma['DATE'] = pd.to_datetime(cumulative_head_trauma['DATE'])
+
+        # Create fight number (1, 2, 3, ...)
+        cumulative_head_trauma['fight_number'] = range(1, len(cumulative_head_trauma) + 1)
+        
+        # Compute slope and intercept using fight number instead of days
+        slope, intercept = np.polyfit(cumulative_head_trauma['fight_number'], cumulative_head_trauma['head_str_l'], 1)
+        
+        # Add trendline (still plotted over time, but based on fight #)
+        cumulative_head_trauma['trend'] = slope * cumulative_head_trauma['fight_number'] + intercept
+        
+        # Plot area chart
+        fig = go.Figure()
+        
+        # Original cumulative line
+        fig.add_trace(go.Scatter(
+            x=cumulative_head_trauma['DATE'],
+            y=cumulative_head_trauma['head_str_l'],
+            mode='lines',
+            fill='tozeroy',
+            name='Cumulative Head Trauma'
+        ))
+        
+        # Trendline (based on fight progression)
+        fig.add_trace(go.Scatter(
+            x=cumulative_head_trauma['DATE'],
+            y=cumulative_head_trauma['trend'],
+            mode='lines',
+            line=dict(dash='dash', color='red'),
+            name=f'Trendline (slope = {slope:.2f} per fight)'
+        ))
+        
+        fig.update_layout(
+            title='Cumulative Head Trauma with Trendline',
+            xaxis_title='Date',
+            yaxis_title='Cumulative Head Trauma',
+            yaxis=dict(range=[0, 2000])
+        )
+        
+        st.plotly_chart(fig, width='content',theme=None)
+        
+        st.divider()
+        with st.expander("Career Results"):
+            try:
+                career_results = duckdb.sql(f"SELECT left(DATE::string,10) AS DATE ,EVENT,case when FIGHTER1='{fighter_filter}' then FIGHTER2 else FIGHTER1 end as OPPONENT,case when FIGHTER1='{fighter_filter}' then FIGHTER1_OUTCOME else FIGHTER2_OUTCOME end as RESULT,METHOD,ROUND, TIME,DETAILS from fr_cleaned where FIGHTER1= '{fighter_filter}' or FIGHTER2='{fighter_filter}' order by DATE desc").df()
+                st.dataframe(career_results,hide_index=True)
+            except Exception as e:
+                st.caption('There may be duplicate fights in the data which are causing an issue since they are labeled the same')
+                st.error(e)
+
+    st.divider()
+    with st.expander("Single Fight Stats"):
+        try:
+            bout_filter = st.selectbox('Pick a bout',options=fights.drop_duplicates())
+            fight_results = duckdb.sql(f"SELECT * EXCLUDE (BOUT,FIGHTER,EVENT) from fs where replace(trim(BOUT),'  ',' ') ='{bout_filter}'  and trim(FIGHTER)='{fighter_filter}' ").df()
+            
+            if bout_filter:
+                 st.write(fight_results.set_index(fight_results.columns[0]).T)
+        except Exception as e:
+            st.caption('There may be duplicate fights in the data which are causing an issue since they are labeled the same')
+            st.error(e)
 ########start of app
 
 
@@ -70,185 +250,7 @@ if view[0].open:
       
 elif view[1].open:
     with view[1]:
-        st.text('Display all relevant fighter stats in just 1 click. Choose your fighter below to get started')
-        
-        f1, f2  = st.columns(2)
-        with f1:
-            fighter_filter = st.selectbox('Pick a fighter',options=fighter_list, width=400)
-        
-        with f2:
-            with st.container(border=True):
-                analysis_lengths = ['Career','Last X fights']
-                analysis_length = st.radio("Analysis Length",(analysis_lengths),horizontal=True)
-                if analysis_length==analysis_lengths[1]:
-                    al = st.number_input('Number of recent fights to analyze',step=1,min_value=1)
-                    fr_cleaned = duckdb.sql(f"select * from fr_cleaned where FIGHTER1 = '{fighter_filter}' or FIGHTER2='{fighter_filter}' order by date desc limit {al}").df()
-                    
-        st.divider()
-        fights = duckdb.sql(f"SELECT BOUT from fr_cleaned where FIGHTER1 = '{fighter_filter}' or FIGHTER2='{fighter_filter}'").df() 
-        if len(fights)==0:
-            st.write("No data for this fighter")
-        else:
-          winloss, last_fight, fighter_stats, cleaned_fighter_stats, ko_wins, opp_stats, cleaned_opp_stats, ko_losses =  calcFighterStats(fighter_filter)
-        
-        if fighter_filter:
-            col1,col2,col3,col4,col5 = st.columns([0.3,0.5,0.3,0.5,0.6])
-            with col1:
-                st.subheader('Bio')
-                st.divider()
-                st.metric(label='Height',value=str(duckdb.sql(f"SELECT HEIGHT FROM fighters WHERE FIGHTER = '{fighter_filter}'").df().iloc[0,0]),border=True)
-                st.metric(label='Division',value=str(duckdb.sql(f"SELECT WEIGHT FROM fighters WHERE FIGHTER = '{fighter_filter}'").df().iloc[0,0]),border=True)
-                st.metric(label='Reach', value=str(duckdb.sql(f"SELECT REACH FROM fighters WHERE FIGHTER = '{fighter_filter}'").df().iloc[0,0]),border=True)
-                
-                dob_str = str(duckdb.sql(f"SELECT DOB FROM fighters WHERE FIGHTER = '{fighter_filter}'").df().iloc[0,0])
-                dob = datetime.datetime.strptime(dob_str, '%b %d, %Y')
-                age = datetime.datetime.now() - dob
-                age_years = age.days // 365
-                st.metric(label='Age',value=age_years,delta=dob_str)
-                if len(fights) >0:
-                    st.metric(label='Last Fought', value=str(last_fight['days_since'].values[0]), delta=str(last_fight['max_date'].values[0]))
-    
-            with col2:
-                st.subheader('Highlights')
-                st.divider()
-                w1,w2 = st.columns(2)
-                with w1:
-                    st.metric(label='UFC Fights',value=len(fights),border=True)
-                    st.metric(label='Rounds',value=fighter_stats.shape[0],border=True)
-                with w2:
-                    st.metric(label='Wins',value=len(duckdb.sql("SELECT * from winloss where result='W'").df()) ,border=True)
-                    st.metric(label='Losses',value=len(duckdb.sql("SELECT * from winloss where result='L'").df()),border=True)
-                
-                st.metric(label='KO/TKO Wins',value=int(ko_wins['s'].iloc[0]),border=True)
-                st.metric(label='KO/TKO Losses',value=int(ko_losses['s'].iloc[0]),border=True)
-                
-            with col3:
-                st.subheader('Striking')
-                st.divider()
-                st.metric(label='Significant Strikes Absored',value=int(cleaned_opp_stats['sig_abs'].iloc[0]),border=True)
-                st.metric(label='Head Strikes Absored',value=int(cleaned_opp_stats['head_abs'].iloc[0]),border=True)
-                st.metric(label='Significant Strikes Landed',value=int(cleaned_fighter_stats['sig_str'].iloc[0]),border=True)
-                st.metric(label='Head Strikes Landed',value=int(cleaned_fighter_stats['head_str'].iloc[0]),border=True)
-                st.metric(label='Knockdowns Landed',value=int(cleaned_fighter_stats['kd'].iloc[0]),border=True)
-                st.metric(label='Knockdowns Absored',value=int(cleaned_opp_stats['kd_abs'].iloc[0]),border=True)
-                
-            with col4:
-                st.subheader('Wrestling')
-                st.divider()
-                st.metric(label='Total Takedowns Landed',value=int(cleaned_fighter_stats['td_l'].iloc[0]),delta="{0:.0%}".format(round(float(cleaned_fighter_stats['td_rate'].iloc[0]),2)),border=True)
-                st.metric(label='Total Takedowns Given Up',value=int(cleaned_opp_stats['td_abs'].iloc[0]),delta="{0:.0%}".format(round(float(cleaned_opp_stats['td_abs_rate'].iloc[0]),2)),border=True)
-                
-            with col5:
-                st.subheader('Adv. Stats')
-                st.divider()
-                st.metric('Significant Strikes Differential',value=round(cleaned_fighter_stats['sig_str']/cleaned_opp_stats['sig_abs'],1),border=True)
-                st.metric('Head Strikes Differential',value=round(cleaned_fighter_stats['head_str']/cleaned_opp_stats['head_abs'],1),border=True)
-                st.metric('Power Differential (Knockdowns)',value=round(cleaned_fighter_stats['kd']/cleaned_opp_stats['kd_abs'],1),border=True)
-                st.metric('Takedown Differential',value=round(cleaned_fighter_stats['td_l']/cleaned_opp_stats['td_abs'],1),border=True)
-                st.caption('Success rate at evading head strikes')
-                head_movement = round(1-(cleaned_opp_stats['head_abs']/cleaned_opp_stats['head_at']),2)
-                st.metric('Head Movement',value=head_movement ,border=True)
-            st.divider()
-            
-            flex = st.container(horizontal=True,horizontal_alignment='center',width='stretch')
-            flex2 = st.container(horizontal=True,horizontal_alignment='center',width='stretch')
-            
-            str_a = duckdb.sql(f"SELECT DATE, sum(total_str_a::INT) as Total_Strikes_At from fighter_stats group by 1").df()
-            fig = px.area(str_a, x='DATE', y='Total_Strikes_At', template='simple_white',title="Strikes Attempted")
-            flex.plotly_chart(fig,width='content',theme=None)
-            # st.area_chart(str_a, x='DATE', y='Total_Strikes_At')
-           
-            str_dif = duckdb.sql(f"SELECT a.DATE, sum(a.sig_str_l::INT)-sum(b.sig_str_l::INT) as Strike_Diff from fighter_stats as a inner join opp_stats as b on a.DATE = b.DATE and a.BOUT=b.BOUT and a.ROUND=b.ROUND group by 1").df()
-            fig = px.area(str_dif, x='DATE', y='Strike_Diff', template='simple_white',title="Net Sig Strike Landed difference")
-            flex.plotly_chart(fig,width='content',theme=None)
-            # st.area_chart(str_dif, x='DATE', y='Strike_Diff')              
-            
-            td_a = duckdb.sql(f"SELECT DATE,  sum(td_a::int) TD_At from fighter_stats group by 1").df()
-            fig = px.area(td_a, x='DATE', y='TD_At', template='simple_white',title="Takedowns Attempted")
-            flex2.plotly_chart(fig,width='content',theme=None)
-            # st.area_chart(td_a, x='DATE', y='TD_At')
-            
-            td_dif = duckdb.sql(f"SELECT a.DATE, sum(a.td_a::INT)-sum(b.td_a::INT) as TD_At_Diff from fighter_stats as a inner join opp_stats as b on a.DATE = b.DATE and a.BOUT=b.BOUT and a.ROUND=b.ROUND group by 1").df()
-            fig = px.area(td_dif, x='DATE', y='TD_At_Diff', template='simple_white',title="Net Takedown difference")
-            flex2.plotly_chart(fig,width='content',theme=None)
-            # st.area_chart(td_dif, x='DATE', y='TD_At_Diff')
-    
-            st.divider()
-            # cumulative_head_trauma = duckdb.sql(f"SELECT date, sum(sum(head_str_l::int)) over (order by date asc) head_str_l from fs_cleaned where BOUT in (select * from fights) and FIGHTER !='{fighter_filter}'  group by 1").df()
-            # fig = px.area(cumulative_head_trauma, x='DATE',y='head_str_l',text='head_str_l',title='Cumulative Head Trauma')
-            # st.plotly_chart(fig,width='content')
-            cumulative_head_trauma = duckdb.sql(f"""
-                SELECT 
-                    date, 
-                    SUM(SUM(head_str_l::int)) OVER (ORDER BY date ASC) AS head_str_l 
-                FROM fs_cleaned 
-                WHERE BOUT IN (SELECT * FROM fights) 
-                  AND FIGHTER != '{fighter_filter}'  
-                GROUP BY 1
-            """).df()
-            
-            # Convert date to datetime and numeric offset
-            cumulative_head_trauma['DATE'] = pd.to_datetime(cumulative_head_trauma['DATE'])
-    
-            # Create fight number (1, 2, 3, ...)
-            cumulative_head_trauma['fight_number'] = range(1, len(cumulative_head_trauma) + 1)
-            
-            # Compute slope and intercept using fight number instead of days
-            slope, intercept = np.polyfit(cumulative_head_trauma['fight_number'], cumulative_head_trauma['head_str_l'], 1)
-            
-            # Add trendline (still plotted over time, but based on fight #)
-            cumulative_head_trauma['trend'] = slope * cumulative_head_trauma['fight_number'] + intercept
-            
-            # Plot area chart
-            fig = go.Figure()
-            
-            # Original cumulative line
-            fig.add_trace(go.Scatter(
-                x=cumulative_head_trauma['DATE'],
-                y=cumulative_head_trauma['head_str_l'],
-                mode='lines',
-                fill='tozeroy',
-                name='Cumulative Head Trauma'
-            ))
-            
-            # Trendline (based on fight progression)
-            fig.add_trace(go.Scatter(
-                x=cumulative_head_trauma['DATE'],
-                y=cumulative_head_trauma['trend'],
-                mode='lines',
-                line=dict(dash='dash', color='red'),
-                name=f'Trendline (slope = {slope:.2f} per fight)'
-            ))
-            
-            fig.update_layout(
-                title='Cumulative Head Trauma with Trendline',
-                xaxis_title='Date',
-                yaxis_title='Cumulative Head Trauma',
-                yaxis=dict(range=[0, 2000])
-            )
-            
-            st.plotly_chart(fig, width='content',theme=None)
-            
-            st.divider()
-            with st.expander("Career Results"):
-                try:
-                    career_results = duckdb.sql(f"SELECT left(DATE::string,10) AS DATE ,EVENT,case when FIGHTER1='{fighter_filter}' then FIGHTER2 else FIGHTER1 end as OPPONENT,case when FIGHTER1='{fighter_filter}' then FIGHTER1_OUTCOME else FIGHTER2_OUTCOME end as RESULT,METHOD,ROUND, TIME,DETAILS from fr_cleaned where FIGHTER1= '{fighter_filter}' or FIGHTER2='{fighter_filter}' order by DATE desc").df()
-                    st.dataframe(career_results,hide_index=True)
-                except Exception as e:
-                    st.caption('There may be duplicate fights in the data which are causing an issue since they are labeled the same')
-                    st.error(e)
-    
-        st.divider()
-        with st.expander("Single Fight Stats"):
-            try:
-                bout_filter = st.selectbox('Pick a bout',options=fights.drop_duplicates())
-                fight_results = duckdb.sql(f"SELECT * EXCLUDE (BOUT,FIGHTER,EVENT) from fs where replace(trim(BOUT),'  ',' ') ='{bout_filter}'  and trim(FIGHTER)='{fighter_filter}' ").df()
-                
-                if bout_filter:
-                     st.write(fight_results.set_index(fight_results.columns[0]).T)
-            except Exception as e:
-                st.caption('There may be duplicate fights in the data which are causing an issue since they are labeled the same')
-                st.error(e)
+        render_one_sheet()
         
 elif view[2].open:
     with view[2]:
