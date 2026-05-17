@@ -106,7 +106,7 @@ elif view[1].open:
             dob = datetime.datetime.strptime(dob_str, '%b %d, %Y')
             age = datetime.datetime.now() - dob
             age_years = age.days // 365
-            flex.metric(label='Age',value=age_years,delta=dob_str)
+            flex.metric(label='Age',value=age_years,delta=dob_str,border=True,width='content')
             if len(fights) >0:
                 flex.metric(label='Last Fought', value=str(last_fight['days_since'].values[0]), delta=str(last_fight['max_date'].values[0]),border=True,width='content')
     
