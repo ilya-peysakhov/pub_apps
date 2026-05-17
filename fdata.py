@@ -76,7 +76,7 @@ elif view[1].open:
         st.text('Display all relevant fighter stats in just 1 click. Choose your fighter below to get started')
         
         flex = st.container(horizontal=True,horizontal_alignment='left')
-        with flex.container():
+        with flex.container(width=400):
             fighter_filter = st.selectbox('Pick a fighter',options=fighter_list, width=400,index=None)
             if fighter_filter == None:
                 st.stop()
