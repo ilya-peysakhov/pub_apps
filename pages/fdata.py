@@ -96,22 +96,21 @@ elif view[1].open:
           winloss, last_fight, fighter_stats, cleaned_fighter_stats, ko_wins, opp_stats, cleaned_opp_stats, ko_losses =  calcFighterStats(fighter_filter)
         
         if fighter_filter:
-            col1,col2,col3,col4,col5 = st.columns([0.3,0.5,0.3,0.5,0.6])
-            with col1:
-                st.subheader('Bio')
-                st.divider()
-                st.metric(label='Height',value=str(duckdb.sql(f"SELECT HEIGHT FROM fighters WHERE FIGHTER = '{fighter_filter}'").df().iloc[0,0]),border=True,width='content')
-                st.metric(label='Division',value=str(duckdb.sql(f"SELECT WEIGHT FROM fighters WHERE FIGHTER = '{fighter_filter}'").df().iloc[0,0]),border=True,width='content')
-                st.metric(label='Reach', value=str(duckdb.sql(f"SELECT REACH FROM fighters WHERE FIGHTER = '{fighter_filter}'").df().iloc[0,0]),border=True,width='content')
-                
-                dob_str = str(duckdb.sql(f"SELECT DOB FROM fighters WHERE FIGHTER = '{fighter_filter}'").df().iloc[0,0])
-                dob = datetime.datetime.strptime(dob_str, '%b %d, %Y')
-                age = datetime.datetime.now() - dob
-                age_years = age.days // 365
-                st.metric(label='Age',value=age_years,delta=dob_str)
-                if len(fights) >0:
-                    st.metric(label='Last Fought', value=str(last_fight['days_since'].values[0]), delta=str(last_fight['max_date'].values[0]))
+            st.subheader('Bio')
+            flex = st.container(horizontal=True,horizontal_alignment='left')
+            flex.metric(label='Height',value=str(duckdb.sql(f"SELECT HEIGHT FROM fighters WHERE FIGHTER = '{fighter_filter}'").df().iloc[0,0]),border=True,width='content')
+            flex.metric(label='Division',value=str(duckdb.sql(f"SELECT WEIGHT FROM fighters WHERE FIGHTER = '{fighter_filter}'").df().iloc[0,0]),border=True,width='content')
+            flex.metric(label='Reach', value=str(duckdb.sql(f"SELECT REACH FROM fighters WHERE FIGHTER = '{fighter_filter}'").df().iloc[0,0]),border=True,width='content')
+            
+            dob_str = str(duckdb.sql(f"SELECT DOB FROM fighters WHERE FIGHTER = '{fighter_filter}'").df().iloc[0,0])
+            dob = datetime.datetime.strptime(dob_str, '%b %d, %Y')
+            age = datetime.datetime.now() - dob
+            age_years = age.days // 365
+            flex.metric(label='Age',value=age_years,delta=dob_str)
+            if len(fights) >0:
+                flex.metric(label='Last Fought', value=str(last_fight['days_since'].values[0]), delta=str(last_fight['max_date'].values[0]))
     
+            col2,col3,col4,col5 = st.columns([0.5,0.3,0.5,0.6])
             with col2:
                 st.subheader('Highlights')
                 st.divider()
