@@ -37,6 +37,8 @@ def get_fighter_list():
     
 st.set_page_config(page_icon="👊", page_title="UFC Stats Explorer v1.0", layout="wide",initial_sidebar_state='collapsed')
 
+st.html("assets/style.css")
+
 ########start of app
 
 view = st.tabs(['Welcome','Fighter One Sheet','Interesting Stats','Aggregate Table','Show all dataset samples','SQL Editor','Tale of the Tape'],
