@@ -12,7 +12,7 @@ def get_memory_usage():
   
 @st.cache_data(ttl = '7d')
 def getData():
-  ed = pl.read_csv("https://raw.githubusercontent.com/Greco1899/scrape_ufc_stats/main/ufc_event_details.csv").df()
+  ed = pl.read_csv("https://raw.githubusercontent.com/Greco1899/scrape_ufc_stats/main/ufc_event_details.csv").to_pandas()
   # fd_greco = duckdb.read_csv("https://raw.githubusercontent.com/Greco1899/scrape_ufc_stats/main/ufc_fight_details.csv").df()
   # fd_backfill = duckdb.read_csv("https://raw.githubusercontent.com/ilya-peysakhov/grecoscraper/main/ufcdata/details.csv").df()
   # fd = duckdb.sql("select * from fd_greco UNION select* from fd_backfill").df()
