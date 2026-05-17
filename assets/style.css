@@ -1,213 +1,68 @@
-/* ============================================================
-   UFC ANALYTICS DASHBOARD — Streamlit Metric Card CSS
-   Apply via: st.markdown(open("ufc_dashboard.css").read(), unsafe_allow_html=True)
-   Or wrap in <style> tags and inject with st.markdown()
-   ============================================================ */
-
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap');
-
-/* ── Root & page ─────────────────────────────────────────── */
-
-[data-testid="stAppViewContainer"],
-[data-testid="stMain"] {
-  background-color: #0a0a0b !important;
+/* --- Global App Background (Apple Liquid Mesh Gradient) --- */
+.stApp {
+    background-color: #f5f5f7;
+    background-image: 
+        radial-gradient(at 0% 0%, rgba(142, 252, 255, 0.15) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(196, 172, 255, 0.18) 0px, transparent 50%),
+        radial-gradient(at 50% 100%, rgba(255, 179, 214, 0.15) 0px, transparent 50%);
+    background-attachment: fixed;
 }
 
-[data-testid="stHeader"] {
-  background-color: #0a0a0b !important;
-  border-bottom: 1px solid #1e1e22;
+/* --- Metric Card Container --- */
+div[data-testid="stMetric"] {
+    /* Translucent glassmorphism effect */
+    background: rgba(255, 255, 255, 0.45);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    
+    /* Crisp borders resembling hardware edges */
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-radius: 20px;
+    padding: 20px 24px;
+    
+    /* Layered shadows for depth */
+    box-shadow: 
+        0 4px 24px rgba(0, 0, 0, 0.02),
+        0 1px 2px rgba(0, 0, 0, 0.02),
+        inset 0 1px 0px rgba(255, 255, 255, 0.6);
+        
+    /* Smooth Apple-like spring transition */
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-[data-testid="stSidebar"] {
-  background-color: #0d0d0f !important;
-  border-right: 1px solid #1e1e22;
+/* --- Card Hover State --- */
+div[data-testid="stMetric"]:hover {
+    transform: scale(1.015) translateY(-2px);
+    background: rgba(255, 255, 255, 0.6);
+    border-color: rgba(255, 255, 255, 0.8);
+    box-shadow: 
+        0 12px 40px rgba(0, 0, 0, 0.04),
+        0 2px 4px rgba(0, 0, 0, 0.02),
+        inset 0 1px 0px rgba(255, 255, 255, 0.8);
 }
 
-/* ── Metric card container ───────────────────────────────── */
-
-[data-testid="stMetric"] {
-  background-color: #111113;
-  border: 1px solid #1e1e22;
-  border-radius: 8px;
-  padding: 18px 16px 16px !important;
-  position: relative;
-  overflow: hidden;
-  transition: border-color 0.2s ease, transform 0.15s ease;
-  font-family: 'DM Mono', monospace !important;
+/* --- Typography (San Francisco Inspired) --- */
+div[data-testid="stMetricLabel"] p {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", sans-serif;
+    font-weight: 500;
+    color: #515154 !important; /* Muted primary */
+    font-size: 0.85rem !important;
+    letter-spacing: -0.01em;
 }
 
-[data-testid="stMetric"]:hover {
-  border-color: #2e2e34;
-  transform: translateY(-1px);
+div[data-testid="stMetricValue"] div {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", sans-serif;
+    font-weight: 600;
+    color: #1d1d1f !important; /* Deep Apple neutral */
+    font-size: 2.2rem !important;
+    letter-spacing: -0.03em;
+    margin-top: 6px;
 }
 
-/* Red accent bar on top of every card */
-[data-testid="stMetric"]::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: #D4001A;
-  border-radius: 0;
+div[data-testid="stMetricDelta"] div {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+    font-weight: 500;
+    font-size: 0.85rem !important;
+    letter-spacing: -0.01em;
+    margin-top: 2px;
 }
-
-/* ── Metric label ────────────────────────────────────────── */
-
-[data-testid="stMetric"] [data-testid="stMetricLabel"],
-[data-testid="stMetric"] [data-testid="stMetricLabel"] p {
-  font-family: 'DM Mono', monospace !important;
-  font-size: 10px !important;
-  font-weight: 500 !important;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: #555 !important;
-  margin-bottom: 6px;
-}
-
-/* ── Metric value ────────────────────────────────────────── */
-
-[data-testid="stMetric"] [data-testid="stMetricValue"],
-[data-testid="stMetric"] [data-testid="stMetricValue"] *  {
-  font-family: 'Bebas Neue', sans-serif !important;
-  font-size: 36px !important;
-  font-weight: 400 !important;
-  line-height: 1 !important;
-  color: #f0f0ee !important;
-  letter-spacing: 0.03em;
-}
-
-/* ── Delta / change indicator ────────────────────────────── */
-
-[data-testid="stMetric"] [data-testid="stMetricDelta"] {
-  font-family: 'DM Mono', monospace !important;
-  font-size: 10px !important;
-  letter-spacing: 0.06em;
-  margin-top: 4px;
-}
-
-/* Positive delta — green */
-[data-testid="stMetric"] [data-testid="stMetricDelta"][data-direction="increase"] svg {
-  fill: #1D9E75 !important;
-  color: #1D9E75 !important;
-}
-[data-testid="stMetric"] [data-testid="stMetricDelta"][data-direction="increase"] {
-  color: #1D9E75 !important;
-}
-
-/* Negative delta — red */
-[data-testid="stMetric"] [data-testid="stMetricDelta"][data-direction="decrease"] svg {
-  fill: #D4001A !important;
-  color: #D4001A !important;
-}
-[data-testid="stMetric"] [data-testid="stMetricDelta"][data-direction="decrease"] {
-  color: #D4001A !important;
-}
-
-/* ── Column gap tightening ───────────────────────────────── */
-
-[data-testid="column"] {
-  padding-left: 6px !important;
-  padding-right: 6px !important;
-}
-
-/* ── Typography — headings & body ────────────────────────── */
-
-h1, h2, h3 {
-  font-family: 'Bebas Neue', sans-serif !important;
-  color: #f0f0ee !important;
-  letter-spacing: 0.05em;
-}
-
-h1 { font-size: 48px !important; }
-h2 { font-size: 32px !important; }
-h3 {
-  font-size: 20px !important;
-  color: #555 !important;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-p, li, span, label {
-  font-family: 'DM Mono', monospace !important;
-  color: #888 !important;
-  font-size: 13px;
-}
-
-/* ── Divider ─────────────────────────────────────────────── */
-
-hr {
-  border-color: #1e1e22 !important;
-  margin: 24px 0 !important;
-}
-
-/* ── Selectbox / dropdown ────────────────────────────────── */
-
-[data-testid="stSelectbox"] > div {
-  background: #111113 !important;
-  border: 1px solid #1e1e22 !important;
-  border-radius: 6px;
-  font-family: 'DM Mono', monospace !important;
-  font-size: 12px;
-  color: #f0f0ee !important;
-}
-
-/* ── Charts ──────────────────────────────────────────────── */
-
-[data-testid="stPlotlyChart"],
-[data-testid="stVegaLiteChart"],
-[data-testid="stAltairChart"] {
-  background: #111113 !important;
-  border: 1px solid #1e1e22 !important;
-  border-radius: 8px;
-  overflow: hidden;
-  padding: 4px;
-}
-
-/* ── Dataframes / tables ─────────────────────────────────── */
-
-[data-testid="stDataFrame"] {
-  background: #111113 !important;
-  border: 1px solid #1e1e22 !important;
-  border-radius: 8px;
-  font-family: 'DM Mono', monospace !important;
-  font-size: 12px;
-}
-
-/* ── Buttons ─────────────────────────────────────────────── */
-
-[data-testid="stButton"] button {
-  background: transparent !important;
-  border: 1px solid #D4001A !important;
-  color: #D4001A !important;
-  font-family: 'DM Mono', monospace !important;
-  font-size: 11px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  border-radius: 4px;
-  transition: background 0.15s ease;
-}
-
-[data-testid="stButton"] button:hover {
-  background: rgba(212, 0, 26, 0.08) !important;
-}
-
-/* ── Color accent variants for cards ─────────────────────── */
-/* Usage: wrap st.metric() calls with st.markdown('<div class="accent-teal">', True) */
-
-.accent-teal [data-testid="stMetric"]::before { background: #1D9E75; }
-.accent-amber [data-testid="stMetric"]::before { background: #EF9F27; }
-.accent-blue  [data-testid="stMetric"]::before { background: #378ADD; }
-.accent-purple [data-testid="stMetric"]::before { background: #7F77DD; }
-.accent-coral  [data-testid="stMetric"]::before { background: #D85A30; }
-
-.accent-teal [data-testid="stMetricValue"] * { color: #1D9E75 !important; }
-.accent-amber [data-testid="stMetricValue"] * { color: #EF9F27 !important; }
-
-/* ── Scrollbar ───────────────────────────────────────────── */
-
-::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: #0a0a0b; }
-::-webkit-scrollbar-thumb { background: #222226; border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: #2e2e34; }
