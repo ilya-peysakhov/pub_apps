@@ -33,7 +33,7 @@ def calcFighterStats(fighter):
 
 @st.cache_data(ttl='7d')
 def get_fighter_list():
-    return duckdb.sql("SELECT FIGHTER from fighters where length(DOB) >3 group by 1 order by 1").df()
+    return duckdb.sql("SELECT distinct FIGHTER from fighters where length(DOB) >3").df()
     
 st.set_page_config(page_icon="👊", page_title="UFC Stats Explorer v1.0", layout="wide",initial_sidebar_state='collapsed')
 
@@ -79,7 +79,7 @@ elif view[1].open:
         
         flex = st.container(horizontal=True,horizontal_alignment='left')
         with flex.container(width=400):
-            fighter_filter = st.selectbox('Pick a fighter',options=fighter_list, width=400,index=None)
+            fighter_filter = st.selectbox('Pick a fighter',options=sorted(fighter_list['FIGHTER'].tolist()), width=400,index=None)
             if fighter_filter == None:
                 st.stop()
                 
