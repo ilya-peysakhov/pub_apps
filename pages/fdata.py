@@ -34,10 +34,6 @@ def calcFighterStats(fighter):
 @st.cache_data(ttl='7d')
 def get_fighter_list():
     return duckdb.sql("""SELECT distinct fighter1 as FIGHTER from fr_cleaned""").df()
-    
-st.set_page_config(page_icon="👊", page_title="UFC Stats Explorer v1.0", layout="wide",initial_sidebar_state='collapsed')
-
-st.html("assets/style.css")
 
 ########start of app
 
