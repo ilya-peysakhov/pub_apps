@@ -8,61 +8,69 @@
     background-attachment: fixed;
 }
 
-/* --- Metric Card Container --- */
+/* --- Compact Metric Card Container --- */
 div[data-testid="stMetric"] {
-    /* Translucent glassmorphism effect */
     background: rgba(255, 255, 255, 0.45);
-    backdrop-filter: blur(25px);
-    -webkit-backdrop-filter: blur(25px);
-    
-    /* Crisp borders resembling hardware edges */
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.6);
-    border-radius: 20px;
-    padding: 20px 24px;
+    border-radius: 12px; /* Slightly tighter radius for smaller cards */
     
-    /* Layered shadows for depth */
+    /* Reduced padding to maximize internal real estate */
+    padding: 10px 14px !important; 
+    
     box-shadow: 
-        0 4px 24px rgba(0, 0, 0, 0.02),
-        0 1px 2px rgba(0, 0, 0, 0.02),
+        0 4px 16px rgba(0, 0, 0, 0.02),
+        0 1px 2px rgba(0, 0, 0, 0.01),
         inset 0 1px 0px rgba(255, 255, 255, 0.6);
         
-    /* Smooth Apple-like spring transition */
-    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow: hidden; /* Prevents text bleeding out of bounds */
 }
 
 /* --- Card Hover State --- */
 div[data-testid="stMetric"]:hover {
-    transform: scale(1.015) translateY(-2px);
+    transform: translateY(-1px);
     background: rgba(255, 255, 255, 0.6);
-    border-color: rgba(255, 255, 255, 0.8);
     box-shadow: 
-        0 12px 40px rgba(0, 0, 0, 0.04),
-        0 2px 4px rgba(0, 0, 0, 0.02),
+        0 8px 24px rgba(0, 0, 0, 0.04),
         inset 0 1px 0px rgba(255, 255, 255, 0.8);
 }
 
-/* --- Typography (San Francisco Inspired) --- */
+/* --- Streamlit Layout Wrapper Overrides --- */
+/* Forces the label, value, and delta to sit tightly together */
+div[data-testid="stMetric"] > div {
+    gap: 2px !important;
+}
+
+/* --- Compact Typography --- */
+
+/* Metric Label (Small & Crisp) */
 div[data-testid="stMetricLabel"] p {
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
     font-weight: 500;
-    color: #515154 !important; /* Muted primary */
-    font-size: 0.85rem !important;
+    color: #6e6e73 !important;
+    font-size: 0.75rem !important; /* Shrunk from 0.85rem */
     letter-spacing: -0.01em;
+    white-space: nowrap; /* Prevents title wrapping where possible */
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
+/* Metric Value (Significantly Scaled Down) */
 div[data-testid="stMetricValue"] div {
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
     font-weight: 600;
-    color: #1d1d1f !important; /* Deep Apple neutral */
-    font-size: 2.2rem !important;
-    letter-spacing: -0.03em;
-    margin-top: 6px;
+    color: #1d1d1f !important;
+    font-size: 1.35rem !important; /* Scaled down drastically from 2.2rem */
+    letter-spacing: -0.02em;
+    line-height: 1.2 !important;
 }
 
+/* Metric Delta (Inline-friendly sizing) */
 div[data-testid="stMetricDelta"] div {
     font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
     font-weight: 500;
-    font-size: 0.85rem !important;
+    font-size: 0.75rem !important; /* Shrunk to match label scale */
     letter-spacing: -0.01em;
-    margin-top: 2px;
 }
