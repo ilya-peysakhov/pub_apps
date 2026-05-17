@@ -30,8 +30,8 @@ def getData():
   fs = pl.read_csv("https://raw.githubusercontent.com/Greco1899/scrape_ufc_stats/main/ufc_fight_stats.csv").to_pandas()
   # fs[['HEAD','BODY','LEG','DISTANCE','CLINCH','GROUND']] = fs[['HEAD','BODY','LEG','DISTANCE','CLINCH','GROUND']].astype(str)
   
-  frd = pl.read_csv("https://raw.githubusercontent.com/Greco1899/scrape_ufc_stats/main/ufc_fighter_details.csv").df()
-  ft = pl.read_csv("https://raw.githubusercontent.com/Greco1899/scrape_ufc_stats/main/ufc_fighter_tott.csv").df()
+  frd = pl.read_csv("https://raw.githubusercontent.com/Greco1899/scrape_ufc_stats/main/ufc_fighter_details.csv").to_pandas()
+  ft = pl.read_csv("https://raw.githubusercontent.com/Greco1899/scrape_ufc_stats/main/ufc_fighter_tott.csv").to_pandas()
   return ed, fd, fr, fs, frd, ft
 
 ed, fd, fr, fs, frd, ft = getData()
