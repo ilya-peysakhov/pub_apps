@@ -1,108 +1,118 @@
-/* --- Streamlit Header Alignment (Apple Liquid Styling) --- */
-
-/* Make the main header container entirely transparent */
-header[data-testid="stHeader"] {
-    background-color: transparent !important;
-    background-image: none !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2); /* Soft separator line */
-    backdrop-filter: blur(10px); /* Gives a frosty glass look as content scrolls under it */
-    -webkit-backdrop-filter: blur(10px);
-}
-
-/* Style the toolbar actions/buttons to blend in nicely */
-header[data-testid="stHeader"] button {
-    background-color: rgba(255, 255, 255, 0.4) !important;
-    border: 1px solid rgba(255, 255, 255, 0.5) !important;
-    border-radius: 8px !important;
-    color: #1d1d1f !important; /* Apple primary text color */
-    transition: all 0.2s ease !important;
-}
-
-/* Button hover state */
-header[data-testid="stHeader"] button:hover {
-    background-color: rgba(255, 255, 255, 0.7) !important;
-    transform: translateY(-1px);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-}
-
-/* Fix icon fills so they stay crisp on the light background */
-header[data-testid="stHeader"] svg {
-    fill: #1d1d1f !important;
-}
-
-/* --- Global App Background (Apple Liquid Mesh Gradient) --- */
+/* --- Global App Background (Apple Cool Gray Mesh) --- */
 .stApp {
-    background-color: #f5f5f7;
+    /* Base background is Apple's signature light gray desktop tint */
+    background-color: #f5f5f7; 
     background-image: 
-        radial-gradient(at 0% 0%, rgba(142, 252, 255, 0.15) 0px, transparent 50%),
-        radial-gradient(at 100% 0%, rgba(196, 172, 255, 0.18) 0px, transparent 50%),
-        radial-gradient(at 50% 100%, rgba(255, 179, 214, 0.15) 0px, transparent 50%);
+        radial-gradient(at 0% 0%, rgba(210, 225, 245, 0.4) 0px, transparent 60%),  /* Soft cool blue-gray */
+        radial-gradient(at 100% 100%, rgba(230, 235, 242, 0.5) 0px, transparent 60%); /* Silver metallic tint */
     background-attachment: fixed;
 }
 
 /* --- Compact Metric Card Container --- */
 div[data-testid="stMetric"] {
-    background: rgba(255, 255, 255, 0.45);
+    /* Pure white translucency over the gray/blue background */
+    background: rgba(255, 255, 255, 0.5);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.6);
-    border-radius: 12px; /* Slightly tighter radius for smaller cards */
     
-    /* Reduced padding to maximize internal real estate */
+    /* Subtle silver hardware border */
+    border: 1px solid rgba(210, 214, 219, 0.4);
+    border-radius: 12px;
     padding: 10px 14px !important; 
     
     box-shadow: 
-        0 4px 16px rgba(0, 0, 0, 0.02),
-        0 1px 2px rgba(0, 0, 0, 0.01),
-        inset 0 1px 0px rgba(255, 255, 255, 0.6);
+        0 4px 14px rgba(0, 0, 0, 0.015),
+        inset 0 1px 0px rgba(255, 255, 255, 0.7);
         
     transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    overflow: hidden; /* Prevents text bleeding out of bounds */
+    overflow: hidden;
 }
 
 /* --- Card Hover State --- */
 div[data-testid="stMetric"]:hover {
     transform: translateY(-1px);
-    background: rgba(255, 255, 255, 0.6);
+    background: rgba(255, 255, 255, 0.7);
+    /* Active blue glow highlight on border hover */
+    border-color: rgba(0, 113, 227, 0.25);
     box-shadow: 
-        0 8px 24px rgba(0, 0, 0, 0.04),
+        0 6px 20px rgba(0, 113, 227, 0.04),
         inset 0 1px 0px rgba(255, 255, 255, 0.8);
 }
 
-/* --- Streamlit Layout Wrapper Overrides --- */
-/* Forces the label, value, and delta to sit tightly together */
+/* Tighten spacing */
 div[data-testid="stMetric"] > div {
     gap: 2px !important;
 }
 
-/* --- Compact Typography --- */
+/* --- Typography (Grays & Accent Blues) --- */
 
-/* Metric Label (Small & Crisp) */
+/* Metric Label: Deep Gray */
 div[data-testid="stMetricLabel"] p {
     font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
     font-weight: 500;
-    color: #6e6e73 !important;
-    font-size: 0.75rem !important; /* Shrunk from 0.85rem */
+    color: #6e6e73 !important; /* Apple secondary text gray */
+    font-size: 0.75rem !important;
     letter-spacing: -0.01em;
-    white-space: nowrap; /* Prevents title wrapping where possible */
-    text-overflow: ellipsis;
-    overflow: hidden;
 }
 
-/* Metric Value (Significantly Scaled Down) */
+/* Metric Value: Off-Black / Charcoal */
 div[data-testid="stMetricValue"] div {
     font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
     font-weight: 600;
-    color: #1d1d1f !important;
-    font-size: 1.35rem !important; /* Scaled down drastically from 2.2rem */
+    color: #1d1d1f !important; /* Apple primary text bold charcoal */
+    font-size: 1.35rem !important;
     letter-spacing: -0.02em;
     line-height: 1.2 !important;
 }
 
-/* Metric Delta (Inline-friendly sizing) */
+/* Metric Delta: Positive changes styled in Apple System Blue */
 div[data-testid="stMetricDelta"] div {
     font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
-    font-weight: 500;
-    font-size: 0.75rem !important; /* Shrunk to match label scale */
+    font-weight: 600;
+    font-size: 0.75rem !important;
     letter-spacing: -0.01em;
+}
+
+/* Target green (positive) deltas and turn them Apple Blue */
+div[data-testid="stMetricDelta"] svg[data-testid="stMetricDeltaIcon-Up"] {
+    fill: #0071e3 !important; /* Changes arrow color */
+}
+div[data-testid="stMetricDelta"] div:has(svg[data-testid="stMetricDeltaIcon-Up"]) {
+    color: #0071e3 !important; /* Changes text color */
+}
+
+/* Target red (negative) deltas and keep them a sophisticated muted gray-red */
+div[data-testid="stMetricDelta"] svg[data-testid="stMetricDeltaIcon-Down"] {
+    fill: #ff453a !important; /* Apple System Red */
+}
+div[data-testid="stMetricDelta"] div:has(svg[data-testid="stMetricDeltaIcon-Down"]) {
+    color: #ff453a !important;
+}
+
+
+/* --- Top Header Alignment --- */
+header[data-testid="stHeader"] {
+    background-color: transparent !important;
+    background-image: none !important;
+    border-bottom: 1px solid rgba(210, 214, 219, 0.3);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+header[data-testid="stHeader"] button {
+    background-color: rgba(255, 255, 255, 0.4) !important;
+    border: 1px solid rgba(210, 214, 219, 0.4) !important;
+    border-radius: 8px !important;
+    color: #424245 !important;
+    transition: all 0.2s ease !important;
+}
+
+header[data-testid="stHeader"] button:hover {
+    background-color: rgba(255, 255, 255, 0.8) !important;
+    color: #0071e3 !important; /* Text turns blue on hover */
+    border-color: rgba(0, 113, 227, 0.3) !important;
+}
+
+header[data-testid="stHeader"] svg {
+    fill: #424245 !important;
 }
