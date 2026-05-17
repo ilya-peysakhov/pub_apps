@@ -75,20 +75,19 @@ elif view[1].open:
     with view[1]:
         st.text('Display all relevant fighter stats in just 1 click. Choose your fighter below to get started')
         
-        f1, f2  = st.columns(2)
-        with f1:
+        flex = st.container(horizontal=True,horizontal_alignment='left')
+        with flex.container():
             fighter_filter = st.selectbox('Pick a fighter',options=fighter_list, width=400,index=None)
             if fighter_filter == None:
                 st.stop()
                 
-        with f2:
-            with st.container(border=True):
-                analysis_lengths = ['Career','Last X fights']
-                analysis_length = st.radio("Analysis Length",(analysis_lengths),horizontal=True)
-                if analysis_length==analysis_lengths[1]:
-                    al = st.number_input('Number of recent fights to analyze',step=1,min_value=1)
-                    fr_cleaned = duckdb.sql(f"select * from fr_cleaned where FIGHTER1 = '{fighter_filter}' or FIGHTER2='{fighter_filter}' order by date desc limit {al}").df()
-                    
+        with flex.container():           
+            analysis_lengths = ['Career','Last X fights']
+            analysis_length = st.radio("Analysis Length",(analysis_lengths),horizontal=True)
+            if analysis_length==analysis_lengths[1]:
+                al = st.number_input('Number of recent fights to analyze',step=1,min_value=1)
+                fr_cleaned = duckdb.sql(f"select * from fr_cleaned where FIGHTER1 = '{fighter_filter}' or FIGHTER2='{fighter_filter}' order by date desc limit {al}").df()
+                
         st.divider()
         fights = duckdb.sql(f"SELECT BOUT from fr_cleaned where FIGHTER1 = '{fighter_filter}' or FIGHTER2='{fighter_filter}'").df() 
         if len(fights)==0:
