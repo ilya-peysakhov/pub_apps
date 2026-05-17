@@ -110,7 +110,7 @@ elif view[1].open:
             if len(fights) >0:
                 flex.metric(label='Last Fought', value=str(last_fight['days_since'].values[0]), delta=str(last_fight['max_date'].values[0]),border=True,width='content')
     
-            col2,col3,col4,col5 = st.columns([0.5,0.3,0.5,0.6])
+            col2,col3,col4,col5 = st.columns([0.5,0.5,0.5,0.6])
             with col2:
                 st.subheader('Highlights')
                 st.divider()
