@@ -12,16 +12,16 @@ def get_memory_usage():
   
 @st.cache_data(ttl = '7d')
 def getData():
-  ed = duckdb.read_csv("https://raw.githubusercontent.com/Greco1899/scrape_ufc_stats/main/ufc_event_details.csv").df()
+  ed = pl.read_csv("https://raw.githubusercontent.com/Greco1899/scrape_ufc_stats/main/ufc_event_details.csv").df()
   # fd_greco = duckdb.read_csv("https://raw.githubusercontent.com/Greco1899/scrape_ufc_stats/main/ufc_fight_details.csv").df()
   # fd_backfill = duckdb.read_csv("https://raw.githubusercontent.com/ilya-peysakhov/grecoscraper/main/ufcdata/details.csv").df()
   # fd = duckdb.sql("select * from fd_greco UNION select* from fd_backfill").df()
-  fd = duckdb.read_csv("https://raw.githubusercontent.com/Greco1899/scrape_ufc_stats/main/ufc_fight_details.csv").df()
+  fd = pl.read_csv("https://raw.githubusercontent.com/Greco1899/scrape_ufc_stats/main/ufc_fight_details.csv").df()
   
   # fr_greco = duckdb.read_csv("https://raw.githubusercontent.com/Greco1899/scrape_ufc_stats/main/ufc_fight_results.csv").df()
   # fr_backfill = duckdb.read_csv("https://raw.githubusercontent.com/ilya-peysakhov/grecoscraper/main/ufcdata/results.csv").df()
   # fr = duckdb.sql("select * from fr_greco UNION select* from fr_backfill").df()
-  fr =  duckdb.read_csv("https://raw.githubusercontent.com/Greco1899/scrape_ufc_stats/main/ufc_fight_results.csv").df()
+  fr =  pl.read_csv("https://raw.githubusercontent.com/Greco1899/scrape_ufc_stats/main/ufc_fight_results.csv").df()
   
   # fs_greco = duckdb.read_csv("https://raw.githubusercontent.com/Greco1899/scrape_ufc_stats/main/ufc_fight_stats.csv").df()
   # fs_greco = pd.read_csv("https://raw.githubusercontent.com/Greco1899/scrape_ufc_stats/main/ufc_fight_stats.csv",engine='pyarrow',dtype_backend='pyarrow')
@@ -30,8 +30,8 @@ def getData():
   fs = pl.read_csv("https://raw.githubusercontent.com/Greco1899/scrape_ufc_stats/main/ufc_fight_stats.csv").to_pandas()
   # fs[['HEAD','BODY','LEG','DISTANCE','CLINCH','GROUND']] = fs[['HEAD','BODY','LEG','DISTANCE','CLINCH','GROUND']].astype(str)
   
-  frd = duckdb.read_csv("https://raw.githubusercontent.com/Greco1899/scrape_ufc_stats/main/ufc_fighter_details.csv").df()
-  ft = duckdb.read_csv("https://raw.githubusercontent.com/Greco1899/scrape_ufc_stats/main/ufc_fighter_tott.csv").df()
+  frd = pl.read_csv("https://raw.githubusercontent.com/Greco1899/scrape_ufc_stats/main/ufc_fighter_details.csv").df()
+  ft = pl.read_csv("https://raw.githubusercontent.com/Greco1899/scrape_ufc_stats/main/ufc_fighter_tott.csv").df()
   return ed, fd, fr, fs, frd, ft
 
 ed, fd, fr, fs, frd, ft = getData()
