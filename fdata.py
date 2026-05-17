@@ -31,13 +31,13 @@ def calcFighterStats(fighter):
     ko_losses = duckdb.sql(f"SELECT count(*) as s from fr_cleaned where ((FIGHTER1='{fighter}' and FIGHTER1_OUTCOME='L') OR (FIGHTER2='{fighter}' and FIGHTER2_OUTCOME='L')) and trim(METHOD)='KO/TKO' ").df()
     return winloss, last_fight, fighter_stats, cleaned_fighter_stats, ko_wins, opp_stats, cleaned_opp_stats, ko_losses
 
-
+@st.cache_data(ttl='7d')
+def get_fighter_list():
+    return duckdb.sql("SELECT FIGHTER from fighters where length(DOB) >3 group by 1 order by 1").df()
+    
 st.set_page_config(page_icon="👊", page_title="UFC Stats Explorer v1.0", layout="wide",initial_sidebar_state='collapsed')
 
-
-    
 ########start of app
-
 
 view = st.tabs(['Welcome','Fighter One Sheet','Interesting Stats','Aggregate Table','Show all dataset samples','SQL Editor','Tale of the Tape'],
                on_change='rerun',
@@ -47,7 +47,7 @@ view = st.tabs(['Welcome','Fighter One Sheet','Interesting Stats','Aggregate Tab
 fed, fr_cleaned, fs_cleaned, fighters, ed_c = cleanData()
 
 ########################
-fighter_list = duckdb.sql("SELECT FIGHTER from fighters  where length(DOB) >3 group by 1 order by 1").df()                      
+fighter_list = get_fighter_list()                   
 
 if view[0].open:
     with view[0]:
