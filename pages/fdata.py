@@ -151,50 +151,55 @@ elif view[1].open:
                 st.metric('Head Movement',value=head_movement ,border=True,width='content')
             st.divider()
             
-            flex = st.container(horizontal=True,horizontal_alignment='center',width='stretch')
-            flex2 = st.container(horizontal=True,horizontal_alignment='center',width='stretch')
-            
-            with flex:
+            c_str1, c_str2 = st.columns(2)
+            with c_str1:
                 str_a = duckdb.sql(f"SELECT DATE, sum(total_str_a::INT) as Total_Strikes_At from fighter_stats group by 1").df()
                 option_str_a = {
+                    "grid": {"left": "10%", "right": "10%", "bottom": "15%", "containLabel": True},
                     "title": {"text": "Strikes Attempted"},
                     "tooltip": {"trigger": "axis"},
                     "xAxis": {"type": "category", "data": str_a['DATE'].astype(str).tolist()},
                     "yAxis": {"type": "value"},
                     "series": [{"data": str_a['Total_Strikes_At'].tolist(), "type": "line", "areaStyle": {}}]
                 }
-                st_echarts(options=option_str_a)
+                st_echarts(options=option_str_a, height="400px")
            
+            with c_str2:
                 str_dif = duckdb.sql(f"SELECT a.DATE, sum(a.sig_str_l::INT)-sum(b.sig_str_l::INT) as Strike_Diff from fighter_stats as a inner join opp_stats as b on a.DATE = b.DATE and a.BOUT=b.BOUT and a.ROUND=b.ROUND group by 1").df()
                 option_str_dif = {
+                    "grid": {"left": "10%", "right": "10%", "bottom": "15%", "containLabel": True},
                     "title": {"text": "Net Sig Strike Landed difference"},
                     "tooltip": {"trigger": "axis"},
                     "xAxis": {"type": "category", "data": str_dif['DATE'].astype(str).tolist()},
                     "yAxis": {"type": "value"},
                     "series": [{"data": str_dif['Strike_Diff'].tolist(), "type": "line", "areaStyle": {}}]
                 }
-                st_echarts(options=option_str_dif)
+                st_echarts(options=option_str_dif, height="400px")
             
-            with flex2:
+            c_td1, c_td2 = st.columns(2)
+            with c_td1:
                 td_a = duckdb.sql(f"SELECT DATE,  sum(td_a::int) TD_At from fighter_stats group by 1").df()
                 option_td_a = {
+                    "grid": {"left": "10%", "right": "10%", "bottom": "15%", "containLabel": True},
                     "title": {"text": "Takedowns Attempted"},
                     "tooltip": {"trigger": "axis"},
                     "xAxis": {"type": "category", "data": td_a['DATE'].astype(str).tolist()},
                     "yAxis": {"type": "value"},
                     "series": [{"data": td_a['TD_At'].tolist(), "type": "line", "areaStyle": {}}]
                 }
-                st_echarts(options=option_td_a)
+                st_echarts(options=option_td_a, height="400px")
             
+            with c_td2:
                 td_dif = duckdb.sql(f"SELECT a.DATE, sum(a.td_a::INT)-sum(b.td_a::INT) as TD_At_Diff from fighter_stats as a inner join opp_stats as b on a.DATE = b.DATE and a.BOUT=b.BOUT and a.ROUND=b.ROUND group by 1").df()
                 option_td_dif = {
+                    "grid": {"left": "10%", "right": "10%", "bottom": "15%", "containLabel": True},
                     "title": {"text": "Net Takedown difference"},
                     "tooltip": {"trigger": "axis"},
                     "xAxis": {"type": "category", "data": td_dif['DATE'].astype(str).tolist()},
                     "yAxis": {"type": "value"},
                     "series": [{"data": td_dif['TD_At_Diff'].tolist(), "type": "line", "areaStyle": {}}]
                 }
-                st_echarts(options=option_td_dif)
+                st_echarts(options=option_td_dif, height="400px")
     
             st.divider()
             cumulative_head_trauma = duckdb.sql(f"""
@@ -207,26 +212,21 @@ elif view[1].open:
                 GROUP BY 1
             """).df()
             
-            # Convert date to datetime and numeric offset
             cumulative_head_trauma['DATE'] = pd.to_datetime(cumulative_head_trauma['DATE'])
-    
-            # Create fight number (1, 2, 3, ...)
             cumulative_head_trauma['fight_number'] = range(1, len(cumulative_head_trauma) + 1)
             
-            # Compute slope and intercept using fight number instead of days
             slope, intercept = np.polyfit(cumulative_head_trauma['fight_number'], cumulative_head_trauma['head_str_l'], 1)
-            
-            # Add trendline (still plotted over time, but based on fight #)
             cumulative_head_trauma['trend'] = slope * cumulative_head_trauma['fight_number'] + intercept
             
             dates_str = cumulative_head_trauma['DATE'].dt.strftime('%Y-%m-%d').tolist()
             
             option_cum_trauma = {
+                "grid": {"left": "8%", "right": "8%", "bottom": "15%", "top": "15%", "containLabel": True},
                 "title": {"text": "Cumulative Head Trauma with Trendline"},
                 "tooltip": {"trigger": "axis"},
                 "legend": {"data": ["Cumulative Head Trauma", f"Trendline (slope = {slope:.2f} per fight)"]},
                 "xAxis": {"type": "category", "data": dates_str, "name": "Date"},
-                "yAxis": {"type": "value", "name": "Cumulative Head Trauma", "min": 0, "max": 2000},
+                "yAxis": {"type": "value", "name": "Cumulative Head Trauma", "min": 0},
                 "series": [
                     {
                         "name": "Cumulative Head Trauma",
@@ -243,7 +243,7 @@ elif view[1].open:
                     }
                 ]
             }
-            st_echarts(options=option_cum_trauma)
+            st_echarts(options=option_cum_trauma, height="500px")
             
             st.divider()
             with st.expander("Career Results"):
@@ -269,12 +269,13 @@ elif view[1].open:
 elif view[2].open:
     with view[2]:
         st.subheader('Lifetime stats unless otherwise noted (last 2 years)')
-        c1, c2  = st.columns(2)
+        c1, c2 = st.columns(2)
         with c1:
             st.write("Fights by month")
             fights_monthly= duckdb.sql("SELECT date_trunc('month',date) as MONTH,count(*) as FIGHTS, count(distinct EVENT) as EVENTS from fed group by 1 order by 1 asc").df()
             
             option_monthly = {
+                "grid": {"left": "10%", "right": "10%", "bottom": "15%", "containLabel": True},
                 "tooltip": {"trigger": "axis"},
                 "legend": {"data": ["FIGHTS", "EVENTS"]},
                 "xAxis": {"type": "category", "data": fights_monthly['MONTH'].astype(str).tolist()},
@@ -284,7 +285,7 @@ elif view[2].open:
                     {"name": "EVENTS", "type": "line", "areaStyle": {}, "data": fights_monthly['EVENTS'].tolist()}
                 ]
             }
-            st_echarts(options=option_monthly)
+            st_echarts(options=option_monthly, height="400px")
             
             st.divider()
     
@@ -302,7 +303,7 @@ elif view[2].open:
                 "series": [{
                     "name": "Method",
                     "type": "pie",
-                    "radius": "50%",
+                    "radius": "60%",
                     "data": pie_data,
                     "emphasis": {
                         "itemStyle": {
@@ -313,7 +314,7 @@ elif view[2].open:
                     }
                 }]
             }
-            st_echarts(options=option_pie)
+            st_echarts(options=option_pie, height="400px")
             
         with c2:
             st.write("Number of Fights per Fighter")
@@ -322,12 +323,13 @@ elif view[2].open:
                                   order by 1""").df()
             
             option_distro = {
+                "grid": {"left": "10%", "right": "10%", "bottom": "15%", "containLabel": True},
                 "tooltip": {"trigger": "axis"},
                 "xAxis": {"type": "category", "data": fight_distro['FIGHTS'].astype(str).tolist(), "name": "FIGHTS"},
                 "yAxis": {"type": "value", "name": "FIGHTERS"},
                 "series": [{"data": fight_distro['FIGHTERS'].tolist(), "type": "bar"}]
             }
-            st_echarts(options=option_distro)
+            st_echarts(options=option_distro, height="400px")
             st.divider()
             
             st.write('Most commonly used venues (2yr)')
@@ -335,12 +337,13 @@ elif view[2].open:
             loc_sorted = locations.sort_values(by='EVENTS')
             
             option_locations = {
+                "grid": {"left": "15%", "right": "10%", "bottom": "15%", "containLabel": True},
                 "tooltip": {"trigger": "axis"},
                 "xAxis": {"type": "value", "name": "EVENTS"},
                 "yAxis": {"type": "category", "data": loc_sorted['LOCATION'].tolist()},
                 "series": [{"data": loc_sorted['EVENTS'].tolist(), "type": "bar"}]
             }
-            st_echarts(options=option_locations)
+            st_echarts(options=option_locations, height="400px")
     
             st.divider()
             st.write('Number of Fighters fought by Weight/Type (2yr)')
@@ -352,6 +355,7 @@ elif view[2].open:
                 """).df()
             st.dataframe(fighters_by_class,hide_index=True)
     
+        st.divider()
         st.write("Method of winning as a percentage of all methods over time")
         frame = st.selectbox('Pick a time dimension',['year','quarter','month','week','day'])
         fr_cleaned_duck = fr_cleaned.copy()
@@ -381,14 +385,12 @@ elif view[2].open:
         
         series_list = []
         for m_name in unique_methods:
-            # Filter for method and build single-column DataFrame with unique DatetimeIndex
             m_df = (
                 methods_over_time[methods_over_time['METHOD'] == m_name]
                 .drop_duplicates(subset=['MONTH'])
                 .set_index('MONTH')
             )
             
-            # Reindex ONLY the numeric 'METHOD_PCT' series to avoid string dtype collisions
             pct_series = m_df['METHOD_PCT'].reindex(unique_months, fill_value=0.0)
             
             series_list.append({
@@ -400,13 +402,14 @@ elif view[2].open:
             })
 
         option_methods_over_time = {
+            "grid": {"left": "5%", "right": "5%", "bottom": "15%", "top": "15%", "containLabel": True},
             "tooltip": {"trigger": "axis"},
-            "legend": {"data": unique_methods},
+            "legend": {"data": unique_methods, "top": "top"},
             "xAxis": {"type": "category", "data": months_str},
             "yAxis": {"type": "value"},
             "series": series_list
         }
-        st_echarts(options=option_methods_over_time)
+        st_echarts(options=option_methods_over_time, height="500px")
 
 elif view[3].open:
     with view[3]:
@@ -446,6 +449,7 @@ elif view[3].open:
             ]
             
             option_scatter = {
+                "grid": {"left": "10%", "right": "10%", "bottom": "15%", "top": "15%", "containLabel": True},
                 "tooltip": {
                     "formatter": "{c}"
                 },
@@ -470,7 +474,7 @@ elif view[3].open:
                     }
                 ]
             }
-            st_echarts(options=option_scatter)
+            st_echarts(options=option_scatter, height="550px")
         
         # vizPlot()
 
