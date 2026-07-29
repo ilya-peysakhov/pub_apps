@@ -375,13 +375,17 @@ elif view[2].open:
             .drop(columns='cnt')
         )
         
-        unique_months = sorted(methods_over_time['MONTH'].unique())
-        months_str = [pd.to_datetime(m).strftime('%Y-%m-%d') for m in unique_months]
+        unique_months = pd.DatetimeIndex(sorted(methods_over_time['MONTH'].unique()))
+        months_str = [m.strftime('%Y-%m-%d') for m in unique_months]
         unique_methods = methods_over_time['METHOD'].unique().tolist()
         
         series_list = []
         for m_name in unique_methods:
-            m_df = methods_over_time[methods_over_time['METHOD'] == m_name].set_index('MONTH')
+            m_df = (
+                methods_over_time[methods_over_time['METHOD'] == m_name]
+                .drop_duplicates(subset=['MONTH'])
+                .set_index('MONTH')
+            )
             m_df = m_df.reindex(unique_months, fill_value=0)
             series_list.append({
                 "name": m_name,
