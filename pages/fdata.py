@@ -295,7 +295,7 @@ elif view[2].open:
             st.write("Fights by result method (2yr)")
             methods = duckdb.sql("SELECT method, count(*) FIGHTS from fr_cleaned where date between current_date() -730 and current_date() group by 1 ").df()
             
-            pie_data = [{"value": row['FIGHTS'], "name": row['method']} for _, row in methods.iterrows()]
+            pie_data = [{"value": row['FIGHTS'], "name": row['METHOD']} for _, row in methods.iterrows()]
             option_pie = {
                 "tooltip": {"trigger": "item"},
                 "legend": {"orient": "vertical", "left": "left"},
