@@ -376,7 +376,11 @@ elif view[2].open:
         )
         
         unique_months = pd.DatetimeIndex(sorted(methods_over_time['MONTH'].unique()))
+        months_str = [pd.to_datetime(m).strftime('%Y-%m-%d') for m in unique_months]
+        unique_methods = methods_over_time['METHOD'].unique().tolist()
+        
         series_list = []
+        
         for m_name in unique_methods:
             # Filter for method
             m_df = methods_over_time[methods_over_time['METHOD'] == m_name].copy()
