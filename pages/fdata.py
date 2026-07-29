@@ -1,13 +1,11 @@
 import streamlit as st
 import pandas as pd
-import altair as alt
 import duckdb
 import time
 import datetime
 from streamlit_ace import st_ace
-import plotly.express as px
 import numpy as np
-import plotly.graph_objects as go
+from streamlit_echarts import st_echarts
 
 from utils.funcs import get_memory_usage, getData, cleanData, pullData, getFighters, query_fighter_data, oppStats, opp_stats,\
     fs,fed, fr_cleaned, fs_cleaned, fighters, ed_c, fed, fr_cleaned, fs_cleaned, fighters, ed_c
@@ -156,30 +154,49 @@ elif view[1].open:
             flex = st.container(horizontal=True,horizontal_alignment='center',width='stretch')
             flex2 = st.container(horizontal=True,horizontal_alignment='center',width='stretch')
             
-            str_a = duckdb.sql(f"SELECT DATE, sum(total_str_a::INT) as Total_Strikes_At from fighter_stats group by 1").df()
-            fig = px.area(str_a, x='DATE', y='Total_Strikes_At', template='simple_white',title="Strikes Attempted")
-            flex.plotly_chart(fig,width='content',theme=None)
-            # st.area_chart(str_a, x='DATE', y='Total_Strikes_At')
+            with flex:
+                str_a = duckdb.sql(f"SELECT DATE, sum(total_str_a::INT) as Total_Strikes_At from fighter_stats group by 1").df()
+                option_str_a = {
+                    "title": {"text": "Strikes Attempted"},
+                    "tooltip": {"trigger": "axis"},
+                    "xAxis": {"type": "category", "data": str_a['DATE'].astype(str).tolist()},
+                    "yAxis": {"type": "value"},
+                    "series": [{"data": str_a['Total_Strikes_At'].tolist(), "type": "line", "areaStyle": {}}]
+                }
+                st_echarts(options=option_str_a)
            
-            str_dif = duckdb.sql(f"SELECT a.DATE, sum(a.sig_str_l::INT)-sum(b.sig_str_l::INT) as Strike_Diff from fighter_stats as a inner join opp_stats as b on a.DATE = b.DATE and a.BOUT=b.BOUT and a.ROUND=b.ROUND group by 1").df()
-            fig = px.area(str_dif, x='DATE', y='Strike_Diff', template='simple_white',title="Net Sig Strike Landed difference")
-            flex.plotly_chart(fig,width='content',theme=None)
-            # st.area_chart(str_dif, x='DATE', y='Strike_Diff')              
+                str_dif = duckdb.sql(f"SELECT a.DATE, sum(a.sig_str_l::INT)-sum(b.sig_str_l::INT) as Strike_Diff from fighter_stats as a inner join opp_stats as b on a.DATE = b.DATE and a.BOUT=b.BOUT and a.ROUND=b.ROUND group by 1").df()
+                option_str_dif = {
+                    "title": {"text": "Net Sig Strike Landed difference"},
+                    "tooltip": {"trigger": "axis"},
+                    "xAxis": {"type": "category", "data": str_dif['DATE'].astype(str).tolist()},
+                    "yAxis": {"type": "value"},
+                    "series": [{"data": str_dif['Strike_Diff'].tolist(), "type": "line", "areaStyle": {}}]
+                }
+                st_echarts(options=option_str_dif)
             
-            td_a = duckdb.sql(f"SELECT DATE,  sum(td_a::int) TD_At from fighter_stats group by 1").df()
-            fig = px.area(td_a, x='DATE', y='TD_At', template='simple_white',title="Takedowns Attempted")
-            flex2.plotly_chart(fig,width='content',theme=None)
-            # st.area_chart(td_a, x='DATE', y='TD_At')
+            with flex2:
+                td_a = duckdb.sql(f"SELECT DATE,  sum(td_a::int) TD_At from fighter_stats group by 1").df()
+                option_td_a = {
+                    "title": {"text": "Takedowns Attempted"},
+                    "tooltip": {"trigger": "axis"},
+                    "xAxis": {"type": "category", "data": td_a['DATE'].astype(str).tolist()},
+                    "yAxis": {"type": "value"},
+                    "series": [{"data": td_a['TD_At'].tolist(), "type": "line", "areaStyle": {}}]
+                }
+                st_echarts(options=option_td_a)
             
-            td_dif = duckdb.sql(f"SELECT a.DATE, sum(a.td_a::INT)-sum(b.td_a::INT) as TD_At_Diff from fighter_stats as a inner join opp_stats as b on a.DATE = b.DATE and a.BOUT=b.BOUT and a.ROUND=b.ROUND group by 1").df()
-            fig = px.area(td_dif, x='DATE', y='TD_At_Diff', template='simple_white',title="Net Takedown difference")
-            flex2.plotly_chart(fig,width='content',theme=None)
-            # st.area_chart(td_dif, x='DATE', y='TD_At_Diff')
+                td_dif = duckdb.sql(f"SELECT a.DATE, sum(a.td_a::INT)-sum(b.td_a::INT) as TD_At_Diff from fighter_stats as a inner join opp_stats as b on a.DATE = b.DATE and a.BOUT=b.BOUT and a.ROUND=b.ROUND group by 1").df()
+                option_td_dif = {
+                    "title": {"text": "Net Takedown difference"},
+                    "tooltip": {"trigger": "axis"},
+                    "xAxis": {"type": "category", "data": td_dif['DATE'].astype(str).tolist()},
+                    "yAxis": {"type": "value"},
+                    "series": [{"data": td_dif['TD_At_Diff'].tolist(), "type": "line", "areaStyle": {}}]
+                }
+                st_echarts(options=option_td_dif)
     
             st.divider()
-            # cumulative_head_trauma = duckdb.sql(f"SELECT date, sum(sum(head_str_l::int)) over (order by date asc) head_str_l from fs_cleaned where BOUT in (select * from fights) and FIGHTER !='{fighter_filter}'  group by 1").df()
-            # fig = px.area(cumulative_head_trauma, x='DATE',y='head_str_l',text='head_str_l',title='Cumulative Head Trauma')
-            # st.plotly_chart(fig,width='content')
             cumulative_head_trauma = duckdb.sql(f"""
                 SELECT 
                     date, 
@@ -202,35 +219,31 @@ elif view[1].open:
             # Add trendline (still plotted over time, but based on fight #)
             cumulative_head_trauma['trend'] = slope * cumulative_head_trauma['fight_number'] + intercept
             
-            # Plot area chart
-            fig = go.Figure()
+            dates_str = cumulative_head_trauma['DATE'].dt.strftime('%Y-%m-%d').tolist()
             
-            # Original cumulative line
-            fig.add_trace(go.Scatter(
-                x=cumulative_head_trauma['DATE'],
-                y=cumulative_head_trauma['head_str_l'],
-                mode='lines',
-                fill='tozeroy',
-                name='Cumulative Head Trauma'
-            ))
-            
-            # Trendline (based on fight progression)
-            fig.add_trace(go.Scatter(
-                x=cumulative_head_trauma['DATE'],
-                y=cumulative_head_trauma['trend'],
-                mode='lines',
-                line=dict(dash='dash', color='red'),
-                name=f'Trendline (slope = {slope:.2f} per fight)'
-            ))
-            
-            fig.update_layout(
-                title='Cumulative Head Trauma with Trendline',
-                xaxis_title='Date',
-                yaxis_title='Cumulative Head Trauma',
-                yaxis=dict(range=[0, 2000])
-            )
-            
-            st.plotly_chart(fig, width='content',theme=None)
+            option_cum_trauma = {
+                "title": {"text": "Cumulative Head Trauma with Trendline"},
+                "tooltip": {"trigger": "axis"},
+                "legend": {"data": ["Cumulative Head Trauma", f"Trendline (slope = {slope:.2f} per fight)"]},
+                "xAxis": {"type": "category", "data": dates_str, "name": "Date"},
+                "yAxis": {"type": "value", "name": "Cumulative Head Trauma", "min": 0, "max": 2000},
+                "series": [
+                    {
+                        "name": "Cumulative Head Trauma",
+                        "type": "line",
+                        "areaStyle": {},
+                        "data": cumulative_head_trauma['head_str_l'].tolist()
+                    },
+                    {
+                        "name": f"Trendline (slope = {slope:.2f} per fight)",
+                        "type": "line",
+                        "lineStyle": {"type": "dashed", "color": "red"},
+                        "itemStyle": {"color": "red"},
+                        "data": cumulative_head_trauma['trend'].tolist()
+                    }
+                ]
+            }
+            st_echarts(options=option_cum_trauma)
             
             st.divider()
             with st.expander("Career Results"):
@@ -260,9 +273,18 @@ elif view[2].open:
         with c1:
             st.write("Fights by month")
             fights_monthly= duckdb.sql("SELECT date_trunc('month',date) as MONTH,count(*) as FIGHTS, count(distinct EVENT) as EVENTS from fed group by 1 order by 1 asc").df()
-            fig = px.area(fights_monthly, x='MONTH',y=['FIGHTS','EVENTS'], template='simple_white')
-            st.plotly_chart(fig,width='content',theme=None)
-            # st.area_chart(fights_monthly, x='MONTH',y='FIGHTS')
+            
+            option_monthly = {
+                "tooltip": {"trigger": "axis"},
+                "legend": {"data": ["FIGHTS", "EVENTS"]},
+                "xAxis": {"type": "category", "data": fights_monthly['MONTH'].astype(str).tolist()},
+                "yAxis": {"type": "value"},
+                "series": [
+                    {"name": "FIGHTS", "type": "line", "areaStyle": {}, "data": fights_monthly['FIGHTS'].tolist()},
+                    {"name": "EVENTS", "type": "line", "areaStyle": {}, "data": fights_monthly['EVENTS'].tolist()}
+                ]
+            }
+            st_echarts(options=option_monthly)
             
             st.divider()
     
@@ -272,30 +294,53 @@ elif view[2].open:
             st.divider()
             st.write("Fights by result method (2yr)")
             methods = duckdb.sql("SELECT method, count(*) FIGHTS from fr_cleaned where date between current_date() -730 and current_date() group by 1 ").df()
-            fig = px.pie(methods,values='FIGHTS', names='METHOD', template='simple_white')
-            st.plotly_chart(fig,width='content',theme=None)
-            # base = alt.Chart(methods).encode(alt.Theta("FIGHTS:Q").stack(True),alt.Color("METHOD:N").legend(None),alt.Tooltip("METHOD:N", title="METHOD"))
-            # pie = base.mark_arc(outerRadius=120)
-            # st.altair_chart(pie)
             
-        
+            pie_data = [{"value": row['FIGHTS'], "name": row['method']} for _, row in methods.iterrows()]
+            option_pie = {
+                "tooltip": {"trigger": "item"},
+                "legend": {"orient": "vertical", "left": "left"},
+                "series": [{
+                    "name": "Method",
+                    "type": "pie",
+                    "radius": "50%",
+                    "data": pie_data,
+                    "emphasis": {
+                        "itemStyle": {
+                            "shadowBlur": 10,
+                            "shadowOffsetX": 0,
+                            "shadowColor": "rgba(0, 0, 0, 0.5)"
+                        }
+                    }
+                }]
+            }
+            st_echarts(options=option_pie)
+            
         with c2:
             st.write("Number of Fights per Fighter")
             fight_distro = duckdb.sql("""select FIGHTS, SUM(FIGHTERS) OVER (ORDER BY FIGHTS desc) FIGHTERS from
                                       (select FIGHTS,count(1) FIGHTERS from  (select FIGHTER,COUNT(DISTINCT EVENT||BOUT) FIGHTS from fs_cleaned group by 1) group by 1)
                                   order by 1""").df()
-            fig = px.bar(fight_distro, x='FIGHTS',y='FIGHTERS', template='simple_white')
-            st.plotly_chart(fig,width='content',theme=None)
-            # st.bar_chart(fight_distro, x='FIGHTS',y='FIGHTERS')
+            
+            option_distro = {
+                "tooltip": {"trigger": "axis"},
+                "xAxis": {"type": "category", "data": fight_distro['FIGHTS'].astype(str).tolist(), "name": "FIGHTS"},
+                "yAxis": {"type": "value", "name": "FIGHTERS"},
+                "series": [{"data": fight_distro['FIGHTERS'].tolist(), "type": "bar"}]
+            }
+            st_echarts(options=option_distro)
             st.divider()
             
             st.write('Most commonly used venues (2yr)')
             locations = duckdb.sql("SELECT LOCATION,count(distinct EVENT) EVENTS from fed where date between current_date() -730 and current_date() group by 1 order by 2 desc limit 10").df()
-            fig = px.bar(locations.sort_values(by='EVENTS'), x='EVENTS',y='LOCATION', template='simple_white')
-            st.plotly_chart(fig,width='content',theme=None)
-           
-            # base = alt.Chart(locations.sort_values(by='EVENTS')).mark_point().encode(x='EVENTS',y='LOCATION')
-            # st.altair_chart(base)
+            loc_sorted = locations.sort_values(by='EVENTS')
+            
+            option_locations = {
+                "tooltip": {"trigger": "axis"},
+                "xAxis": {"type": "value", "name": "EVENTS"},
+                "yAxis": {"type": "category", "data": loc_sorted['LOCATION'].tolist()},
+                "series": [{"data": loc_sorted['EVENTS'].tolist(), "type": "bar"}]
+            }
+            st_echarts(options=option_locations)
     
             st.divider()
             st.write('Number of Fighters fought by Weight/Type (2yr)')
@@ -311,14 +356,6 @@ elif view[2].open:
         frame = st.selectbox('Pick a time dimension',['year','quarter','month','week','day'])
         fr_cleaned_duck = fr_cleaned.copy()
 
-        # methods_over_time = duckdb.sql(f"""
-        # SELECT 
-        #     CASE WHEN METHOD LIKE 'Decision%' THEN 'Decision' ELSE METHOD END AS METHOD,
-        #     date_trunc('{frame}', date) AS MONTH,
-        #     count(*) / sum(sum(1)) OVER (PARTITION BY date_trunc('{frame}', date)) AS METHOD_PCT
-        # FROM fr_cleaned_duck
-        # GROUP BY 1, 2
-        # """).df()     
         frame_map = {
             'month': 'M',
             'quarter': 'Q', 
@@ -338,9 +375,30 @@ elif view[2].open:
             .drop(columns='cnt')
         )
         
-        fig = px.area(methods_over_time, x='MONTH',y='METHOD_PCT',color='METHOD', template='simple_white')
-        st.plotly_chart(fig,width='stretch',theme=None)
-        # st.area_chart(methods_over_time, x='MONTH',y='METHOD_PCT',color='METHOD')
+        unique_months = sorted(methods_over_time['MONTH'].unique())
+        months_str = [pd.to_datetime(m).strftime('%Y-%m-%d') for m in unique_months]
+        unique_methods = methods_over_time['METHOD'].unique().tolist()
+        
+        series_list = []
+        for m_name in unique_methods:
+            m_df = methods_over_time[methods_over_time['METHOD'] == m_name].set_index('MONTH')
+            m_df = m_df.reindex(unique_months, fill_value=0)
+            series_list.append({
+                "name": m_name,
+                "type": "line",
+                "stack": "Total",
+                "areaStyle": {},
+                "data": m_df['METHOD_PCT'].tolist()
+            })
+
+        option_methods_over_time = {
+            "tooltip": {"trigger": "axis"},
+            "legend": {"data": unique_methods},
+            "xAxis": {"type": "category", "data": months_str},
+            "yAxis": {"type": "value"},
+            "series": series_list
+        }
+        st_echarts(options=option_methods_over_time)
 
 elif view[3].open:
     with view[3]:
@@ -364,33 +422,47 @@ elif view[3].open:
             chart_metric1 = c1.selectbox('Choose a metric to plot',combined_stats.columns)
             chart_metric2 = c2.selectbox('Choose a second metric to plot',combined_stats.columns)
             viz_data = duckdb.sql(f"select FIGHTER, {chart_metric1}, {chart_metric2} from combined_stats ").df()
-            # fig = px.scatter(viz_data, x=chart_metric1,y=chart_metric2, text='FIGHTER', template='simple_white')
-            # st.plotly_chart(fig, width='content')
             x = viz_data[chart_metric1]
             y = viz_data[chart_metric2]
             slope, intercept = np.polyfit(x, y, 1)
-            trendline_y = slope * x + intercept
             
-            # Create base scatter plot
-            fig = px.scatter(
-                viz_data, 
-                x=chart_metric1, 
-                y=chart_metric2, 
-                text='FIGHTER', 
-                template='simple_white'
-            )
+            scatter_series_data = [
+                [row[chart_metric1], row[chart_metric2], row['FIGHTER']]
+                for _, row in viz_data.iterrows()
+            ]
             
-            # Add line of best fit
-            fig.add_trace(go.Scatter(
-                x=x,
-                y=trendline_y,
-                mode='lines',
-                name=f'Best Fit Line (slope = {slope:.2f})',
-                line=dict(color='red', dash='dash')
-            ))
+            x_min, x_max = float(x.min()), float(x.max())
+            trendline_data = [
+                [x_min, slope * x_min + intercept],
+                [x_max, slope * x_max + intercept]
+            ]
             
-            # Plot
-            st.plotly_chart(fig, width='content',theme=None)
+            option_scatter = {
+                "tooltip": {
+                    "formatter": "{c}"
+                },
+                "legend": {"data": ["Fighters", f"Best Fit Line (slope = {slope:.2f})"]},
+                "xAxis": {"type": "value", "name": chart_metric1, "scale": True},
+                "yAxis": {"type": "value", "name": chart_metric2, "scale": True},
+                "series": [
+                    {
+                        "name": "Fighters",
+                        "type": "scatter",
+                        "data": scatter_series_data,
+                        "tooltip": {
+                            "formatter": "Function(params) { return params.data[2] + '<br/>' + params.seriesName + ': ' + params.data[0] + ', ' + params.data[1]; }"
+                        }
+                    },
+                    {
+                        "name": f"Best Fit Line (slope = {slope:.2f})",
+                        "type": "line",
+                        "data": trendline_data,
+                        "lineStyle": {"color": "red", "type": "dashed"},
+                        "itemStyle": {"color": "red"}
+                    }
+                ]
+            }
+            st_echarts(options=option_scatter)
         
         # vizPlot()
 
@@ -453,7 +525,6 @@ elif view[5].open:
             st.write('fighters = fighter details')
         with col2:
             query_text = st_ace()
-            # query_text = st.text_area('Write SELECT statement here')
             st.caption('Will add history of previous queries for reference')
     
             if query_text:
@@ -566,6 +637,3 @@ with col2:
   st.code('This application uses data from Greco1899''s scraper of UFC Fight Stats - "https://raw.githubusercontent.com/Greco1899/scrape_ufc_stats"')
 with col3:
   st.code('Recent changes - SQL Editor, data retrieval cached via function' )
-
-# memory_usage = get_memory_usage()
-# st.sidebar.caption(f"Memory Usage: {memory_usage:.1f}% MB")
