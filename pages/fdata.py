@@ -5,10 +5,11 @@ import time
 import datetime
 from streamlit_ace import st_ace
 import numpy as np
-from streamlit_echarts import st_echarts
 
+# Updated imports: native st.echarts (v1.64+) and externalized charts module
 from utils.funcs import get_memory_usage, getData, cleanData, pullData, getFighters, query_fighter_data, oppStats, opp_stats,\
-    fs,fed, fr_cleaned, fs_cleaned, fighters, ed_c, fed, fr_cleaned, fs_cleaned, fighters, ed_c
+    fs, fed, fr_cleaned, fs_cleaned, fighters, ed_c
+import charts as ch
 ##################################
 
 def refreshData():
@@ -17,12 +18,11 @@ def refreshData():
     st.rerun()
     st.toast("Data Refreshed!")
 
-
 def calcFighterStats(fighter):
     winloss = duckdb.sql(f"SELECT case when FIGHTER1 = '{fighter}' then FIGHTER1_OUTCOME else FIGHTER2_OUTCOME end result from fr_cleaned where FIGHTER1 = '{fighter}' or FIGHTER2='{fighter}' ")
-    last_fight= duckdb.sql(f"SELECT left(max(date)::string,10) max_date, left( (current_date() - max(date))::string,10) days_since from fr_cleaned where FIGHTER1= '{fighter}' or FIGHTER2='{fighter}' ").df()
+    last_fight = duckdb.sql(f"SELECT left(max(date)::string,10) max_date, left( (current_date() - max(date))::string,10) days_since from fr_cleaned where FIGHTER1= '{fighter}' or FIGHTER2='{fighter}' ").df()
     fighter_stats = duckdb.sql(f"SELECT * from fs_cleaned where BOUT in (select BOUT from fights) and FIGHTER ='{fighter}' ")
-    cleaned_fighter_stats = duckdb.sql("SELECT sum(sig_str_l::INTEGER) as sig_str, sum(head_str_l::INTEGER) as head_str, sum(td_l::INTEGER) as td_l, round(sum(td_l::INTEGER)/cast(sum(td_a::REAL) as REAL),2)  as td_rate, sum(kd::INTEGER) as kd, from fighter_stats").df()
+    cleaned_fighter_stats = duckdb.sql("SELECT sum(sig_str_l::INTEGER) as sig_str, sum(head_str_l::INTEGER) as head_str, sum(td_l::INTEGER) as td_l, round(sum(td_l::INTEGER)/cast(sum(td_a::REAL) as REAL),2) as td_rate, sum(kd::INTEGER) as kd, from fighter_stats").df()
     ko_wins = duckdb.sql(f"SELECT count(*) as s from fr_cleaned where ((FIGHTER1='{fighter}' and FIGHTER1_OUTCOME='W') OR (FIGHTER2='{fighter}' and FIGHTER2_OUTCOME='W')) and trim(METHOD)='KO/TKO' ").df()
     opp_stats = duckdb.sql(f"SELECT * from fs_cleaned where BOUT in (select * from fights) and FIGHTER !='{fighter}' ")
     cleaned_opp_stats = duckdb.sql("SELECT sum(sig_str_l::INTEGER) as sig_abs ,sum(head_str_l::INTEGER) as head_abs,sum(head_str_a::INTEGER) as head_at,sum(td_l::INTEGER) as td_abs,round(sum(td_l::INTEGER)/cast(sum(td_a::REAL) as REAL),2) as td_abs_rate,sum(kd::INTEGER) as kd_abs from opp_stats").df()
@@ -37,38 +37,38 @@ def get_fighter_list():
 
 view = st.tabs(['Welcome','Fighter One Sheet','Interesting Stats','Aggregate Table','Show all dataset samples','SQL Editor','Tale of the Tape'],
                on_change='rerun',
-              default='Welcome')
+               default='Welcome')
 
 ###################### data pull and clean
 fed, fr_cleaned, fs_cleaned, fighters, ed_c = cleanData()
 
 ########################
-fighter_list = get_fighter_list()                   
+fighter_list = get_fighter_list()                    
 
 if view[0].open:
     with view[0]:
-      st.title('Welcome to UFC Stats Explorer!👊')
-      st.write("""
-      The purpose of this application is to make it easy to dive into the world of UFC fight stats. The fight data goes back to 1994 and is available at a round by round level, which allows for very granular analysis.
+        st.title('Welcome to UFC Stats Explorer!👊')
+        st.write("""
+        The purpose of this application is to make it easy to dive into the world of UFC fight stats. The fight data goes back to 1994 and is available at a round by round level, which allows for very granular analysis.
                   
-      - To view a summary of a single fighter throughout their career, or a few of their recent fights, head over to the Fighter One Sheet page. 
-      
-      - To see a high level overview of the UFC over the years, including fights by month, most active referees, fights by division and most common methods of victory, click Interesting Stats
-      
-      - To view an all time ranking of every UFC fighter with both offensive and defensive stats (such as, which fighter has thrown the most leg kicks ever), go to Aggregate Table.
-      
-      - If you have your own ideas for the data, head over to SQL Editor, and write your own code. You can get insights such as win % by age and other nerdy metrics. To get familiar with the tables, you can see the existing tables on the Samples page.
-      
-      - Lastly, if you are excited about an upcoming fight, go to Tale of the Tape, and compare 2 fighters and their advanced metrics!
-      """)
+        - To view a summary of a single fighter throughout their career, or a few of their recent fights, head over to the Fighter One Sheet page. 
+        
+        - To see a high level overview of the UFC over the years, including fights by month, most active referees, fights by division and most common methods of victory, click Interesting Stats
+        
+        - To view an all time ranking of every UFC fighter with both offensive and defensive stats (such as, which fighter has thrown the most leg kicks ever), go to Aggregate Table.
+        
+        - If you have your own ideas for the data, head over to SQL Editor, and write your own code. You can get insights such as win % by age and other nerdy metrics. To get familiar with the tables, you can see the existing tables on the Samples page.
+        
+        - Lastly, if you are excited about an upcoming fight, go to Tale of the Tape, and compare 2 fighters and their advanced metrics!
+        """)
                   
-      st.caption('Please note that this a free, hosted application with data gathered by a 3rd party and not everything will be perfectly working at all times. However if you are a hardcore MMA fan, please use as you like. If you have questions or suggestions, a suggestion box will be introduced soon.') 
-      
-      if st.button('Refresh Data'):
-          refreshData()
-      st.header('Enjoy and JUST BLEED!')
-      st.image('https://media.tenor.com/8jkYjD4cnqUAAAAM/just-bleed.gif')
-      
+        st.caption('Please note that this a free, hosted application with data gathered by a 3rd party and not everything will be perfectly working at all times. However if you are a hardcore MMA fan, please use as you like. If you have questions or suggestions, a suggestion box will be introduced soon.') 
+        
+        if st.button('Refresh Data'):
+            refreshData()
+        st.header('Enjoy and JUST BLEED!')
+        st.image('https://media.tenor.com/8jkYjD4cnqUAAAAM/just-bleed.gif')
+        
 elif view[1].open:
     with view[1]:
         st.text('Display all relevant fighter stats in just 1 click. Choose your fighter below to get started')
@@ -91,7 +91,7 @@ elif view[1].open:
         if len(fights)==0:
             st.write("No data for this fighter")
         else:
-          winloss, last_fight, fighter_stats, cleaned_fighter_stats, ko_wins, opp_stats, cleaned_opp_stats, ko_losses =  calcFighterStats(fighter_filter)
+            winloss, last_fight, fighter_stats, cleaned_fighter_stats, ko_wins, opp_stats, cleaned_opp_stats, ko_losses = calcFighterStats(fighter_filter)
         
         if fighter_filter:
             st.subheader('Bio')
@@ -154,52 +154,20 @@ elif view[1].open:
             c_str1, c_str2 = st.columns(2)
             with c_str1:
                 str_a = duckdb.sql(f"SELECT DATE, sum(total_str_a::INT) as Total_Strikes_At from fighter_stats group by 1").df()
-                option_str_a = {
-                    "grid": {"left": "10%", "right": "10%", "bottom": "15%", "containLabel": True},
-                    "title": {"text": "Strikes Attempted"},
-                    "tooltip": {"trigger": "axis"},
-                    "xAxis": {"type": "category", "data": str_a['DATE'].astype(str).tolist()},
-                    "yAxis": {"type": "value"},
-                    "series": [{"data": str_a['Total_Strikes_At'].tolist(), "type": "line", "areaStyle": {}}]
-                }
-                st_echarts(options=option_str_a, height="400px")
-           
+                st.echarts(options=ch.get_strikes_attempted_chart(str_a['DATE'].astype(str).tolist(), str_a['Total_Strikes_At'].tolist()), height="400px")
+            
             with c_str2:
                 str_dif = duckdb.sql(f"SELECT a.DATE, sum(a.sig_str_l::INT)-sum(b.sig_str_l::INT) as Strike_Diff from fighter_stats as a inner join opp_stats as b on a.DATE = b.DATE and a.BOUT=b.BOUT and a.ROUND=b.ROUND group by 1").df()
-                option_str_dif = {
-                    "grid": {"left": "10%", "right": "10%", "bottom": "15%", "containLabel": True},
-                    "title": {"text": "Net Sig Strike Landed difference"},
-                    "tooltip": {"trigger": "axis"},
-                    "xAxis": {"type": "category", "data": str_dif['DATE'].astype(str).tolist()},
-                    "yAxis": {"type": "value"},
-                    "series": [{"data": str_dif['Strike_Diff'].tolist(), "type": "line", "areaStyle": {}}]
-                }
-                st_echarts(options=option_str_dif, height="400px")
+                st.echarts(options=ch.get_strike_diff_chart(str_dif['DATE'].astype(str).tolist(), str_dif['Strike_Diff'].tolist()), height="400px")
             
             c_td1, c_td2 = st.columns(2)
             with c_td1:
-                td_a = duckdb.sql(f"SELECT DATE,  sum(td_a::int) TD_At from fighter_stats group by 1").df()
-                option_td_a = {
-                    "grid": {"left": "10%", "right": "10%", "bottom": "15%", "containLabel": True},
-                    "title": {"text": "Takedowns Attempted"},
-                    "tooltip": {"trigger": "axis"},
-                    "xAxis": {"type": "category", "data": td_a['DATE'].astype(str).tolist()},
-                    "yAxis": {"type": "value"},
-                    "series": [{"data": td_a['TD_At'].tolist(), "type": "line", "areaStyle": {}}]
-                }
-                st_echarts(options=option_td_a, height="400px")
+                td_a = duckdb.sql(f"SELECT DATE, sum(td_a::int) TD_At from fighter_stats group by 1").df()
+                st.echarts(options=ch.get_td_attempted_chart(td_a['DATE'].astype(str).tolist(), td_a['TD_At'].tolist()), height="400px")
             
             with c_td2:
                 td_dif = duckdb.sql(f"SELECT a.DATE, sum(a.td_a::INT)-sum(b.td_a::INT) as TD_At_Diff from fighter_stats as a inner join opp_stats as b on a.DATE = b.DATE and a.BOUT=b.BOUT and a.ROUND=b.ROUND group by 1").df()
-                option_td_dif = {
-                    "grid": {"left": "10%", "right": "10%", "bottom": "15%", "containLabel": True},
-                    "title": {"text": "Net Takedown difference"},
-                    "tooltip": {"trigger": "axis"},
-                    "xAxis": {"type": "category", "data": td_dif['DATE'].astype(str).tolist()},
-                    "yAxis": {"type": "value"},
-                    "series": [{"data": td_dif['TD_At_Diff'].tolist(), "type": "line", "areaStyle": {}}]
-                }
-                st_echarts(options=option_td_dif, height="400px")
+                st.echarts(options=ch.get_td_diff_chart(td_dif['DATE'].astype(str).tolist(), td_dif['TD_At_Diff'].tolist()), height="400px")
     
             st.divider()
             cumulative_head_trauma = duckdb.sql(f"""
@@ -220,30 +188,15 @@ elif view[1].open:
             
             dates_str = cumulative_head_trauma['DATE'].dt.strftime('%Y-%m-%d').tolist()
             
-            option_cum_trauma = {
-                "grid": {"left": "8%", "right": "8%", "bottom": "15%", "top": "15%", "containLabel": True},
-                "title": {"text": "Cumulative Head Trauma with Trendline"},
-                "tooltip": {"trigger": "axis"},
-                "legend": {"data": ["Cumulative Head Trauma", f"Trendline (slope = {slope:.2f} per fight)"]},
-                "xAxis": {"type": "category", "data": dates_str, "name": "Date"},
-                "yAxis": {"type": "value", "name": "Cumulative Head Trauma", "min": 0},
-                "series": [
-                    {
-                        "name": "Cumulative Head Trauma",
-                        "type": "line",
-                        "areaStyle": {},
-                        "data": cumulative_head_trauma['head_str_l'].tolist()
-                    },
-                    {
-                        "name": f"Trendline (slope = {slope:.2f} per fight)",
-                        "type": "line",
-                        "lineStyle": {"type": "dashed", "color": "red"},
-                        "itemStyle": {"color": "red"},
-                        "data": cumulative_head_trauma['trend'].tolist()
-                    }
-                ]
-            }
-            st_echarts(options=option_cum_trauma, height="500px")
+            st.echarts(
+                options=ch.get_cum_trauma_chart(
+                    dates_str, 
+                    cumulative_head_trauma['head_str_l'].tolist(), 
+                    cumulative_head_trauma['trend'].tolist(), 
+                    slope
+                ), 
+                height="500px"
+            )
             
             st.divider()
             with st.expander("Career Results"):
@@ -274,18 +227,14 @@ elif view[2].open:
             st.write("Fights by month")
             fights_monthly= duckdb.sql("SELECT date_trunc('month',date) as MONTH,count(*) as FIGHTS, count(distinct EVENT) as EVENTS from fed group by 1 order by 1 asc").df()
             
-            option_monthly = {
-                "grid": {"left": "10%", "right": "10%", "bottom": "15%", "containLabel": True},
-                "tooltip": {"trigger": "axis"},
-                "legend": {"data": ["FIGHTS", "EVENTS"]},
-                "xAxis": {"type": "category", "data": fights_monthly['MONTH'].astype(str).tolist()},
-                "yAxis": {"type": "value"},
-                "series": [
-                    {"name": "FIGHTS", "type": "line", "areaStyle": {}, "data": fights_monthly['FIGHTS'].tolist()},
-                    {"name": "EVENTS", "type": "line", "areaStyle": {}, "data": fights_monthly['EVENTS'].tolist()}
-                ]
-            }
-            st_echarts(options=option_monthly, height="400px")
+            st.echarts(
+                options=ch.get_monthly_fights_chart(
+                    fights_monthly['MONTH'].astype(str).tolist(),
+                    fights_monthly['FIGHTS'].tolist(),
+                    fights_monthly['EVENTS'].tolist()
+                ), 
+                height="400px"
+            )
             
             st.divider()
     
@@ -297,24 +246,7 @@ elif view[2].open:
             methods = duckdb.sql("SELECT method, count(*) FIGHTS from fr_cleaned where date between current_date() -730 and current_date() group by 1 ").df()
             
             pie_data = [{"value": row['FIGHTS'], "name": row['METHOD']} for _, row in methods.iterrows()]
-            option_pie = {
-                "tooltip": {"trigger": "item"},
-                "legend": {"orient": "vertical", "left": "left"},
-                "series": [{
-                    "name": "Method",
-                    "type": "pie",
-                    "radius": "60%",
-                    "data": pie_data,
-                    "emphasis": {
-                        "itemStyle": {
-                            "shadowBlur": 10,
-                            "shadowOffsetX": 0,
-                            "shadowColor": "rgba(0, 0, 0, 0.5)"
-                        }
-                    }
-                }]
-            }
-            st_echarts(options=option_pie, height="400px")
+            st.echarts(options=ch.get_methods_pie_chart(pie_data), height="400px")
             
         with c2:
             st.write("Number of Fights per Fighter")
@@ -322,28 +254,26 @@ elif view[2].open:
                                       (select FIGHTS,count(1) FIGHTERS from  (select FIGHTER,COUNT(DISTINCT EVENT||BOUT) FIGHTS from fs_cleaned group by 1) group by 1)
                                   order by 1""").df()
             
-            option_distro = {
-                "grid": {"left": "10%", "right": "10%", "bottom": "15%", "containLabel": True},
-                "tooltip": {"trigger": "axis"},
-                "xAxis": {"type": "category", "data": fight_distro['FIGHTS'].astype(str).tolist(), "name": "FIGHTS"},
-                "yAxis": {"type": "value", "name": "FIGHTERS"},
-                "series": [{"data": fight_distro['FIGHTERS'].tolist(), "type": "bar"}]
-            }
-            st_echarts(options=option_distro, height="400px")
+            st.echarts(
+                options=ch.get_fight_distro_chart(
+                    fight_distro['FIGHTS'].astype(str).tolist(),
+                    fight_distro['FIGHTERS'].tolist()
+                ), 
+                height="400px"
+            )
             st.divider()
             
             st.write('Most commonly used venues (2yr)')
             locations = duckdb.sql("SELECT LOCATION,count(distinct EVENT) EVENTS from fed where date between current_date() -730 and current_date() group by 1 order by 2 desc limit 10").df()
             loc_sorted = locations.sort_values(by='EVENTS')
             
-            option_locations = {
-                "grid": {"left": "15%", "right": "10%", "bottom": "15%", "containLabel": True},
-                "tooltip": {"trigger": "axis"},
-                "xAxis": {"type": "value", "name": "EVENTS"},
-                "yAxis": {"type": "category", "data": loc_sorted['LOCATION'].tolist()},
-                "series": [{"data": loc_sorted['EVENTS'].tolist(), "type": "bar"}]
-            }
-            st_echarts(options=option_locations, height="400px")
+            st.echarts(
+                options=ch.get_locations_chart(
+                    loc_sorted['LOCATION'].tolist(),
+                    loc_sorted['EVENTS'].tolist()
+                ), 
+                height="400px"
+            )
     
             st.divider()
             st.write('Number of Fighters fought by Weight/Type (2yr)')
@@ -401,15 +331,10 @@ elif view[2].open:
                 "data": pct_series.tolist()
             })
 
-        option_methods_over_time = {
-            "grid": {"left": "5%", "right": "5%", "bottom": "15%", "top": "15%", "containLabel": True},
-            "tooltip": {"trigger": "axis"},
-            "legend": {"data": unique_methods, "top": "top"},
-            "xAxis": {"type": "category", "data": months_str},
-            "yAxis": {"type": "value"},
-            "series": series_list
-        }
-        st_echarts(options=option_methods_over_time, height="500px")
+        st.echarts(
+            options=ch.get_methods_over_time_chart(unique_methods, months_str, series_list), 
+            height="500px"
+        )
 
 elif view[3].open:
     with view[3]:
@@ -448,33 +373,16 @@ elif view[3].open:
                 [x_max, slope * x_max + intercept]
             ]
             
-            option_scatter = {
-                "grid": {"left": "10%", "right": "10%", "bottom": "15%", "top": "15%", "containLabel": True},
-                "tooltip": {
-                    "formatter": "{c}"
-                },
-                "legend": {"data": ["Fighters", f"Best Fit Line (slope = {slope:.2f})"]},
-                "xAxis": {"type": "value", "name": chart_metric1, "scale": True},
-                "yAxis": {"type": "value", "name": chart_metric2, "scale": True},
-                "series": [
-                    {
-                        "name": "Fighters",
-                        "type": "scatter",
-                        "data": scatter_series_data,
-                        "tooltip": {
-                            "formatter": "Function(params) { return params.data[2] + '<br/>' + params.seriesName + ': ' + params.data[0] + ', ' + params.data[1]; }"
-                        }
-                    },
-                    {
-                        "name": f"Best Fit Line (slope = {slope:.2f})",
-                        "type": "line",
-                        "data": trendline_data,
-                        "lineStyle": {"color": "red", "type": "dashed"},
-                        "itemStyle": {"color": "red"}
-                    }
-                ]
-            }
-            st_echarts(options=option_scatter, height="550px")
+            st.echarts(
+                options=ch.get_scatter_chart(
+                    chart_metric1, 
+                    chart_metric2, 
+                    scatter_series_data, 
+                    trendline_data, 
+                    slope
+                ), 
+                height="550px"
+            )
         
         # vizPlot()
 
@@ -496,156 +404,27 @@ elif view[5].open:
     with view[5]:
         st.write("Write custom sql on the data using [🦆duckdb](https://duckdb.org/docs/archive/0.9.2/sql/introduction)")
         with st.expander("Examples"):
-          st.write('Win % by age')
-          st.code("""select age,  sum(W) as wins, sum(L) as losses, sum(fights) as total_results, sum(W)/(sum(W)+sum(L)) as win_pct from 
-           (
-          select date_diff('year',strptime(dob, '%b %d, %Y'),date)  as age, sum (case when fighter1_outcome = 'W' then 1 else 0 end) W, sum (case when fighter1_outcome = 'L' then 1 else 0 end) as L, count(1) fights from fighters inner join fr_cleaned on fighter = fighter1 where (weightclass ilike '%featherweight title%' )
-          group by 1 
-          UNION
-          select date_diff('year',strptime(dob, '%b %d, %Y'),date)  as age, sum (case when fighter2_outcome = 'W' then 1 else 0 end) W, sum (case when fighter2_outcome = 'L' then 1 else 0 end) as L, count(1) fights from fighters inner join fr_cleaned on fighter = fighter2 where (weightclass ilike '%featherweight title%' )
-          group by 1 
-           )
-          group by 1   
-          """)
-          st.write('Most significant strikes landed')
-          st.code("""select event, bout, fighter, sum(sig_Str_l::int)  
-                  from fs_cleaned 
-                  group by 1,2,3 
-                  order by 4 desc  
-                  limit 20
-                  """)
-          st.write('Womens bouts with the most combined strikes')
-          st.code("""select event, bout, sum(sig_str_l) as total_sig_strikes, avg(rounds) as rounds, 
-             round(sum(sig_str_l)/avg(rounds)) as sig_per_round
-            from 
-            (
-            select event, bout, fighter,sum(sig_str_l::int) sig_str_l,
-            count(distinct round) as rounds, sum(sig_str_l::int)/count(distinct round) as sig_per_rd
-            from fs_cleaned
-                where bout in (
-                select distinct bout from fr_cleaned 
-                where weightclass ilike '%women%' )
-            group by all)
-            group by all
-            order by 3 desc 
+            st.write('Win % by age')
+            st.code("""select age,  sum(W) as wins, sum(L) as losses, sum(fights) as total_results, sum(W)/(sum(W)+sum(L)) as win_pct from 
+             (
+            select date_diff('year',strptime(dob, '%b %d, %Y'),date)  as age, sum (case when fighter1_outcome = 'W' then 1 else 0 end) W, sum (case when fighter1_outcome = 'L' then 1 else 0 end) as L, count(1) fights from fighters inner join fr_cleaned on fighter = fighter1 where (weightclass ilike '%featherweight title%' )
+            group by 1 
+            UNION
+            select date_diff('year',strptime(dob, '%b %d, %Y'),date)  as age, sum (case when fighter2_outcome = 'W' then 1 else 0 end) W, sum (case when fighter2_outcome = 'L' then 1 else 0 end) as L, count(1) fights from fighters inner join fr_cleaned on fighter = fighter2 where (weightclass ilike '%featherweight title%' )
+            group by 1 
+             )
+            group by 1   
             """)
-        col1,col2 = st.columns([3,10])
-        with col1:
-            st.write('Tables')
-            st.write('fs_cleaned = fight stats')
-            st.write('fr_cleaned = fight results')
-            st.write('fighters = fighter details')
-        with col2:
-            query_text = st_ace()
-            st.caption('Will add history of previous queries for reference')
-    
-            if query_text:
-                try:
-                  with st.spinner('Running Query'):
-                    data = pullData(query_text)
-                    data = data.df()
-                    st.caption('Displaying 1,000 rows')
-                    st.dataframe(data.head(1000), hide_index=True)
-                    
-                except Exception as e:
-                  st.write(e)
-if view[6].open:
-    with view[6]:
-        st.write('Compare advanced metrics between 2 fighters')
-        c1, c2, c3 = st.columns(3)
-        fighter1_filter = c1.selectbox('Pick Fighter 1', options=fighter_list, index=None)
-        if fighter1_filter == None:
-            st.stop()
-        fights1 = duckdb.sql(f"SELECT BOUT from fr_cleaned where FIGHTER1 = '{fighter1_filter}' or FIGHTER2='{fighter1_filter}'").df()
-        fighter_stats1 = duckdb.sql(f"SELECT * from fs_cleaned where BOUT in (select BOUT from fights1) and FIGHTER ='{fighter1_filter}' ")
-        cleaned_fighter_stats1 = duckdb.sql("SELECT sum(sig_str_l::INTEGER) as sig_str, sum(head_str_l::INTEGER) as head_str, sum(td_l::INTEGER) as td_l, round(sum(td_l::INTEGER)/cast(sum(td_a::REAL) as REAL),2)  as td_rate, sum(kd::INTEGER) as kd, from fighter_stats1").df()
-        opp_stats1 = duckdb.sql(f"SELECT * from fs_cleaned where BOUT in (select * from fights1) and FIGHTER !='{fighter1_filter}' ")
-        cleaned_opp_stats1 = duckdb.sql("SELECT sum(sig_str_l::INTEGER) as sig_abs ,sum(head_str_l::INTEGER) as head_abs,sum(head_str_a::INTEGER) as head_at,sum(td_l::INTEGER) as td_abs,round(sum(td_l::INTEGER)/cast(sum(td_a::REAL) as REAL),2) as td_abs_rate,sum(kd::INTEGER) as kd_abs from opp_stats1").df()
-        
-        metric_width = 'content'
-        sig_strike_diff = round(cleaned_fighter_stats1['sig_str']/cleaned_opp_stats1['sig_abs'],1)
-        c1.metric('Significant Strikes Differential',width=metric_width, value=sig_strike_diff,border=True)
-        head_strike_diff = round(cleaned_fighter_stats1['head_str']/cleaned_opp_stats1['head_abs'],1)
-        c1.metric('Head Strikes Differential',width=metric_width, value=head_strike_diff,border=True)
-        power_diff = round(cleaned_fighter_stats1['kd']/cleaned_opp_stats1['kd_abs'],1)
-        c1.metric('Power Differential (Knockdowns)',width=metric_width, value=power_diff,border=True)
-        td_landed = int(cleaned_fighter_stats1['td_l'].iloc[0])
-        c1.metric(label='Total Takedowns Landed',width=metric_width,value=td_landed,delta="{0:.0%}".format(round(float(cleaned_fighter_stats1['td_rate'].iloc[0]),2)),border=True)
-        td_given = int(cleaned_opp_stats1['td_abs'].iloc[0])
-        c1.metric(label='Total Takedowns Given Up',width=metric_width,value=td_given,delta="{0:.0%}".format(round(float(cleaned_opp_stats1['td_abs_rate'].iloc[0]),2)),border=True)
-        td_diff = round(cleaned_fighter_stats1['td_l']/cleaned_opp_stats1['td_abs'],1)
-        c1.metric('Takedown Differential',width=metric_width, value=td_diff,border=True)
-        c1.caption('Success rate at evading head strikes')
-        head_movement1 = round(1-(cleaned_opp_stats1['head_abs']/cleaned_opp_stats1['head_at']),2)
-        c1.metric('Head Movement',width=metric_width, value=head_movement1,border=True)
-        
-        fighter2_filter = c2.selectbox('Pick Fighter 2', options=fighter_list, index=None)
-        if fighter2_filter == None:
-            st.stop()
-        fights2 = duckdb.sql(f"SELECT BOUT from fr_cleaned where FIGHTER1 = '{fighter2_filter}' or FIGHTER2='{fighter2_filter}'").df()
-        fighter_stats2 = duckdb.sql(f"SELECT * from fs_cleaned where BOUT in (select BOUT from fights2) and FIGHTER ='{fighter2_filter}' ")
-        cleaned_fighter_stats2 = duckdb.sql("SELECT sum(sig_str_l::INTEGER) as sig_str, sum(head_str_l::INTEGER) as head_str, sum(td_l::INTEGER) as td_l, round(sum(td_l::INTEGER)/cast(sum(td_a::REAL) as REAL),2)  as td_rate, sum(kd::INTEGER) as kd, from fighter_stats2").df()
-        opp_stats2 = duckdb.sql(f"SELECT * from fs_cleaned where BOUT in (select * from fights2) and FIGHTER !='{fighter2_filter}' ")
-        cleaned_opp_stats2 = duckdb.sql("SELECT sum(sig_str_l::INTEGER) as sig_abs ,sum(head_str_l::INTEGER) as head_abs,sum(head_str_a::INTEGER) as head_at,sum(td_l::INTEGER) as td_abs,round(sum(td_l::INTEGER)/cast(sum(td_a::REAL) as REAL),2) as td_abs_rate,sum(kd::INTEGER) as kd_abs from opp_stats2").df()
-        
-        sig_strike_diff2 = round(cleaned_fighter_stats2['sig_str']/cleaned_opp_stats2['sig_abs'],1)
-        c2.metric('Significant Strikes Differential',width=metric_width, value=sig_strike_diff2,border=True)
-        head_strike_diff2 = round(cleaned_fighter_stats2['head_str']/cleaned_opp_stats2['head_abs'],1)
-        c2.metric('Head Strikes Differential',width=metric_width, value=head_strike_diff2,border=True)
-        power_diff2 = round(cleaned_fighter_stats2['kd']/cleaned_opp_stats2['kd_abs'],1)
-        c2.metric('Power Differential (Knockdowns)',width=metric_width, value=power_diff2,border=True)
-        td_landed_2 = int(cleaned_fighter_stats2['td_l'].iloc[0])
-        c2.metric(label='Total Takedowns Landed',width=metric_width,value=td_landed_2,delta="{0:.0%}".format(round(float(cleaned_fighter_stats2['td_rate'].iloc[0]),2)),border=True)
-        td_given_2 = int(cleaned_opp_stats2['td_abs'].iloc[0])
-        c2.metric(label='Total Takedowns Given Up',width=metric_width,value=td_given_2,delta="{0:.0%}".format(round(float(cleaned_opp_stats2['td_abs_rate'].iloc[0]),2)),border=True)
-        td_diff = round(cleaned_fighter_stats2['td_l']/cleaned_opp_stats2['td_abs'],1)
-        c2.metric('Takedown Differential',width=metric_width, value=td_diff,border=True)
-        c2.caption('Success rate at evading head strikes')
-        head_movement2 = round(1-(cleaned_opp_stats2['head_abs']/cleaned_opp_stats2['head_at']),2)
-        c2.metric('Head Movement',width=metric_width, value=head_movement2,border=True)
-        
-        with c3:
-          fighter1_advantage_counter = 0
-          fighter2_advantage_counter = 0
-          
-          if sig_strike_diff.iloc[0] >sig_strike_diff2.iloc[0]:
-              fighter1_advantage_counter += 1
-          else:
-              fighter2_advantage_counter += 1
-          
-          if head_strike_diff.iloc[0] >head_strike_diff.iloc[0]:
-              fighter1_advantage_counter += 1
-          else:
-              fighter2_advantage_counter += 1
-              
-          if power_diff.iloc[0] >power_diff2.iloc[0]:
-              fighter1_advantage_counter += 1
-          else:
-              fighter2_advantage_counter += 1
-              
-          if td_landed >td_landed_2:
-              fighter1_advantage_counter += 1
-          else:
-              fighter2_advantage_counter += 1    
-        
-          if head_movement1.iloc[0] >head_movement2.iloc[0]:
-              fighter1_advantage_counter += 1
-          else:
-              fighter2_advantage_counter += 1    
-          
-          if fighter1_advantage_counter>fighter2_advantage_counter:
-              advantage_diff = fighter1_advantage_counter -fighter2_advantage_counter
-              st.write(f'{fighter1_filter} has {advantage_diff} more advantages to win the fight')
-          else:
-              advantage_diff = fighter2_advantage_counter -fighter1_advantage_counter
-              st.write(f'{fighter2_filter} has {advantage_diff} more advantages to win the fight')
-        
-###################END OF APP########################################  
-st.divider()
-col1,col2,col3 = st.columns(3)
-with col1:
-  st.code('Built by Ilya')
-with col2:
-  st.code('This application uses data from Greco1899''s scraper of UFC Fight Stats - "https://raw.githubusercontent.com/Greco1899/scrape_ufc_stats"')
-with col3:
-  st.code('Recent changes - SQL Editor, data retrieval cached via function' )
+            st.write('Most significant strikes landed')
+            st.code("""select event, bout, fighter, sum(sig_Str_l::int)  
+                    from fs_cleaned 
+                    group by 1,2,3 
+                    order by 4 desc  
+                    limit 20
+                    """)
+            st.write('Womens bouts with the most combined strikes')
+            st.code("""select event, bout, sum(sig_str_l) as total_sig_strikes, avg(rounds) as rounds, 
+               round(sum(sig_str_l)/avg(rounds)) as sig_per_round
+              from 
+              (
+              select event, bout, fighter,sum(sig_str_l::int)
