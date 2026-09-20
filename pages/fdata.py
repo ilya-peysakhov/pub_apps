@@ -548,5 +548,3 @@ with col2:
   st.code('This application uses data from Greco1899''s scraper of UFC Fight Stats - "https://raw.githubusercontent.com/Greco1899/scrape_ufc_stats"')
 with col3:
   st.code('Recent changes - SQL Editor, data retrieval cached via function' )
-              (
-              select event, bout, fighter,sum(sig_str_l::int)
