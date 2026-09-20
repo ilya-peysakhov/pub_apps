@@ -9,7 +9,7 @@ import numpy as np
 # Import chart option generators from charts.py
 from utils.funcs import get_memory_usage, getData, cleanData, pullData, getFighters, query_fighter_data, oppStats, opp_stats,\
     fs, fed, fr_cleaned, fs_cleaned, fighters, ed_c
-import charts as ch
+import utils.charts as ch
 ##################################
 
 def refreshData():
