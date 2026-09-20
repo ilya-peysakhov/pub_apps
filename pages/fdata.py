@@ -5,9 +5,11 @@ import time
 import datetime
 from streamlit_ace import st_ace
 import numpy as np
+
+# Import chart option generators from charts.py
 from utils.funcs import get_memory_usage, getData, cleanData, pullData, getFighters, query_fighter_data, oppStats, opp_stats,\
     fs, fed, fr_cleaned, fs_cleaned, fighters, ed_c
-import utils.charts as ch
+import charts as ch
 ##################################
 
 def refreshData():
@@ -152,20 +154,20 @@ elif view[1].open:
             c_str1, c_str2 = st.columns(2)
             with c_str1:
                 str_a = duckdb.sql(f"SELECT DATE, sum(total_str_a::INT) as Total_Strikes_At from fighter_stats group by 1").df()
-                st.echarts_chart(options=ch.get_strikes_attempted_chart(str_a['DATE'].astype(str).tolist(), str_a['Total_Strikes_At'].tolist()), height="400px")
+                st.echarts_chart(ch.get_strikes_attempted_chart(str_a['DATE'].astype(str).tolist(), str_a['Total_Strikes_At'].tolist()), height=400)
             
             with c_str2:
                 str_dif = duckdb.sql(f"SELECT a.DATE, sum(a.sig_str_l::INT)-sum(b.sig_str_l::INT) as Strike_Diff from fighter_stats as a inner join opp_stats as b on a.DATE = b.DATE and a.BOUT=b.BOUT and a.ROUND=b.ROUND group by 1").df()
-                st.echarts_chart(options=ch.get_strike_diff_chart(str_dif['DATE'].astype(str).tolist(), str_dif['Strike_Diff'].tolist()), height="400px")
+                st.echarts_chart(ch.get_strike_diff_chart(str_dif['DATE'].astype(str).tolist(), str_dif['Strike_Diff'].tolist()), height=400)
             
             c_td1, c_td2 = st.columns(2)
             with c_td1:
                 td_a = duckdb.sql(f"SELECT DATE, sum(td_a::int) TD_At from fighter_stats group by 1").df()
-                st.echarts_chart(options=ch.get_td_attempted_chart(td_a['DATE'].astype(str).tolist(), td_a['TD_At'].tolist()), height="400px")
+                st.echarts_chart(ch.get_td_attempted_chart(td_a['DATE'].astype(str).tolist(), td_a['TD_At'].tolist()), height=400)
             
             with c_td2:
                 td_dif = duckdb.sql(f"SELECT a.DATE, sum(a.td_a::INT)-sum(b.td_a::INT) as TD_At_Diff from fighter_stats as a inner join opp_stats as b on a.DATE = b.DATE and a.BOUT=b.BOUT and a.ROUND=b.ROUND group by 1").df()
-                st.echarts_chart(options=ch.get_td_diff_chart(td_dif['DATE'].astype(str).tolist(), td_dif['TD_At_Diff'].tolist()), height="400px")
+                st.echarts_chart(ch.get_td_diff_chart(td_dif['DATE'].astype(str).tolist(), td_dif['TD_At_Diff'].tolist()), height=400)
     
             st.divider()
             cumulative_head_trauma = duckdb.sql(f"""
@@ -187,13 +189,13 @@ elif view[1].open:
             dates_str = cumulative_head_trauma['DATE'].dt.strftime('%Y-%m-%d').tolist()
             
             st.echarts_chart(
-                options=ch.get_cum_trauma_chart(
+                ch.get_cum_trauma_chart(
                     dates_str, 
                     cumulative_head_trauma['head_str_l'].tolist(), 
                     cumulative_head_trauma['trend'].tolist(), 
                     slope
                 ), 
-                height="500px"
+                height=500
             )
             
             st.divider()
@@ -226,12 +228,12 @@ elif view[2].open:
             fights_monthly= duckdb.sql("SELECT date_trunc('month',date) as MONTH,count(*) as FIGHTS, count(distinct EVENT) as EVENTS from fed group by 1 order by 1 asc").df()
             
             st.echarts_chart(
-                options=ch.get_monthly_fights_chart(
+                ch.get_monthly_fights_chart(
                     fights_monthly['MONTH'].astype(str).tolist(),
                     fights_monthly['FIGHTS'].tolist(),
                     fights_monthly['EVENTS'].tolist()
                 ), 
-                height="400px"
+                height=400
             )
             
             st.divider()
@@ -244,7 +246,7 @@ elif view[2].open:
             methods = duckdb.sql("SELECT method, count(*) FIGHTS from fr_cleaned where date between current_date() -730 and current_date() group by 1 ").df()
             
             pie_data = [{"value": row['FIGHTS'], "name": row['METHOD']} for _, row in methods.iterrows()]
-            st.echarts_chart(options=ch.get_methods_pie_chart(pie_data), height="400px")
+            st.echarts_chart(ch.get_methods_pie_chart(pie_data), height=400)
             
         with c2:
             st.write("Number of Fights per Fighter")
@@ -253,11 +255,11 @@ elif view[2].open:
                                   order by 1""").df()
             
             st.echarts_chart(
-                options=ch.get_fight_distro_chart(
+                ch.get_fight_distro_chart(
                     fight_distro['FIGHTS'].astype(str).tolist(),
                     fight_distro['FIGHTERS'].tolist()
                 ), 
-                height="400px"
+                height=400
             )
             st.divider()
             
@@ -266,11 +268,11 @@ elif view[2].open:
             loc_sorted = locations.sort_values(by='EVENTS')
             
             st.echarts_chart(
-                options=ch.get_locations_chart(
+                ch.get_locations_chart(
                     loc_sorted['LOCATION'].tolist(),
                     loc_sorted['EVENTS'].tolist()
                 ), 
-                height="400px"
+                height=400
             )
     
             st.divider()
@@ -330,8 +332,8 @@ elif view[2].open:
             })
 
         st.echarts_chart(
-            options=ch.get_methods_over_time_chart(unique_methods, months_str, series_list), 
-            height="500px"
+            ch.get_methods_over_time_chart(unique_methods, months_str, series_list), 
+            height=500
         )
 
 elif view[3].open:
@@ -372,14 +374,14 @@ elif view[3].open:
             ]
             
             st.echarts_chart(
-                options=ch.get_scatter_chart(
+                ch.get_scatter_chart(
                     chart_metric1, 
                     chart_metric2, 
                     scatter_series_data, 
                     trendline_data, 
                     slope
                 ), 
-                height="550px"
+                height=550
             )
         
         # vizPlot()
