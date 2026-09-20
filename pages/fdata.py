@@ -5,8 +5,6 @@ import time
 import datetime
 from streamlit_ace import st_ace
 import numpy as np
-
-# Updated imports: native st.echarts (v1.64+) and externalized charts module
 from utils.funcs import get_memory_usage, getData, cleanData, pullData, getFighters, query_fighter_data, oppStats, opp_stats,\
     fs, fed, fr_cleaned, fs_cleaned, fighters, ed_c
 import utils.charts as ch
